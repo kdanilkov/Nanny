@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">Nanny</string>
+    <string name="ok"> OK </string>
+    <string name="loading"> loading </string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string-array name="bank_array">
+        <item>ADIB</item>
+        <item>HSBC</item>
+        <item>UNB</item>
+        <item>Emirates NBD</item>
+    </string-array>
+
+    <string-array name="acccount_type_array">
+        <item>TYPE 1</item>
+        <item>TYPE 2</item>
+        <item>TYPE 3</item>
+        <item>TYPE 4</item>
+    </string-array>
+</resources>

@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_small">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/rlyTop"
+        android:background="@color/colorPrimary">
+
+        <Button
+            android:layout_marginStart="15dp"
+            android:id="@+id/btnMenu"
+            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true"
+            android:background="@drawable/ic_menu"
+            android:layout_width="30dp"
+            android:layout_height="30dp" />
+
+        <Button
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="15dp"
+            android:id="@+id/btnMore"
+            android:background="@drawable/ic_more" />
+
+        <Button
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:id="@+id/btnSearch"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@+id/btnMore"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/ic_search" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/rlyTop">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="15dp">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="3">
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="#7634809d">
+
+                    <TextView
+                        android:text="230$"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/tvMoneyThisWeek"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:textSize="30sp"
+                        android:textColor="@color/white" />
+
+                    <TextView
+                        android:text="Left on this week"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/textView2"
+                        android:layout_alignStart="@+id/tvMoneyThisWeek"
+                        android:layout_below="@+id/tvMoneyThisWeek"
+                        android:textColor="@color/white"
+                        android:layout_marginTop="5dp" />
+
+                    <TextView
+                        android:text="1,400$"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/tvMoneyThisMonth"
+                        android:layout_alignStart="@+id/tvMoneyThisWeek"
+                        android:layout_below="@+id/textView2"
+                        android:layout_marginTop="15dp"
+                        android:textColor="@color/white"
+                        android:textSize="30sp" />
+
+                    <TextView
+                        android:text="Left on this month"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/textView4"
+                        android:layout_alignLeft="@+id/tvMoneyThisMonth"
+                        android:layout_below="@+id/tvMoneyThisMonth"
+                        android:layout_marginTop="5dp"
+                        android:textColor="@color/white" />
+                </RelativeLayout>
+
+                <RelativeLayout android:layout_height="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="10dp"
+                    android:background="#c6c17204">
+
+                    <TextView
+                        android:text="370$"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/tvMoneyUpcoming"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="10dp"
+                        android:textSize="30sp"
+                        android:textColor="@color/white" />
+
+                    <TextView
+                        android:text="Upcoming"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/textView6"
+                        android:textColor="@color/white"
+                        android:layout_below="@+id/tvMoneyUpcoming"
+                        android:layout_alignStart="@+id/tvMoneyUpcoming"
+                        android:layout_marginTop="8dp" />
+
+                    <TextView
+                        android:text="payments"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/textView7"
+                        android:layout_alignStart="@+id/textView6"
+                        android:layout_below="@+id/textView6"
+                        android:layout_marginTop="5dp"
+                        android:textColor="@color/white" />
+                </RelativeLayout>
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="2"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:background="#9643bc08">
+
+                <TextView
+                    android:text="500$"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tvMoneySpentMonthWish"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginStart="5dp"
+                    android:textColor="@color/white"
+                    android:textSize="30sp" />
+
+                <TextView
+                    android:text="Spent every month to Wishes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textView9"
+                    android:layout_alignBottom="@+id/tvMoneySpentMonthWish"
+                    android:layout_toRightOf="@+id/tvMoneySpentMonthWish"
+                    android:layout_marginLeft="10dp"
+                    android:textColor="@color/white" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="2"
+                android:background="#96572cbc">
+
+                <TextView
+                    android:text="1,400$"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentStart="true"
+                    android:id="@+id/tvMoneyDebit"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:textSize="30sp"
+                    android:textColor="@color/white" />
+
+                <TextView
+                    android:text="show my Debit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/tvMoneyDebit"
+                    android:layout_toEndOf="@+id/tvMoneyDebit"
+                    android:layout_marginStart="10dp"
+                    android:id="@+id/textView11"
+                    android:textColor="@color/white" />
+            </RelativeLayout>
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <Button
+        android:layout_width="150dp"
+        android:id="@+id/btnAdvice"
+        android:layout_centerInParent="true"
+        android:layout_height="150dp"
+        android:background="@drawable/ic_btn_advice" />
+
+</RelativeLayout>
+

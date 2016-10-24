@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <ImageView
+        app:srcCompat="@drawable/ic_circle_blue"
+        android:layout_marginStart="15dp"
+        android:id="@+id/imgvCircle"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="15dp" />
+
+    <TextView
+        android:text="Emirates NBD"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/imgvCircle"
+        android:layout_toEndOf="@+id/imgvCircle"
+        android:layout_marginStart="20dp"
+        android:id="@+id/tvBankName"
+        android:textSize="16sp"
+        android:textStyle="normal|bold" />
+
+    <TextView
+        android:text="******123, Current, by SMS"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvBankName"
+        android:layout_alignStart="@+id/tvBankName"
+        android:id="@+id/tvDetail"
+        android:layout_marginTop="3dp"
+        android:textColor="@color/gray_dark" />
+
+    <TextView
+        android:text="Balance: 7500$"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvDetail"
+        android:layout_alignStart="@+id/tvDetail"
+        android:id="@+id/tvBalance"
+        android:layout_marginTop="2dp"
+        android:textColor="@color/gray_dark"
+        android:layout_marginBottom="15dp" />
+
+    <Button
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_alignTop="@+id/tvBankName"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="15dp"
+        android:id="@+id/btnCheck"
+        android:background="@drawable/ic_checked" />
+</RelativeLayout>

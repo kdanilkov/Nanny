@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:rsv="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/rlyTop"
+        android:background="@color/colorPrimary">
+
+        <Button
+            android:layout_marginStart="15dp"
+            android:id="@+id/btnBack"
+            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true"
+            android:background="@drawable/ic_back_other"
+            android:layout_width="30dp"
+            android:layout_height="30dp" />
+
+        <TextView
+            android:text="Calendar of Payments"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="false"
+            android:layout_marginStart="10dp"
+            android:id="@+id/textView3"
+            android:layout_alignBaseline="@+id/btnBack"
+            android:layout_toRightOf="@+id/btnBack"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/rlyTop">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:id="@+id/lySwitch">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <TextView
+                    android:text="PAYMENTS"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/label_text_color"
+                    android:layout_gravity="center_horizontal" />
+
+                <ToggleButton
+                    android:layout_width="44dp"
+                    android:layout_height="23dp"
+                    android:background="@drawable/tbtn_selector_blue"
+                    android:textOff=""
+                    android:textOn=""
+                    android:id="@+id/tbtnSwitchPayment"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:checked="true"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="10dp" />
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <TextView
+                    android:text="FINISH"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/label_text_color"
+                    android:layout_gravity="center_horizontal" />
+
+                <ToggleButton
+                    android:layout_width="44dp"
+                    android:layout_height="23dp"
+                    android:background="@drawable/tbtn_selector_green"
+                    android:textOff=""
+                    android:textOn=""
+                    android:id="@+id/tbtnSwitchFinish"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:checked="true"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="10dp" />
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <TextView
+                    android:text="WISHES"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/label_text_color"
+                    android:layout_gravity="center_horizontal" />
+
+                <ToggleButton
+                    android:layout_width="44dp"
+                    android:layout_height="23dp"
+                    android:background="@drawable/tbtn_selector_yellow"
+                    android:textOff=""
+                    android:textOn=""
+                    android:id="@+id/tbtnSwitchWish"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:checked="true"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="10dp" />
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <TextView
+                    android:text=" ??? "
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/label_text_color"
+                    android:layout_gravity="center_horizontal" />
+
+                <ToggleButton
+                    android:layout_width="44dp"
+                    android:layout_height="23dp"
+                    android:background="@drawable/tbtn_selector_orange"
+                    android:textOff=""
+                    android:textOn=""
+                    android:id="@+id/tbtnSwitchOther"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:checked="true"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="10dp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:id="@+id/rlyDateLabel"
+            android:layout_below="@+id/lySwitch"
+            android:layout_marginTop="30dp">
+
+            <TextView
+                android:text="TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvDay"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="20dp"
+                android:textSize="30sp" />
+
+            <TextView
+                android:text="TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tvYear"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="20dp" />
+        </RelativeLayout>
+
+        <com.stacktips.view.CustomCalendarView
+            android:id="@+id/calendar_view"
+            android:layout_width="match_parent"
+            android:background="@color/gray_lt"
+            app:calendarBackgroundColor="@color/gray_lt"
+            app:calendarTitleTextColor="@color/black"
+            app:currentDayOfMonthColor="@color/colorPrimary"
+            app:dayOfMonthTextColor="@color/black"
+            app:dayOfWeekTextColor="@color/black"
+            app:disabledDayBackgroundColor="@color/gray_lt"
+            app:disabledDayTextColor="@color/gray_dark"
+            app:selectedDayBackgroundColor="@color/colorPrimary"
+            app:titleLayoutBackgroundColor="@color/white"
+            app:weekLayoutBackgroundColor="@color/white"
+            android:layout_alignParentBottom="true"
+            android:layout_height="wrap_content">
+        </com.stacktips.view.CustomCalendarView>
+    </RelativeLayout>
+
+
+</RelativeLayout>
+

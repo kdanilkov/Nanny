@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:rsv="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/rlyTop"
+        android:background="@color/colorPrimary">
+
+        <Button
+            android:layout_marginStart="15dp"
+            android:id="@+id/btnBack"
+            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true"
+            android:background="@drawable/ic_menu"
+            android:layout_width="30dp"
+            android:layout_height="30dp" />
+
+        <Button
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="15dp"
+            android:id="@+id/btnSave"
+            android:background="@drawable/ic_check" />
+
+        <TextView
+            android:text="Application Settings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="false"
+            android:layout_marginStart="10dp"
+            android:id="@+id/textView3"
+            android:layout_alignBaseline="@+id/btnBack"
+            android:layout_toRightOf="@+id/btnBack"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
+
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/rlyTop"
+        android:layout_alignParentStart="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="30dp">
+
+                <TextView
+                    android:text="MINIMAL AMOUNT PER DAY"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textView"
+                    android:textColor="@color/label_text_color" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName"
+                    android:text="10$"
+                    android:ems="10"
+                    android:id="@+id/etAmount"
+                    android:background="@drawable/border_setting_editor"
+                    android:layout_marginTop="10dp"
+                    android:textColor="?android:attr/textColorHint"
+                    android:paddingBottom="5dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="30dp">
+
+                <TextView
+                    android:text="SALARY DATE"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textView1"
+                    android:textColor="@color/label_text_color" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName"
+                    android:text="15"
+                    android:ems="10"
+                    android:id="@+id/etDate"
+                    android:background="@drawable/border_setting_editor"
+                    android:layout_marginTop="10dp"
+                    android:textColor="?android:attr/textColorHint"
+                    android:paddingBottom="5dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="30dp">
+
+                <TextView
+                    android:text="MONTHLY INCOME"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textView2"
+                    android:textColor="@color/label_text_color" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName"
+                    android:text="5000$"
+                    android:ems="10"
+                    android:id="@+id/etIncome"
+                    android:background="@drawable/border_setting_editor"
+                    android:layout_marginTop="10dp"
+                    android:textColor="?android:attr/textColorHint"
+                    android:paddingBottom="5dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="30dp">
+
+                <TextView
+                    android:text="PAYMENTS TOLERANCE(DAYS)"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textView4"
+                    android:textColor="@color/label_text_color" />
+
+                <org.adw.library.widgets.discreteseekbar.DiscreteSeekBar
+                    android:theme="@style/Widget.AppCompat.SeekBar.Discrete"
+                    android:id="@+id/discrete1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:dsb_trackColor = "@color/label_text_color"
+                    app:dsb_min="1"
+                    app:dsb_max="15"
+                    app:dsb_value="2"
+                    android:layout_marginTop="25dp"
+                    android:layout_marginLeft="-20dp"
+                    android:layout_marginRight="-20dp" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="30dp">
+
+                <TextView
+                    android:text="AMOUNT TOLERANCE(%)"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/textView5"
+                    android:textColor="@color/label_text_color" />
+
+                <org.adw.library.widgets.discreteseekbar.DiscreteSeekBar
+                    android:theme="@style/Widget.AppCompat.SeekBar.Discrete"
+                    android:id="@+id/discrete2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:dsb_trackColor = "@color/label_text_color"
+                    app:dsb_min="0"
+                    app:dsb_max="100"
+                    app:dsb_value="20"
+                    android:layout_marginTop="25dp"
+                    android:layout_marginLeft="-20dp"
+                    android:layout_marginRight="-20dp"
+                    app:dsb_indicatorFormatter="%d%%"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>
+

@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="5dp">
+
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="3">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/bg_chat_left_top_green"
+            android:id="@+id/imgvTop"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/bg_chat_left_bottom_green"
+            android:id="@+id/imgvBottom"
+            android:layout_below="@+id/tvText"
+            android:scaleType="fitXY" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:srcCompat="@drawable/bg_chat_left_middle_green"
+            android:id="@+id/imgvMiddle"
+            android:layout_above="@+id/imgvBottom"
+            android:layout_below="@+id/imgvTop"
+            android:scaleType="fitXY" />
+
+        <TextView
+            android:text="Don't forget to pay your utility bills"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvText"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="20dp"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:layout_marginLeft="5dp">
+
+        <TextView
+            android:text="Oct, 6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:id="@+id/tvDate"
+            android:textSize="17sp"
+            android:textColor="?android:attr/textColorHint" />
+
+        <TextView
+            android:text="VIEW CALENDR..."
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true"
+            android:id="@+id/tvDetail"
+            android:textSize="16sp"
+            android:textColor="?android:attr/colorActivatedHighlight" />
+    </RelativeLayout>
+</LinearLayout>
