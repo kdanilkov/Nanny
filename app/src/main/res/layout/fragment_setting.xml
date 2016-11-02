@@ -16,21 +16,12 @@
 
         <Button
             android:layout_marginStart="15dp"
-            android:id="@+id/btnBack"
+            android:id="@+id/btnMenu"
             android:layout_centerVertical="true"
             android:layout_alignParentStart="true"
             android:background="@drawable/ic_menu"
             android:layout_width="30dp"
             android:layout_height="30dp" />
-
-        <Button
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_centerVertical="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="15dp"
-            android:id="@+id/btnSave"
-            android:background="@drawable/ic_check" />
 
         <TextView
             android:text="Application Settings"
@@ -38,9 +29,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="false"
             android:layout_marginStart="10dp"
-            android:id="@+id/textView3"
-            android:layout_alignBaseline="@+id/btnBack"
-            android:layout_toRightOf="@+id/btnBack"
+            android:layout_alignBaseline="@+id/btnMenu"
+            android:layout_toRightOf="@+id/btnMenu"
             android:textColor="@color/white"
             android:textSize="20sp" />
 
@@ -66,19 +56,18 @@
                 android:layout_marginTop="30dp">
 
                 <TextView
-                    android:text="MINIMAL AMOUNT PER DAY"
+                    android:text="MINIMAL AMOUNT PER DAY ($)"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/textView"
                     android:textColor="@color/label_text_color" />
 
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textPersonName"
-                    android:text="10$"
+                    android:inputType="number"
+                    android:text="10"
                     android:ems="10"
-                    android:id="@+id/etAmount"
+                    android:id="@+id/etMinimalAmountPerDay"
                     android:background="@drawable/border_setting_editor"
                     android:layout_marginTop="10dp"
                     android:textColor="?android:attr/textColorHint"
@@ -95,20 +84,19 @@
                     android:text="SALARY DATE"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/textView1"
                     android:textColor="@color/label_text_color" />
 
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textPersonName"
                     android:text="15"
                     android:ems="10"
-                    android:id="@+id/etDate"
+                    android:id="@+id/etSalaryDate"
                     android:background="@drawable/border_setting_editor"
                     android:layout_marginTop="10dp"
                     android:textColor="?android:attr/textColorHint"
-                    android:paddingBottom="5dp" />
+                    android:paddingBottom="5dp"
+                    android:inputType="number" />
             </LinearLayout>
 
             <LinearLayout
@@ -118,23 +106,22 @@
                 android:layout_marginTop="30dp">
 
                 <TextView
-                    android:text="MONTHLY INCOME"
+                    android:text="MONTHLY INCOME ($)"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/textView2"
                     android:textColor="@color/label_text_color" />
 
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textPersonName"
-                    android:text="5000$"
+                    android:text="5000"
                     android:ems="10"
-                    android:id="@+id/etIncome"
+                    android:id="@+id/etMonthlyIncome"
                     android:background="@drawable/border_setting_editor"
                     android:layout_marginTop="10dp"
                     android:textColor="?android:attr/textColorHint"
-                    android:paddingBottom="5dp" />
+                    android:paddingBottom="5dp"
+                    android:inputType="number" />
             </LinearLayout>
 
             <LinearLayout
@@ -144,15 +131,55 @@
                 android:layout_marginTop="30dp">
 
                 <TextView
-                    android:text="PAYMENTS TOLERANCE(DAYS)"
+                    android:text="USED SALARY ($)"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/textView4"
                     android:textColor="@color/label_text_color" />
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="1334"
+                    android:ems="10"
+                    android:id="@+id/etUsedSalary"
+                    android:background="@drawable/border_setting_editor"
+                    android:layout_marginTop="10dp"
+                    android:textColor="?android:attr/textColorHint"
+                    android:paddingBottom="5dp"
+                    android:inputType="number" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="30dp">
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:text="PAYMENTS TOLERANCE (DAYS)"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/label_text_color"
+                        android:layout_weight="1" />
+
+                    <TextView
+                        android:text="3 DAYS"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/tvToleranceDays"
+                        android:layout_weight="1"
+                        android:textColor="?android:attr/textColorHint"
+                        android:layout_marginLeft="10dp" />
+                </LinearLayout>
 
                 <org.adw.library.widgets.discreteseekbar.DiscreteSeekBar
                     android:theme="@style/Widget.AppCompat.SeekBar.Discrete"
-                    android:id="@+id/discrete1"
+                    android:id="@+id/seekbarDays"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:dsb_trackColor = "@color/label_text_color"
@@ -160,8 +187,8 @@
                     app:dsb_max="15"
                     app:dsb_value="2"
                     android:layout_marginTop="25dp"
-                    android:layout_marginLeft="-20dp"
-                    android:layout_marginRight="-20dp" />
+                    android:layout_marginLeft="-10dp"
+                    android:layout_marginRight="-10dp" />
 
             </LinearLayout>
 
@@ -171,16 +198,30 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="30dp">
 
-                <TextView
-                    android:text="AMOUNT TOLERANCE(%)"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/textView5"
-                    android:textColor="@color/label_text_color" />
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:text="AMOUNT TOLERANCE (%)"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/label_text_color" />
+
+                    <TextView
+                        android:text="15 %"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/tvTolerancePercent"
+                        android:textColor="?android:attr/textColorHint"
+                        android:layout_weight="1"
+                        android:layout_marginLeft="10dp" />
+                </LinearLayout>
 
                 <org.adw.library.widgets.discreteseekbar.DiscreteSeekBar
                     android:theme="@style/Widget.AppCompat.SeekBar.Discrete"
-                    android:id="@+id/discrete2"
+                    android:id="@+id/seekbarPercent"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:dsb_trackColor = "@color/label_text_color"
@@ -188,14 +229,30 @@
                     app:dsb_max="100"
                     app:dsb_value="20"
                     android:layout_marginTop="25dp"
-                    android:layout_marginLeft="-20dp"
-                    android:layout_marginRight="-20dp"
+                    android:layout_marginLeft="-10dp"
+                    android:layout_marginRight="-10dp"
                     app:dsb_indicatorFormatter="%d%%"/>
 
             </LinearLayout>
 
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"></LinearLayout>
+
         </LinearLayout>
     </ScrollView>
-
+    <Button
+        android:text="SAVE"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:id="@+id/btnSave"
+        android:background="@color/colorPrimary"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginEnd="10dp" />
 </RelativeLayout>
 

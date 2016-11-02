@@ -23,7 +23,7 @@
             android:layout_width="30dp"
             android:layout_height="30dp" />
         <TextView
-            android:text="Add bank account"
+            android:text="Edit bank account"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="false"
@@ -33,6 +33,15 @@
             android:layout_toRightOf="@+id/btnBack"
             android:textColor="@color/white"
             android:textSize="20sp" />
+
+        <Button
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="15dp"
+            android:id="@+id/btnDelete"
+            android:background="@drawable/ic_trash" />
 
     </RelativeLayout>
 

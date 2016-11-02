@@ -1,9 +1,11 @@
 package com.ninja.nanny;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -18,6 +20,9 @@ import com.ninja.nanny.Fragment.PaymentFragment;
 import com.ninja.nanny.Fragment.SettingFragment;
 import com.ninja.nanny.Fragment.TransactionFragment;
 import com.ninja.nanny.Fragment.WishFragment;
+import com.ninja.nanny.Helper.DatabaseHelper;
+import com.ninja.nanny.Preference.UserPreference;
+import com.ninja.nanny.Utils.Common;
 import com.ninja.nanny.Utils.Constant;
 
 public class MainActivity extends CustomActivity {
@@ -39,11 +44,23 @@ public class MainActivity extends CustomActivity {
 //        requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
 
+        initSetting();
         setupDrawer();
         setupContainer();
+
     }
 
-    private void setupContainer()
+    void initSetting() {
+        UserPreference.getInstance().pref = getSharedPreferences(Constant.PREF_NAME, Context.MODE_PRIVATE);
+        Common.getInstance().dbHelper = new DatabaseHelper(getApplicationContext());
+        Common.getInstance().listBanks = Common.getInstance().dbHelper.getAllBanks();
+        Common.getInstance().listAllWishes = Common.getInstance().dbHelper.getAllWishes();
+        Common.getInstance().listActiveWishes = Common.getInstance().dbHelper.getActiveWishes();
+        Common.getInstance().listFinishedWishes = Common.getInstance().dbHelper.getFinishedWishes();
+    }
+
+
+    void setupContainer()
     {
         getSupportFragmentManager().addOnBackStackChangedListener(
                 new FragmentManager.OnBackStackChangedListener() {
@@ -51,12 +68,31 @@ public class MainActivity extends CustomActivity {
                     @Override
                     public void onBackStackChanged() {
 
+                        FragmentManager manager = getSupportFragmentManager();
+                        Fragment currFrag = manager.findFragmentById(R.id.content_frame);
+                        if(currFrag == null) return;
+                        currFrag.onResume();
                     }
                 });
         launchFragment(0);
     }
 
-    private void setupDrawer()
+    @Override
+    public void onBackPressed() {
+        FragmentManager manager = getSupportFragmentManager();
+
+        int nStackCount = manager.getBackStackEntryCount();
+
+        Log.e("number", nStackCount + "");
+
+        if(nStackCount == 1) {
+            launchFragment(0);
+            return;
+        }
+        manager.popBackStackImmediate();
+    }
+
+    void setupDrawer()
     {
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 //        drawerLayout.setDrawerShadow(R.drawable.drawer_shadow,
@@ -99,7 +135,7 @@ public class MainActivity extends CustomActivity {
             drawerLayout.closeDrawers();
     }
 
-    private void setupLeftNavDrawer()
+    void setupLeftNavDrawer()
     {
         drawerLeft = (ListView) findViewById(R.id.left_drawer);
 
@@ -119,7 +155,7 @@ public class MainActivity extends CustomActivity {
                                     long arg3) {
                 drawerLayout.closeDrawers();
 
-                launchFragment(pos);
+                launchFragment(pos - 1);
                 adapterLeft.setSelection(pos - 1);
             }
         });

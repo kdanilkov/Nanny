@@ -35,6 +35,24 @@
             android:textColor="@color/white"
             android:textSize="20sp" />
 
+        <Button
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="15dp"
+            android:id="@+id/btnDelete"
+            android:background="@drawable/ic_trash" />
+
+        <Button
+            android:layout_width="30dp"
+            android:layout_marginEnd="16dp"
+            android:id="@+id/btnEdit"
+            android:background="@drawable/ic_edit"
+            android:layout_height="30dp"
+            android:layout_alignTop="@+id/btnDelete"
+            android:layout_toStartOf="@+id/btnDelete" />
+
     </RelativeLayout>
 
     <RelativeLayout
@@ -54,7 +72,6 @@
             CircleProgressView:cpv_outerContourSize="0dp"
             CircleProgressView:cpv_rimColor="@color/gray_lt"
             CircleProgressView:cpv_rimWidth="35dp"
-            CircleProgressView:cpv_seekMode="true"
             CircleProgressView:cpv_showUnit="true"
             CircleProgressView:cpv_spinColor="@color/gray_dark"
             CircleProgressView:cpv_textColor="@color/colorPrimary"
@@ -66,7 +83,9 @@
             CircleProgressView:cpv_value="30"
             android:layout_alignParentEnd="true"
             android:layout_marginRight="30dp"
-            android:layout_marginTop="30dp" />
+            android:layout_marginTop="30dp"
+            android:clickable="false"
+            CircleProgressView:cpv_seekMode="false" />
 
         <LinearLayout
             android:orientation="vertical"

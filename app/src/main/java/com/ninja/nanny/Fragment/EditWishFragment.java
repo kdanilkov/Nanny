@@ -22,10 +22,10 @@ import com.ninja.nanny.Utils.Constant;
 import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar;
 
 
-public class NewWishFragment extends CustomFragment {
+public class EditWishFragment extends CustomFragment {
 
 
-    public NewWishFragment() {
+    public EditWishFragment() {
         // Required empty public constructor
     }
 
@@ -35,12 +35,14 @@ public class NewWishFragment extends CustomFragment {
     EditText etTitle, etTotalAmount;
     TextView tvPeriod, tvMonthlyPayment;
     DiscreteSeekBar seekbarPropotion;
+    public Wish wishSelected;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        mView = inflater.inflate(R.layout.fragment_new_wish, container, false);
+        mView = inflater.inflate(R.layout.fragment_edit_wish, container, false);
         mContext = (MainActivity)getActivity();
         mInflater = inflater;
 
@@ -59,6 +61,18 @@ public class NewWishFragment extends CustomFragment {
         tvPeriod = (TextView)mView.findViewById(R.id.tvTotalMonths);
         tvMonthlyPayment = (TextView)mView.findViewById(R.id.tvMonthlyPayment);
         seekbarPropotion = (DiscreteSeekBar)mView.findViewById(R.id.seekbarPropotion);
+
+        etTitle.setText(wishSelected.getTitle());
+
+        int nTotalAmount = wishSelected.getTotalAmount();
+        int nMonthlyPayment = wishSelected.getMonthlyPayment();
+        int nPercentage = nMonthlyPayment * 100 / wishSelected.getTotalAmount();
+        int nTotalMonths = (nTotalAmount + nMonthlyPayment -1) / nMonthlyPayment;
+
+        etTotalAmount.setText(nTotalAmount + "");
+        tvMonthlyPayment.setText(nMonthlyPayment + " $");
+        tvPeriod.setText(nTotalMonths + " month");
+        seekbarPropotion.setProgress(nPercentage);
 
         seekbarPropotion.setOnProgressChangeListener(new DiscreteSeekBar.OnProgressChangeListener() {
             @Override
@@ -111,6 +125,7 @@ public class NewWishFragment extends CustomFragment {
 
     void saveWish() {
         String strTitle = etTitle.getText().toString();
+
         if(etTotalAmount.getText().toString().length() > 8){
             etTotalAmount.setError(Html.fromHtml("<font color='red'>amount value is too large</font>"));
             return;
@@ -129,25 +144,48 @@ public class NewWishFragment extends CustomFragment {
         }
 
         int nMonthlyPayment = nTotalAmount * seekbarPropotion.getProgress() / 100;
-        int nFlagActive = 1;
 
-        if(Common.getInstance().listAllWishes.size() > 0) nFlagActive = 0;
+        wishSelected.setTitle(strTitle);
+        wishSelected.setTotalAmount(nTotalAmount);
+        wishSelected.setMonthlyPayment(nMonthlyPayment);
+        wishSelected.setSavedAmount(nTotalAmount / 3);
+        wishSelected.setUpdatedAt(Common.getInstance().dbHelper.getDateTime());
 
-        Wish wishNew = new Wish(strTitle, nTotalAmount, nMonthlyPayment, nTotalAmount/3, Common.getInstance().dbHelper.getDateTime(), nFlagActive);
-        int nID = Common.getInstance().dbHelper.createWish(wishNew);
+        Common.getInstance().dbHelper.updateWish(wishSelected);
 
-        wishNew.setId(nID);
+        int nIdx = 0;
 
-        Common.getInstance().listAllWishes.add(wishNew);
+        for(nIdx = 0; nIdx < Common.getInstance().listAllWishes.size(); nIdx ++) {
+            Wish wishTmp = Common.getInstance().listAllWishes.get(nIdx);
 
-        if(wishNew.getFlagActive() == 1) {
-            Common.getInstance().listActiveWishes.add(wishNew);
+            if(wishSelected.getId() == wishTmp.getId()) break;
+        }
+
+        Common.getInstance().listAllWishes.remove(nIdx);
+        Common.getInstance().listAllWishes.add(nIdx, wishSelected);
+
+        if(wishSelected.getFlagActive() == 1) {
+            for(nIdx = 0; nIdx < Common.getInstance().listActiveWishes.size(); nIdx ++){
+                Wish wishTmp = Common.getInstance().listActiveWishes.get(nIdx);
+
+                if(wishSelected.getId() == wishTmp.getId()) break;
+            }
+
+            Common.getInstance().listActiveWishes.remove(nIdx);
+            Common.getInstance().listActiveWishes.add(nIdx, wishSelected);
         } else {
-            Common.getInstance().listFinishedWishes.add(wishNew);
+            for(nIdx = 0; nIdx < Common.getInstance().listFinishedWishes.size(); nIdx ++){
+                Wish wishTmp = Common.getInstance().listFinishedWishes.get(nIdx);
+
+                if(wishSelected.getId() == wishTmp.getId()) break;
+            }
+
+            Common.getInstance().listFinishedWishes.remove(nIdx);
+            Common.getInstance().listFinishedWishes.add(nIdx, wishSelected);
         }
 
 
-        Toast.makeText(mContext, "new wish info has been added successfully", Toast.LENGTH_SHORT).show();
+        Toast.makeText(mContext, "wish info has been updated successfully", Toast.LENGTH_SHORT).show();
         mContext.getSupportFragmentManager().popBackStackImmediate();
     }
 

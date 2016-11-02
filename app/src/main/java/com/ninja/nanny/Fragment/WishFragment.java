@@ -6,16 +6,23 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.ninja.nanny.Custom.CustomFragment;
 import com.ninja.nanny.MainActivity;
+import com.ninja.nanny.Model.Wish;
 import com.ninja.nanny.R;
+import com.ninja.nanny.Utils.Common;
 import com.ninja.nanny.Utils.Constant;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class WishFragment extends CustomFragment {
 
@@ -29,6 +36,7 @@ public class WishFragment extends CustomFragment {
     MainActivity mContext;
     RelativeLayout rlyAllBottom, rlyActiveBottom, rlyFinishedBottom;
     LinearLayout mLyContainer;
+    int nSelectedTab;
 
 
     @Override
@@ -58,9 +66,8 @@ public class WishFragment extends CustomFragment {
         mLyContainer = (LinearLayout)mView.findViewById(R.id.lyContainer);
 
         initTab();
+        nSelectedTab = 0;
         rlyAllBottom.setVisibility(View.VISIBLE);
-
-        presentData();
     }
 
     void initTab() {
@@ -69,31 +76,49 @@ public class WishFragment extends CustomFragment {
         rlyFinishedBottom.setVisibility(View.INVISIBLE);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        presentData();
+    }
+
     void presentData() {
         mLyContainer.removeAllViews();
 
-        String[] arrName = {"Red Dress", "Trip to Maldives", "Ferrari California"};
-        String[] arrDetail = {"200$, next week", "1000$, in December", "300,000$, in 2017"};
-        boolean[] arrStatus = {true, true, false};
+        List<Wish> listCurrent = new ArrayList<Wish>();
 
-        for(int i = 0; i < arrName.length; i ++) {
-            String strName = arrName[i];
-            String strDetail = arrDetail[i];
-            boolean blStatus = arrStatus[i];
+        switch (nSelectedTab) {
+            case 0:
+                listCurrent = Common.getInstance().listAllWishes;
+                break;
+            case 1:
+                listCurrent = Common.getInstance().listActiveWishes;
+                break;
+            case 2:
+                listCurrent = Common.getInstance().listFinishedWishes;
+        }
+
+        if(listCurrent.size() == 0) {
+            Toast.makeText(mContext, "There is no data to display", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        for(int i = 0; i < listCurrent.size(); i ++) {
+            final Wish wishItem = listCurrent.get(i);
 
             View cell = mInflater.inflate(R.layout.cell_wish_item, null);
 
-            if(blStatus) {
+            boolean flagActive = (wishItem.getFlagActive() == 1);
+
+            if(flagActive) {
                 ((ImageView)cell.findViewById(R.id.imgvCircle)).setImageResource(R.drawable.ic_circle_blue);
             } else {
                 ((ImageView)cell.findViewById(R.id.imgvCircle)).setImageResource(R.drawable.ic_circle_gray);
             }
 
-            ((ToggleButton)cell.findViewById(R.id.tbtnSwitch)).setChecked(blStatus);
-            ((TextView)cell.findViewById(R.id.tvName)).setText(strName);
-            ((TextView)cell.findViewById(R.id.tvDetail)).setText(strDetail);
-
-            final int pos = i;
+            ((ToggleButton)cell.findViewById(R.id.tbtnSwitch)).setChecked(flagActive);
+            ((TextView)cell.findViewById(R.id.tvName)).setText(wishItem.getTitle());
+            ((TextView)cell.findViewById(R.id.tvDetail)).setText("saved:" + wishItem.getSavedAmount() + "$ / total:" + wishItem.getTotalAmount() + "$");
 
             cell.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -101,9 +126,68 @@ public class WishFragment extends CustomFragment {
                     ViewWishFragment f = new ViewWishFragment();
                     String title = Constant.FRAGMENT_VIEW_WISH;
 
+                    f.wishSelected = wishItem;
+
                     FragmentTransaction transaction = mContext.getSupportFragmentManager()
                             .beginTransaction();
                     transaction.add(R.id.content_frame, f, title).addToBackStack(title).commit();
+                }
+            });
+
+            ((ToggleButton)cell.findViewById(R.id.tbtnSwitch)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    if(b) {
+                        wishItem.setFlagActive(1);
+                        Common.getInstance().dbHelper.updateWish(wishItem);
+
+                        int nIdx = 0;
+
+                        for(nIdx = 0; nIdx < Common.getInstance().listAllWishes.size(); nIdx ++) {
+                            Wish wishTmp = Common.getInstance().listAllWishes.get(nIdx);
+
+                            if(wishItem.getId() == wishTmp.getId()) break;
+                        }
+
+                        Common.getInstance().listAllWishes.remove(nIdx);
+                        Common.getInstance().listAllWishes.add(nIdx, wishItem);
+
+                        for(nIdx = 0; nIdx < Common.getInstance().listFinishedWishes.size(); nIdx ++){
+                            Wish wishTmp = Common.getInstance().listFinishedWishes.get(nIdx);
+
+                            if(wishItem.getId() == wishTmp.getId()) break;
+                        }
+
+                        Common.getInstance().listFinishedWishes.remove(nIdx);
+
+                        Common.getInstance().listActiveWishes.add(wishItem);
+                    } else {
+                        wishItem.setFlagActive(0);
+                        Common.getInstance().dbHelper.updateWish(wishItem);
+
+                        int nIdx = 0;
+
+                        for(nIdx = 0; nIdx < Common.getInstance().listAllWishes.size(); nIdx ++) {
+                            Wish wishTmp = Common.getInstance().listAllWishes.get(nIdx);
+
+                            if(wishItem.getId() == wishTmp.getId()) break;
+                        }
+
+                        Common.getInstance().listAllWishes.remove(nIdx);
+                        Common.getInstance().listAllWishes.add(nIdx, wishItem);
+
+                        for(nIdx = 0; nIdx < Common.getInstance().listActiveWishes.size(); nIdx ++){
+                            Wish wishTmp = Common.getInstance().listActiveWishes.get(nIdx);
+
+                            if(wishItem.getId() == wishTmp.getId()) break;
+                        }
+
+                        Common.getInstance().listActiveWishes.remove(nIdx);
+
+                        Common.getInstance().listFinishedWishes.add(wishItem);
+                    }
+
+                    presentData();
                 }
             });
 
@@ -130,16 +214,22 @@ public class WishFragment extends CustomFragment {
             case R.id.rlyAll:
                 initTab();
                 rlyAllBottom.setVisibility(View.VISIBLE);
+                nSelectedTab = 0;
+                presentData();
                 break;
 
             case R.id.rlyActive:
                 initTab();
                 rlyActiveBottom.setVisibility(View.VISIBLE);
+                nSelectedTab = 1;
+                presentData();
                 break;
 
             case R.id.rlyFinished:
                 initTab();
                 rlyFinishedBottom.setVisibility(View.VISIBLE);
+                nSelectedTab = 2;
+                presentData();
                 break;
         }
     }

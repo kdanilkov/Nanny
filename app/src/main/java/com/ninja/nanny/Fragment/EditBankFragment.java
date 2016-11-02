@@ -1,6 +1,8 @@
 package com.ninja.nanny.Fragment;
 
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,10 +26,10 @@ import java.util.Arrays;
 import java.util.List;
 
 
-public class AddBankFragment extends CustomFragment {
+public class EditBankFragment extends CustomFragment {
 
 
-    public AddBankFragment() {
+    public EditBankFragment() {
         // Required empty public constructor
     }
 
@@ -40,12 +42,14 @@ public class AddBankFragment extends CustomFragment {
     Spinner spinnerBank;
     ArrayList<String> myBankArrayList, myAccountTypeArrayList;
     boolean isSMS;
+    public int nIndex;
+    Bank bankItem;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        mView = inflater.inflate(R.layout.fragment_add_bank, container, false);
+        mView = inflater.inflate(R.layout.fragment_edit_bank, container, false);
         mContext = (MainActivity)getActivity();
         mInflater = inflater;
 
@@ -67,6 +71,8 @@ public class AddBankFragment extends CustomFragment {
         myAccountTypeArrayList = new ArrayList<String>(myAccountTypeList);
 
         isSMS = true;
+
+        bankItem = Common.getInstance().listBanks.get(nIndex);
     }
 
     void setUI() {
@@ -78,8 +84,6 @@ public class AddBankFragment extends CustomFragment {
         tvAccountType = (TextView)mView.findViewById(R.id.tvAccountType);
         etBalance = (EditText) mView.findViewById(R.id.etBalance);
 
-        mView.findViewById(R.id.btnBack).setOnClickListener(this);
-        mView.findViewById(R.id.btnSave).setOnClickListener(this);
         btnSMS.setOnClickListener(this);
         btnEmail.setOnClickListener(this);
 
@@ -101,8 +105,28 @@ public class AddBankFragment extends CustomFragment {
             }
         });
 
-        btnSMS.setBackgroundResource(R.drawable.ic_checked);
-        btnEmail.setBackgroundResource(R.drawable.ic_unchecked);
+        mView.findViewById(R.id.btnBack).setOnClickListener(this);
+        mView.findViewById(R.id.btnSave).setOnClickListener(this);
+        mView.findViewById(R.id.btnDelete).setOnClickListener(this);
+
+        etAccountName.setText(bankItem.getAccountName());
+        etBalance.setText(bankItem.getBalance() + "");
+
+        if(bankItem.getNotificationMode() == 0) {
+            btnSMS.setBackgroundResource(R.drawable.ic_checked);
+            btnEmail.setBackgroundResource(R.drawable.ic_unchecked);
+        } else {
+            btnSMS.setBackgroundResource(R.drawable.ic_unchecked);
+            btnEmail.setBackgroundResource(R.drawable.ic_checked);
+        }
+
+        int i = 0;
+        for(i = 0; i < myBankArrayList.size(); i ++) {
+            String strBank = myBankArrayList.get(i);
+            if(strBank.equals(bankItem.getBank())) break;
+        }
+
+        spinnerBank.setSelection(i);
     }
 
     void saveBank() {
@@ -126,18 +150,44 @@ public class AddBankFragment extends CustomFragment {
 
         if(isSMS) nNotificationMode = 0;
 
-        int nFlagActive = 0;
+        bankItem.setAccountName(strAccountName);
+        bankItem.setBank(strBank);
+        bankItem.setAccountType(strAccountType);
+        bankItem.setBalance(nBalance);
+        bankItem.setNotificationMode(nNotificationMode);
 
-        if(Common.getInstance().listBanks.size() == 0) nFlagActive = 1;
+        Common.getInstance().dbHelper.updateBank(bankItem);
 
-        Bank bankNew = new Bank(strAccountName, strBank, strAccountType, nBalance, nNotificationMode, nFlagActive); // activate the new bank info
-        int nID =  Common.getInstance().dbHelper.createBank(bankNew);
-
-        bankNew.setId(nID);
-        Common.getInstance().listBanks.add(bankNew);
-
-        Toast.makeText(mContext, "new bank info has been added successfully", Toast.LENGTH_SHORT).show();
         mContext.getSupportFragmentManager().popBackStackImmediate();
+        Toast.makeText(mContext, "bank info has been saved successfully", Toast.LENGTH_SHORT).show();
+    }
+
+    void removeItem() {
+        new AlertDialog.Builder(mContext)
+                .setTitle("Delete entry")
+                .setMessage("Are you sure you want to delete this entry?")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // continue with delete
+                        Common.getInstance().dbHelper.deleteBank(bankItem.getId());
+                        Common.getInstance().listBanks.remove(bankItem);
+
+                        if(bankItem.getFlagActive() == 1 && Common.getInstance().listBanks.size() > 0) {
+                            Bank bankFirst = Common.getInstance().listBanks.get(0);
+                            bankFirst.setFlagActive(1);
+                        }
+
+                        mContext.getSupportFragmentManager().popBackStackImmediate();
+                        Toast.makeText(mContext, "bank info has been deleted successfully", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 
     @Override
@@ -148,6 +198,9 @@ public class AddBankFragment extends CustomFragment {
                 break;
             case R.id.btnSave:
                 saveBank();
+                break;
+            case R.id.btnDelete:
+                removeItem();
                 break;
             case R.id.btnSMS:
                 isSMS = true;

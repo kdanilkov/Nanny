@@ -8,11 +8,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ninja.nanny.Custom.CustomFragment;
 import com.ninja.nanny.MainActivity;
+import com.ninja.nanny.Model.Bank;
 import com.ninja.nanny.R;
+import com.ninja.nanny.Utils.Common;
 import com.ninja.nanny.Utils.Constant;
 
 
@@ -26,6 +30,8 @@ public class BankFragment extends CustomFragment {
     LayoutInflater mInflater;
     View mView;
     MainActivity mContext;
+    LinearLayout lyContainer;
+    int nActiveIndex = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -43,23 +49,90 @@ public class BankFragment extends CustomFragment {
     void setUI() {
         mView.findViewById(R.id.btnBack).setOnClickListener(this);
         mView.findViewById(R.id.btnAddBankItem).setOnClickListener(this);
+        lyContainer = (LinearLayout)mView.findViewById(R.id.lyContainer);
+    }
 
-        View viewItemChecked = mView.findViewById(R.id.bankItemChekced);
-        View viewItemUnChecked = mView.findViewById(R.id.bankItemUnChekced);
+    @Override
+    public void onResume() {
+        super.onResume();
+        presentData();
+    }
 
-        ((ImageView)viewItemChecked.findViewById(R.id.imgvCircle)).setImageResource(R.drawable.ic_circle_blue);
-        ((TextView)viewItemChecked.findViewById(R.id.tvBankName)).setText("Emirates NBD");
-        ((TextView)viewItemChecked.findViewById(R.id.tvDetail)).setText("******123, Current, by SMS");
-        ((TextView)viewItemChecked.findViewById(R.id.tvBalance)).setText("Balance: 7500$");
-        ((Button)viewItemChecked.findViewById(R.id.btnCheck)).setBackgroundResource(R.drawable.ic_checked);
+    void presentData() {
+        lyContainer.removeAllViews();
 
-        ((ImageView)viewItemUnChecked.findViewById(R.id.imgvCircle)).setImageResource(R.drawable.ic_circle_gray);
-        ((TextView)viewItemUnChecked.findViewById(R.id.tvBankName)).setText("City Bank Card");
-        ((TextView)viewItemUnChecked.findViewById(R.id.tvDetail)).setText("******345, Savings");
-        ((TextView)viewItemUnChecked.findViewById(R.id.tvBalance)).setText("Balance: 15,000$");
-        ((Button)viewItemUnChecked.findViewById(R.id.btnCheck)).setBackgroundResource(R.drawable.ic_unchecked);
+        if(Common.getInstance().listBanks == null || Common.getInstance().listBanks.size() == 0) {
+            Toast.makeText(mContext, "There is no bank info", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
+        for(int i = 0; i < Common.getInstance().listBanks.size(); i ++) {
+            Bank bankItem = Common.getInstance().listBanks.get(i);
 
+            if(bankItem.getFlagActive() == 1) {
+                nActiveIndex = i;
+            }
+
+            final int nIdx = i;
+            View cell = mInflater.inflate(R.layout.cell_bank_item, null);
+
+            ((TextView)cell.findViewById(R.id.tvBankName)).setText(bankItem.getAccountName());
+            ((TextView)cell.findViewById(R.id.tvDetail)).setText(bankItem.getBank() + ", " + bankItem.getAccountType());
+            ((TextView)cell.findViewById(R.id.tvBalance)).setText("Balance: " + bankItem.getBalance() + "$");
+
+            final ImageView imgvCircle = (ImageView)cell.findViewById(R.id.imgvCircle);
+            final Button btnCheck = (Button)cell.findViewById(R.id.btnCheck);
+
+            if(bankItem.getFlagActive() == 1) {
+                imgvCircle.setImageResource(R.drawable.ic_circle_blue);
+                btnCheck.setBackgroundResource(R.drawable.ic_checked);
+            } else {
+                imgvCircle.setImageResource(R.drawable.ic_circle_gray);
+                btnCheck.setBackgroundResource(R.drawable.ic_unchecked);
+            }
+
+            cell.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    EditBankFragment f = new EditBankFragment();
+                    String title = Constant.FRAGMENT_EDIT_BANK;
+                    f.nIndex = nIdx;
+
+                    FragmentTransaction transaction = mContext.getSupportFragmentManager()
+                            .beginTransaction();
+                    transaction.add(R.id.content_frame, f, title).addToBackStack(title).commit();
+                }
+            });
+
+            btnCheck.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if(nIdx == nActiveIndex) return;
+
+                    Bank bankSelected = Common.getInstance().listBanks.get(nIdx);
+
+                    imgvCircle.setImageResource(R.drawable.ic_circle_blue);
+                    btnCheck.setBackgroundResource(R.drawable.ic_checked);
+
+                    bankSelected.setFlagActive(1);
+                    Common.getInstance().dbHelper.updateBank(bankSelected);
+
+                    Bank bankPrevious = Common.getInstance().listBanks.get(nActiveIndex);
+                    View cellPrevious = lyContainer.getChildAt(nActiveIndex);
+
+                    ((ImageView)cellPrevious.findViewById(R.id.imgvCircle)).setImageResource(R.drawable.ic_circle_gray);
+                    ((Button)cellPrevious.findViewById(R.id.btnCheck)).setBackgroundResource(R.drawable.ic_unchecked);
+
+                    bankPrevious.setFlagActive(0);
+                    Common.getInstance().dbHelper.updateBank(bankPrevious);
+
+                    nActiveIndex = nIdx;
+
+                }
+            });
+
+            lyContainer.addView(cell);
+        }
     }
 
 

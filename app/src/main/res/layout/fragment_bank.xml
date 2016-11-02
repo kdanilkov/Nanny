@@ -32,23 +32,6 @@
             android:textColor="@color/white"
             android:textSize="20sp" />
 
-        <Button
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_centerVertical="true"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="15dp"
-            android:id="@+id/btnMore"
-            android:background="@drawable/ic_more" />
-
-        <Button
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:id="@+id/btnSearch"
-            android:layout_centerVertical="true"
-            android:layout_toStartOf="@+id/btnMore"
-            android:layout_marginEnd="10dp"
-            android:background="@drawable/ic_search" />
     </RelativeLayout>
 
     <ScrollView
@@ -62,12 +45,8 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:paddingLeft="10dp"
-            android:paddingRight="10dp">
-
-            <include layout="@layout/cell_bank_item"
-                android:id="@+id/bankItemChekced" />
-            <include layout="@layout/cell_bank_item"
-                android:id="@+id/bankItemUnChekced" />
+            android:paddingRight="10dp"
+            android:id="@+id/lyContainer">
 
         </LinearLayout>
     </ScrollView>

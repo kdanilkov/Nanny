@@ -1,16 +1,24 @@
 package com.ninja.nanny.Fragment;
 
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ninja.nanny.Custom.CustomFragment;
 import com.ninja.nanny.FancyChart.ChartData;
 import com.ninja.nanny.FancyChart.FancyChart;
 import com.ninja.nanny.MainActivity;
+import com.ninja.nanny.Model.Wish;
 import com.ninja.nanny.R;
+import com.ninja.nanny.Utils.Common;
+import com.ninja.nanny.Utils.Constant;
 
 import at.grabner.circleprogress.CircleProgressView;
 
@@ -26,6 +34,7 @@ public class ViewWishFragment extends CustomFragment {
     View mView;
     MainActivity mContext;
     CircleProgressView mCircleView;
+    public Wish wishSelected;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -40,11 +49,28 @@ public class ViewWishFragment extends CustomFragment {
         return mView;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        setUI();
+    }
+
     void setUI() {
         mView.findViewById(R.id.btnBack).setOnClickListener(this);
+        mView.findViewById(R.id.btnDelete).setOnClickListener(this);
+        mView.findViewById(R.id.btnEdit).setOnClickListener(this);
 
         mCircleView = (CircleProgressView)mView.findViewById(R.id.circleView);
-        mCircleView.setValue(62);
+
+        ((TextView)mView.findViewById(R.id.tvTitle)).setText(wishSelected.getTitle());
+        ((TextView)mView.findViewById(R.id.tvAmount)).setText(wishSelected.getTotalAmount() + "");
+        ((TextView)mView.findViewById(R.id.tvPayment)).setText(wishSelected.getMonthlyPayment() + "");
+        ((TextView)mView.findViewById(R.id.tvSaved)).setText(wishSelected.getSavedAmount() + "");
+        ((TextView)mView.findViewById(R.id.tvLeft)).setText((wishSelected.getTotalAmount() - wishSelected.getSavedAmount()) + "");
+
+        int nPercent = wishSelected.getSavedAmount() * 100 / wishSelected.getTotalAmount();
+
+        mCircleView.setValue(nPercent);
 
         FancyChart chart = (FancyChart)mView.findViewById(R.id.fancyChart);
 
@@ -68,12 +94,77 @@ public class ViewWishFragment extends CustomFragment {
 
     }
 
+    void removeItem() {
+        new AlertDialog.Builder(mContext)
+                .setTitle("Delete entry")
+                .setMessage("Are you sure you want to delete this entry?")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // continue with delete
+                        Common.getInstance().dbHelper.deleteBank(wishSelected.getId());
+
+                        int nIdx = 0;
+
+                        for(nIdx = 0; nIdx < Common.getInstance().listAllWishes.size(); nIdx ++) {
+                            Wish wishTmp = Common.getInstance().listAllWishes.get(nIdx);
+
+                            if(wishTmp.getId() == wishSelected.getId()) break;
+                        }
+
+                        Common.getInstance().listAllWishes.remove(nIdx);
+
+                        if(wishSelected.getFlagActive() == 0) {
+                            for(nIdx = 0; nIdx < Common.getInstance().listFinishedWishes.size(); nIdx ++) {
+                                Wish wishTmp = Common.getInstance().listFinishedWishes.get(nIdx);
+
+                                if(wishTmp.getId() == wishSelected.getId()) break;
+                            }
+
+                            Common.getInstance().listFinishedWishes.remove(nIdx);
+                        } else {
+                            for(nIdx = 0; nIdx < Common.getInstance().listActiveWishes.size(); nIdx ++) {
+                                Wish wishTmp = Common.getInstance().listActiveWishes.get(nIdx);
+
+                                if(wishTmp.getId() == wishSelected.getId()) break;
+                            }
+
+                            Common.getInstance().listActiveWishes.remove(nIdx);
+                        }
+
+                        mContext.getSupportFragmentManager().popBackStackImmediate();
+                        Toast.makeText(mContext, "wish info has been deleted successfully", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+    }
+
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnBack:
                 mContext.getSupportFragmentManager().popBackStackImmediate();
+                break;
+
+            case R.id.btnDelete:
+                removeItem();
+                break;
+
+            case R.id.btnEdit:
+                EditWishFragment f = new EditWishFragment();
+                String title = Constant.FRAGMENT_EDIT_WISH;
+
+                f.wishSelected = wishSelected;
+
+                FragmentTransaction transaction = mContext.getSupportFragmentManager()
+                        .beginTransaction();
+                transaction.add(R.id.content_frame, f, title).addToBackStack(title).commit();
                 break;
         }
     }

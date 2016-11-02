@@ -36,7 +36,7 @@ public class AdviceFragment extends CustomFragment {
     }
 
     void setUI() {
-        mView.findViewById(R.id.btnMenu).setOnClickListener(this);
+        mView.findViewById(R.id.btnBack).setOnClickListener(this);
 
         View cellYellow = mView.findViewById(R.id.cellYellow);
         View cellBlue = mView.findViewById(R.id.cellBlue);
@@ -59,8 +59,8 @@ public class AdviceFragment extends CustomFragment {
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btnMenu:
-                mContext.toggleMenu();
+            case R.id.btnBack:
+                mContext.getSupportFragmentManager().popBackStackImmediate();
                 break;
         }
     }

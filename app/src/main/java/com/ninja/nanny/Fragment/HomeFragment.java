@@ -37,8 +37,6 @@ public class HomeFragment extends CustomFragment {
     void setUI() {
         mView.findViewById(R.id.btnAdvice).setOnClickListener(this);
         mView.findViewById(R.id.btnMenu).setOnClickListener(this);
-        mView.findViewById(R.id.btnMore).setOnClickListener(this);
-        mView.findViewById(R.id.btnSearch).setOnClickListener(this);
     }
 
     @Override
@@ -50,11 +48,9 @@ public class HomeFragment extends CustomFragment {
             case R.id.btnMenu:
                 mContext.toggleMenu();
                 break;
-            case R.id.btnMore:
-                break;
-            case R.id.btnSearch:
-                break;
             default:
         }
     }
+
+
 }

@@ -105,7 +105,7 @@
                         android:background="@drawable/ic_checked" />
 
                     <TextView
-                        android:text="TEXT"
+                        android:text="RECURRENT"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -194,35 +194,6 @@
                         android:textColor="?android:attr/textColorHint"
                         android:paddingBottom="5dp" />
                 </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="30dp">
-
-                <TextView
-                    android:text="PAY FROM"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/label_text_color" />
-
-                <ToggleButton
-                    android:layout_width="150dp"
-                    android:layout_height="30dp"
-                    android:background="@drawable/tbtn_selector_spec"
-                    android:textOff="CityBank Account"
-                    android:textOn="Paypal Account"
-                    android:id="@+id/tbtnSwitch"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:checked="false"
-                    android:layout_marginTop="15dp"
-                    android:textSize="10sp"
-                    android:textColor="@color/gray_dark" />
-
             </LinearLayout>
 
         </LinearLayout>
