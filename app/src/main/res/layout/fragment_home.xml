@@ -51,7 +51,7 @@
                         android:text="230$"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/tvMoneyThisWeek"
+                        android:id="@+id/tvLeftThisWeek"
                         android:layout_marginLeft="10dp"
                         android:layout_marginTop="10dp"
                         android:textSize="30sp"
@@ -62,8 +62,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/textView2"
-                        android:layout_alignStart="@+id/tvMoneyThisWeek"
-                        android:layout_below="@+id/tvMoneyThisWeek"
+                        android:layout_alignStart="@+id/tvLeftThisWeek"
+                        android:layout_below="@+id/tvLeftThisWeek"
                         android:textColor="@color/white"
                         android:layout_marginTop="5dp" />
 
@@ -71,8 +71,8 @@
                         android:text="1,400$"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/tvMoneyThisMonth"
-                        android:layout_alignStart="@+id/tvMoneyThisWeek"
+                        android:id="@+id/tvLeftThisMonth"
+                        android:layout_alignStart="@+id/tvLeftThisWeek"
                         android:layout_below="@+id/textView2"
                         android:layout_marginTop="15dp"
                         android:textColor="@color/white"
@@ -83,8 +83,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/textView4"
-                        android:layout_alignLeft="@+id/tvMoneyThisMonth"
-                        android:layout_below="@+id/tvMoneyThisMonth"
+                        android:layout_alignLeft="@+id/tvLeftThisMonth"
+                        android:layout_below="@+id/tvLeftThisMonth"
                         android:layout_marginTop="5dp"
                         android:textColor="@color/white" />
                 </RelativeLayout>
@@ -99,7 +99,7 @@
                         android:text="370$"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/tvMoneyUpcoming"
+                        android:id="@+id/tvUpcomingPayment"
                         android:layout_marginLeft="10dp"
                         android:layout_marginTop="10dp"
                         android:textSize="30sp"
@@ -111,8 +111,8 @@
                         android:layout_height="wrap_content"
                         android:id="@+id/textView6"
                         android:textColor="@color/white"
-                        android:layout_below="@+id/tvMoneyUpcoming"
-                        android:layout_alignStart="@+id/tvMoneyUpcoming"
+                        android:layout_below="@+id/tvUpcomingPayment"
+                        android:layout_alignStart="@+id/tvUpcomingPayment"
                         android:layout_marginTop="8dp" />
 
                     <TextView
@@ -139,7 +139,7 @@
                     android:text="500$"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/tvMoneySpentMonthWish"
+                    android:id="@+id/tvSpentForWish"
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentStart="true"
                     android:layout_marginBottom="5dp"
@@ -152,8 +152,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/textView9"
-                    android:layout_alignBottom="@+id/tvMoneySpentMonthWish"
-                    android:layout_toRightOf="@+id/tvMoneySpentMonthWish"
+                    android:layout_alignBottom="@+id/tvSpentForWish"
+                    android:layout_toRightOf="@+id/tvSpentForWish"
                     android:layout_marginLeft="10dp"
                     android:textColor="@color/white" />
             </RelativeLayout>

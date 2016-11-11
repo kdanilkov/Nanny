@@ -6,12 +6,14 @@ package com.ninja.nanny.Utils;
 
 public class Constant {
     public static final String PREF_NAME = "Nanny";
+    public static final String PREF_KEY_IS_INIT_SET = "is_init_set";
     public static final String PREF_KEY_MINIMAL_AMOUNT_PER_DAY = "MinimalAmountPerDay";
     public static final String PREF_KEY_SALARY_DATE = "SalaryDate";
     public static final String PREF_KEY_MONTHLY_INCOME = "MonthlyIncome";
     public static final String PREF_KEY_USED_SALARY = "UsedSalary";
     public static final String PREF_KEY_TOLERANCE_DAYS = "ToleranceDays";
     public static final String PREF_KEY_TOLERANCE_PERCENT = "TolerancePercent";
+    public static final String PREF_KEY_SMS_TIMESTAMP = "sms_timestamp";
 
     public static final String FRAGMENT_HOME = "home";
     public static final String FRAGMENT_BANK = "bank";
@@ -27,6 +29,7 @@ public class Constant {
     public static final String FRAGMENT_EDIT_WISH = "edit_wish";
     public static final String FRAGMENT_VIEW_WISH = "view_wish";
     public static final String FRAGMENT_NEW_PAYMENT = "new_payment";
+    public static final String FRAGMENT_EDIT_PAYMENT = "edit_payment";
     public static final String FRAGMENT_EXPENSE_AS_PAYED = "expense_as_payed";
     public static final String FRAGMENT_MONTHLY_SAVINGS = "monthly_savings";
     public static final String FRAGMENT_CALENDAR_PAYMENT = "calendar_payment";

@@ -24,8 +24,17 @@
             android:layout_width="30dp"
             android:layout_height="30dp" />
 
+        <Button
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="15dp"
+            android:id="@+id/btnDelete"
+            android:background="@drawable/ic_trash" />
+
         <TextView
-            android:text="New Payment"
+            android:text="Edit Payment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="false"
@@ -67,6 +76,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName"
+                    android:text=""
                     android:ems="10"
                     android:id="@+id/etTitle"
                     android:background="@drawable/border_add_bank_editor"
@@ -91,6 +101,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName"
+                    android:text=""
                     android:ems="10"
                     android:id="@+id/etDetail"
                     android:background="@drawable/border_add_bank_editor"
@@ -115,7 +126,7 @@
                         android:id="@+id/btnChkBoxRecurrent"
                         android:layout_weight="1"
                         android:layout_width="30dp"
-                        android:background="@drawable/ic_unchecked" />
+                        android:background="@drawable/ic_checked" />
 
                     <TextView
                         android:text="RECURRENT"
@@ -231,17 +242,6 @@
             android:paddingRight="15dp"
             android:textColor="@color/white"
             android:layout_alignParentRight="true" />
-        <Button
-            android:text="COPY PATTERN"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btnPattern"
-            android:background="@color/colorPrimary"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
-            android:textColor="@color/white"
-            android:layout_toLeftOf="@+id/btnSave"
-            android:layout_marginRight="15dp" />
     </RelativeLayout>
 
 </RelativeLayout>

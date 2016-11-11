@@ -111,6 +111,7 @@ public class NewWishFragment extends CustomFragment {
 
     void saveWish() {
         String strTitle = etTitle.getText().toString();
+
         if(etTotalAmount.getText().toString().length() > 8){
             etTotalAmount.setError(Html.fromHtml("<font color='red'>amount value is too large</font>"));
             return;

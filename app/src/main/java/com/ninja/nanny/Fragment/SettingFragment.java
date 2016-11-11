@@ -14,6 +14,7 @@ import com.ninja.nanny.Custom.CustomFragment;
 import com.ninja.nanny.MainActivity;
 import com.ninja.nanny.Preference.UserPreference;
 import com.ninja.nanny.R;
+import com.ninja.nanny.Utils.Common;
 import com.ninja.nanny.Utils.Constant;
 
 import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar;
@@ -64,27 +65,25 @@ public class SettingFragment extends CustomFragment implements DiscreteSeekBar.O
         tvToleranceDays = (TextView)mView.findViewById(R.id.tvToleranceDays);
         tvTolerancePercent = (TextView)mView.findViewById(R.id.tvTolerancePercent);
 
-        int nMinimalAmountPerDay = UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_MINIMAL_AMOUNT_PER_DAY, 0);
-        int nSalaryDate = UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_SALARY_DATE, 15);
-        int nMonthlyIncome = UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_MONTHLY_INCOME, 0);
-        int nUsedSalary = UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_USED_SALARY, 0);
-        int nToleranceDays = UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_TOLERANCE_DAYS, 2);
-        int nTolerancePercent = UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_TOLERANCE_PERCENT, 5);
-
-        etMinimalAmountPerDay.setText(nMinimalAmountPerDay + "");
-        etSalaryDate.setText(nSalaryDate + "");
-        etMonthlyIncome.setText(nMonthlyIncome + "");
-        etUsedSalary.setText(nUsedSalary + "");
-        seekBarDays.setProgress(nToleranceDays);
-        seekBarPercent.setProgress(nTolerancePercent);
-        tvToleranceDays.setText(nToleranceDays + " DAYS");
-        tvTolerancePercent.setText(nTolerancePercent + " %");
+        etMinimalAmountPerDay.setText(Common.getInstance().nMinimalDayAmount + "");
+        etSalaryDate.setText(Common.getInstance().nSalaryDate + "");
+        etMonthlyIncome.setText(Common.getInstance().nMonthlyIncome + "");
+        etUsedSalary.setText(Common.getInstance().nUsedAmount + "");
+        seekBarDays.setProgress(Common.getInstance().nToleranceDays);
+        seekBarPercent.setProgress(Common.getInstance().nTolerancePercents);
+        tvToleranceDays.setText(Common.getInstance().nToleranceDays + " DAYS");
+        tvTolerancePercent.setText(Common.getInstance().nTolerancePercents + " %");
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnMenu:
+                boolean isInitSet = UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_IS_INIT_SET, false);
+                if(!isInitSet) {
+                    Toast.makeText(mContext, "You should make the initial setting first of all", Toast.LENGTH_SHORT).show();
+                    break;
+                }
                 mContext.toggleMenu();
                 break;
 
@@ -114,6 +113,7 @@ public class SettingFragment extends CustomFragment implements DiscreteSeekBar.O
 
         if(nMinimalAmountPerDay > nMonthlyIncome / 30) {
             etMinimalAmountPerDay.setError(Html.fromHtml("<font color='red'>minimal amount per day should be lower than one 30th of monthly income</font>"));
+            return;
         }
 
         UserPreference.getInstance().putSharedPreference(Constant.PREF_KEY_MINIMAL_AMOUNT_PER_DAY, nMinimalAmountPerDay);
@@ -122,6 +122,20 @@ public class SettingFragment extends CustomFragment implements DiscreteSeekBar.O
         UserPreference.getInstance().putSharedPreference(Constant.PREF_KEY_USED_SALARY, nUsedSalary);
         UserPreference.getInstance().putSharedPreference(Constant.PREF_KEY_TOLERANCE_DAYS, nToleranceDays);
         UserPreference.getInstance().putSharedPreference(Constant.PREF_KEY_TOLERANCE_PERCENT, nTolerancePercent);
+
+        Common.getInstance().nMinimalDayAmount = nMinimalAmountPerDay;
+        Common.getInstance().nSalaryDate = nSalaryDate;
+        Common.getInstance().nMonthlyIncome = nMonthlyIncome;
+        Common.getInstance().nUsedAmount = nUsedSalary;
+        Common.getInstance().nToleranceDays = nToleranceDays;
+        Common.getInstance().nTolerancePercents = nTolerancePercent;
+
+        boolean isInitSet = UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_IS_INIT_SET, false);
+
+        if(!isInitSet) {
+            UserPreference.getInstance().putSharedPreference(Constant.PREF_KEY_IS_INIT_SET, true);
+            mContext.launchFragment(0);
+        }
 
         Toast.makeText(mContext, "Setting Info has been saved successfully", Toast.LENGTH_SHORT).show();
     }

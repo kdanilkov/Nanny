@@ -6,14 +6,19 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.ninja.nanny.Custom.CustomFragment;
 import com.ninja.nanny.MainActivity;
+import com.ninja.nanny.Model.Payment;
 import com.ninja.nanny.R;
+import com.ninja.nanny.Utils.Common;
 import com.ninja.nanny.Utils.Constant;
 
 public class PaymentFragment extends CustomFragment {
@@ -27,6 +32,8 @@ public class PaymentFragment extends CustomFragment {
     View mView;
     MainActivity mContext;
     LinearLayout mLyContainer;
+    boolean isCalendarClicked, isCurrent;
+    Switch switchView;
 
 
     @Override
@@ -45,56 +52,127 @@ public class PaymentFragment extends CustomFragment {
     void setUI() {
         mView.findViewById(R.id.btnBack).setOnClickListener(this);
         mView.findViewById(R.id.btnAdd).setOnClickListener(this);
+        mView.findViewById(R.id.btnCalendar).setOnClickListener(this);
 
         mLyContainer = (LinearLayout)mView.findViewById(R.id.lyContainer);
 
+        switchView = (Switch)mView.findViewById(R.id.switchView);
+        isCurrent = true;
+        switchView.setChecked(true);
+
+        switchView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                isCurrent = b;
+                presentData();
+            }
+        });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         presentData();
+        isCalendarClicked = false;
     }
 
     void presentData() {
         mLyContainer.removeAllViews();
 
-        String[] arrName = {"Savings 30%", "Tenancy", "Hot Water", "Mobile", "Internet", "TV"};
-        String[] arrDetail = {"500$, to Savings Account", "500$, to Provider", "500$, to Provider", "200$, to Provider", "200$, to Provider", "75$, to Provider"};
-        int[] arrStatus = {2, 1, 1, 1, 1, 0}; //2-green, 1-blue, 0-false(gray)
+//        String[] arrName = {"Savings 30%", "Tenancy", "Hot Water", "Mobile", "Internet", "TV"};
+//        String[] arrDetail = {"500$, to Savings Account", "500$, to Provider", "500$, to Provider", "200$, to Provider", "200$, to Provider", "75$, to Provider"};
+//        int[] arrStatus = {2, 1, 1, 1, 1, 0}; //2-green, 1-blue, 0-false(gray)
 
-        for(int i = 0; i < arrName.length; i ++) {
-            String strName = arrName[i];
-            String strDetail = arrDetail[i];
-            int nStatus = arrStatus[i];
+        if(Common.getInstance().listAllPayments.size() == 0) {
+            Toast.makeText(mContext, "There is no data to show", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-            View cell = mInflater.inflate(R.layout.cell_wish_item, null);
+        int nSize = Common.getInstance().listAllPayments.size();
 
-            ImageView imgvCircle = (ImageView)cell.findViewById(R.id.imgvCircle);
-            ToggleButton tbSwitch = (ToggleButton)cell.findViewById(R.id.tbtnSwitch);
+        if(isCurrent) nSize = Common.getInstance().listCurrentPayments.size();
 
-            switch (nStatus) {
-                case 0:
-                    imgvCircle.setImageResource(R.drawable.ic_circle_gray);
-                    tbSwitch.setChecked(false);
-                    break;
-                case 1:
-                    imgvCircle.setImageResource(R.drawable.ic_circle_blue);
-                    tbSwitch.setBackgroundResource(R.drawable.tbtn_selector_blue);
-                    tbSwitch.setChecked(true);
-                    break;
-                case 2:
-                    imgvCircle.setImageResource(R.drawable.ic_circle_green);
-                    tbSwitch.setBackgroundResource(R.drawable.tbtn_selector_green);
-                    tbSwitch.setChecked(true);
-                    break;
+        for(int i = 0; i < nSize; i ++) {
+            final Payment payment = Common.getInstance().listAllPayments.get(i);
+
+            int nPaymentMode = payment.getPaymentMode();
+            int nPaidStatus = payment.getPaidStatus();
+            int nSavingMode = payment.getSavingMode();
+
+            String strDetail = payment.getAmount() + "$, to Savings Account, :" + payment.getDateOfMonth();
+
+            if(nPaymentMode > 1) {
+                strDetail = payment.getAmount() + "$, to Provider, :" + payment.getDateOfMonth();
+            } else if(nPaymentMode < 2 && nSavingMode == 1) {
+                strDetail = payment.getAmount() + "%, to Savings Account, :" + payment.getDateOfMonth();
             }
 
-            ((TextView)cell.findViewById(R.id.tvName)).setText(strName);
+            View cell = mInflater.inflate(R.layout.cell_payment_item, null);
+
+            final ImageView imgvCircle = (ImageView)cell.findViewById(R.id.imgvCircle);
+            final ToggleButton tbSwitch = (ToggleButton)cell.findViewById(R.id.tbtnSwitch);
+
+            if(nPaymentMode < 2) {
+                if(nPaidStatus == 0) {
+                    tbSwitch.setChecked(true);
+                    tbSwitch.setBackgroundResource(R.drawable.tbtn_selector_dark_orange);
+                    imgvCircle.setBackgroundResource(R.drawable.circle_view_dark_orange);
+                } else {
+                    tbSwitch.setChecked(false);
+                    tbSwitch.setBackgroundResource(R.drawable.tbtn_selector_light_orange);
+                    imgvCircle.setBackgroundResource(R.drawable.circle_view_light_orange);
+                }
+            } else {
+                if(nPaidStatus == 0) {
+                    tbSwitch.setChecked(true);
+                    tbSwitch.setBackgroundResource(R.drawable.tbtn_selector_dark_blue);
+                    imgvCircle.setBackgroundResource(R.drawable.circle_view_dark_blue);
+                } else {
+                    tbSwitch.setChecked(false);
+                    tbSwitch.setBackgroundResource(R.drawable.tbtn_selector_light_blue);
+                    imgvCircle.setBackgroundResource(R.drawable.circle_view_light_blue);
+                }
+            }
+
+            ((TextView)cell.findViewById(R.id.tvName)).setText(payment.getTitle());
             ((TextView)cell.findViewById(R.id.tvDetail)).setText(strDetail);
 
-            final int pos = i;
+            tbSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                    if(b) {
+                        tbSwitch.setChecked(false);
+                        return;
+                    }
+
+                    tbSwitch.setChecked(true);
+
+//                    int nPaymentMode = payment.getPaymentMode();
+//
+//                    if(nPaymentMode < 2) {
+//                        tbSwitch.setBackgroundResource(R.drawable.tbtn_selector_light_orange);
+//                        imgvCircle.setBackgroundResource(R.drawable.circle_view_light_orange);
+//                    } else {
+//                        tbSwitch.setBackgroundResource(R.drawable.tbtn_selector_light_blue);
+//                        imgvCircle.setBackgroundResource(R.drawable.circle_view_light_blue);
+//                    }
+
+                    ExpenseAsPayedFragment f = new ExpenseAsPayedFragment();
+                    String title = Constant.FRAGMENT_EXPENSE_AS_PAYED;
+                    f.paymentSelected = payment;
+
+                    FragmentTransaction transaction = mContext.getSupportFragmentManager()
+                            .beginTransaction();
+                    transaction.add(R.id.content_frame, f, title).addToBackStack(title).commit();
+                }
+            });
 
             cell.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    ExpenseAsPayedFragment f = new ExpenseAsPayedFragment();
-                    String title = Constant.FRAGMENT_EXPENSE_AS_PAYED;
+                    EditPaymentFragment f = new EditPaymentFragment();
+                    String title = Constant.FRAGMENT_EDIT_PAYMENT;
+                    f.paymentSelected = payment;
 
                     FragmentTransaction transaction = mContext.getSupportFragmentManager()
                             .beginTransaction();
@@ -120,6 +198,20 @@ public class PaymentFragment extends CustomFragment {
                 FragmentTransaction transaction = mContext.getSupportFragmentManager()
                         .beginTransaction();
                 transaction.add(R.id.content_frame, f, title).addToBackStack(title).commit();
+                break;
+
+            case R.id.btnCalendar:
+                if(!isCalendarClicked) {
+                    CalendarPaymentFragment f1 = new CalendarPaymentFragment();
+                    String title1 = Constant.FRAGMENT_CALENDAR_PAYMENT;
+
+                    FragmentTransaction transaction1 = mContext.getSupportFragmentManager()
+                            .beginTransaction();
+                    transaction1.add(R.id.content_frame, f1, title1).addToBackStack(title1).commit();
+
+                    isCalendarClicked = true;
+                }
+
                 break;
         }
     }

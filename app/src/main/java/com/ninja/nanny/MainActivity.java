@@ -1,19 +1,27 @@
 package com.ninja.nanny;
 
+import android.Manifest;
+import android.content.ContentResolver;
 import android.content.Context;
+import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.ninja.nanny.Adapter.LeftNavAdapter;
 import com.ninja.nanny.Custom.CustomActivity;
-import com.ninja.nanny.Fragment.AdviceFragment;
 import com.ninja.nanny.Fragment.BankFragment;
 import com.ninja.nanny.Fragment.HomeFragment;
 import com.ninja.nanny.Fragment.PaymentFragment;
@@ -21,9 +29,17 @@ import com.ninja.nanny.Fragment.SettingFragment;
 import com.ninja.nanny.Fragment.TransactionFragment;
 import com.ninja.nanny.Fragment.WishFragment;
 import com.ninja.nanny.Helper.DatabaseHelper;
+import com.ninja.nanny.Model.Payment;
+import com.ninja.nanny.Model.Sms;
 import com.ninja.nanny.Preference.UserPreference;
 import com.ninja.nanny.Utils.Common;
 import com.ninja.nanny.Utils.Constant;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
 
 public class MainActivity extends CustomActivity {
 
@@ -41,7 +57,10 @@ public class MainActivity extends CustomActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-//        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        //Do your operation
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+        //requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_main);
 
         initSetting();
@@ -57,8 +76,320 @@ public class MainActivity extends CustomActivity {
         Common.getInstance().listAllWishes = Common.getInstance().dbHelper.getAllWishes();
         Common.getInstance().listActiveWishes = Common.getInstance().dbHelper.getActiveWishes();
         Common.getInstance().listFinishedWishes = Common.getInstance().dbHelper.getFinishedWishes();
+        Common.getInstance().listAllPayments = Common.getInstance().dbHelper.getAllPayments();
+        Common.getInstance().listSms = Common.getInstance().dbHelper.getAllSms();
+
+        if (weHavePermissionToReadSMS()) {
+            syncSms();
+        } else {
+            requestReadSMSPermissionFirst();
+        }
+
+        processPayments();
+        syncSettingInfo();
     }
 
+    void syncSettingInfo() {
+        Common.getInstance().nMinimalDayAmount = UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_MINIMAL_AMOUNT_PER_DAY, 0);
+        Common.getInstance().nSalaryDate = UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_SALARY_DATE, 15);
+        Common.getInstance().nMonthlyIncome = UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_MONTHLY_INCOME, 0);
+        Common.getInstance().nUsedAmount = UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_USED_SALARY, 0);
+        Common.getInstance().nToleranceDays = UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_TOLERANCE_DAYS, 2);
+        Common.getInstance().nTolerancePercents = UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_TOLERANCE_PERCENT, 5);
+    }
+
+    void processPayments() {
+        Collections.sort(Common.getInstance().listAllPayments, new PaymentComparator());
+
+        Common.getInstance().listCurrentPayments = new ArrayList<Payment>();
+
+        Calendar cal = Calendar.getInstance();
+        int yearNow = cal.get(Calendar.YEAR);
+        int monthNow = cal.get(Calendar.MONTH);
+        int dayNow = cal.get(Calendar.DAY_OF_MONTH);
+        int daySalary = UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_SALARY_DATE, 15);
+        int nLowDayLimit = 0;
+        int nHighDayLimit = 0;
+
+        if(dayNow <= daySalary) {
+            nHighDayLimit = yearNow * 32 * 12 + monthNow * 32 + daySalary;
+
+            monthNow --;
+            if(monthNow == -1) {
+                monthNow = 11;
+                yearNow --;
+            }
+
+            nLowDayLimit = yearNow * 32 * 12 + monthNow * 32 + daySalary;
+        } else {
+            nLowDayLimit = yearNow * 32 * 12 + monthNow * 32 + daySalary;
+
+            monthNow ++;
+            if(monthNow == 12) {
+                monthNow = 0;
+                yearNow ++;
+            }
+
+            nHighDayLimit = yearNow * 32 * 12 + monthNow * 32 + daySalary;
+        }
+
+
+        for(int i = 0; i < Common.getInstance().listAllPayments.size(); i ++) {
+            Payment paymentTmp = Common.getInstance().listAllPayments.get(i);
+            int nPaymentMode = paymentTmp.getPaymentMode();
+
+            if(nPaymentMode == 0 || nPaymentMode == 2) {
+                Common.getInstance().listCurrentPayments.add(paymentTmp);
+                continue;
+            }
+
+            cal.setTimeInMillis(paymentTmp.getTimestampCreated());
+            int monthTmp = cal.get(Calendar.MONTH);
+            int yearTmp = cal.get(Calendar.YEAR);
+            int dayTmp = cal.get(Calendar.DAY_OF_MONTH);
+
+            if(dayTmp > paymentTmp.getDateOfMonth()) {
+                monthTmp ++;
+                if(monthTmp == 12) {
+                    monthTmp = 0;
+                    yearTmp ++;
+                }
+            }
+
+            int nDay = yearTmp * 32 * 12 + monthTmp * 32 + paymentTmp.getDateOfMonth();
+
+            if(nDay <= nLowDayLimit) break;
+            if(nDay > nHighDayLimit) continue;
+
+            Common.getInstance().listCurrentPayments.add(paymentTmp);
+        }
+    }
+
+    private boolean weHavePermissionToReadSMS() {
+        return ContextCompat.checkSelfPermission(this, Manifest.permission.READ_SMS) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    private void requestReadSMSPermissionFirst() {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_SMS)) {
+            Toast.makeText(this, "We need permission so you can text your friends.", Toast.LENGTH_LONG).show();
+            requestForResultSMSPermission();
+        } else {
+            requestForResultSMSPermission();
+        }
+    }
+
+    private void requestForResultSMSPermission() {
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_SMS}, 123);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 123
+                && grantResults.length > 0
+                && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(this, "Permission For Reading Sms Granted", Toast.LENGTH_SHORT).show();
+            syncSms();
+        } else {
+            Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    void syncSms() {
+
+        long currentTimeStamp = UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_SMS_TIMESTAMP, (long)0);
+        Uri message = Uri.parse("content://sms/");
+        ContentResolver cr = getContentResolver();
+        Cursor c = cr.query(message, null, null, null, null);
+
+        int totalSMS = c.getCount();
+        long maxTimestamp = currentTimeStamp;
+
+        if(c.moveToFirst()) {
+            for(int i = 0; i < totalSMS; i ++) {
+                long lTimeStamp = c.getLong(c.getColumnIndexOrThrow("date"));
+
+                if(lTimeStamp > currentTimeStamp) {
+                    Sms objSms = new Sms();
+
+                    objSms.setAddress(c.getString(c.getColumnIndexOrThrow("address")));
+                    objSms.setText(c.getString(c.getColumnIndexOrThrow("body")));
+                    objSms.setTimestamp(lTimeStamp);
+
+                    int sms_id = Common.getInstance().dbHelper.createSMS(objSms);
+                    objSms.setId(sms_id);
+
+                    Common.getInstance().listSms.add(objSms);
+
+                    if(lTimeStamp > maxTimestamp) maxTimestamp = lTimeStamp;
+                } else {
+                    break;
+                }
+
+                c.moveToNext();
+            }
+
+            UserPreference.getInstance().putSharedPreference(Constant.PREF_KEY_SMS_TIMESTAMP, maxTimestamp);
+        }
+
+        Collections.sort(Common.getInstance().listSms, new SmsComparator());
+
+        if(Common.getInstance().listSms.size() == 0) {
+            addSampleSmsForTransaction();
+        }
+    }
+
+    void addSampleSmsForTransaction() {
+        String[] arrTransacitons = getResources().getStringArray(R.array.sample_transaction_data);
+
+        for(int i = 0; i < arrTransacitons.length; i ++) {
+            Sms objSms = new Sms();
+
+            objSms.setAddress("10001");
+            objSms.setText(arrTransacitons[i]);
+            objSms.setTimestamp(new Date().getTime());
+
+            int sms_id = Common.getInstance().dbHelper.createSMS(objSms);
+            objSms.setId(sms_id);
+
+            Common.getInstance().listSms.add(objSms);
+        }
+    }
+
+    class SmsComparator implements Comparator<Sms> {
+        public int compare(Sms smsA, Sms smsB) {
+            int nResult = 0;
+            if(smsB.getTimestamp() > smsA.getTimestamp()) nResult = 1;
+            if(smsB.getTimestamp() < smsA.getTimestamp()) nResult = -1;
+            return nResult;
+        }
+    }
+
+    class PaymentComparator implements Comparator<Payment> {
+        public int compare(Payment paymentA, Payment paymentB) {
+            int nResult = 0;
+            int nTotlaPaymentMode = paymentA.getPaymentMode() * 4 + paymentB.getPaymentMode();
+
+            Calendar cal = Calendar.getInstance();
+            int yearNow = cal.get(Calendar.YEAR);
+            int monthNow = cal.get(Calendar.MONTH);
+
+            cal.setTimeInMillis(paymentA.getTimestampCreated());
+            int monthA = cal.get(Calendar.MONTH);
+            int yearA = cal.get(Calendar.YEAR);
+            int dayA = cal.get(Calendar.DAY_OF_MONTH);
+
+            if(dayA >= paymentA.getDateOfMonth()) {
+                monthA ++;
+                if(monthA == 12) {
+                    monthA = 0;
+                    yearA ++;
+                }
+            }
+
+            dayA = paymentA.getDateOfMonth();
+
+            cal.setTimeInMillis(paymentB.getTimestampCreated());
+            int monthB = cal.get(Calendar.MONTH);
+            int yearB = cal.get(Calendar.YEAR);
+            int dayB = cal.get(Calendar.DAY_OF_MONTH);
+
+            if(dayB >= paymentB.getDateOfMonth()) {
+                monthB ++;
+                if(monthB == 12) {
+                    monthB = 0;
+                    yearB ++;
+                }
+            }
+
+            dayB = paymentB.getDateOfMonth();
+
+            switch (nTotlaPaymentMode) {
+                case 0:   // A-saving recurrent, B-saving recurrent
+                case 2:   // A-saving recurrent, B-bill recurrent
+                case 8:   // A-bill recurrent, B-saving recurrent
+                case 10:  // A-bill recurrent, B-bill recurrent
+                    nResult = paymentB.getDateOfMonth() - paymentA.getDateOfMonth();
+                    break;
+
+                case 1:   // A-saving recurrent, B-saving single
+                case 3:   // A-saving recurret, B-bill single
+                case 9:   // A-bill recurrent, B-saving single
+                case 11:  // A-bill recurrent, B-bill single
+                    if((yearB < yearNow) || (yearB == yearNow && monthB < monthNow)) {
+                        nResult = -1;
+                    } else {
+                        nResult = paymentB.getDateOfMonth() - paymentA.getDateOfMonth();
+                    }
+                    break;
+
+                case 4:   // A-saving single, B-saving recurrent
+                case 6:   // A-saving single, B-bill recurrent
+                case 12:  // A-bill single, B-saving recurrent
+                case 14:  // A-bill single, B-bill recurrent
+                    if((yearA < yearNow) || (yearA == yearNow && monthA < monthNow)) {
+                        nResult = 1;
+                    } else {
+                        nResult = paymentB.getDateOfMonth() - paymentA.getDateOfMonth();
+                    }
+                    break;
+
+                case 5:   // A-saving single, B-saving single
+                case 7:   // A-saving single, B-bill single
+                case 13:  // A-bill single, B-saving single
+                case 15:  // A-bill single, B-bill single
+                    nResult = (yearB * 32 * 12 + monthB * 32 + dayB) - (yearA * 32 * 12 + monthA * 32 + dayA);
+                    break;
+            }
+            return nResult;
+        }
+    }
+
+//    Map<Integer, List<Sms>> getAllSms() {
+//        Map<Integer, List<Sms>> smsMap = new TreeMap<Integer, List<Sms>>();
+//        Sms objSms = null;
+//        Uri message = Uri.parse("content://sms/");
+//        ContentResolver cr = getContentResolver();
+//        Calendar cal = Calendar.getInstance(Locale.ENGLISH);
+//
+//        Cursor c = cr.query(message, null, null, null, null);
+//        startManagingCursor(c);
+//        int totalSMS = c.getCount();
+//
+//        if (c.moveToFirst()) {
+//            for (int i = 0; i < totalSMS; i++) {
+//
+//                objSms = new Sms();
+////                objSms.setId(c.getString(c.getColumnIndexOrThrow("_id")));
+//                objSms.setAddress(c.getString(c.getColumnIndexOrThrow("address")));
+//                objSms.setMsg(c.getString(c.getColumnIndexOrThrow("body")));
+//                objSms.setReadState(c.getString(c.getColumnIndex("read")));
+//                objSms.setTime(c.getLong(c.getColumnIndexOrThrow("date")));
+//
+//                if (c.getString(c.getColumnIndexOrThrow("type")).contains("1")) {
+//                    objSms.setFolderName("inbox");
+//                } else {
+//                    objSms.setFolderName("sent");
+//                }
+//
+//                cal.setTimeInMillis(objSms.getTime());
+//                int month = cal.get(Calendar.MONTH);
+//
+//                if (!smsMap.containsKey(month))
+//                    smsMap.put(month, new ArrayList<Sms>());
+//
+//                smsMap.get(month).add(objSms);
+//
+//                c.moveToNext();
+//            }
+//        }
+//        // else {
+//        // throw new RuntimeException("You have no SMS");
+//        // }
+//        c.close();
+//
+//        return smsMap;
+//    }
 
     void setupContainer()
     {
@@ -74,7 +405,16 @@ public class MainActivity extends CustomActivity {
                         currFrag.onResume();
                     }
                 });
-        launchFragment(0);
+
+        boolean isSetInitSet = UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_IS_INIT_SET, false);
+
+        if(isSetInitSet) {
+            launchFragment(0);
+        } else {
+            launchFragment(5);
+        }
+
+
     }
 
     @Override
@@ -144,6 +484,13 @@ public class MainActivity extends CustomActivity {
         ImageView imgvBG = (ImageView)header.findViewById(R.id.imgvBG);
         imgvBG.setImageResource(R.drawable.bg_left_nav_header);
 
+        header.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
         drawerLeft.addHeaderView(header);
 
         adapterLeft = new LeftNavAdapter(this); // home, my chat, location, setting, invite friend
@@ -188,17 +535,13 @@ public class MainActivity extends CustomActivity {
 
             case 4:
                 f = new TransactionFragment();
+                ((TransactionFragment)f).nMode = 0;
                 title = Constant.FRAGMENT_TRANSACTION;
                 break;
 
             case 5:
                 f = new SettingFragment();
                 title = Constant.FRAGMENT_SETTING;
-                break;
-
-            default:
-                f = new AdviceFragment();
-                title = Constant.FRAGMENT_ADVICE;
                 break;
         }
 

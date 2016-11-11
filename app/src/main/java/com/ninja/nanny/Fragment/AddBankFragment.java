@@ -149,16 +149,16 @@ public class AddBankFragment extends CustomFragment {
             case R.id.btnSave:
                 saveBank();
                 break;
-            case R.id.btnSMS:
-                isSMS = true;
-                btnSMS.setBackgroundResource(R.drawable.ic_checked);
-                btnEmail.setBackgroundResource(R.drawable.ic_unchecked);
-                break;
-            case R.id.btnEmail:
-                isSMS = false;
-                btnSMS.setBackgroundResource(R.drawable.ic_unchecked);
-                btnEmail.setBackgroundResource(R.drawable.ic_checked);
-                break;
+//            case R.id.btnSMS:
+//                isSMS = true;
+//                btnSMS.setBackgroundResource(R.drawable.ic_checked);
+//                btnEmail.setBackgroundResource(R.drawable.ic_unchecked);
+//                break;
+//            case R.id.btnEmail:
+//                isSMS = false;
+//                btnSMS.setBackgroundResource(R.drawable.ic_unchecked);
+//                btnEmail.setBackgroundResource(R.drawable.ic_checked);
+//                break;
         }
     }
 

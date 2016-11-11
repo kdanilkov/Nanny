@@ -5,9 +5,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.ninja.nanny.Custom.CustomFragment;
 import com.ninja.nanny.MainActivity;
+import com.ninja.nanny.Model.Sms;
 import com.ninja.nanny.R;
 
 public class TransactionDetailFragment extends CustomFragment {
@@ -21,6 +23,7 @@ public class TransactionDetailFragment extends CustomFragment {
     LayoutInflater mInflater;
     View mView;
     MainActivity mContext;
+    public Sms smsItem;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -37,6 +40,7 @@ public class TransactionDetailFragment extends CustomFragment {
 
     void setUI() {
         mView.findViewById(R.id.btnBack).setOnClickListener(this);
+        ((TextView)mView.findViewById(R.id.tvDetail)).setText(smsItem.getText());
     }
 
     @Override

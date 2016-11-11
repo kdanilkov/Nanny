@@ -2,6 +2,7 @@ package com.ninja.nanny.Fragment;
 
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.text.Html;
@@ -9,14 +10,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.ninja.nanny.Adapter.CustomSpinnerAdapter;
 import com.ninja.nanny.Custom.CustomFragment;
 import com.ninja.nanny.MainActivity;
 import com.ninja.nanny.Model.Payment;
@@ -24,14 +22,11 @@ import com.ninja.nanny.R;
 import com.ninja.nanny.Utils.Common;
 import com.ninja.nanny.Utils.Constant;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
-public class NewPaymentFragment extends CustomFragment {
+public class EditPaymentFragment extends CustomFragment {
 
 
-    public NewPaymentFragment() {
+    public EditPaymentFragment() {
         // Required empty public constructor
     }
 
@@ -41,53 +36,92 @@ public class NewPaymentFragment extends CustomFragment {
     TextView tvAmount;
     EditText etTitle, etAmount, etDateofMonth, etDetail;
     Button btnCheckRecurrent, btnCheckSaving;
-    boolean isRecurrent;
-    boolean isSaving;
+    boolean isRecurrent, isSaving;
+    public Payment paymentSelected;
     public boolean isSavingSet;
     public int nFixedAmountSaving;
     public int nPercentAmountSaving;
-    String[] arrPatternNames, arrPatternWords, arrPatternDates;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        mView = inflater.inflate(R.layout.fragment_new_payment, container, false);
+        mView = inflater.inflate(R.layout.fragment_edit_payment, container, false);
         mContext = (MainActivity)getActivity();
         mInflater = inflater;
 
-        initData();
         setUI();
 
         return mView;
     }
 
-    void initData() {
-        arrPatternNames = getResources().getStringArray(R.array.payment_pattern_name);
-        arrPatternWords = getResources().getStringArray(R.array.payment_pattern_words);
-        arrPatternDates = getResources().getStringArray(R.array.payment_pattern_date);
-    }
-
     void setUI() {
-        tvAmount = (TextView)mView.findViewById(R.id.tvAmount);
+
         etTitle = (EditText)mView.findViewById(R.id.etTitle);
         etDetail = (EditText)mView.findViewById(R.id.etDetail);
         etAmount = (EditText)mView.findViewById(R.id.etAmount);
         etDateofMonth = (EditText)mView.findViewById(R.id.etDateOfMonth);
         btnCheckRecurrent = (Button)mView.findViewById(R.id.btnChkBoxRecurrent);
         btnCheckSaving = (Button)mView.findViewById(R.id.btnChkBoxSaving);
+        tvAmount = (TextView)mView.findViewById(R.id.tvAmount);
 
         mView.findViewById(R.id.btnBack).setOnClickListener(this);
         mView.findViewById(R.id.btnSave).setOnClickListener(this);
-        mView.findViewById(R.id.btnPattern).setOnClickListener(this);
+        mView.findViewById(R.id.btnDelete).setOnClickListener(this);
 
         btnCheckRecurrent.setOnClickListener(this);
         btnCheckSaving.setOnClickListener(this);
 
-        isRecurrent = false;
-        isSaving = false;
+        etTitle.setText(paymentSelected.getTitle());
+        etDetail.setText(paymentSelected.getDetail());
+        etAmount.setText(paymentSelected.getAmount() + "");
+        etDateofMonth.setText(paymentSelected.getDateOfMonth() + "");
 
-        isSavingSet = false;
+        int nPaymentMode = paymentSelected.getPaymentMode();
+
+        switch (nPaymentMode) {
+            case 0:
+                isSaving = true;
+                isRecurrent = true;
+                break;
+            case 1:
+                isSaving = true;
+                isRecurrent = false;
+                break;
+            case 2:
+                isSaving = false;
+                isRecurrent = true;
+                break;
+            case 3:
+                isSaving = false;
+                isRecurrent = false;
+                break;
+        }
+
+        if(isSaving) {
+            btnCheckSaving.setBackgroundResource(R.drawable.ic_checked);
+        } else {
+            btnCheckSaving.setBackgroundResource(R.drawable.ic_unchecked);
+        }
+
+        if(isRecurrent) {
+            btnCheckRecurrent.setBackgroundResource(R.drawable.ic_checked);
+        } else {
+            btnCheckRecurrent.setBackgroundResource(R.drawable.ic_unchecked);
+        }
+
+        if(isSaving) {
+            isSavingSet = true;
+            if(paymentSelected.getSavingMode() == 0) {
+                nFixedAmountSaving = paymentSelected.getAmount();
+                nPercentAmountSaving = 0;
+            } else {
+                nFixedAmountSaving = 0;
+                nPercentAmountSaving = paymentSelected.getAmount();
+            }
+        } else {
+            isSavingSet = false;
+        }
     }
 
     @Override
@@ -171,89 +205,50 @@ public class NewPaymentFragment extends CustomFragment {
         if(nFixedAmountSaving == 0) nSavingMode = 1;
         if(!isSaving) nSavingMode = 0;
 
-        Payment paymentNew = new Payment(strTitle, strDetail, nAmount, nDateOfMonth, nPaymentMode, 0, nSavingMode, Common.getInstance().dbHelper.getTimestamp()); // paid_status = 0 because it is unpaid
+        paymentSelected.setTitle(strTitle);
+        paymentSelected.setDetail(strDetail);
+        paymentSelected.setAmount(nAmount);
+        paymentSelected.setDateOfMonth(nDateOfMonth);
+        paymentSelected.setPaymentMode(nPaymentMode);
+        paymentSelected.setSavingMode(nSavingMode);
+        paymentSelected.setTimestampCreated(Common.getInstance().dbHelper.getTimestamp());
 
-        int payment_id = Common.getInstance().dbHelper.createPayment(paymentNew);
+        Common.getInstance().dbHelper.updatePayment(paymentSelected);
 
-        paymentNew.setId(payment_id);
-
-        Common.getInstance().listAllPayments.add(paymentNew);
-        Common.getInstance().listCurrentPayments.add(paymentNew);
-
-        Toast.makeText(mContext, "new payment info has been added successfully", Toast.LENGTH_SHORT).show();
+        Toast.makeText(mContext, "new payment info has been updated successfully", Toast.LENGTH_SHORT).show();
         mContext.getSupportFragmentManager().popBackStackImmediate();
     }
 
-    void showDialogForPattern() {
-        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(mContext);
-// ...Irrelevant code for customizing the buttons and title
-        View dialogView = mInflater.inflate(R.layout.dialog_payment_pattern, null);
-        dialogBuilder.setView(dialogView);
+    void removeItem() {
+        new AlertDialog.Builder(mContext)
+                .setTitle("Delete entry")
+                .setMessage("Are you sure you want to delete this entry?")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // continue with delete
+                        Common.getInstance().dbHelper.deletePayment(paymentSelected.getId());
+                        Common.getInstance().listAllPayments.remove(paymentSelected);
 
-        final AlertDialog alertDialog = dialogBuilder.create();
-        alertDialog.show();
+                        for(int i = 0; i < Common.getInstance().listCurrentPayments.size(); i ++) {
+                            Payment paymentTmp = Common.getInstance().listCurrentPayments.get(i);
 
-        final EditText etWords = (EditText)dialogView.findViewById(R.id.etWords);
-        final EditText etDateOfMonthTmp = (EditText)dialogView.findViewById(R.id.etDateOfMonth);
+                            if(paymentTmp.getId() == paymentSelected.getId()){
+                                Common.getInstance().listCurrentPayments.remove(i);
+                                break;
+                            }
+                        }
 
-        etWords.setText(arrPatternWords[0]);
-        etDateOfMonthTmp.setText(arrPatternDates[0]);
-
-        final Spinner spinnerName = (Spinner)dialogView.findViewById(R.id.spinnerName);
-        List<String> myNameList = Arrays.asList(arrPatternNames);
-        ArrayList<String> myNameArrayList = new ArrayList<String>(myNameList);
-
-        CustomSpinnerAdapter spinnerAdapterName = new CustomSpinnerAdapter(mContext,myNameArrayList);
-        spinnerName.setAdapter(spinnerAdapterName);
-        spinnerName.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                etWords.setText(arrPatternWords[position]);
-                etDateOfMonthTmp.setText(arrPatternDates[position]);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-        dialogView.findViewById(R.id.btnSelect).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                etTitle.setText(spinnerName.getSelectedItem().toString());
-                etDetail.setText(etWords.getText().toString());
-                etDateofMonth.setText(etDateOfMonthTmp.getText().toString());
-
-                alertDialog.dismiss();
-            }
-        });
-
-        dialogView.findViewById(R.id.btnCancel).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                alertDialog.dismiss();
-            }
-        });
-
-
-
-
-//        new AlertDialog.Builder(mContext)
-//                .setTitle("Delete entry")
-//                .setMessage("Are you sure you want to delete this entry?")
-//                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        // continue with delete
-//                    }
-//                })
-//                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-//                    public void onClick(DialogInterface dialog, int which) {
-//                        // do nothing
-//                    }
-//                })
-//                .setIcon(android.R.drawable.ic_dialog_alert)
-//                .show();
+                        mContext.getSupportFragmentManager().popBackStackImmediate();
+                        Toast.makeText(mContext, "payment info has been deleted successfully", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
     }
 
     @Override
@@ -265,11 +260,17 @@ public class NewPaymentFragment extends CustomFragment {
                 mContext.getSupportFragmentManager().popBackStackImmediate();
                 break;
             case R.id.btnSave:
+//                CalendarPaymentFragment f = new CalendarPaymentFragment();
+//                String title = Constant.FRAGMENT_CALENDAR_PAYMENT;
+//
+//                FragmentTransaction transaction = mContext.getSupportFragmentManager()
+//                        .beginTransaction();
+//                transaction.add(R.id.content_frame, f, title).addToBackStack(title).commit();
                 saveNewPayment();
                 break;
 
-            case R.id.btnPattern:
-                showDialogForPattern();
+            case R.id.btnDelete:
+                removeItem();
                 break;
 
             case R.id.btnChkBoxRecurrent:

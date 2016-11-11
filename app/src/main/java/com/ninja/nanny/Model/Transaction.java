@@ -1,71 +1,95 @@
 package com.ninja.nanny.Model;
 
-import java.util.Date;
-
 /**
  * Created by Administrator on 10/28/2016.
  */
 
 public class Transaction {
-    int id;
-    String accountName;
-    String usage;
-    int amount;
-    String createdAt;
-    Date createdDate;
+    int _id;
+    String _accountName;
+    String _identifier;
+    int _bankId;
+    int _smsId;
+    int _amount;
+    int _mode; //0-balance, 1-income, 2-spending
+    long _timestmapCreated;
 
     public Transaction() {
 
     }
 
-    public Transaction(String accountName, String usage, int amount, String createdAt) {
-        this.accountName = accountName;
-        this.usage = usage;
-        this.amount = amount;
-        this.createdAt = createdAt;
+    public Transaction(String accountName, String identifier, int bankId, int smsId, int amount, int mode, int timestampCreated) {
+        _accountName = accountName;
+        _identifier = identifier;
+        _bankId = bankId;
+        _smsId = smsId;
+        _amount = amount;
+        _mode = mode;
+        _timestmapCreated = timestampCreated;
     }
 
-    public Transaction(int id, String accountName, String usage, int amount, String createdAt) {
-        this.id = id;
-        this.accountName = accountName;
-        this.usage = usage;
-        this.amount = amount;
-        this.createdAt = createdAt;
-    }
 
     public void setId(int id) {
-        this.id = id;
+        _id = id;
     }
 
     public void setAccountName(String accountName) {
-        this.accountName = accountName;
+        _accountName = accountName;
     }
 
-    public void setUsage(String usage) {
-        this.usage = usage;
+    public void setIdentifier(String identifier) {
+        _identifier = identifier;
+    }
+
+    public void setBankId(int bankId) {
+        _bankId = bankId;
+    }
+
+    public void setSmsId(int smsId) {
+        _smsId = smsId;
     }
 
     public void setAmount(int amount) {
-        this.amount = amount;
+        _amount = amount;
     }
 
-    public void setCreatedAt(String createdAt) {
-        this.createdAt = createdAt;
+    public void setMode(int mode) {
+        _mode = mode;
+    }
+
+    public void setTimestampCreated(long timestampCreated) {
+        _timestmapCreated = timestampCreated;
     }
 
     public int getId() {
-        return id;
+        return _id;
     }
 
     public String getAccountName() {
-        return accountName;
+        return _accountName;
     }
 
-    public String getUsage() {
-        return usage;
+    public String getIdentifier() {
+        return _identifier;
+    }
+
+    public int getBankId() {
+        return _bankId;
+    }
+
+    public int getSmsId() {
+        return _smsId;
     }
 
     public int getAmount() {
-        return amount;
+        return _amount;
+    }
+
+    public int getMode() {
+        return _mode;
+    }
+
+    public long getTimestampCreated() {
+        return _timestmapCreated;
     }
 }

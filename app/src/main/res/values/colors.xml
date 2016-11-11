@@ -10,4 +10,8 @@
     <color name="gray_dark">#9a9a9a</color>
     <color name="transparent">#00000000</color>
     <color name="label_text_color">#009688</color>
+    <color name="light_blue">#add8e6</color>
+    <color name="dark_blue">#191970</color>
+    <color name="light_orange">#feb65f</color>
+    <color name="dark_orange">#d97904</color>
 </resources>

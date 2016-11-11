@@ -1,32 +1,34 @@
 package com.ninja.nanny.Fragment;
 
 
-import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.ninja.nanny.Custom.CustomFragment;
 import com.ninja.nanny.MainActivity;
+import com.ninja.nanny.Model.Payment;
+import com.ninja.nanny.Preference.UserPreference;
 import com.ninja.nanny.R;
-import com.stacktips.view.CalendarListener;
-import com.stacktips.view.CustomCalendarView;
-import com.stacktips.view.DayDecorator;
-import com.stacktips.view.DayView;
-import com.stacktips.view.utils.CalendarUtils;
+import com.ninja.nanny.Utils.Common;
+import com.ninja.nanny.Utils.Constant;
+import com.roomorama.caldroid.CaldroidFragment;
+import com.roomorama.caldroid.CaldroidListener;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
-import java.util.Locale;
+import java.util.HashMap;
 
 
-public class CalendarPaymentFragment extends CustomFragment {
+public class CalendarPaymentFragment extends CustomFragment implements CompoundButton.OnCheckedChangeListener {
 
 
     public CalendarPaymentFragment() {
@@ -37,6 +39,12 @@ public class CalendarPaymentFragment extends CustomFragment {
     View mView;
     MainActivity mContext;
     TextView tvDay, tvYear;
+    CaldroidFragment caldroidFragment;
+    ToggleButton tbNotPaidBill, tbPaidBill, tbNotPaidSaving, tbPaidSaving;
+    HashMap<Date, Drawable> hashMapBackgroundDrawble;
+    HashMap<Date, Integer> hashMapTextColor;
+    HashMap<String, Integer> hashMapConverter;
+    final SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy");
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -51,8 +59,155 @@ public class CalendarPaymentFragment extends CustomFragment {
         return mView;
     }
 
+    private void displayPayments() {
+        hashMapBackgroundDrawble.clear();
+        hashMapTextColor.clear();
+        hashMapConverter.clear();
+
+        boolean isNotPaidBill = tbNotPaidBill.isChecked();
+        boolean isPaidBill = tbPaidBill.isChecked();
+        boolean isNotPaidSaving = tbNotPaidSaving.isChecked();
+        boolean isPaidSaving = tbPaidSaving.isChecked();
+        Calendar cal = Calendar.getInstance();
+
+        for(int i = 0; i < Common.getInstance().listAllPayments.size(); i ++) {
+            Payment payment = Common.getInstance().listAllPayments.get(i);
+
+            int nPaymentMode = payment.getPaymentMode();
+            int nPaidStatus = payment.getPaidStatus();
+            int nDateOfMonth = payment.getDateOfMonth();
+            Drawable drawable = null;
+            boolean flag = false;
+
+            if (nPaymentMode > 1 && nPaidStatus == 0 && isNotPaidBill) {
+                drawable = getResources().getDrawable(R.drawable.circle_view_dark_blue_outside);
+                flag = true;
+            } else if (nPaymentMode > 1 && nPaidStatus == 1 && isPaidBill) {
+                drawable = getResources().getDrawable(R.drawable.circle_view_light_blue_outside);
+                flag = true;
+            } else if (nPaymentMode < 2 && nPaidStatus == 0 && isNotPaidSaving) {
+                drawable = getResources().getDrawable(R.drawable.circle_view_dark_orange_outside);
+                flag = true;
+            } else if (nPaymentMode < 2 && nPaidStatus == 1 && isPaidSaving) {
+                drawable = getResources().getDrawable(R.drawable.circle_view_light_orange_outside);
+                flag = true;
+            }
+
+            if(!flag) continue;
+
+            cal = Calendar.getInstance();
+            cal.set(Calendar.DAY_OF_MONTH, nDateOfMonth);
+
+            Date date = cal.getTime();
+
+            hashMapBackgroundDrawble.put(date, drawable);
+            hashMapTextColor.put(date, R.color.white);
+            hashMapConverter.put(formatter.format(date), i);
+        }
+
+        int nSalaryDate = UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_SALARY_DATE, 15);
+        cal = Calendar.getInstance();
+        cal.set(Calendar.DAY_OF_MONTH, nSalaryDate);
+
+        Date date = cal.getTime();
+        Drawable drawable = getResources().getDrawable(R.drawable.circle_border_blue);
+
+        hashMapBackgroundDrawble.put(date, drawable);
+        hashMapTextColor.put(date, R.color.caldroid_light_red);
+
+        if (caldroidFragment != null) {
+            caldroidFragment.setBackgroundDrawableForDates(hashMapBackgroundDrawble);
+            caldroidFragment.setTextColorForDates(hashMapTextColor);
+            caldroidFragment.refreshView();
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        displayPayments();
+    }
+
+    void initCalendar() {
+        // Setup caldroid fragment
+        // **** If you want normal CaldroidFragment, use below line ****
+        caldroidFragment = new CaldroidFragment();
+
+        Bundle args = new Bundle();
+        Calendar cal = Calendar.getInstance();
+
+        args.putInt(CaldroidFragment.MONTH, cal.get(Calendar.MONTH) + 1);
+        args.putInt(CaldroidFragment.YEAR, cal.get(Calendar.YEAR));
+        args.putBoolean(CaldroidFragment.ENABLE_SWIPE, true);
+        args.putBoolean(CaldroidFragment.SIX_WEEKS_IN_CALENDAR, true);
+
+        caldroidFragment.setArguments(args);
+
+        // Attach to the activity
+        FragmentTransaction t = mContext.getSupportFragmentManager().beginTransaction();
+        t.replace(R.id.lyCalendar, caldroidFragment);
+        t.commit();
+
+        // Setup listener
+        final CaldroidListener listener = new CaldroidListener() {
+
+            @Override
+            public void onSelectDate(Date date, View view) {
+                String strDate = formatter.format(date);
+
+                if(hashMapConverter.containsKey(strDate)) {
+                    int nSelected = hashMapConverter.get(formatter.format(date));
+                    EditPaymentFragment f = new EditPaymentFragment();
+                    String title = Constant.FRAGMENT_EDIT_PAYMENT;
+                    f.paymentSelected = Common.getInstance().listAllPayments.get(nSelected);
+
+                    FragmentTransaction transaction = mContext.getSupportFragmentManager()
+                            .beginTransaction();
+                    transaction.add(R.id.content_frame, f, title).addToBackStack(title).commit();
+                } else {
+                    Toast.makeText(mContext, formatter.format(date),
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onChangeMonth(int month, int year) {
+                String text = "month: " + month + " year: " + year;
+                Toast.makeText(mContext, text,
+                        Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onLongClickDate(Date date, View view) {
+                Toast.makeText(mContext,
+                        "Long click " + formatter.format(date),
+                        Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onCaldroidViewCreated() {
+                if (caldroidFragment.getLeftArrowButton() != null) {
+                    Toast.makeText(mContext,
+                            "Caldroid view is created", Toast.LENGTH_SHORT)
+                            .show();
+                }
+            }
+
+        };
+
+        // Setup Caldroid
+        caldroidFragment.setCaldroidListener(listener);
+
+        hashMapBackgroundDrawble = new HashMap<Date, Drawable>();
+        hashMapTextColor = new HashMap<Date, Integer>();
+        hashMapConverter = new HashMap<String, Integer>();
+    }
+
     void setUI() {
         mView.findViewById(R.id.btnBack).setOnClickListener(this);
+        mView.findViewById(R.id.rlyCover).setOnClickListener(this);
+        mView.findViewById(R.id.btnAdd).setOnClickListener(this);
+
         tvDay = (TextView)mView.findViewById(R.id.tvDay);
         tvYear = (TextView)mView.findViewById(R.id.tvYear);
 
@@ -62,54 +217,22 @@ public class CalendarPaymentFragment extends CustomFragment {
         SimpleDateFormat dfDate = new SimpleDateFormat("EEE, MMM d");
         tvDay.setText(dfDate.format(new Date()));
 
-        //Initialize CustomCalendarView from layout
-        CustomCalendarView calendarView = (CustomCalendarView) mView.findViewById(R.id.calendar_view);
+        tbNotPaidBill = (ToggleButton)mView.findViewById(R.id.tbtnNotPaidBill);
+        tbPaidBill = (ToggleButton)mView.findViewById(R.id.tbtnPaidBill);
+        tbNotPaidSaving = (ToggleButton)mView.findViewById(R.id.tbtnNotPaidSaving);
+        tbPaidSaving = (ToggleButton)mView.findViewById(R.id.tbtnPaidSaving);
 
-        //Initialize calendar with date
-        Calendar currentCalendar = Calendar.getInstance(Locale.getDefault());
+        tbNotPaidBill.setChecked(true);
+        tbPaidBill.setChecked(true);
+        tbNotPaidSaving.setChecked(true);
+        tbPaidSaving.setChecked(true);
 
-        //Show Monday as first date of week
-        calendarView.setFirstDayOfWeek(Calendar.MONDAY);
+        tbNotPaidBill.setOnCheckedChangeListener(this);
+        tbPaidBill.setOnCheckedChangeListener(this);
+        tbNotPaidSaving.setOnCheckedChangeListener(this);
+        tbPaidSaving.setOnCheckedChangeListener(this);
 
-        //Show/hide overflow days of a month
-        calendarView.setShowOverflowDate(false);
-
-        //call refreshCalendar to update calendar the view
-        calendarView.refreshCalendar(currentCalendar);
-
-        //Handling custom calendar events
-        calendarView.setCalendarListener(new CalendarListener() {
-            @Override
-            public void onDateSelected(Date date) {
-                SimpleDateFormat dfYear = new SimpleDateFormat("yyyy");
-                tvYear.setText(dfYear.format(date));
-
-                SimpleDateFormat dfDate = new SimpleDateFormat("EEE, MMM d");
-                tvDay.setText(dfDate.format(date));
-            }
-
-            @Override
-            public void onMonthChanged(Date date) {
-                SimpleDateFormat df = new SimpleDateFormat("MM-yyyy");
-                Toast.makeText(mContext, df.format(date), Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        //adding calendar day decorators
-        List<DayDecorator> decorators = new ArrayList<>();
-        decorators.add(new DisabledColorDecorator());
-        calendarView.setDecorators(decorators);
-        calendarView.refreshCalendar(currentCalendar);
-    }
-
-    private class DisabledColorDecorator implements DayDecorator {
-        @Override
-        public void decorate(DayView dayView) {
-            if (CalendarUtils.isPastDay(dayView.getDate())) {
-                int color = Color.parseColor("#a9afb9");
-                dayView.setBackgroundColor(color);
-            }
-        }
+        initCalendar();
     }
 
 
@@ -119,7 +242,21 @@ public class CalendarPaymentFragment extends CustomFragment {
             case R.id.btnBack:
                 mContext.getSupportFragmentManager().popBackStackImmediate();
                 break;
+            case R.id.rlyCover:
+                break;
+            case R.id.btnAdd:
+                NewPaymentFragment f = new NewPaymentFragment();
+                String title = Constant.FRAGMENT_NEW_PAYMENT;
+
+                FragmentTransaction transaction = mContext.getSupportFragmentManager()
+                        .beginTransaction();
+                transaction.add(R.id.content_frame, f, title).addToBackStack(title).commit();
+                break;
         }
     }
 
+    @Override
+    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+        displayPayments();
+    }
 }

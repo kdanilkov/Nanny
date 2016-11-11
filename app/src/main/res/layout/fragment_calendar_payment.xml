@@ -41,14 +41,16 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/rlyTop">
+        android:layout_below="@+id/rlyTop"
+        android:id="@+id/rlyCover">
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:id="@+id/lySwitch">
+            android:id="@+id/lySwitch"
+            android:background="@color/white">
 
             <LinearLayout
                 android:orientation="vertical"
@@ -57,7 +59,7 @@
                 android:layout_weight="1">
 
                 <TextView
-                    android:text="PAYMENTS"
+                    android:text="Not Paid Bill"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/label_text_color"
@@ -66,10 +68,10 @@
                 <ToggleButton
                     android:layout_width="44dp"
                     android:layout_height="23dp"
-                    android:background="@drawable/tbtn_selector_blue"
+                    android:background="@drawable/tbtn_selector_dark_blue"
                     android:textOff=""
                     android:textOn=""
-                    android:id="@+id/tbtnSwitchPayment"
+                    android:id="@+id/tbtnNotPaidBill"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
@@ -84,7 +86,7 @@
                 android:layout_weight="1">
 
                 <TextView
-                    android:text="FINISH"
+                    android:text="Paid Bill"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/label_text_color"
@@ -93,10 +95,10 @@
                 <ToggleButton
                     android:layout_width="44dp"
                     android:layout_height="23dp"
-                    android:background="@drawable/tbtn_selector_green"
+                    android:background="@drawable/tbtn_selector_light_blue"
                     android:textOff=""
                     android:textOn=""
-                    android:id="@+id/tbtnSwitchFinish"
+                    android:id="@+id/tbtnPaidBill"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
@@ -111,19 +113,20 @@
                 android:layout_weight="1">
 
                 <TextView
-                    android:text="WISHES"
+                    android:text="Not Paid Saving"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/label_text_color"
-                    android:layout_gravity="center_horizontal" />
+                    android:layout_gravity="center_horizontal"
+                    android:textSize="12sp" />
 
                 <ToggleButton
                     android:layout_width="44dp"
                     android:layout_height="23dp"
-                    android:background="@drawable/tbtn_selector_yellow"
+                    android:background="@drawable/tbtn_selector_dark_orange"
                     android:textOff=""
                     android:textOn=""
-                    android:id="@+id/tbtnSwitchWish"
+                    android:id="@+id/tbtnNotPaidSaving"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
@@ -138,7 +141,7 @@
                 android:layout_weight="1">
 
                 <TextView
-                    android:text=" ??? "
+                    android:text="Paid Saving"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/label_text_color"
@@ -147,10 +150,10 @@
                 <ToggleButton
                     android:layout_width="44dp"
                     android:layout_height="23dp"
-                    android:background="@drawable/tbtn_selector_orange"
+                    android:background="@drawable/tbtn_selector_light_orange"
                     android:textOff=""
                     android:textOn=""
-                    android:id="@+id/tbtnSwitchOther"
+                    android:id="@+id/tbtnPaidSaving"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
@@ -185,26 +188,26 @@
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="20dp" />
         </RelativeLayout>
-
-        <com.stacktips.view.CustomCalendarView
-            android:id="@+id/calendar_view"
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:background="@color/gray_lt"
-            app:calendarBackgroundColor="@color/gray_lt"
-            app:calendarTitleTextColor="@color/black"
-            app:currentDayOfMonthColor="@color/colorPrimary"
-            app:dayOfMonthTextColor="@color/black"
-            app:dayOfWeekTextColor="@color/black"
-            app:disabledDayBackgroundColor="@color/gray_lt"
-            app:disabledDayTextColor="@color/gray_dark"
-            app:selectedDayBackgroundColor="@color/colorPrimary"
-            app:titleLayoutBackgroundColor="@color/white"
-            app:weekLayoutBackgroundColor="@color/white"
-            android:layout_alignParentBottom="true"
-            android:layout_height="wrap_content">
-        </com.stacktips.view.CustomCalendarView>
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rlyDateLabel"
+            android:id="@+id/lyCalendar"
+            android:layout_marginTop="10dp" />
     </RelativeLayout>
 
-
+    <Button
+        android:text="+"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:id="@+id/btnAdd"
+        android:background="@drawable/ic_circle_blue"
+        android:textColor="@color/white"
+        android:textSize="40sp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginEnd="10dp" />
 </RelativeLayout>
 
