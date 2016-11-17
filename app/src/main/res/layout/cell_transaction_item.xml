@@ -10,19 +10,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
-        <TextView
+        <com.ninja.nanny.Custom.RegularTextView
             android:text="12 October 2016"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/tvDate"
-            android:textSize="16sp"
-            android:textStyle="normal|bold" />
+            android:textSize="16sp" />
 
-        <TextView
+        <com.ninja.nanny.Custom.RegularTextView
             android:text="Emirates NBD, 100$ > Internet"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/tvDetail"
+            android:textSize="14sp"
             android:layout_marginTop="5dp"
             android:textColor="@color/gray_dark" />
     </LinearLayout>

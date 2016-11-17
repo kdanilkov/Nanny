@@ -111,9 +111,9 @@ public class WishFragment extends CustomFragment {
             boolean flagActive = (wishItem.getFlagActive() == 1);
 
             if(flagActive) {
-                ((ImageView)cell.findViewById(R.id.imgvCircle)).setImageResource(R.drawable.ic_circle_blue);
+                ((ImageView)cell.findViewById(R.id.imgvCircle)).setImageResource(R.drawable.circle_view_blue);
             } else {
-                ((ImageView)cell.findViewById(R.id.imgvCircle)).setImageResource(R.drawable.ic_circle_gray);
+                ((ImageView)cell.findViewById(R.id.imgvCircle)).setImageResource(R.drawable.circle_view_grey);
             }
 
             ((ToggleButton)cell.findViewById(R.id.tbtnSwitch)).setChecked(flagActive);
@@ -137,57 +137,58 @@ public class WishFragment extends CustomFragment {
             ((ToggleButton)cell.findViewById(R.id.tbtnSwitch)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                    if(b) {
-                        wishItem.setFlagActive(1);
-                        Common.getInstance().dbHelper.updateWish(wishItem);
-
-                        int nIdx = 0;
-
-                        for(nIdx = 0; nIdx < Common.getInstance().listAllWishes.size(); nIdx ++) {
-                            Wish wishTmp = Common.getInstance().listAllWishes.get(nIdx);
-
-                            if(wishItem.getId() == wishTmp.getId()) break;
-                        }
-
-                        Common.getInstance().listAllWishes.remove(nIdx);
-                        Common.getInstance().listAllWishes.add(nIdx, wishItem);
-
-                        for(nIdx = 0; nIdx < Common.getInstance().listFinishedWishes.size(); nIdx ++){
-                            Wish wishTmp = Common.getInstance().listFinishedWishes.get(nIdx);
-
-                            if(wishItem.getId() == wishTmp.getId()) break;
-                        }
-
-                        Common.getInstance().listFinishedWishes.remove(nIdx);
-
-                        Common.getInstance().listActiveWishes.add(wishItem);
-                    } else {
-                        wishItem.setFlagActive(0);
-                        Common.getInstance().dbHelper.updateWish(wishItem);
-
-                        int nIdx = 0;
-
-                        for(nIdx = 0; nIdx < Common.getInstance().listAllWishes.size(); nIdx ++) {
-                            Wish wishTmp = Common.getInstance().listAllWishes.get(nIdx);
-
-                            if(wishItem.getId() == wishTmp.getId()) break;
-                        }
-
-                        Common.getInstance().listAllWishes.remove(nIdx);
-                        Common.getInstance().listAllWishes.add(nIdx, wishItem);
-
-                        for(nIdx = 0; nIdx < Common.getInstance().listActiveWishes.size(); nIdx ++){
-                            Wish wishTmp = Common.getInstance().listActiveWishes.get(nIdx);
-
-                            if(wishItem.getId() == wishTmp.getId()) break;
-                        }
-
-                        Common.getInstance().listActiveWishes.remove(nIdx);
-
-                        Common.getInstance().listFinishedWishes.add(wishItem);
-                    }
-
-                    presentData();
+                    compoundButton.setChecked(!b);
+//                    if(b) {
+//                        wishItem.setFlagActive(1);
+//                        Common.getInstance().dbHelper.updateWish(wishItem);
+//
+//                        int nIdx = 0;
+//
+//                        for(nIdx = 0; nIdx < Common.getInstance().listAllWishes.size(); nIdx ++) {
+//                            Wish wishTmp = Common.getInstance().listAllWishes.get(nIdx);
+//
+//                            if(wishItem.getId() == wishTmp.getId()) break;
+//                        }
+//
+//                        Common.getInstance().listAllWishes.remove(nIdx);
+//                        Common.getInstance().listAllWishes.add(nIdx, wishItem);
+//
+//                        for(nIdx = 0; nIdx < Common.getInstance().listFinishedWishes.size(); nIdx ++){
+//                            Wish wishTmp = Common.getInstance().listFinishedWishes.get(nIdx);
+//
+//                            if(wishItem.getId() == wishTmp.getId()) break;
+//                        }
+//
+//                        Common.getInstance().listFinishedWishes.remove(nIdx);
+//
+//                        Common.getInstance().listActiveWishes.add(wishItem);
+//                    } else {
+//                        wishItem.setFlagActive(0);
+//                        Common.getInstance().dbHelper.updateWish(wishItem);
+//
+//                        int nIdx = 0;
+//
+//                        for(nIdx = 0; nIdx < Common.getInstance().listAllWishes.size(); nIdx ++) {
+//                            Wish wishTmp = Common.getInstance().listAllWishes.get(nIdx);
+//
+//                            if(wishItem.getId() == wishTmp.getId()) break;
+//                        }
+//
+//                        Common.getInstance().listAllWishes.remove(nIdx);
+//                        Common.getInstance().listAllWishes.add(nIdx, wishItem);
+//
+//                        for(nIdx = 0; nIdx < Common.getInstance().listActiveWishes.size(); nIdx ++){
+//                            Wish wishTmp = Common.getInstance().listActiveWishes.get(nIdx);
+//
+//                            if(wishItem.getId() == wishTmp.getId()) break;
+//                        }
+//
+//                        Common.getInstance().listActiveWishes.remove(nIdx);
+//
+//                        Common.getInstance().listFinishedWishes.add(wishItem);
+//                    }
+//
+//                    presentData();
                 }
             });
 

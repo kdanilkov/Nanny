@@ -22,6 +22,18 @@
             android:layout_width="30dp"
             android:layout_height="30dp" />
 
+        <com.ninja.nanny.Custom.MediumTextView
+            android:text="Money Nanny"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="false"
+            android:layout_marginStart="10dp"
+            android:id="@+id/textView3"
+            android:layout_alignBaseline="@+id/btnMenu"
+            android:layout_toRightOf="@+id/btnMenu"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
+
     </RelativeLayout>
 
     <RelativeLayout
@@ -47,27 +59,28 @@
                     android:layout_weight="1"
                     android:background="#7634809d">
 
-                    <TextView
+                    <com.ninja.nanny.Custom.RegularTextView
                         android:text="230$"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/tvLeftThisWeek"
                         android:layout_marginLeft="10dp"
                         android:layout_marginTop="10dp"
-                        android:textSize="30sp"
+                        android:textSize="36sp"
                         android:textColor="@color/white" />
 
-                    <TextView
+                    <com.ninja.nanny.Custom.RegularTextView
                         android:text="Left on this week"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/textView2"
                         android:layout_alignStart="@+id/tvLeftThisWeek"
                         android:layout_below="@+id/tvLeftThisWeek"
+                        android:textSize="14sp"
                         android:textColor="@color/white"
                         android:layout_marginTop="5dp" />
 
-                    <TextView
+                    <com.ninja.nanny.Custom.RegularTextView
                         android:text="1,400$"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -76,9 +89,9 @@
                         android:layout_below="@+id/textView2"
                         android:layout_marginTop="15dp"
                         android:textColor="@color/white"
-                        android:textSize="30sp" />
+                        android:textSize="36sp" />
 
-                    <TextView
+                    <com.ninja.nanny.Custom.RegularTextView
                         android:text="Left on this month"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -86,6 +99,7 @@
                         android:layout_alignLeft="@+id/tvLeftThisMonth"
                         android:layout_below="@+id/tvLeftThisMonth"
                         android:layout_marginTop="5dp"
+                        android:textSize="14sp"
                         android:textColor="@color/white" />
                 </RelativeLayout>
 
@@ -95,17 +109,17 @@
                     android:layout_marginLeft="10dp"
                     android:background="#c6c17204">
 
-                    <TextView
+                    <com.ninja.nanny.Custom.RegularTextView
                         android:text="370$"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/tvUpcomingPayment"
                         android:layout_marginLeft="10dp"
                         android:layout_marginTop="10dp"
-                        android:textSize="30sp"
+                        android:textSize="36sp"
                         android:textColor="@color/white" />
 
-                    <TextView
+                    <com.ninja.nanny.Custom.RegularTextView
                         android:text="Upcoming"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -113,9 +127,10 @@
                         android:textColor="@color/white"
                         android:layout_below="@+id/tvUpcomingPayment"
                         android:layout_alignStart="@+id/tvUpcomingPayment"
+                        android:textSize="14sp"
                         android:layout_marginTop="8dp" />
 
-                    <TextView
+                    <com.ninja.nanny.Custom.RegularTextView
                         android:text="payments"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -123,6 +138,7 @@
                         android:layout_alignStart="@+id/textView6"
                         android:layout_below="@+id/textView6"
                         android:layout_marginTop="5dp"
+                        android:textSize="14sp"
                         android:textColor="@color/white" />
                 </RelativeLayout>
             </LinearLayout>
@@ -135,7 +151,7 @@
                 android:layout_marginBottom="10dp"
                 android:background="#9643bc08">
 
-                <TextView
+                <com.ninja.nanny.Custom.RegularTextView
                     android:text="500$"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -145,9 +161,9 @@
                     android:layout_marginBottom="5dp"
                     android:layout_marginStart="5dp"
                     android:textColor="@color/white"
-                    android:textSize="30sp" />
+                    android:textSize="36sp" />
 
-                <TextView
+                <com.ninja.nanny.Custom.RegularTextView
                     android:text="Spent every month to Wishes"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -155,16 +171,18 @@
                     android:layout_alignBottom="@+id/tvSpentForWish"
                     android:layout_toRightOf="@+id/tvSpentForWish"
                     android:layout_marginLeft="10dp"
+                    android:textSize="14sp"
                     android:textColor="@color/white" />
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/rlytDebitCard"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="2"
                 android:background="#96572cbc">
 
-                <TextView
+                <com.ninja.nanny.Custom.RegularTextView
                     android:text="1,400$"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -173,17 +191,18 @@
                     android:id="@+id/tvMoneyDebit"
                     android:layout_marginLeft="5dp"
                     android:layout_marginBottom="5dp"
-                    android:textSize="30sp"
+                    android:textSize="36sp"
                     android:textColor="@color/white" />
 
-                <TextView
+                <com.ninja.nanny.Custom.RegularTextView
                     android:text="show my Debit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignBottom="@+id/tvMoneyDebit"
                     android:layout_toEndOf="@+id/tvMoneyDebit"
                     android:layout_marginStart="10dp"
-                    android:id="@+id/textView11"
+                    android:id="@+id/tvLabelDebitCard"
+                    android:textSize="14sp"
                     android:textColor="@color/white" />
             </RelativeLayout>
         </LinearLayout>

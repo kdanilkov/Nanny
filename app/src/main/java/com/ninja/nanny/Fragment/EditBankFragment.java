@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,10 +21,12 @@ import com.ninja.nanny.MainActivity;
 import com.ninja.nanny.Model.Bank;
 import com.ninja.nanny.R;
 import com.ninja.nanny.Utils.Common;
+import com.ninja.nanny.Utils.Constant;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 
 public class EditBankFragment extends CustomFragment {
@@ -60,15 +63,18 @@ public class EditBankFragment extends CustomFragment {
     }
 
     void initData() {
-        String[] myBankArray = getResources().getStringArray(R.array.bank_array);
-        List<String> myBankList = Arrays.asList(myBankArray);
+        myBankArrayList = new ArrayList<String>();
+        myAccountTypeArrayList = new ArrayList<String>();
 
-        myBankArrayList = new ArrayList<String>(myBankList);
-
-        String[] myAccountTypeArray = getResources().getStringArray(R.array.acccount_type_array);
-        List<String> myAccountTypeList = Arrays.asList(myAccountTypeArray);
-
-        myAccountTypeArrayList = new ArrayList<String>(myAccountTypeList);
+        for(int i = 0; i < Common.getInstance().jsonArrayBankInfo.length(); i ++) {
+            try {
+                JSONObject jsonObject = Common.getInstance().jsonArrayBankInfo.getJSONObject(i);
+                myBankArrayList.add(jsonObject.getString(Constant.JSON_NAME));
+                myAccountTypeArrayList.add(jsonObject.getString(Constant.JSON_TYPE));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
 
         isSMS = true;
 
@@ -120,19 +126,19 @@ public class EditBankFragment extends CustomFragment {
             btnEmail.setBackgroundResource(R.drawable.ic_checked);
         }
 
-        int i = 0;
-        for(i = 0; i < myBankArrayList.size(); i ++) {
-            String strBank = myBankArrayList.get(i);
-            if(strBank.equals(bankItem.getBank())) break;
-        }
+        spinnerBank.setSelection(bankItem.getIdxKind());
 
-        spinnerBank.setSelection(i);
+        mView.findViewById(R.id.lyContainer).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                InputMethodManager imm = (InputMethodManager) mContext.getSystemService(mContext.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(etAccountName.getWindowToken(), 0);
+            }
+        });
     }
 
     void saveBank() {
         String strAccountName = etAccountName.getText().toString();
-        String strBank = myBankArrayList.get(spinnerBank.getSelectedItemPosition());
-        String strAccountType = myAccountTypeArrayList.get(spinnerBank.getSelectedItemPosition());
         String strBalance = etBalance.getText().toString();
 
         if(strAccountName.length() == 0) {
@@ -149,10 +155,10 @@ public class EditBankFragment extends CustomFragment {
         int nNotificationMode = 1;
 
         if(isSMS) nNotificationMode = 0;
+        int nIdxKind = spinnerBank.getSelectedItemPosition();
 
         bankItem.setAccountName(strAccountName);
-        bankItem.setBank(strBank);
-        bankItem.setAccountType(strAccountType);
+        bankItem.setIdxKind(nIdxKind);
         bankItem.setBalance(nBalance);
         bankItem.setNotificationMode(nNotificationMode);
 
@@ -175,6 +181,8 @@ public class EditBankFragment extends CustomFragment {
                         if(bankItem.getFlagActive() == 1 && Common.getInstance().listBanks.size() > 0) {
                             Bank bankFirst = Common.getInstance().listBanks.get(0);
                             bankFirst.setFlagActive(1);
+                            Common.getInstance().bankActive = bankFirst;
+                            Common.getInstance().dbHelper.updateBank(bankFirst);
                         }
 
                         mContext.getSupportFragmentManager().popBackStackImmediate();
@@ -202,16 +210,16 @@ public class EditBankFragment extends CustomFragment {
             case R.id.btnDelete:
                 removeItem();
                 break;
-            case R.id.btnSMS:
-                isSMS = true;
-                btnSMS.setBackgroundResource(R.drawable.ic_checked);
-                btnEmail.setBackgroundResource(R.drawable.ic_unchecked);
-                break;
-            case R.id.btnEmail:
-                isSMS = false;
-                btnSMS.setBackgroundResource(R.drawable.ic_unchecked);
-                btnEmail.setBackgroundResource(R.drawable.ic_checked);
-                break;
+//            case R.id.btnSMS:
+//                isSMS = true;
+//                btnSMS.setBackgroundResource(R.drawable.ic_checked);
+//                btnEmail.setBackgroundResource(R.drawable.ic_unchecked);
+//                break;
+//            case R.id.btnEmail:
+//                isSMS = false;
+//                btnSMS.setBackgroundResource(R.drawable.ic_unchecked);
+//                btnEmail.setBackgroundResource(R.drawable.ic_checked);
+//                break;
         }
     }
 

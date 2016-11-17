@@ -6,20 +6,6 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
-    <string-array name="bank_array">
-        <item>ADIB</item>
-        <item>HSBC</item>
-        <item>UNB</item>
-        <item>Emirates NBD</item>
-    </string-array>
-
-    <string-array name="acccount_type_array">
-        <item>TYPE 1</item>
-        <item>TYPE 2</item>
-        <item>TYPE 3</item>
-        <item>TYPE 4</item>
-    </string-array>
-
     <string-array name="payment_pattern_name">
         <item>subscription for music</item>
         <item>film processing</item>
@@ -35,7 +21,7 @@
         <item>25</item>
     </string-array>
 
-    <string-array name="sample_transaction_data">
+    <string-array name="sample_sms_data">
         <item>Purchase of AED 26.00 with Debit Card ending 1736 at GULF FILM LLC -471203, DUBAI.</item>
         <item>Cash Withdrawal of AED 500.00 with Debit Card ending 1736 at, DUBAI.</item>
         <item>Purchase of AED 1.00 with Debit Card ending 1736 at ITUNES.COM/BILL, ITUNES.COM.</item>

@@ -23,7 +23,7 @@
             android:layout_width="30dp"
             android:layout_height="30dp" />
 
-        <TextView
+        <com.ninja.nanny.Custom.MediumTextView
             android:text="View Wish"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -96,19 +96,19 @@
             android:layout_marginTop="30dp"
             android:id="@+id/lyTitle">
 
-            <TextView
+            <com.ninja.nanny.Custom.MediumTextView
                 android:text="TITLE"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/label_text_color"
-                android:textSize="15sp" />
+                android:textSize="14sp" />
 
-            <TextView
+            <com.ninja.nanny.Custom.RegularTextView
                 android:text="Trip to Maldives"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/tvTitle"
-                android:textSize="17sp"
+                android:textSize="16sp"
                 android:textColor="@color/gray_dark"
                 android:layout_marginTop="5dp" />
         </LinearLayout>
@@ -123,19 +123,19 @@
             android:layout_below="@+id/lyTitle"
             android:layout_alignStart="@+id/lyTitle">
 
-            <TextView
+            <com.ninja.nanny.Custom.MediumTextView
                 android:text="AMOUNT"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/label_text_color"
-                android:textSize="15sp" />
+                android:textSize="14sp" />
 
-            <TextView
+            <com.ninja.nanny.Custom.RegularTextView
                 android:text="10,000$"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/tvAmount"
-                android:textSize="17sp"
+                android:textSize="16sp"
                 android:textColor="@color/gray_dark"
                 android:layout_marginTop="5dp" />
         </LinearLayout>
@@ -150,19 +150,19 @@
             android:layout_below="@+id/lyAmount"
             android:layout_alignStart="@+id/lyAmount">
 
-            <TextView
+            <com.ninja.nanny.Custom.MediumTextView
                 android:text="MONTHLY PAYMENT"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/label_text_color"
-                android:textSize="15sp" />
+                android:textSize="14sp" />
 
-            <TextView
+            <com.ninja.nanny.Custom.RegularTextView
                 android:text="250$"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/tvPayment"
-                android:textSize="17sp"
+                android:textSize="16sp"
                 android:textColor="@color/gray_dark"
                 android:layout_marginTop="5dp" />
         </LinearLayout>
@@ -190,19 +190,19 @@
                     android:layout_marginTop="15dp"
                     android:id="@+id/lySaved">
 
-                    <TextView
+                    <com.ninja.nanny.Custom.MediumTextView
                         android:text="SAVED"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColor="@color/label_text_color"
-                        android:textSize="15sp" />
+                        android:textSize="14sp" />
 
-                    <TextView
+                    <com.ninja.nanny.Custom.RegularTextView
                         android:text="6,200$"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/tvSaved"
-                        android:textSize="17sp"
+                        android:textSize="16sp"
                         android:textColor="@color/gray_dark"
                         android:layout_marginTop="5dp" />
                 </LinearLayout>
@@ -222,19 +222,19 @@
                     android:layout_marginTop="15dp"
                     android:id="@+id/lyLeft">
 
-                    <TextView
+                    <com.ninja.nanny.Custom.MediumTextView
                         android:text="LEFT"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColor="@color/label_text_color"
-                        android:textSize="15sp" />
+                        android:textSize="14sp" />
 
-                    <TextView
+                    <com.ninja.nanny.Custom.RegularTextView
                         android:text="3,800$"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/tvLeft"
-                        android:textSize="17sp"
+                        android:textSize="16sp"
                         android:textColor="@color/gray_dark"
                         android:layout_marginTop="5dp" />
                 </LinearLayout>

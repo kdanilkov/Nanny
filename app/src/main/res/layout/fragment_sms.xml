@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/rlyTop"
+        android:background="@color/colorPrimary">
+
+        <Button
+            android:layout_marginStart="15dp"
+            android:id="@+id/btnBack"
+            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true"
+            android:background="@drawable/ic_menu"
+            android:layout_width="30dp"
+            android:layout_height="30dp" />
+        <com.ninja.nanny.Custom.MediumTextView
+            android:text="SMS List"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="false"
+            android:layout_marginStart="10dp"
+            android:id="@+id/textView3"
+            android:layout_alignBaseline="@+id/btnBack"
+            android:layout_toRightOf="@+id/btnBack"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/rlyTop"
+        android:background="@color/gray_lt"
+        android:layout_height="3dp"
+        android:id="@+id/lyShadow" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/lyShadow"
+        android:layout_marginBottom="40dp"
+        android:layout_marginTop="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:id="@+id/lyContainer">
+
+        </LinearLayout>
+    </ScrollView>
+
+    <Button
+        android:text="+"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:id="@+id/btnAdd"
+        android:background="@drawable/circle_view_blue"
+        android:textColor="@color/white"
+        android:textSize="40sp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginEnd="10dp" />
+</RelativeLayout>
+

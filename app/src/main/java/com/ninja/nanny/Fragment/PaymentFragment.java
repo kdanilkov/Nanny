@@ -97,14 +97,11 @@ public class PaymentFragment extends CustomFragment {
 
             int nPaymentMode = payment.getPaymentMode();
             int nPaidStatus = payment.getPaidStatus();
-            int nSavingMode = payment.getSavingMode();
 
-            String strDetail = payment.getAmount() + "$, to Savings Account, :" + payment.getDateOfMonth();
+            String strDetail = payment.getAmount() + "$, to Savings Account";
 
             if(nPaymentMode > 1) {
-                strDetail = payment.getAmount() + "$, to Provider, :" + payment.getDateOfMonth();
-            } else if(nPaymentMode < 2 && nSavingMode == 1) {
-                strDetail = payment.getAmount() + "%, to Savings Account, :" + payment.getDateOfMonth();
+                strDetail = payment.getAmount() + "$, to Provider";
             }
 
             View cell = mInflater.inflate(R.layout.cell_payment_item, null);
@@ -115,22 +112,22 @@ public class PaymentFragment extends CustomFragment {
             if(nPaymentMode < 2) {
                 if(nPaidStatus == 0) {
                     tbSwitch.setChecked(true);
-                    tbSwitch.setBackgroundResource(R.drawable.tbtn_selector_dark_orange);
-                    imgvCircle.setBackgroundResource(R.drawable.circle_view_dark_orange);
+                    tbSwitch.setBackgroundResource(R.drawable.tbtn_selector_yellow);
+                    imgvCircle.setBackgroundResource(R.drawable.circle_view_yellow);
                 } else {
                     tbSwitch.setChecked(false);
-                    tbSwitch.setBackgroundResource(R.drawable.tbtn_selector_light_orange);
-                    imgvCircle.setBackgroundResource(R.drawable.circle_view_light_orange);
+                    tbSwitch.setBackgroundResource(R.drawable.tbtn_selector_orange);
+                    imgvCircle.setBackgroundResource(R.drawable.circle_view_orange);
                 }
             } else {
                 if(nPaidStatus == 0) {
                     tbSwitch.setChecked(true);
-                    tbSwitch.setBackgroundResource(R.drawable.tbtn_selector_dark_blue);
-                    imgvCircle.setBackgroundResource(R.drawable.circle_view_dark_blue);
+                    tbSwitch.setBackgroundResource(R.drawable.tbtn_selector_blue);
+                    imgvCircle.setBackgroundResource(R.drawable.circle_view_blue);
                 } else {
                     tbSwitch.setChecked(false);
-                    tbSwitch.setBackgroundResource(R.drawable.tbtn_selector_light_blue);
-                    imgvCircle.setBackgroundResource(R.drawable.circle_view_light_blue);
+                    tbSwitch.setBackgroundResource(R.drawable.tbtn_selector_green);
+                    imgvCircle.setBackgroundResource(R.drawable.circle_view_green);
                 }
             }
 

@@ -16,9 +16,12 @@ import com.ninja.nanny.FancyChart.ChartData;
 import com.ninja.nanny.FancyChart.FancyChart;
 import com.ninja.nanny.MainActivity;
 import com.ninja.nanny.Model.Wish;
+import com.ninja.nanny.Model.WishSaving;
 import com.ninja.nanny.R;
 import com.ninja.nanny.Utils.Common;
 import com.ninja.nanny.Utils.Constant;
+
+import java.util.List;
 
 import at.grabner.circleprogress.CircleProgressView;
 
@@ -35,6 +38,7 @@ public class ViewWishFragment extends CustomFragment {
     MainActivity mContext;
     CircleProgressView mCircleView;
     public Wish wishSelected;
+    List<WishSaving> listSaving;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -52,10 +56,15 @@ public class ViewWishFragment extends CustomFragment {
     @Override
     public void onResume() {
         super.onResume();
+
         setUI();
     }
 
     void setUI() {
+        int nWishId = wishSelected.getId();
+        listSaving = Common.getInstance().dbHelper.getAllWishSavings(nWishId);
+
+
         mView.findViewById(R.id.btnBack).setOnClickListener(this);
         mView.findViewById(R.id.btnDelete).setOnClickListener(this);
         mView.findViewById(R.id.btnEdit).setOnClickListener(this);
@@ -75,22 +84,43 @@ public class ViewWishFragment extends CustomFragment {
         FancyChart chart = (FancyChart)mView.findViewById(R.id.fancyChart);
 
         // First data set
-        ChartData data = new ChartData(ChartData.LINE_COLOR_BLUE);
-        int[] yValues = new int[]{0, 8, 9, 18, 35, 30, 33, 32, 46, 53, 50, 42};
-        for(int i = 8; i <= 19; i++) {
-            data.addPoint(i, yValues[i-8]);
-            data.addXValue(i, i + ":00");
+        ChartData data1 = new ChartData(ChartData.LINE_COLOR_BLUE);
+        ChartData data2 = new ChartData(ChartData.LINE_COLOR_RED);
+//        int[] yValues = new int[]{0, 8, 9, 18, 35, 30, 33, 32, 46, 53, 50, 42};
+        data1.addPoint(0, 0);
+        data2.addPoint(0, 0);
+
+        data1.addXValue(0, "0");
+        data2.addXValue(0, "0");
+
+        int nSum = 0;
+
+        for(int i = 1; i < listSaving.size() + 1; i++) {
+            WishSaving wishSaving = listSaving.get(i - 1);
+            nSum += wishSaving.getSavedAmount();
+
+            data1.addPoint(i, wishSaving.getSavedAmount());
+            data2.addPoint(i, nSum);
+
+            int nSavingDate = wishSaving.getDateCreated();
+            int nMonth = nSavingDate % 100;
+            int nYear = (nSavingDate / 100) % 100; // in case  of 2016, result is 16
+
+            data1.addXValue(i, nYear + "/" + nMonth);
+            data2.addXValue(i, nYear + "/" + nMonth);
         }
-        chart.addData(data);
+
+        chart.addData(data1);
+        chart.addData(data2);
 
         // Second data set
-        ChartData data2 = new ChartData(ChartData.LINE_COLOR_RED);
-        int[] yValues2 = new int[]{0, 5, 9, 23, 15, 35, 45, 50, 41, 45, 32, 24};
-        for(int i = 8; i <= 19; i++) {
-            data2.addPoint(i, yValues2[i-8]);
-            data2.addXValue(i, i + ":00");
-        }
-        chart.addData(data2);
+//        ChartData data2 = new ChartData(ChartData.LINE_COLOR_RED);
+//        int[] yValues2 = new int[]{0, 5, 9, 23, 15, 35, 45, 50, 41, 45, 32, 24};
+//        for(int i = 8; i <= 19; i++) {
+//            data2.addPoint(i, yValues2[i-8]);
+//            data2.addXValue(i, i + ":00");
+//        }
+//        chart.addData(data2);
 
     }
 
@@ -111,6 +141,8 @@ public class ViewWishFragment extends CustomFragment {
                             if(wishTmp.getId() == wishSelected.getId()) break;
                         }
 
+                        Common.getInstance().dbHelper.deleteWish(wishSelected.getId());
+                        Common.getInstance().dbHelper.deleteWishSavingGroup(wishSelected.getId());
                         Common.getInstance().listAllWishes.remove(nIdx);
 
                         if(wishSelected.getFlagActive() == 0) {

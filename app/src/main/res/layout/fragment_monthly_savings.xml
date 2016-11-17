@@ -24,7 +24,7 @@
             android:layout_width="30dp"
             android:layout_height="30dp" />
 
-        <TextView
+        <com.ninja.nanny.Custom.MediumTextView
             android:text="Monthly Savings"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -69,16 +69,17 @@
                         android:layout_weight="1"
                         android:background="@drawable/ic_radio_on" />
 
-                    <TextView
+                    <com.ninja.nanny.Custom.MediumTextView
                         android:text="FIXED AMOUNT ($)"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:layout_marginLeft="15dp"
+                        android:textSize="14sp"
                         android:textColor="@color/label_text_color" />
                 </LinearLayout>
 
-                <EditText
+                <com.ninja.nanny.Custom.RegularEditText
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
                     android:text="0"
@@ -86,9 +87,10 @@
                     android:id="@+id/etFixed"
                     android:background="@drawable/border_add_bank_editor"
                     android:layout_marginTop="10dp"
-                    android:textColor="?android:attr/textColorHint"
+                    android:textColor="@color/black"
                     android:paddingBottom="5dp"
                     android:layout_marginLeft="40dp"
+                    android:textSize="16sp"
                     android:inputType="number" />
             </LinearLayout>
 
@@ -110,16 +112,17 @@
                         android:layout_weight="1"
                         android:background="@drawable/ic_radio_off" />
 
-                    <TextView
+                    <com.ninja.nanny.Custom.MediumTextView
                         android:text="PERCENT FROM SALARY (%)"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:layout_marginLeft="15dp"
+                        android:textSize="14sp"
                         android:textColor="@color/label_text_color" />
                 </LinearLayout>
 
-                <EditText
+                <com.ninja.nanny.Custom.RegularEditText
                     android:layout_width="50dp"
                     android:layout_height="wrap_content"
                     android:text="0"
@@ -127,7 +130,7 @@
                     android:id="@+id/etPercent"
                     android:background="@drawable/border_add_bank_editor"
                     android:layout_marginTop="10dp"
-                    android:textColor="?android:attr/textColorHint"
+                    android:textColor="@color/black"
                     android:paddingBottom="5dp"
                     android:layout_marginLeft="40dp"
                     android:inputType="number" />
@@ -167,15 +170,13 @@
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp">
 
-        <Button
+        <com.ninja.nanny.Custom.MediumButton
             android:text="SAVE"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/btnSave"
-            android:background="@color/colorPrimary"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
-            android:textColor="@color/white"
             android:layout_alignParentRight="true" />
     </RelativeLayout>
 

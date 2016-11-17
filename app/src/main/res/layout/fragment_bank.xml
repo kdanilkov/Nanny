@@ -20,7 +20,7 @@
             android:background="@drawable/ic_menu"
             android:layout_width="30dp"
             android:layout_height="30dp" />
-        <TextView
+        <com.ninja.nanny.Custom.MediumTextView
             android:text="Banks"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -56,7 +56,7 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:id="@+id/btnAddBankItem"
-        android:background="@drawable/ic_circle_blue"
+        android:background="@drawable/circle_view_blue"
         android:textColor="@color/white"
         android:textSize="40sp"
         android:layout_alignParentBottom="true"

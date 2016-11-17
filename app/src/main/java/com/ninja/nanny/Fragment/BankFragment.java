@@ -77,17 +77,17 @@ public class BankFragment extends CustomFragment {
             View cell = mInflater.inflate(R.layout.cell_bank_item, null);
 
             ((TextView)cell.findViewById(R.id.tvBankName)).setText(bankItem.getAccountName());
-            ((TextView)cell.findViewById(R.id.tvDetail)).setText(bankItem.getBank() + ", " + bankItem.getAccountType());
+            ((TextView)cell.findViewById(R.id.tvDetail)).setText(bankItem.getBankName() + ", " + bankItem.getBankType());
             ((TextView)cell.findViewById(R.id.tvBalance)).setText("Balance: " + bankItem.getBalance() + "$");
 
             final ImageView imgvCircle = (ImageView)cell.findViewById(R.id.imgvCircle);
             final Button btnCheck = (Button)cell.findViewById(R.id.btnCheck);
 
             if(bankItem.getFlagActive() == 1) {
-                imgvCircle.setImageResource(R.drawable.ic_circle_blue);
+                imgvCircle.setImageResource(R.drawable.circle_view_blue);
                 btnCheck.setBackgroundResource(R.drawable.ic_checked);
             } else {
-                imgvCircle.setImageResource(R.drawable.ic_circle_gray);
+                imgvCircle.setImageResource(R.drawable.circle_view_grey);
                 btnCheck.setBackgroundResource(R.drawable.ic_unchecked);
             }
 
@@ -111,7 +111,7 @@ public class BankFragment extends CustomFragment {
 
                     Bank bankSelected = Common.getInstance().listBanks.get(nIdx);
 
-                    imgvCircle.setImageResource(R.drawable.ic_circle_blue);
+                    imgvCircle.setImageResource(R.drawable.circle_view_blue);
                     btnCheck.setBackgroundResource(R.drawable.ic_checked);
 
                     bankSelected.setFlagActive(1);
@@ -120,7 +120,7 @@ public class BankFragment extends CustomFragment {
                     Bank bankPrevious = Common.getInstance().listBanks.get(nActiveIndex);
                     View cellPrevious = lyContainer.getChildAt(nActiveIndex);
 
-                    ((ImageView)cellPrevious.findViewById(R.id.imgvCircle)).setImageResource(R.drawable.ic_circle_gray);
+                    ((ImageView)cellPrevious.findViewById(R.id.imgvCircle)).setImageResource(R.drawable.circle_view_grey);
                     ((Button)cellPrevious.findViewById(R.id.btnCheck)).setBackgroundResource(R.drawable.ic_unchecked);
 
                     bankPrevious.setFlagActive(0);

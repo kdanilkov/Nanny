@@ -6,7 +6,7 @@ package com.ninja.nanny.Utils;
 
 public class Constant {
     public static final String PREF_NAME = "Nanny";
-    public static final String PREF_KEY_IS_INIT_SET = "is_init_set";
+    public static final String PREF_KEY_IS_INIT_CONFIG = "is_init_config";
     public static final String PREF_KEY_MINIMAL_AMOUNT_PER_DAY = "MinimalAmountPerDay";
     public static final String PREF_KEY_SALARY_DATE = "SalaryDate";
     public static final String PREF_KEY_MONTHLY_INCOME = "MonthlyIncome";
@@ -14,6 +14,12 @@ public class Constant {
     public static final String PREF_KEY_TOLERANCE_DAYS = "ToleranceDays";
     public static final String PREF_KEY_TOLERANCE_PERCENT = "TolerancePercent";
     public static final String PREF_KEY_SMS_TIMESTAMP = "sms_timestamp";
+
+    public static final String JSON_NAME = "name";
+    public static final String JSON_TYPE = "type";
+    public static final String JSON_TRANSACTION = "transaction";
+    public static final String JSON_SPENDING = "spending";
+    public static final String JSON_INCOME = "income";
 
     public static final String FRAGMENT_HOME = "home";
     public static final String FRAGMENT_BANK = "bank";
@@ -33,5 +39,64 @@ public class Constant {
     public static final String FRAGMENT_EXPENSE_AS_PAYED = "expense_as_payed";
     public static final String FRAGMENT_MONTHLY_SAVINGS = "monthly_savings";
     public static final String FRAGMENT_CALENDAR_PAYMENT = "calendar_payment";
+
+    public static final String strBankJsonData = "[" +
+            "{" +
+                "\"name\":\"EmiratesNBD\", " +
+                "\"type\":\"TYPE 1\", " +
+                "\"transaction\":{" +
+                    "\"spending\":[" +
+                        "\"Purchase of xxx with Debit Card ending 1736 at xxx.\", " +
+                        "\"Cash Withdrawal of xxx with Debit Card ending 1736 at, xxx.\"" +
+                    "]," +
+                    "\"income\":[" +
+                        "\"xxx has been received as TELEGRAHPHIC TRANSFER.\"" +
+                    "]" +
+                "}" +
+            "}," +
+
+            "{" +
+                "\"name\":\"ADIB\", " +
+                "\"type\":\"TYPE 2\", " +
+                "\"transaction\":{" +
+                    "\"spending\":[" +
+                        "\"Purchase of xxx with Debit Card ending 1736 at xxx\", " +
+                        "\"Cash Withdrawal of xxx with Debit Card ending 1736 at, xxx\"" +
+                    "]," +
+                    "\"income\":[" +
+                        "\"xxx has been received as TELEGRAHPHIC TRANSFER.\"" +
+                    "]" +
+                "}" +
+            "}," +
+
+            "{" +
+                "\"name\":\"HSBC\", " +
+                "\"type\":\"TYPE 3\", " +
+                "\"transaction\":{" +
+                    "\"spending\":[" +
+                        "\"Purchase of xxx with Debit Card ending 1736 at xxx\", " +
+                        "\"Cash Withdrawal of xxx with Debit Card ending 1736 at, xxx\"" +
+                    "]," +
+                    "\"income\":[" +
+                        "\"xxx has been received as TELEGRAHPHIC TRANSFER.\"" +
+                    "]" +
+                "}" +
+            "}," +
+
+            "{" +
+                "\"name\":\"UNB\", " +
+                "\"type\":\"TYPE 4\", " +
+                "\"transaction\":{" +
+                    "\"spending\":[" +
+                        "\"Purchase of xxx with Debit Card ending 1736 at xxx\", " +
+                        "\"Cash Withdrawal of xxx with Debit Card ending 1736 at, xxx\"" +
+                    "]," +
+                    "\"income\":[" +
+                        "\"xxx has been received as TELEGRAHPHIC TRANSFER.\"" +
+                    "]" +
+                "}" +
+            "}" +
+
+            "]";
 
 }

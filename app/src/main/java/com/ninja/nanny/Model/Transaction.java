@@ -1,5 +1,7 @@
 package com.ninja.nanny.Model;
 
+import com.ninja.nanny.Utils.Common;
+
 /**
  * Created by Administrator on 10/28/2016.
  */
@@ -91,5 +93,10 @@ public class Transaction {
 
     public long getTimestampCreated() {
         return _timestmapCreated;
+    }
+
+    public String getText() {
+        Sms sms = Common.getInstance().dbHelper.getSms(_smsId);
+        return sms.getText();
     }
 }

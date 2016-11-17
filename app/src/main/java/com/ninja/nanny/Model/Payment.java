@@ -12,33 +12,19 @@ public class Payment {
     int _dateOfMonth;
     int _paymentMode; //0-saving recurrent, 1-saving single, 2-bill payment recurrent, 3-bill payment single
     int _paidStatus; //0-Unpaid, 1-Paid
-    int _nSavingMode; //0-fixed, 1-percent
     long _timestampCreated;
 
     public Payment() {
 
     }
 
-    public Payment(String title, String detail, int amount, int dateOfMonth, int paymentMode, int paidStatus, int nSavingMode, long timestampCreated) {
+    public Payment(String title, String detail, int amount, int dateOfMonth, int paymentMode, int paidStatus, long timestampCreated) {
         _title = title;
         _detail = detail;
         _amount = amount;
         _dateOfMonth = dateOfMonth;
         _paymentMode = paymentMode;
         _paidStatus = paidStatus;
-        _nSavingMode = nSavingMode;
-        _timestampCreated = timestampCreated;
-    }
-
-    public Payment(int id, String title, String detail, int amount, int dateOfMonth, int paymentMode, int paidStatus, int nSavingMode, long timestampCreated) {
-        _id = id;
-        _title = title;
-        _detail = detail;
-        _amount = amount;
-        _dateOfMonth = dateOfMonth;
-        _paymentMode = paymentMode;
-        _paidStatus = paidStatus;
-        _nSavingMode = nSavingMode;
         _timestampCreated = timestampCreated;
     }
 
@@ -67,8 +53,6 @@ public class Payment {
     public void setPaidStatus(int paidStatus) {
         _paidStatus = paidStatus;
     }
-
-    public void setSavingMode(int nSavingMode) { _nSavingMode = nSavingMode;}
 
     public void setTimestampCreated(long timestampCreated) {
         _timestampCreated = timestampCreated;
@@ -99,8 +83,6 @@ public class Payment {
     public int getPaidStatus() {
         return _paidStatus;
     }
-
-    public int getSavingMode() { return _nSavingMode;}
 
     public long getTimestampCreated() {
         return _timestampCreated;

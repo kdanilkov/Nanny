@@ -80,16 +80,16 @@ public class CalendarPaymentFragment extends CustomFragment implements CompoundB
             boolean flag = false;
 
             if (nPaymentMode > 1 && nPaidStatus == 0 && isNotPaidBill) {
-                drawable = getResources().getDrawable(R.drawable.circle_view_dark_blue_outside);
+                drawable = getResources().getDrawable(R.drawable.circle_view_blue_outside);
                 flag = true;
             } else if (nPaymentMode > 1 && nPaidStatus == 1 && isPaidBill) {
-                drawable = getResources().getDrawable(R.drawable.circle_view_light_blue_outside);
+                drawable = getResources().getDrawable(R.drawable.circle_view_green_outside);
                 flag = true;
             } else if (nPaymentMode < 2 && nPaidStatus == 0 && isNotPaidSaving) {
-                drawable = getResources().getDrawable(R.drawable.circle_view_dark_orange_outside);
+                drawable = getResources().getDrawable(R.drawable.circle_view_yellow_outside);
                 flag = true;
             } else if (nPaymentMode < 2 && nPaidStatus == 1 && isPaidSaving) {
-                drawable = getResources().getDrawable(R.drawable.circle_view_light_orange_outside);
+                drawable = getResources().getDrawable(R.drawable.circle_view_orange_outside);
                 flag = true;
             }
 

@@ -36,6 +36,7 @@ public class EditWishFragment extends CustomFragment {
     TextView tvPeriod, tvMonthlyPayment;
     DiscreteSeekBar seekbarPropotion;
     public Wish wishSelected;
+    int nLeftOnMonth;
 
 
     @Override
@@ -66,13 +67,32 @@ public class EditWishFragment extends CustomFragment {
 
         int nTotalAmount = wishSelected.getTotalAmount();
         int nMonthlyPayment = wishSelected.getMonthlyPayment();
-        int nPercentage = nMonthlyPayment * 100 / wishSelected.getTotalAmount();
         int nTotalMonths = (nTotalAmount + nMonthlyPayment -1) / nMonthlyPayment;
+
+        nLeftOnMonth = Common.getInstance().leftOnThisMonth() + nMonthlyPayment ;
+
+        if(nLeftOnMonth <= 0) {
+            Toast.makeText(mContext, "There is no money left on this month!", Toast.LENGTH_SHORT).show();
+            etTotalAmount.setEnabled(false);
+            etTitle.setEnabled(false);
+            seekbarPropotion.setEnabled(false);
+            return;
+        }
+
+        int nPercentage = nMonthlyPayment * 100 / nLeftOnMonth;
 
         etTotalAmount.setText(nTotalAmount + "");
         tvMonthlyPayment.setText(nMonthlyPayment + " $");
         tvPeriod.setText(nTotalMonths + " month");
         seekbarPropotion.setProgress(nPercentage);
+
+        if(wishSelected.getFlagActive() == 0) {
+            etTotalAmount.setEnabled(false);
+            etTitle.setEnabled(false);
+            seekbarPropotion.setEnabled(false);
+            mView.findViewById(R.id.btnSave).setVisibility(View.INVISIBLE);
+            mView.findViewById(R.id.btnAskAdviser).setVisibility(View.INVISIBLE);
+        }
 
         seekbarPropotion.setOnProgressChangeListener(new DiscreteSeekBar.OnProgressChangeListener() {
             @Override
@@ -95,8 +115,9 @@ public class EditWishFragment extends CustomFragment {
 
                 if(nTotalAmount == 0) return;
 
-                int nMonthlyPayment = nTotalAmount * seekBar.getProgress() / 100;
+                int nMonthlyPayment = nLeftOnMonth * seekBar.getProgress() / 100;
                 if(nMonthlyPayment == 0) nMonthlyPayment = 1;
+                if(nMonthlyPayment > nTotalAmount) nMonthlyPayment = nTotalAmount;
 
                 int nTotalMonths = (nTotalAmount + nMonthlyPayment -1) / nMonthlyPayment;
 
@@ -113,7 +134,10 @@ public class EditWishFragment extends CustomFragment {
 
                     if(nTotalAmount == 0) return;
 
-                    int nMonthlyPayment = nTotalAmount * seekbarPropotion.getProgress() / 100;
+                    int nMonthlyPayment = nLeftOnMonth * seekbarPropotion.getProgress() / 100;
+                    if(nMonthlyPayment == 0) nMonthlyPayment = 1;
+                    if(nMonthlyPayment > nTotalAmount) nMonthlyPayment = nTotalAmount;
+
                     int nTotalMonths = (nTotalAmount + nMonthlyPayment -1) / nMonthlyPayment;
 
                     tvMonthlyPayment.setText(nMonthlyPayment + " $");
@@ -121,9 +145,22 @@ public class EditWishFragment extends CustomFragment {
                 }
             }
         });
+
+        mView.findViewById(R.id.lyContainer).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                InputMethodManager imm = (InputMethodManager) mContext.getSystemService(mContext.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(etTitle.getWindowToken(), 0);
+            }
+        });
     }
 
     void saveWish() {
+        if(nLeftOnMonth <= 0) {
+            Toast.makeText(mContext, "There is no money left on this month!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         String strTitle = etTitle.getText().toString();
 
         if(etTotalAmount.getText().toString().length() > 8){
@@ -143,13 +180,19 @@ public class EditWishFragment extends CustomFragment {
             return;
         }
 
-        int nMonthlyPayment = nTotalAmount * seekbarPropotion.getProgress() / 100;
+        if(nTotalAmount < wishSelected.getSavedAmount()) {
+            etTotalAmount.setError(Html.fromHtml("<font color='red'>please input the amount value larger than saved amount</font>"));
+            return;
+        }
+
+        int nMonthlyPayment = nLeftOnMonth * seekbarPropotion.getProgress() / 100;
+        if(nMonthlyPayment == 0) nMonthlyPayment = 1;
+        if(nMonthlyPayment > nTotalAmount) nMonthlyPayment = nTotalAmount;
 
         wishSelected.setTitle(strTitle);
         wishSelected.setTotalAmount(nTotalAmount);
         wishSelected.setMonthlyPayment(nMonthlyPayment);
-        wishSelected.setSavedAmount(nTotalAmount / 3);
-        wishSelected.setUpdatedAt(Common.getInstance().dbHelper.getDateTime());
+        wishSelected.setTimestampCreated(Common.getInstance().getTimestamp());
 
         Common.getInstance().dbHelper.updateWish(wishSelected);
 

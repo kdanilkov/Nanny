@@ -15,11 +15,14 @@ import android.widget.Toast;
 import com.ninja.nanny.Custom.CustomFragment;
 import com.ninja.nanny.MainActivity;
 import com.ninja.nanny.Model.Wish;
+import com.ninja.nanny.Model.WishSaving;
 import com.ninja.nanny.R;
 import com.ninja.nanny.Utils.Common;
 import com.ninja.nanny.Utils.Constant;
 
 import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar;
+
+import java.util.Calendar;
 
 
 public class NewWishFragment extends CustomFragment {
@@ -35,6 +38,7 @@ public class NewWishFragment extends CustomFragment {
     EditText etTitle, etTotalAmount;
     TextView tvPeriod, tvMonthlyPayment;
     DiscreteSeekBar seekbarPropotion;
+    int nLeftOnMonth;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -81,8 +85,9 @@ public class NewWishFragment extends CustomFragment {
 
                 if(nTotalAmount == 0) return;
 
-                int nMonthlyPayment = nTotalAmount * seekBar.getProgress() / 100;
+                int nMonthlyPayment = nLeftOnMonth * seekBar.getProgress() / 100;
                 if(nMonthlyPayment == 0) nMonthlyPayment = 1;
+                if(nMonthlyPayment > nTotalAmount) nMonthlyPayment = nTotalAmount;
 
                 int nTotalMonths = (nTotalAmount + nMonthlyPayment -1) / nMonthlyPayment;
 
@@ -99,7 +104,10 @@ public class NewWishFragment extends CustomFragment {
 
                     if(nTotalAmount == 0) return;
 
-                    int nMonthlyPayment = nTotalAmount * seekbarPropotion.getProgress() / 100;
+                    int nMonthlyPayment = nLeftOnMonth * seekbarPropotion.getProgress() / 100;
+                    if(nMonthlyPayment == 0) nMonthlyPayment = 1;
+                    if(nMonthlyPayment > nTotalAmount) nMonthlyPayment = nTotalAmount;
+
                     int nTotalMonths = (nTotalAmount + nMonthlyPayment -1) / nMonthlyPayment;
 
                     tvMonthlyPayment.setText(nMonthlyPayment + " $");
@@ -107,9 +115,32 @@ public class NewWishFragment extends CustomFragment {
                 }
             }
         });
+
+        nLeftOnMonth = Common.getInstance().leftOnThisMonth();
+
+        if(nLeftOnMonth <= 0) {
+            Toast.makeText(mContext, "There is no money left on this month!", Toast.LENGTH_SHORT).show();
+            etTotalAmount.setEnabled(false);
+            etTitle.setEnabled(false);
+            seekbarPropotion.setEnabled(false);
+            return;
+        }
+
+        mView.findViewById(R.id.lyContainer).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                InputMethodManager imm = (InputMethodManager) mContext.getSystemService(mContext.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(etTitle.getWindowToken(), 0);
+            }
+        });
     }
 
     void saveWish() {
+        if(nLeftOnMonth <= 0) {
+            Toast.makeText(mContext, "There is no money left on this month!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         String strTitle = etTitle.getText().toString();
 
         if(etTotalAmount.getText().toString().length() > 8){
@@ -129,24 +160,41 @@ public class NewWishFragment extends CustomFragment {
             return;
         }
 
-        int nMonthlyPayment = nTotalAmount * seekbarPropotion.getProgress() / 100;
-        int nFlagActive = 1;
+        int nMonthlyPayment = nLeftOnMonth * seekbarPropotion.getProgress() / 100;
+        if(nMonthlyPayment == 0) nMonthlyPayment = 1;
+        if(nMonthlyPayment > nTotalAmount) nMonthlyPayment = nTotalAmount;
 
-        if(Common.getInstance().listAllWishes.size() > 0) nFlagActive = 0;
-
-        Wish wishNew = new Wish(strTitle, nTotalAmount, nMonthlyPayment, nTotalAmount/3, Common.getInstance().dbHelper.getDateTime(), nFlagActive);
+        Wish wishNew = new Wish(strTitle, nTotalAmount, nMonthlyPayment, 0, Common.getInstance().getTimestamp(), -1, 1);
         int nID = Common.getInstance().dbHelper.createWish(wishNew);
 
         wishNew.setId(nID);
 
-        Common.getInstance().listAllWishes.add(wishNew);
+        Calendar c = Calendar.getInstance();
+        int nDayOfMonth = c.get(Calendar.DAY_OF_MONTH);
+        int nMonth = c.get(Calendar.MONTH);
+        int nYear = c.get(Calendar.YEAR);
 
-        if(wishNew.getFlagActive() == 1) {
-            Common.getInstance().listActiveWishes.add(wishNew);
-        } else {
-            Common.getInstance().listFinishedWishes.add(wishNew);
+        if(nDayOfMonth >= Common.getInstance().nSalaryDate) {
+            nMonth ++;
+            if(nMonth == 12) {
+                nYear ++;
+                nMonth = 0;
+            }
         }
 
+        int nDateSaving = nYear * 100 + nMonth;
+
+        WishSaving wishSaving = new WishSaving(wishNew.getId(), wishNew.getMonthlyPayment(), nDateSaving);
+        int nWishSavingId = Common.getInstance().dbHelper.createWishSaving(wishSaving);
+        wishSaving.setId(nWishSavingId);
+
+        wishNew.setLastSavingId(nWishSavingId);
+        wishNew.setSavedAmount(wishNew.getMonthlyPayment());
+
+        Common.getInstance().dbHelper.updateWish(wishNew);
+
+        Common.getInstance().listAllWishes.add(wishNew);
+        Common.getInstance().listActiveWishes.add(wishNew);
 
         Toast.makeText(mContext, "new wish info has been added successfully", Toast.LENGTH_SHORT).show();
         mContext.getSupportFragmentManager().popBackStackImmediate();

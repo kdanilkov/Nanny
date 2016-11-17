@@ -1,94 +1,108 @@
 package com.ninja.nanny.Model;
 
+import com.ninja.nanny.Utils.Common;
+import com.ninja.nanny.Utils.Constant;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * Created by Administrator on 10/28/2016.
  */
 
 public class Bank {
-    int id;
-    String accountName;
-    String bank;
-    String accountType;
-    int balance;
-    int notificationMode;// 0-SMS, 1-Email
-    int flagActive; //0-disabled, 1-enabled
+    int _id;
+    String _accountName;
+    int _idxKind;
+    int _balance;
+    int _notificationMode;// 0-SMS, 1-Email
+    int _flagActive; //0-disabled, 1-enabled
 
     public Bank() {
 
     }
 
-    public Bank(String accountName, String bank, String accountType, int balance, int notificationMode, int flagActive) {
-        this.accountName = accountName;
-        this.bank = bank;
-        this.accountType = accountType;
-        this.balance = balance;
-        this.notificationMode = notificationMode;
-        this.flagActive = flagActive;
-    }
-
-    public Bank(int id, String accountName, String bank, String accountType, int balance, int notificationMode, int flagActive) {
-        this.id = id;
-        this.accountName = accountName;
-        this.bank = bank;
-        this.accountType = accountType;
-        this.balance = balance;
-        this.notificationMode = notificationMode;
-        this.flagActive = flagActive;
+    public Bank(String accountName, int idxKind, int balance, int notificationMode, int flagActive) {
+        _accountName = accountName;
+        _idxKind = idxKind;
+        _balance = balance;
+        _notificationMode = notificationMode;
+        _flagActive = flagActive;
     }
 
     public void setId(int id) {
-        this.id = id;
+        _id = id;
     }
 
     public void setAccountName(String accountName) {
-        this.accountName = accountName;
+        _accountName = accountName;
     }
 
-    public void setBank(String bank) {
-        this.bank = bank;
-    }
-
-    public void setAccountType(String accountType) {
-        this.accountType = accountType;
+    public void setIdxKind(int idxKind) {
+        _idxKind = idxKind;
     }
 
     public void setBalance(int balance) {
-        this.balance = balance;
+        _balance = balance;
     }
 
     public void setNotificationMode(int notificationMode) {
-        this.notificationMode = notificationMode;
+        _notificationMode = notificationMode;
     }
 
     public void setFlagActive(int flagActive) {
-        this.flagActive = flagActive;
+        _flagActive = flagActive;
     }
 
     public int getId() {
-        return id;
+        return _id;
     }
 
     public String getAccountName() {
-        return accountName;
+        return _accountName;
     }
 
-    public String getBank() {
-        return bank;
-    }
-
-    public String getAccountType() {
-        return accountType;
+    public int getIdxKind() {
+        return _idxKind;
     }
 
     public int getBalance() {
-        return balance;
+        return _balance;
     }
 
     public int getNotificationMode() {
-        return notificationMode;
+        return _notificationMode;
     }
 
     public int getFlagActive() {
-        return flagActive;
+        return _flagActive;
+    }
+
+    public String getBankName() {
+        JSONObject jsonObjBank = null;
+        try {
+            jsonObjBank = Common.getInstance().jsonArrayBankInfo.getJSONObject(_idxKind);
+            String strAccountName = jsonObjBank.getString(Constant.JSON_NAME);
+
+            return strAccountName;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return "";
+    }
+
+    public String getBankType() {
+        JSONObject jsonObjBank = null;
+        try {
+            jsonObjBank = Common.getInstance().jsonArrayBankInfo.getJSONObject(_idxKind);
+            String strAccountType = jsonObjBank.getString(Constant.JSON_TYPE);
+
+            return strAccountType;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return "";
     }
 }

@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.ninja.nanny.Adapter.LeftNavAdapter;
 import com.ninja.nanny.Custom.CustomActivity;
+import com.ninja.nanny.Fragment.AddBankFragment;
 import com.ninja.nanny.Fragment.BankFragment;
 import com.ninja.nanny.Fragment.HomeFragment;
 import com.ninja.nanny.Fragment.PaymentFragment;
@@ -31,15 +32,20 @@ import com.ninja.nanny.Fragment.WishFragment;
 import com.ninja.nanny.Helper.DatabaseHelper;
 import com.ninja.nanny.Model.Payment;
 import com.ninja.nanny.Model.Sms;
+import com.ninja.nanny.Model.Transaction;
+import com.ninja.nanny.Model.Wish;
+import com.ninja.nanny.Model.WishSaving;
 import com.ninja.nanny.Preference.UserPreference;
 import com.ninja.nanny.Utils.Common;
 import com.ninja.nanny.Utils.Constant;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 
 public class MainActivity extends CustomActivity {
 
@@ -69,7 +75,27 @@ public class MainActivity extends CustomActivity {
 
     }
 
+    void produceVirtualSms() {
+        String[] arrText = getResources().getStringArray(R.array.sample_sms_data);
+
+        Common.getInstance().listSms = new ArrayList<Sms>();
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DAY_OF_YEAR, -15);
+
+        for(int i = 0; i < arrText.length; i ++) {
+            cal.add(Calendar.DAY_OF_YEAR, 1);
+            Sms sms = new Sms(i + 1, "EmiratesNBD", arrText[i], cal.getTimeInMillis());
+            Common.getInstance().listSms.add(sms);
+        }
+    }
+
     void initSetting() {
+        try {
+            Common.getInstance().jsonArrayBankInfo = new JSONArray(Constant.strBankJsonData);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
         UserPreference.getInstance().pref = getSharedPreferences(Constant.PREF_NAME, Context.MODE_PRIVATE);
         Common.getInstance().dbHelper = new DatabaseHelper(getApplicationContext());
         Common.getInstance().listBanks = Common.getInstance().dbHelper.getAllBanks();
@@ -78,15 +104,80 @@ public class MainActivity extends CustomActivity {
         Common.getInstance().listFinishedWishes = Common.getInstance().dbHelper.getFinishedWishes();
         Common.getInstance().listAllPayments = Common.getInstance().dbHelper.getAllPayments();
         Common.getInstance().listSms = Common.getInstance().dbHelper.getAllSms();
+        Common.getInstance().listTransactions = new ArrayList<Transaction>();
+        syncSettingInfo();
+        checkPayingWishes();
+        produceVirtualSms();
 
-        if (weHavePermissionToReadSMS()) {
-            syncSms();
-        } else {
-            requestReadSMSPermissionFirst();
+        if(Common.getInstance().isActiveBankExist()) {
+            Common.getInstance().getTransaction();
         }
 
+
+//        if (weHavePermissionToReadSMS()) {
+//            syncSms();
+//        } else {
+//            requestReadSMSPermissionFirst();
+//        }
+
         processPayments();
-        syncSettingInfo();
+
+    }
+
+    void checkPayingWishes() {
+        Calendar c = Calendar.getInstance();
+        int nDayOfMonth = c.get(Calendar.DAY_OF_MONTH);
+        int nMonth = c.get(Calendar.MONTH);
+        int nYear = c.get(Calendar.YEAR);
+
+        if(nDayOfMonth >= Common.getInstance().nSalaryDate) {
+            nMonth ++;
+            if(nMonth == 12) {
+                nYear ++;
+                nMonth = 0;
+            }
+        }
+
+        int nDateSaving = nYear * 100 + nMonth;
+
+        for(int i = 0; i < Common.getInstance().listActiveWishes.size(); i ++) {
+            Wish wish = Common.getInstance().listActiveWishes.get(i);
+
+            int nLastSavingId = wish.getLastSavingId();
+
+            if(nLastSavingId >= 0) {
+                WishSaving wishSaving = Common.getInstance().dbHelper.getWishSaving(nLastSavingId);
+
+                if(wishSaving.getDateCreated() == nDateSaving) {
+                    continue;
+                }
+            }
+
+            int nTotalAmount = wish.getTotalAmount();
+            int nSavingAmount = wish.getMonthlyPayment();
+            int nUpdatedSavedAmount = wish.getSavedAmount() + nSavingAmount;
+
+            if(nUpdatedSavedAmount > nTotalAmount) {
+                nUpdatedSavedAmount = nTotalAmount;
+                nSavingAmount = nTotalAmount - wish.getSavedAmount();
+            }
+
+            WishSaving wishSaving = new WishSaving(wish.getId(), nSavingAmount, nDateSaving);
+            int nWishSavingId = Common.getInstance().dbHelper.createWishSaving(wishSaving);
+            wishSaving.setId(nWishSavingId);
+
+            wish.setLastSavingId(nWishSavingId);
+            wish.setSavedAmount(nUpdatedSavedAmount);
+
+            if(nUpdatedSavedAmount == nTotalAmount) {
+                wish.setFlagActive(0); // this is finished
+            }
+
+            Common.getInstance().dbHelper.updateWish(wish);
+        }
+
+        Common.getInstance().listActiveWishes = Common.getInstance().dbHelper.getActiveWishes();
+        Common.getInstance().listFinishedWishes = Common.getInstance().dbHelper.getFinishedWishes();
     }
 
     void syncSettingInfo() {
@@ -235,26 +326,27 @@ public class MainActivity extends CustomActivity {
         Collections.sort(Common.getInstance().listSms, new SmsComparator());
 
         if(Common.getInstance().listSms.size() == 0) {
-            addSampleSmsForTransaction();
+//            addSampleSmsForTransaction();
+            produceVirtualSms();
         }
     }
 
-    void addSampleSmsForTransaction() {
-        String[] arrTransacitons = getResources().getStringArray(R.array.sample_transaction_data);
-
-        for(int i = 0; i < arrTransacitons.length; i ++) {
-            Sms objSms = new Sms();
-
-            objSms.setAddress("10001");
-            objSms.setText(arrTransacitons[i]);
-            objSms.setTimestamp(new Date().getTime());
-
-            int sms_id = Common.getInstance().dbHelper.createSMS(objSms);
-            objSms.setId(sms_id);
-
-            Common.getInstance().listSms.add(objSms);
-        }
-    }
+//    void addSampleSmsForTransaction() {
+//        String[] arrTransacitons = getResources().getStringArray(R.array.sample_transaction_data);
+//
+//        for(int i = 0; i < arrTransacitons.length; i ++) {
+//            Sms objSms = new Sms();
+//
+//            objSms.setAddress("10001");
+//            objSms.setText(arrTransacitons[i]);
+//            objSms.setTimestamp(new Date().getTime());
+//
+//            int sms_id = Common.getInstance().dbHelper.createSMS(objSms);
+//            objSms.setId(sms_id);
+//
+//            Common.getInstance().listSms.add(objSms);
+//        }
+//    }
 
     class SmsComparator implements Comparator<Sms> {
         public int compare(Sms smsA, Sms smsB) {
@@ -406,24 +498,42 @@ public class MainActivity extends CustomActivity {
                     }
                 });
 
-        boolean isSetInitSet = UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_IS_INIT_SET, false);
+        boolean isSetInitConfig = UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_IS_INIT_CONFIG, false);
 
-        if(isSetInitSet) {
+        if(isSetInitConfig) {
             launchFragment(0);
         } else {
+            Toast.makeText(getBaseContext(), "You should set initial configuration", Toast.LENGTH_SHORT).show();
             launchFragment(5);
         }
-
-
     }
 
     @Override
     public void onBackPressed() {
         FragmentManager manager = getSupportFragmentManager();
-
+        Fragment currFrag = manager.findFragmentById(R.id.content_frame);
         int nStackCount = manager.getBackStackEntryCount();
 
         Log.e("number", nStackCount + "");
+        if(currFrag instanceof SettingFragment) {
+            boolean isSetInitConfig = UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_IS_INIT_CONFIG, false);
+
+            if(!isSetInitConfig) {
+                Toast.makeText(getBaseContext(), "You should set initial configuration", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
+
+        if(currFrag instanceof AddBankFragment) {
+            if(!Common.getInstance().isActiveBankExist()) {
+                Toast.makeText(getBaseContext(), "You should set active bank info", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
+
+        if(currFrag instanceof HomeFragment) {
+            return;
+        }
 
         if(nStackCount == 1) {
             launchFragment(0);

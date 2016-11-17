@@ -33,7 +33,7 @@
             android:id="@+id/btnDelete"
             android:background="@drawable/ic_trash" />
 
-        <TextView
+        <com.ninja.nanny.Custom.MediumTextView
             android:text="Edit Payment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -54,6 +54,7 @@
         android:layout_alignParentStart="true">
 
         <LinearLayout
+            android:id="@+id/lyContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -66,22 +67,24 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="30dp">
 
-                <TextView
+                <com.ninja.nanny.Custom.MediumTextView
                     android:text="TITLE"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textSize="14sp"
                     android:textColor="@color/label_text_color" />
 
-                <EditText
+                <com.ninja.nanny.Custom.RegularEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName"
                     android:text=""
                     android:ems="10"
+                    android:textSize="16sp"
                     android:id="@+id/etTitle"
                     android:background="@drawable/border_add_bank_editor"
                     android:layout_marginTop="10dp"
-                    android:textColor="?android:attr/textColorHint"
+                    android:textColor="@color/black"
                     android:paddingBottom="5dp" />
             </LinearLayout>
 
@@ -91,22 +94,24 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="30dp">
 
-                <TextView
+                <com.ninja.nanny.Custom.MediumTextView
                     android:text="DETAIL"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textSize="14sp"
                     android:textColor="@color/label_text_color" />
 
-                <EditText
+                <com.ninja.nanny.Custom.RegularEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName"
                     android:text=""
                     android:ems="10"
+                    android:textSize="16sp"
                     android:id="@+id/etDetail"
                     android:background="@drawable/border_add_bank_editor"
                     android:layout_marginTop="10dp"
-                    android:textColor="?android:attr/textColorHint"
+                    android:textColor="@color/black"
                     android:paddingBottom="5dp" />
             </LinearLayout>
 
@@ -126,13 +131,14 @@
                         android:id="@+id/btnChkBoxRecurrent"
                         android:layout_weight="1"
                         android:layout_width="30dp"
-                        android:background="@drawable/ic_checked" />
+                        android:background="@drawable/ic_unchecked" />
 
-                    <TextView
+                    <com.ninja.nanny.Custom.MediumTextView
                         android:text="RECURRENT"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:textSize="14sp"
                         android:layout_marginLeft="20dp"
                         android:textColor="@color/label_text_color" />
 
@@ -151,11 +157,12 @@
                         android:layout_width="30dp"
                         android:background="@drawable/ic_unchecked" />
 
-                    <TextView
+                    <com.ninja.nanny.Custom.MediumTextView
                         android:text="IS SAVING WISH"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:textSize="14sp"
                         android:layout_marginLeft="20dp"
                         android:textColor="@color/label_text_color" />
 
@@ -174,22 +181,24 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1">
 
-                    <TextView
-                        android:text="AMOUNT"
+                    <com.ninja.nanny.Custom.MediumTextView
+                        android:text="AMOUNT ($)"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColor="@color/label_text_color"
+                        android:textSize="14sp"
                         android:id="@+id/tvAmount" />
 
-                    <EditText
+                    <com.ninja.nanny.Custom.RegularEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="0"
+                        android:textSize="16sp"
                         android:ems="10"
                         android:id="@+id/etAmount"
                         android:background="@drawable/border_add_bank_editor"
                         android:layout_marginTop="10dp"
-                        android:textColor="?android:attr/textColorHint"
+                        android:textColor="@color/black"
                         android:paddingBottom="5dp"
                         android:inputType="number" />
                 </LinearLayout>
@@ -201,13 +210,14 @@
                     android:layout_weight="1"
                     android:layout_marginLeft="60dp">
 
-                    <TextView
+                    <com.ninja.nanny.Custom.MediumTextView
                         android:text="DATE OF MONTH"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:textSize="14sp"
                         android:textColor="@color/label_text_color" />
 
-                    <EditText
+                    <com.ninja.nanny.Custom.RegularEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="1"
@@ -215,8 +225,9 @@
                         android:id="@+id/etDateOfMonth"
                         android:background="@drawable/border_add_bank_editor"
                         android:layout_marginTop="10dp"
-                        android:textColor="?android:attr/textColorHint"
+                        android:textColor="@color/black"
                         android:paddingBottom="5dp"
+                        android:textSize="16sp"
                         android:inputType="number" />
                 </LinearLayout>
             </LinearLayout>
@@ -232,15 +243,13 @@
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp">
 
-        <Button
+        <com.ninja.nanny.Custom.MediumButton
             android:text="SAVE"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/btnSave"
-            android:background="@color/colorPrimary"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
-            android:textColor="@color/white"
             android:layout_alignParentRight="true" />
     </RelativeLayout>
 

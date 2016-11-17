@@ -24,7 +24,7 @@
             android:layout_width="30dp"
             android:layout_height="30dp" />
 
-        <TextView
+        <com.ninja.nanny.Custom.MediumTextView
             android:text="Edit Wish"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -45,6 +45,7 @@
         android:layout_alignParentStart="true">
 
         <LinearLayout
+            android:id="@+id/lyContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -57,22 +58,24 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="30dp">
 
-                <TextView
+                <com.ninja.nanny.Custom.MediumTextView
                     android:text="TITLE"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/textView"
+                    android:textSize="14sp"
                     android:textColor="@color/label_text_color" />
 
-                <EditText
+                <com.ninja.nanny.Custom.RegularEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName"
                     android:ems="10"
+                    android:textSize="16sp"
                     android:id="@+id/etTitle"
                     android:background="@drawable/border_add_bank_editor"
                     android:layout_marginTop="10dp"
-                    android:textColor="?android:attr/textColorHint"
+                    android:textColor="@color/black"
                     android:paddingBottom="5dp" />
             </LinearLayout>
 
@@ -82,22 +85,24 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="30dp">
 
-                <TextView
+                <com.ninja.nanny.Custom.MediumTextView
                     android:text="AMOUNT ($)"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/textView1"
+                    android:textSize="14sp"
                     android:textColor="@color/label_text_color" />
 
-                <EditText
+                <com.ninja.nanny.Custom.RegularEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="0"
                     android:ems="10"
+                    android:textSize="16sp"
                     android:id="@+id/etAmount"
                     android:background="@drawable/border_add_bank_editor"
                     android:layout_marginTop="10dp"
-                    android:textColor="?android:attr/textColorHint"
+                    android:textColor="@color/black"
                     android:paddingBottom="5dp"
                     android:inputType="number" />
             </LinearLayout>
@@ -108,11 +113,12 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="30dp">
 
-                <TextView
+                <com.ninja.nanny.Custom.MediumTextView
                     android:text="PROPOTION"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/textView4"
+                    android:textSize="14sp"
                     android:textColor="@color/label_text_color" />
 
                 <org.adw.library.widgets.discreteseekbar.DiscreteSeekBar
@@ -141,20 +147,21 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1">
 
-                    <TextView
+                    <com.ninja.nanny.Custom.MediumTextView
                         android:text="TOTAL MONTHS"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_horizontal"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:textColor="@color/label_text_color" />
 
-                    <TextView
+                    <com.ninja.nanny.Custom.RegularTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/tvTotalMonths"
                         android:gravity="center_horizontal"
                         android:textColor="@color/gray_dark"
+                        android:textSize="16sp"
                         android:layout_marginTop="10dp" />
                 </LinearLayout>
 
@@ -164,20 +171,21 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1">
 
-                    <TextView
+                    <com.ninja.nanny.Custom.MediumTextView
                         android:text="MONTHLY PAYMENT"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_horizontal"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:textColor="@color/label_text_color" />
 
-                    <TextView
+                    <com.ninja.nanny.Custom.RegularTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/tvMonthlyPayment"
                         android:gravity="center_horizontal"
                         android:textColor="@color/gray_dark"
+                        android:textSize="16sp"
                         android:layout_marginTop="10dp" />
                 </LinearLayout>
 
@@ -197,25 +205,21 @@
         android:layout_marginLeft="15dp"
         android:layout_marginRight="15dp">
 
-        <Button
+        <com.ninja.nanny.Custom.MediumButton
             android:text="ASK ADVISER"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/btnAskAdviser"
-            android:background="@color/colorPrimary"
             android:paddingLeft="15dp"
-            android:paddingRight="15dp"
-            android:textColor="@color/white" />
+            android:paddingRight="15dp" />
 
-        <Button
+        <com.ninja.nanny.Custom.MediumButton
             android:text="SAVE"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:id="@+id/btnSave"
-            android:background="@color/colorPrimary"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
-            android:textColor="@color/white"
             android:layout_alignParentRight="true" />
     </RelativeLayout>
 

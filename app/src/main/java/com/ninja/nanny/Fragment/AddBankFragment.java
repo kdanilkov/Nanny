@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,10 +19,12 @@ import com.ninja.nanny.MainActivity;
 import com.ninja.nanny.Model.Bank;
 import com.ninja.nanny.R;
 import com.ninja.nanny.Utils.Common;
+import com.ninja.nanny.Utils.Constant;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 
 public class AddBankFragment extends CustomFragment {
@@ -56,15 +59,18 @@ public class AddBankFragment extends CustomFragment {
     }
 
     void initData() {
-        String[] myBankArray = getResources().getStringArray(R.array.bank_array);
-        List<String> myBankList = Arrays.asList(myBankArray);
+        myBankArrayList = new ArrayList<String>();
+        myAccountTypeArrayList = new ArrayList<String>();
 
-        myBankArrayList = new ArrayList<String>(myBankList);
-
-        String[] myAccountTypeArray = getResources().getStringArray(R.array.acccount_type_array);
-        List<String> myAccountTypeList = Arrays.asList(myAccountTypeArray);
-
-        myAccountTypeArrayList = new ArrayList<String>(myAccountTypeList);
+        for(int i = 0; i < Common.getInstance().jsonArrayBankInfo.length(); i ++) {
+            try {
+                JSONObject jsonObject = Common.getInstance().jsonArrayBankInfo.getJSONObject(i);
+                myBankArrayList.add(jsonObject.getString(Constant.JSON_NAME));
+                myAccountTypeArrayList.add(jsonObject.getString(Constant.JSON_TYPE));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
 
         isSMS = true;
     }
@@ -103,12 +109,19 @@ public class AddBankFragment extends CustomFragment {
 
         btnSMS.setBackgroundResource(R.drawable.ic_checked);
         btnEmail.setBackgroundResource(R.drawable.ic_unchecked);
+
+        mView.findViewById(R.id.lyContainer).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                InputMethodManager imm = (InputMethodManager) mContext.getSystemService(mContext.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(etAccountName.getWindowToken(), 0);
+            }
+        });
+
     }
 
     void saveBank() {
         String strAccountName = etAccountName.getText().toString();
-        String strBank = myBankArrayList.get(spinnerBank.getSelectedItemPosition());
-        String strAccountType = myAccountTypeArrayList.get(spinnerBank.getSelectedItemPosition());
         String strBalance = etBalance.getText().toString();
 
         if(strAccountName.length() == 0) {
@@ -127,14 +140,20 @@ public class AddBankFragment extends CustomFragment {
         if(isSMS) nNotificationMode = 0;
 
         int nFlagActive = 0;
+        int nIdxKind = spinnerBank.getSelectedItemPosition();
 
         if(Common.getInstance().listBanks.size() == 0) nFlagActive = 1;
 
-        Bank bankNew = new Bank(strAccountName, strBank, strAccountType, nBalance, nNotificationMode, nFlagActive); // activate the new bank info
+        Bank bankNew = new Bank(strAccountName, nIdxKind, nBalance, nNotificationMode, nFlagActive); // activate the new bank info
         int nID =  Common.getInstance().dbHelper.createBank(bankNew);
 
         bankNew.setId(nID);
         Common.getInstance().listBanks.add(bankNew);
+
+        if(bankNew.getFlagActive() == 1) {
+            Common.getInstance().bankActive = bankNew;
+            Common.getInstance().getTransaction();
+        }
 
         Toast.makeText(mContext, "new bank info has been added successfully", Toast.LENGTH_SHORT).show();
         mContext.getSupportFragmentManager().popBackStackImmediate();
@@ -144,6 +163,10 @@ public class AddBankFragment extends CustomFragment {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnBack:
+                if(!Common.getInstance().isActiveBankExist()) {
+                    Toast.makeText(mContext, "You should set active bank info", Toast.LENGTH_SHORT).show();
+                    break;
+                }
                 mContext.getSupportFragmentManager().popBackStackImmediate();
                 break;
             case R.id.btnSave:

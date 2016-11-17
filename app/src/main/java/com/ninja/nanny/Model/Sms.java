@@ -10,6 +10,17 @@ public class Sms {
     private String _text;
     private long _timestamp;
 
+    public Sms() {
+
+    }
+
+    public Sms(int id, String address, String text, long timestamp) {
+        _id = id;
+        _address = address;
+        _text = text;
+        _timestamp = timestamp;
+    }
+
     public int getId() {
         return _id;
     }

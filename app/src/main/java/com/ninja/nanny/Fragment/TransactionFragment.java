@@ -13,7 +13,7 @@ import android.widget.TextView;
 import com.ninja.nanny.Custom.CustomFragment;
 import com.ninja.nanny.MainActivity;
 import com.ninja.nanny.Model.Payment;
-import com.ninja.nanny.Model.Sms;
+import com.ninja.nanny.Model.Transaction;
 import com.ninja.nanny.R;
 import com.ninja.nanny.Utils.Common;
 import com.ninja.nanny.Utils.Constant;
@@ -59,7 +59,7 @@ public class TransactionFragment extends CustomFragment {
         }
 
         mView.findViewById(R.id.btnBack).setOnClickListener(this);
-        mLyContainer = (LinearLayout)mView.findViewById(R.id.lytContainer);
+        mLyContainer = (LinearLayout)mView.findViewById(R.id.lyContainer);
 
         presentData();
     }
@@ -70,17 +70,17 @@ public class TransactionFragment extends CustomFragment {
 
         mLyContainer.removeAllViews();
 
-        for(int i = 0; i < Common.getInstance().listSms.size(); i ++) {
-            final Sms sms = Common.getInstance().listSms.get(i);
+        for(int i = 0; i < Common.getInstance().listTransactions.size(); i ++) {
+            final Transaction transaction = Common.getInstance().listTransactions.get(i);
 
             Calendar cal = Calendar.getInstance();
-            cal.setTimeInMillis(sms.getTimestamp());
+            cal.setTimeInMillis(transaction.getTimestampCreated());
             Date date = cal.getTime();
 
             View cell = mInflater.inflate(R.layout.cell_transaction_item, null);
 
             ((TextView)cell.findViewById(R.id.tvDate)).setText(formatter.format(date));
-            String strText = sms.getText();
+            String strText = transaction.getText();
             if(strText.length() > 20) strText = strText.substring(0, 20);
             ((TextView)cell.findViewById(R.id.tvDetail)).setText(strText);
 
@@ -99,7 +99,7 @@ public class TransactionFragment extends CustomFragment {
                     }
                     TransactionDetailFragment f = new TransactionDetailFragment();
                     String title = Constant.FRAGMENT_TRANSACTION_DETAIL;
-                    f.smsItem = sms;
+                    f.smsItem = Common.getInstance().dbHelper.getSms(transaction.getSmsId());
 
                     FragmentTransaction transaction = mContext.getSupportFragmentManager()
                             .beginTransaction();

@@ -6,6 +6,7 @@ import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -73,13 +74,21 @@ public class SettingFragment extends CustomFragment implements DiscreteSeekBar.O
         seekBarPercent.setProgress(Common.getInstance().nTolerancePercents);
         tvToleranceDays.setText(Common.getInstance().nToleranceDays + " DAYS");
         tvTolerancePercent.setText(Common.getInstance().nTolerancePercents + " %");
+
+        mView.findViewById(R.id.lyContainer).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                InputMethodManager imm = (InputMethodManager) mContext.getSystemService(mContext.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(etMinimalAmountPerDay.getWindowToken(), 0);
+            }
+        });
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnMenu:
-                boolean isInitSet = UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_IS_INIT_SET, false);
+                boolean isInitSet = UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_IS_INIT_CONFIG, false);
                 if(!isInitSet) {
                     Toast.makeText(mContext, "You should make the initial setting first of all", Toast.LENGTH_SHORT).show();
                     break;
@@ -130,10 +139,10 @@ public class SettingFragment extends CustomFragment implements DiscreteSeekBar.O
         Common.getInstance().nToleranceDays = nToleranceDays;
         Common.getInstance().nTolerancePercents = nTolerancePercent;
 
-        boolean isInitSet = UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_IS_INIT_SET, false);
+        boolean isInitSet = UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_IS_INIT_CONFIG, false);
 
         if(!isInitSet) {
-            UserPreference.getInstance().putSharedPreference(Constant.PREF_KEY_IS_INIT_SET, true);
+            UserPreference.getInstance().putSharedPreference(Constant.PREF_KEY_IS_INIT_CONFIG, true);
             mContext.launchFragment(0);
         }
 

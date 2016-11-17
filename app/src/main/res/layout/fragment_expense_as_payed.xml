@@ -24,7 +24,7 @@
             android:layout_width="30dp"
             android:layout_height="30dp" />
 
-        <TextView
+        <com.ninja.nanny.Custom.MediumTextView
             android:text="Mark as payed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -44,32 +44,32 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/rlyTop">
 
-        <TextView
+        <com.ninja.nanny.Custom.RegularTextView
             android:text="Hot water BBB suplier regular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:layout_marginTop="40dp" />
 
-        <TextView
+        <com.ninja.nanny.Custom.RegularTextView
             android:text="20 day payment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:layout_marginTop="5dp" />
 
-        <TextView
+        <com.ninja.nanny.Custom.RegularTextView
             android:text="30$"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/textView12"
             android:layout_gravity="center_horizontal"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:layout_marginTop="5dp" />
 
-        <Button
+        <com.ninja.nanny.Custom.MediumOrangeButton
             android:text="PAYED BY WIRE"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -78,21 +78,16 @@
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
             android:layout_gravity="center_horizontal"
-            android:textSize="16sp"
-            android:textColor="@color/white"
             android:layout_marginTop="30dp" />
 
-        <Button
+        <com.ninja.nanny.Custom.MediumButton
             android:text="PAYED BY CASH"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/btnCash"
-            android:background="@color/colorPrimary"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
             android:layout_gravity="center_horizontal"
-            android:textSize="16sp"
-            android:textColor="@color/white"
             android:layout_marginTop="40dp" />
     </LinearLayout>
 

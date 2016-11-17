@@ -3,7 +3,6 @@ package com.ninja.nanny.Fragment;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,7 +21,6 @@ import com.ninja.nanny.MainActivity;
 import com.ninja.nanny.Model.Payment;
 import com.ninja.nanny.R;
 import com.ninja.nanny.Utils.Common;
-import com.ninja.nanny.Utils.Constant;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -43,9 +41,6 @@ public class NewPaymentFragment extends CustomFragment {
     Button btnCheckRecurrent, btnCheckSaving;
     boolean isRecurrent;
     boolean isSaving;
-    public boolean isSavingSet;
-    public int nFixedAmountSaving;
-    public int nPercentAmountSaving;
     String[] arrPatternNames, arrPatternWords, arrPatternDates;
 
     @Override
@@ -87,31 +82,13 @@ public class NewPaymentFragment extends CustomFragment {
         isRecurrent = false;
         isSaving = false;
 
-        isSavingSet = false;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        presentSavingData();
-    }
-
-    void presentSavingData() {
-        if(isSavingSet) {
-            etAmount.setEnabled(false);
-
-            if(nPercentAmountSaving == 0) {
-                tvAmount.setText("Amount ($)");
-                etAmount.setText(nFixedAmountSaving + "");
-            } else {
-                tvAmount.setText("Amount (%)");
-                etAmount.setText(nPercentAmountSaving + "");
+        mView.findViewById(R.id.lyContainer).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                InputMethodManager imm = (InputMethodManager) mContext.getSystemService(mContext.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(etTitle.getWindowToken(), 0);
             }
-
-        } else {
-            tvAmount.setText("Amount ($)");
-            etAmount.setEnabled(true);
-        }
+        });
     }
 
     void saveNewPayment() {
@@ -167,11 +144,7 @@ public class NewPaymentFragment extends CustomFragment {
             nPaymentMode = isSaving? 1 : 3;
         }
 
-        int nSavingMode = 0;
-        if(nFixedAmountSaving == 0) nSavingMode = 1;
-        if(!isSaving) nSavingMode = 0;
-
-        Payment paymentNew = new Payment(strTitle, strDetail, nAmount, nDateOfMonth, nPaymentMode, 0, nSavingMode, Common.getInstance().dbHelper.getTimestamp()); // paid_status = 0 because it is unpaid
+        Payment paymentNew = new Payment(strTitle, strDetail, nAmount, nDateOfMonth, nPaymentMode, 0, Common.getInstance().getTimestamp()); // paid_status = 0 because it is unpaid
 
         int payment_id = Common.getInstance().dbHelper.createPayment(paymentNew);
 
@@ -256,6 +229,8 @@ public class NewPaymentFragment extends CustomFragment {
 //                .show();
     }
 
+
+
     @Override
     public void onClick(View v) {
         InputMethodManager imm = (InputMethodManager) mContext.getSystemService(mContext.INPUT_METHOD_SERVICE);
@@ -290,18 +265,18 @@ public class NewPaymentFragment extends CustomFragment {
                 if(isSaving) {
                     btnCheckSaving.setBackgroundResource(R.drawable.ic_checked);
 
-                    MonthlySavingFragment f = new MonthlySavingFragment();
-                    String title = Constant.FRAGMENT_MONTHLY_SAVINGS;
-
-                    FragmentTransaction transaction = mContext.getSupportFragmentManager()
-                            .beginTransaction();
-                    transaction.add(R.id.content_frame, f, title).addToBackStack(title).commit();
+//                    MonthlySavingFragment f = new MonthlySavingFragment();
+//                    String title = Constant.FRAGMENT_MONTHLY_SAVINGS;
+//
+//                    FragmentTransaction transaction = mContext.getSupportFragmentManager()
+//                            .beginTransaction();
+//                    transaction.add(R.id.content_frame, f, title).addToBackStack(title).commit();
                 } else {
                     btnCheckSaving.setBackgroundResource(R.drawable.ic_unchecked);
-                    isSavingSet = false;
-                    tvAmount.setText("Amount ($)");
-                    etAmount.setEnabled(true);
-                    etAmount.setText("0");
+//                    isSavingSet = false;
+//                    tvAmount.setText("Amount ($)");
+//                    etAmount.setEnabled(true);
+//                    etAmount.setText("0");
                 }
 
                 //to hide it, call the method again

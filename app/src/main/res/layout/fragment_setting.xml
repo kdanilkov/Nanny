@@ -23,7 +23,7 @@
             android:layout_width="30dp"
             android:layout_height="30dp" />
 
-        <TextView
+        <com.ninja.nanny.Custom.MediumTextView
             android:text="Application Settings"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -43,6 +43,7 @@
         android:layout_alignParentStart="true">
 
         <LinearLayout
+            android:id="@+id/lyContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -55,22 +56,24 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="30dp">
 
-                <TextView
+                <com.ninja.nanny.Custom.MediumTextView
                     android:text="MINIMAL AMOUNT PER DAY ($)"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textSize="14sp"
                     android:textColor="@color/label_text_color" />
 
-                <EditText
+                <com.ninja.nanny.Custom.RegularEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="number"
                     android:text="10"
+                    android:textSize="16sp"
                     android:ems="10"
                     android:id="@+id/etMinimalAmountPerDay"
                     android:background="@drawable/border_setting_editor"
                     android:layout_marginTop="10dp"
-                    android:textColor="?android:attr/textColorHint"
+                    android:textColor="@color/black"
                     android:paddingBottom="5dp" />
             </LinearLayout>
 
@@ -80,13 +83,14 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="30dp">
 
-                <TextView
+                <com.ninja.nanny.Custom.MediumTextView
                     android:text="SALARY DATE"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textSize="14sp"
                     android:textColor="@color/label_text_color" />
 
-                <EditText
+                <com.ninja.nanny.Custom.RegularEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="15"
@@ -94,7 +98,8 @@
                     android:id="@+id/etSalaryDate"
                     android:background="@drawable/border_setting_editor"
                     android:layout_marginTop="10dp"
-                    android:textColor="?android:attr/textColorHint"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
                     android:paddingBottom="5dp"
                     android:inputType="number" />
             </LinearLayout>
@@ -105,21 +110,23 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="30dp">
 
-                <TextView
+                <com.ninja.nanny.Custom.MediumTextView
                     android:text="MONTHLY INCOME ($)"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textSize="14sp"
                     android:textColor="@color/label_text_color" />
 
-                <EditText
+                <com.ninja.nanny.Custom.RegularEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="5000"
                     android:ems="10"
+                    android:textSize="16sp"
                     android:id="@+id/etMonthlyIncome"
                     android:background="@drawable/border_setting_editor"
                     android:layout_marginTop="10dp"
-                    android:textColor="?android:attr/textColorHint"
+                    android:textColor="@color/black"
                     android:paddingBottom="5dp"
                     android:inputType="number" />
             </LinearLayout>
@@ -130,21 +137,23 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="30dp">
 
-                <TextView
+                <com.ninja.nanny.Custom.MediumTextView
                     android:text="USED SALARY ($)"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textSize="14sp"
                     android:textColor="@color/label_text_color" />
 
-                <EditText
+                <com.ninja.nanny.Custom.RegularEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="1334"
                     android:ems="10"
+                    android:textSize="16sp"
                     android:id="@+id/etUsedSalary"
                     android:background="@drawable/border_setting_editor"
                     android:layout_marginTop="10dp"
-                    android:textColor="?android:attr/textColorHint"
+                    android:textColor="@color/black"
                     android:paddingBottom="5dp"
                     android:inputType="number" />
             </LinearLayout>
@@ -160,20 +169,22 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent">
 
-                    <TextView
+                    <com.ninja.nanny.Custom.MediumTextView
                         android:text="PAYMENTS TOLERANCE (DAYS)"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/label_text_color"
+                        android:textSize="14sp"
                         android:layout_weight="1" />
 
-                    <TextView
+                    <com.ninja.nanny.Custom.RegularTextView
                         android:text="3 DAYS"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/tvToleranceDays"
                         android:layout_weight="1"
-                        android:textColor="?android:attr/textColorHint"
+                        android:textSize="16sp"
+                        android:textColor="@color/gray_dark"
                         android:layout_marginLeft="10dp" />
                 </LinearLayout>
 
@@ -203,18 +214,20 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent">
 
-                    <TextView
+                    <com.ninja.nanny.Custom.MediumTextView
                         android:text="AMOUNT TOLERANCE (%)"
                         android:layout_width="match_parent"
+                        android:textSize="14sp"
                         android:layout_height="wrap_content"
                         android:textColor="@color/label_text_color" />
 
-                    <TextView
+                    <com.ninja.nanny.Custom.RegularTextView
                         android:text="15 %"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/tvTolerancePercent"
-                        android:textColor="?android:attr/textColorHint"
+                        android:textSize="16sp"
+                        android:textColor="@color/gray_dark"
                         android:layout_weight="1"
                         android:layout_marginLeft="10dp" />
                 </LinearLayout>
@@ -242,13 +255,11 @@
 
         </LinearLayout>
     </ScrollView>
-    <Button
+    <com.ninja.nanny.Custom.MediumButton
         android:text="SAVE"
         android:layout_width="100dp"
         android:layout_height="40dp"
         android:id="@+id/btnSave"
-        android:background="@color/colorPrimary"
-        android:textColor="@color/white"
         android:textSize="20sp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"

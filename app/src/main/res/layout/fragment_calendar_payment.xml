@@ -24,7 +24,7 @@
             android:layout_width="30dp"
             android:layout_height="30dp" />
 
-        <TextView
+        <com.ninja.nanny.Custom.MediumTextView
             android:text="Calendar of Payments"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -58,17 +58,18 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1">
 
-                <TextView
+                <com.ninja.nanny.Custom.MediumTextView
                     android:text="Not Paid Bill"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/label_text_color"
+                    android:textSize="14sp"
                     android:layout_gravity="center_horizontal" />
 
                 <ToggleButton
                     android:layout_width="44dp"
                     android:layout_height="23dp"
-                    android:background="@drawable/tbtn_selector_dark_blue"
+                    android:background="@drawable/tbtn_selector_blue"
                     android:textOff=""
                     android:textOn=""
                     android:id="@+id/tbtnNotPaidBill"
@@ -85,17 +86,18 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1">
 
-                <TextView
+                <com.ninja.nanny.Custom.MediumTextView
                     android:text="Paid Bill"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/label_text_color"
+                    android:textSize="14sp"
                     android:layout_gravity="center_horizontal" />
 
                 <ToggleButton
                     android:layout_width="44dp"
                     android:layout_height="23dp"
-                    android:background="@drawable/tbtn_selector_light_blue"
+                    android:background="@drawable/tbtn_selector_green"
                     android:textOff=""
                     android:textOn=""
                     android:id="@+id/tbtnPaidBill"
@@ -112,18 +114,18 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1">
 
-                <TextView
+                <com.ninja.nanny.Custom.MediumTextView
                     android:text="Not Paid Saving"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/label_text_color"
                     android:layout_gravity="center_horizontal"
-                    android:textSize="12sp" />
+                    android:textSize="13sp" />
 
                 <ToggleButton
                     android:layout_width="44dp"
                     android:layout_height="23dp"
-                    android:background="@drawable/tbtn_selector_dark_orange"
+                    android:background="@drawable/tbtn_selector_yellow"
                     android:textOff=""
                     android:textOn=""
                     android:id="@+id/tbtnNotPaidSaving"
@@ -140,17 +142,18 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1">
 
-                <TextView
+                <com.ninja.nanny.Custom.MediumTextView
                     android:text="Paid Saving"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textSize="14sp"
                     android:textColor="@color/label_text_color"
                     android:layout_gravity="center_horizontal" />
 
                 <ToggleButton
                     android:layout_width="44dp"
                     android:layout_height="23dp"
-                    android:background="@drawable/tbtn_selector_light_orange"
+                    android:background="@drawable/tbtn_selector_orange"
                     android:textOff=""
                     android:textOn=""
                     android:id="@+id/tbtnPaidSaving"
@@ -170,20 +173,21 @@
             android:layout_below="@+id/lySwitch"
             android:layout_marginTop="30dp">
 
-            <TextView
+            <com.ninja.nanny.Custom.RegularTextView
                 android:text="TextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/tvDay"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="20dp"
-                android:textSize="30sp" />
+                android:textSize="36sp" />
 
-            <TextView
+            <com.ninja.nanny.Custom.RegularTextView
                 android:text="TextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/tvYear"
+                android:textSize="16sp"
                 android:layout_centerVertical="true"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="20dp" />
@@ -202,7 +206,7 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:id="@+id/btnAdd"
-        android:background="@drawable/ic_circle_blue"
+        android:background="@drawable/circle_view_blue"
         android:textColor="@color/white"
         android:textSize="40sp"
         android:layout_alignParentBottom="true"

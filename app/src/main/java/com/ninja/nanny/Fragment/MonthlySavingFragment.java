@@ -131,16 +131,16 @@ public class MonthlySavingFragment extends CustomFragment {
 
         NewPaymentFragment fragmentNew = (NewPaymentFragment) mContext.getSupportFragmentManager().findFragmentByTag(Constant.FRAGMENT_NEW_PAYMENT);
         if(fragmentNew != null) {
-            fragmentNew.isSavingSet = true;
-            fragmentNew.nFixedAmountSaving = nFixed;
-            fragmentNew.nPercentAmountSaving = nPercent;
+//            fragmentNew.isSavingSet = true;
+//            fragmentNew.nFixedAmountSaving = nFixed;
+//            fragmentNew.nPercentAmountSaving = nPercent;
         }
 
         EditPaymentFragment fragmentEdit = (EditPaymentFragment) mContext.getSupportFragmentManager().findFragmentByTag(Constant.FRAGMENT_EDIT_PAYMENT);
         if(fragmentEdit != null) {
-            fragmentEdit.isSavingSet = true;
-            fragmentEdit.nFixedAmountSaving = nFixed;
-            fragmentEdit.nPercentAmountSaving = nPercent;
+//            fragmentEdit.isSavingSet = true;
+//            fragmentEdit.nFixedAmountSaving = nFixed;
+//            fragmentEdit.nPercentAmountSaving = nPercent;
         }
 
         mContext.getSupportFragmentManager().popBackStackImmediate();

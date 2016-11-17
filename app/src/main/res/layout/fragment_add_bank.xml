@@ -22,7 +22,7 @@
             android:background="@drawable/ic_back_other"
             android:layout_width="30dp"
             android:layout_height="30dp" />
-        <TextView
+        <com.ninja.nanny.Custom.MediumTextView
             android:text="Add bank account"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -46,6 +46,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:id="@+id/lyContainer"
             android:paddingLeft="10dp"
             android:paddingRight="10dp">
 
@@ -55,14 +56,15 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="30dp">
 
-                <TextView
+                <com.ninja.nanny.Custom.MediumTextView
                     android:text="ACCOUNT NAME"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/textView"
+                    android:textSize="14sp"
                     android:textColor="@color/label_text_color" />
 
-                <EditText
+                <com.ninja.nanny.Custom.RegularEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName"
@@ -71,7 +73,8 @@
                     android:id="@+id/etAccountName"
                     android:background="@drawable/border_add_bank_editor"
                     android:layout_marginTop="10dp"
-                    android:textColor="?android:attr/textColorHint"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
                     android:paddingBottom="5dp"
                     android:enabled="true" />
             </LinearLayout>
@@ -82,11 +85,12 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="30dp">
 
-                <TextView
+                <com.ninja.nanny.Custom.MediumTextView
                     android:text="BANK"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/textView1"
+                    android:textSize="14sp"
                     android:textColor="@color/label_text_color" />
 
                 <RelativeLayout
@@ -96,18 +100,8 @@
                     <Spinner
                         android:id="@+id/spinnerBank"
                         android:layout_marginTop="10dp"
-                        android:background="@drawable/custom_spinner_background"
                         android:layout_width="180dp"
-                        android:layout_height="40dp" />
-
-                    <ImageView
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        app:srcCompat="@drawable/ic_dropdown"
-                        android:id="@+id/imageView"
-                        android:layout_centerVertical="true"
-                        android:layout_alignRight="@+id/spinnerBank"
-                        android:layout_marginEnd="5dp" />
+                        android:layout_height="60dp" />
                 </RelativeLayout>
 
             </LinearLayout>
@@ -118,20 +112,21 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="30dp">
 
-                <TextView
+                <com.ninja.nanny.Custom.MediumTextView
                     android:text="ACCOUNT TYPE"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/textView2"
+                    android:textSize="14sp"
                     android:textColor="@color/label_text_color" />
 
-                <TextView
+                <com.ninja.nanny.Custom.RegularTextView
                     android:text="TextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/tvAccountType"
-                    android:textColor="?android:attr/textColorHint"
-                    android:textSize="17sp"
+                    android:textColor="@color/gray_dark"
+                    android:textSize="16sp"
                     android:layout_marginTop="5dp" />
 
             </LinearLayout>
@@ -142,14 +137,15 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="30dp">
 
-                <TextView
+                <com.ninja.nanny.Custom.MediumTextView
                     android:text="BALANCE ($)"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/textView4"
+                    android:textSize="14sp"
                     android:textColor="@color/label_text_color" />
 
-                <EditText
+                <com.ninja.nanny.Custom.RegularEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="1000"
@@ -157,7 +153,8 @@
                     android:id="@+id/etBalance"
                     android:background="@drawable/border_add_bank_editor"
                     android:layout_marginTop="10dp"
-                    android:textColor="?android:attr/textColorHint"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
                     android:paddingBottom="5dp"
                     android:inputType="number" />
             </LinearLayout>
@@ -168,11 +165,12 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="30dp">
 
-                <TextView
+                <com.ninja.nanny.Custom.MediumTextView
                     android:text="NOTIFICATION"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/textView6"
+                    android:textSize="14sp"
                     android:textColor="@color/label_text_color" />
 
                 <LinearLayout
@@ -188,12 +186,13 @@
                         android:layout_weight="1"
                         android:background="@drawable/ic_checked" />
 
-                    <TextView
+                    <com.ninja.nanny.Custom.MediumTextView
                         android:text="SMS"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:layout_marginLeft="10dp"
+                        android:textSize="14sp"
                         android:textColor="@color/label_text_color" />
 
                     <Button
@@ -204,11 +203,12 @@
                         android:background="@drawable/ic_unchecked"
                         android:layout_marginLeft="40dp" />
 
-                    <TextView
+                    <com.ninja.nanny.Custom.MediumTextView
                         android:text="EMAIL"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
+                        android:textSize="14sp"
                         android:layout_marginLeft="10dp"
                         android:textColor="@color/label_text_color" />
                 </LinearLayout>
@@ -219,14 +219,11 @@
         </LinearLayout>
     </ScrollView>
 
-    <Button
+    <com.ninja.nanny.Custom.MediumButton
         android:text="SAVE"
         android:layout_width="100dp"
         android:layout_height="50dp"
         android:id="@+id/btnSave"
-        android:background="@color/colorPrimary"
-        android:textColor="@color/white"
-        android:textSize="20sp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_marginBottom="10dp"
