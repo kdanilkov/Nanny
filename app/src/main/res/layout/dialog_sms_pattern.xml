@@ -15,38 +15,26 @@
         android:id="@+id/rlyTop"
         android:background="@color/colorPrimary">
 
-        <Button
-            android:layout_marginStart="15dp"
-            android:id="@+id/btnBack"
-            android:layout_centerVertical="true"
-            android:layout_alignParentStart="true"
-            android:background="@drawable/ic_back_other"
-            android:layout_width="30dp"
-            android:layout_height="30dp" />
-
         <com.ninja.nanny.Custom.MediumTextView
-            android:text="New SMS"
+            android:text="SMS Pattern"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentStart="false"
+            android:layout_alignParentStart="true"
             android:layout_marginStart="10dp"
             android:id="@+id/textView3"
-            android:layout_alignBaseline="@+id/btnBack"
-            android:layout_toRightOf="@+id/btnBack"
             android:textColor="@color/white"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            android:layout_centerVertical="true" />
 
     </RelativeLayout>
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/rlyTop">
+        android:layout_below="@+id/rlyTop"
+        android:layout_alignParentStart="true">
 
         <LinearLayout
-            android:id="@+id/lyContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -60,24 +48,18 @@
                 android:layout_marginTop="30dp">
 
                 <com.ninja.nanny.Custom.MediumTextView
-                    android:text="ADDRESS"
+                    android:text="TYPE"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/textView"
                     android:textSize="14sp"
                     android:textColor="@color/label_text_color" />
 
-                <com.ninja.nanny.Custom.RegularEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPersonName"
-                    android:ems="10"
-                    android:id="@+id/etTitle"
-                    android:background="@drawable/border_add_bank_editor"
+                <Spinner
+                    android:id="@+id/spinnerType"
                     android:layout_marginTop="10dp"
-                    android:textColor="@color/black"
-                    android:textSize="16sp"
-                    android:paddingBottom="5dp" />
+                    android:layout_width="150dp"
+                    android:layout_height="60dp"
+                    android:gravity="left|start" />
             </LinearLayout>
 
             <LinearLayout
@@ -90,7 +72,6 @@
                     android:text="TEXT"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/textView1"
                     android:textSize="14sp"
                     android:textColor="@color/label_text_color" />
 
@@ -102,43 +83,10 @@
                     android:background="@drawable/border_add_bank_editor"
                     android:textColor="@color/black"
                     android:textSize="16sp"
+                    android:enabled="false"
                     android:id="@+id/etText" />
             </LinearLayout>
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="30dp">
 
-                <com.ninja.nanny.Custom.MediumTextView
-                    android:text="DATE/TIME SETTER"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/textView2"
-                    android:textSize="14sp"
-                    android:textColor="@color/label_text_color" />
-
-                <com.ninja.nanny.Custom.RegularTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/tvDateTime"
-                    android:textSize="16sp"
-                    android:textColor="@color/black"
-                    android:layout_marginTop="10dp" />
-
-                <DatePicker
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/datePicker"
-                    android:calendarViewShown="false" />
-
-                <TimePicker
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/timePicker"
-                    android:layout_marginTop="10dp" />
-
-            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 
@@ -151,22 +99,22 @@
         android:layout_marginRight="15dp">
 
         <com.ninja.nanny.Custom.MediumButton
-            android:text="SAVE"
-            android:layout_width="100dp"
+            android:text="SELECT"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/btnSave"
+            android:id="@+id/btnSelect"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
             android:layout_alignParentRight="true" />
-
         <com.ninja.nanny.Custom.MediumButton
-            android:text="COPY TEMPLATE"
+            android:text="CANCEL"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/btnCopy"
+            android:id="@+id/btnCancel"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
-            android:layout_alignParentLeft="true" />
+            android:layout_toLeftOf="@+id/btnSave"
+            android:layout_marginRight="15dp" />
     </RelativeLayout>
 
 </RelativeLayout>

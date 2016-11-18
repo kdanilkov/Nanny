@@ -79,7 +79,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	private static final String CREATE_TABLE_BANKS = "CREATE TABLE IF NOT EXISTS "
 			+ TBL_BANKS + "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_ACCOUNT_NAME
 			+ " TEXT," + KEY_IDX_KIND + " INTEGER," + KEY_BALANCE + " INTEGER,"
-			 + KEY_NOTIFICATION_MODE + " INTEGER," + KEY_FLAG_ACTIVE + " INTEGER" + ")";
+			 + KEY_NOTIFICATION_MODE + " INTEGER," + KEY_FLAG_ACTIVE + " INTEGER," + KEY_TIME_STAMP + " INTEGER" + ")";
 
 	// Transactions table create statement
 	private static final String CREATE_TABLE_TRANSACTIONS = "CREATE TABLE IF NOT EXISTS "
@@ -150,6 +150,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		values.put(KEY_BALANCE, bank.getBalance());
 		values.put(KEY_NOTIFICATION_MODE, bank.getNotificationMode());
 		values.put(KEY_FLAG_ACTIVE, bank.getFlagActive());
+		values.put(KEY_TIME_STAMP, bank.getTimestamp());
 
 		// insert row
 		long bank_id = db.insert(TBL_BANKS, null, values);
@@ -181,6 +182,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		bank.setBalance(c.getInt(c.getColumnIndex(KEY_BALANCE)));
 		bank.setNotificationMode(c.getInt(c.getColumnIndex(KEY_NOTIFICATION_MODE)));
 		bank.setFlagActive(c.getInt(c.getColumnIndex(KEY_FLAG_ACTIVE)));
+		bank.setTimestamp(c.getLong(c.getColumnIndex(KEY_TIME_STAMP)));
 
 		return bank;
 	}
@@ -207,6 +209,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 				bank.setBalance(c.getInt(c.getColumnIndex(KEY_BALANCE)));
 				bank.setNotificationMode(c.getInt(c.getColumnIndex(KEY_NOTIFICATION_MODE)));
 				bank.setFlagActive(c.getInt(c.getColumnIndex(KEY_FLAG_ACTIVE)));
+				bank.setTimestamp(c.getLong(c.getColumnIndex(KEY_TIME_STAMP)));
 
 				// adding to bank list
 				banks.add(bank);
@@ -243,6 +246,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		values.put(KEY_BALANCE, bank.getBalance());
 		values.put(KEY_NOTIFICATION_MODE, bank.getNotificationMode());
 		values.put(KEY_FLAG_ACTIVE, bank.getFlagActive());
+		values.put(KEY_TIME_STAMP, bank.getTimestamp());
 
 		// updating row
 		return db.update(TBL_BANKS, values, KEY_ID + " = ?",

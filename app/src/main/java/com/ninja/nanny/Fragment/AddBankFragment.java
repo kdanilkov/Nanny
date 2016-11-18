@@ -144,7 +144,7 @@ public class AddBankFragment extends CustomFragment {
 
         if(Common.getInstance().listBanks.size() == 0) nFlagActive = 1;
 
-        Bank bankNew = new Bank(strAccountName, nIdxKind, nBalance, nNotificationMode, nFlagActive); // activate the new bank info
+        Bank bankNew = new Bank(strAccountName, nIdxKind, nBalance, nNotificationMode, nFlagActive, Common.getInstance().getTimestamp()); // activate the new bank info
         int nID =  Common.getInstance().dbHelper.createBank(bankNew);
 
         bankNew.setId(nID);

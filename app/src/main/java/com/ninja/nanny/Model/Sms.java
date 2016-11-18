@@ -14,6 +14,12 @@ public class Sms {
 
     }
 
+    public Sms(String address, String text, long timestamp) {
+        _address = address;
+        _text = text;
+        _timestamp = timestamp;
+    }
+
     public Sms(int id, String address, String text, long timestamp) {
         _id = id;
         _address = address;

@@ -161,6 +161,7 @@ public class EditBankFragment extends CustomFragment {
         bankItem.setIdxKind(nIdxKind);
         bankItem.setBalance(nBalance);
         bankItem.setNotificationMode(nNotificationMode);
+        bankItem.setTimestamp(Common.getInstance().getTimestamp());
 
         Common.getInstance().dbHelper.updateBank(bankItem);
 

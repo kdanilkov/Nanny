@@ -1,5 +1,7 @@
 package com.ninja.nanny.Utils;
 
+import com.ninja.nanny.Comparator.SmsComparator;
+import com.ninja.nanny.Comparator.TransactionComparator;
 import com.ninja.nanny.Helper.DatabaseHelper;
 import com.ninja.nanny.Model.Bank;
 import com.ninja.nanny.Model.Payment;
@@ -7,6 +9,7 @@ import com.ninja.nanny.Model.Sms;
 import com.ninja.nanny.Model.Transaction;
 import com.ninja.nanny.Model.Wish;
 import com.ninja.nanny.Model.WishSaving;
+import com.ninja.nanny.Preference.UserPreference;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -15,7 +18,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -79,18 +81,34 @@ public class Common {
             return;
         }
 
+        Collections.sort(listSms, new SmsComparator());
+
+        long timestampCurrent = UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_SMS_TIMESTAMP, (long)0);
+        long timestampBankActive = bankActive.getTimestamp();
+
+        if(timestampBankActive > timestampCurrent) timestampCurrent = timestampBankActive;
+
+        long timestampMax = timestampCurrent;
         listTransactions = new ArrayList<Transaction>();
 
         for(int i = 0; i < listSms.size(); i ++) {
-            Sms sms = Common.getInstance().listSms.get(i);
-            Transaction transaction = Common.getInstance().convertToTransactionFromSms(sms);
+            Sms sms = listSms.get(i);
+            long timestampSMS = sms.getTimestamp();
+            if(timestampSMS <= timestampCurrent) break;
+            if(timestampSMS > timestampMax) timestampMax = timestampSMS;
+
+            Transaction transaction = convertToTransactionFromSms(sms);
 
             if(transaction == null) continue;
 
-            Common.getInstance().listTransactions.add(transaction);
+            listTransactions.add(transaction);
         }
 
-        Collections.sort(Common.getInstance().listTransactions, new TransactionComparator());
+        timestampCurrent = timestampMax;
+
+        UserPreference.getInstance().putSharedPreference(Constant.PREF_KEY_SMS_TIMESTAMP, timestampCurrent);
+
+        Collections.sort(listTransactions, new TransactionComparator());
 
         if(listTransactions.size() > 0) {
             calculatteBalance();
@@ -261,7 +279,7 @@ public class Common {
         Calendar c = Calendar.getInstance();
         int nTotalDaysOfMonth = c.getActualMaximum(Calendar.DAY_OF_MONTH);
 
-        return monthlyLimit() / nTotalDaysOfMonth;
+        return monthlyLimit() * 7 / nTotalDaysOfMonth;
     }
 
     public int sumOfTransactionThisWeek() { // for B Group Transaction, Transaction.mode = 2
@@ -430,12 +448,5 @@ public class Common {
         return nStatus;
     }
 
-    class TransactionComparator implements Comparator<Transaction> {
-        public int compare(Transaction transA, Transaction transB) {
-            int nResult = 0;
-            if(transB.getTimestampCreated() > transA.getTimestampCreated()) nResult = 1;
-            if(transB.getTimestampCreated() < transA.getTimestampCreated()) nResult = -1;
-            return nResult;
-        }
-    }
+
 }

@@ -2,6 +2,7 @@ package com.ninja.nanny.Fragment;
 
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.LayoutInflater;
@@ -29,10 +30,10 @@ import java.util.Calendar;
 import java.util.List;
 
 
-public class NewSmsFragment extends CustomFragment {
+public class EditSmsFragment extends CustomFragment {
 
 
-    public NewSmsFragment() {
+    public EditSmsFragment() {
         // Required empty public constructor
     }
 
@@ -44,6 +45,7 @@ public class NewSmsFragment extends CustomFragment {
     EditText etTitle, etText;
     DatePicker datePicker;
     TimePicker timePicker;
+    public Sms smsSelected;
     String[] arrPatternTypes, arrPatternTexts;
 
     int nYear, nMonth, nDay, nHour, nMinute;
@@ -52,7 +54,7 @@ public class NewSmsFragment extends CustomFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        mView = inflater.inflate(R.layout.fragment_new_sms, container, false);
+        mView = inflater.inflate(R.layout.fragment_edit_sms, container, false);
         mContext = (MainActivity)getActivity();
         mInflater = inflater;
 
@@ -70,6 +72,7 @@ public class NewSmsFragment extends CustomFragment {
     void setUI() {
         mView.findViewById(R.id.btnBack).setOnClickListener(this);
         mView.findViewById(R.id.btnSave).setOnClickListener(this);
+        mView.findViewById(R.id.btnDelete).setOnClickListener(this);
         mView.findViewById(R.id.btnCopy).setOnClickListener(this);
 
         etTitle = (EditText)mView.findViewById(R.id.etTitle);
@@ -78,7 +81,11 @@ public class NewSmsFragment extends CustomFragment {
         timePicker = (TimePicker)mView.findViewById(R.id.timePicker);
         datePicker = (DatePicker)mView.findViewById(R.id.datePicker);
 
+        etTitle.setText(smsSelected.getAddress());
+        etText.setText(smsSelected.getText());
+
         Calendar c = Calendar.getInstance();
+        c.setTimeInMillis(smsSelected.getTimestamp());
 
         nYear = c.get(Calendar.YEAR);
         nMonth = c.get(Calendar.MONTH);
@@ -117,45 +124,6 @@ public class NewSmsFragment extends CustomFragment {
                 imm.hideSoftInputFromWindow(etTitle.getWindowToken(), 0);
             }
         });
-    }
-
-    void saveSms() {
-        String strTitle = etTitle.getText().toString();
-        String strText = etText.getText().toString();
-        String strDateTime = tvDateTime.getText().toString();
-
-        if(strTitle.length() == 0) {
-            etTitle.setError(Html.fromHtml("<font color='red'>please input the title</font>"));
-            return;
-        }
-
-        if(strText.length() == 0) {
-            etText.setError(Html.fromHtml("<font color='red'>please input the sms text</font>"));
-            return;
-        }
-
-        if(strDateTime.length() == 0) {
-            Toast.makeText(mContext, "pls set time and date", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        Calendar cal = Calendar.getInstance();
-
-        cal.set(Calendar.YEAR, nYear);
-        cal.set(Calendar.MONTH, nMonth);
-        cal.set(Calendar.DAY_OF_MONTH, nDay);
-        cal.set(Calendar.HOUR_OF_DAY, nHour);
-        cal.set(Calendar.MINUTE, nMinute);
-
-        Sms sms = new Sms(strTitle, strText, cal.getTimeInMillis());
-        int nId = Common.getInstance().dbHelper.createSMS(sms);
-
-        sms.setId(nId);
-
-        Common.getInstance().listSms.add(0, sms);
-
-        Toast.makeText(mContext, "new sms has been registered successfully", Toast.LENGTH_SHORT).show();
-        mContext.getSupportFragmentManager().popBackStackImmediate();
     }
 
     void showDialogForPattern() {
@@ -206,6 +174,83 @@ public class NewSmsFragment extends CustomFragment {
 
     }
 
+    void saveSms() {
+        String strTitle = etTitle.getText().toString();
+        String strText = etText.getText().toString();
+        String strDateTime = tvDateTime.getText().toString();
+
+        if(strTitle.length() == 0) {
+            etTitle.setError(Html.fromHtml("<font color='red'>please input the title</font>"));
+            return;
+        }
+
+        if(strText.length() == 0) {
+            etText.setError(Html.fromHtml("<font color='red'>please input the sms text</font>"));
+            return;
+        }
+
+        if(strDateTime.length() == 0) {
+            Toast.makeText(mContext, "pls set time and date", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Calendar cal = Calendar.getInstance();
+
+        cal.set(Calendar.YEAR, nYear);
+        cal.set(Calendar.MONTH, nMonth);
+        cal.set(Calendar.DAY_OF_MONTH, nDay);
+        cal.set(Calendar.HOUR_OF_DAY, nHour);
+        cal.set(Calendar.MINUTE, nMinute);
+
+        smsSelected.setAddress(strTitle);
+        smsSelected.setText(strText);
+        smsSelected.setTimestamp(cal.getTimeInMillis());
+
+        Common.getInstance().dbHelper.updateSms(smsSelected);
+
+        Sms sms = new Sms(strTitle, strText, cal.getTimeInMillis());
+        int nId = Common.getInstance().dbHelper.createSMS(sms);
+
+        sms.setId(nId);
+
+        Common.getInstance().listSms.add(0, sms);
+
+        Toast.makeText(mContext, "new sms has been registered successfully", Toast.LENGTH_SHORT).show();
+        mContext.getSupportFragmentManager().popBackStackImmediate();
+    }
+
+    void removeSms() {
+        new AlertDialog.Builder(mContext)
+                .setTitle("Delete entry")
+                .setMessage("Are you sure you want to delete this entry?")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // continue with delete
+                        Common.getInstance().dbHelper.deleteBank(smsSelected.getId());
+
+                        int nIdx = 0;
+
+                        for(nIdx = 0; nIdx < Common.getInstance().listSms.size(); nIdx ++) {
+                            Sms smsTmp = Common.getInstance().listSms.get(nIdx);
+
+                            if(smsTmp.getId() == smsSelected.getId()) break;
+                        }
+
+                        Common.getInstance().dbHelper.deleteSms(smsSelected.getId());
+                        Common.getInstance().listAllWishes.remove(nIdx);
+
+                        mContext.getSupportFragmentManager().popBackStackImmediate();
+                        Toast.makeText(mContext, "sms info has been deleted successfully", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .show();
+    }
 
     @Override
     public void onClick(View v) {
@@ -215,6 +260,9 @@ public class NewSmsFragment extends CustomFragment {
                 break;
             case R.id.btnSave:
                 saveSms();
+                break;
+            case R.id.btnDelete:
+                removeSms();
                 break;
             case R.id.btnCopy:
                 showDialogForPattern();
