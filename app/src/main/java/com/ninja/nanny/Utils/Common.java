@@ -348,7 +348,36 @@ public class Common {
         return weeklyLimit() - sumOfTransactionThisWeek();
     }
 
-    public int upcomingPayments() { // SUM(predefiend payments for next 7 days)
+//    public int upcomingPayments() { // SUM(predefiend payments for next 7 days)
+//        int nAns = 0;
+//
+//        Calendar c = Calendar.getInstance();
+//        int nTotalDaysOfMonth = c.getActualMaximum(Calendar.DAY_OF_MONTH);
+//        int nDayCurrent = c.get(Calendar.DAY_OF_MONTH);
+//
+//        for(int i = 0; i < listCurrentPayments.size(); i ++) {
+//            Payment paymentItem = listCurrentPayments.get(i);
+//            int nDayPayment = paymentItem.getDateOfMonth();
+//
+//            if(nDayCurrent + 7 > nTotalDaysOfMonth) {
+//                if(nDayPayment > nDayCurrent){
+//                    nAns += paymentItem.getAmount();
+//                } else {
+//                    if(nDayPayment <= nDayCurrent + 7 - nTotalDaysOfMonth) {
+//                        nAns += paymentItem.getAmount();
+//                    }
+//                }
+//            } else {
+//                if(nDayPayment > nDayCurrent && nDayPayment <= nDayCurrent + 7) {
+//                    nAns += paymentItem.getAmount();
+//                }
+//            }
+//        }
+//
+//        return nAns;
+//    }
+
+    public int upcomingPayments() { // SUM(predefiend payments for salary interval)
         int nAns = 0;
 
         Calendar c = Calendar.getInstance();
@@ -359,16 +388,12 @@ public class Common {
             Payment paymentItem = listCurrentPayments.get(i);
             int nDayPayment = paymentItem.getDateOfMonth();
 
-            if(nDayCurrent + 7 > nTotalDaysOfMonth) {
-                if(nDayPayment > nDayCurrent){
+            if(nDayCurrent > nSalaryDate) {
+                if(nDayPayment > nDayCurrent || nDayPayment <= nSalaryDate) {
                     nAns += paymentItem.getAmount();
-                } else {
-                    if(nDayPayment <= nDayCurrent + 7 - nTotalDaysOfMonth) {
-                        nAns += paymentItem.getAmount();
-                    }
                 }
             } else {
-                if(nDayPayment > nDayCurrent && nDayPayment <= nDayCurrent + 7) {
+                if(nDayPayment > nDayCurrent && nDayPayment <= nSalaryDate) {
                     nAns += paymentItem.getAmount();
                 }
             }
@@ -376,6 +401,7 @@ public class Common {
 
         return nAns;
     }
+
 
     public int leftOnThisMonth() {
         return monthlyLimit() - sumOfTransactionThisMonth();

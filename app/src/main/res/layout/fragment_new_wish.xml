@@ -42,6 +42,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/rlyTop"
+        android:id="@+id/scrollView"
         android:layout_alignParentStart="true">
 
         <LinearLayout
@@ -86,7 +87,7 @@
                 android:layout_marginTop="30dp">
 
                 <com.ninja.nanny.Custom.MediumTextView
-                    android:text="AMOUNT ($)"
+                    android:text="AMOUNT (AED)"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/textView1"
@@ -96,7 +97,6 @@
                 <com.ninja.nanny.Custom.RegularEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="0"
                     android:ems="10"
                     android:id="@+id/etAmount"
                     android:background="@drawable/border_add_bank_editor"
@@ -104,7 +104,8 @@
                     android:textColor="@color/black"
                     android:paddingBottom="5dp"
                     android:textSize="16sp"
-                    android:inputType="number" />
+                    android:inputType="number"
+                    android:hint="AED 0.00" />
             </LinearLayout>
 
             <LinearLayout
@@ -129,7 +130,7 @@
                     app:dsb_trackColor = "@color/label_text_color"
                     app:dsb_min="1"
                     app:dsb_max="100"
-                    app:dsb_value="2"
+                    app:dsb_value="1"
                     android:layout_marginTop="25dp"
                     android:layout_marginLeft="-10dp"
                     android:layout_marginRight="-10dp" />

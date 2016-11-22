@@ -1,14 +1,17 @@
 package com.ninja.nanny.Fragment;
 
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -79,15 +82,23 @@ public class NewWishFragment extends CustomFragment {
 
             @Override
             public void onStopTrackingTouch(DiscreteSeekBar seekBar) {
-                if(etTotalAmount.getText().toString().length() > 8) return;
+                if(etTotalAmount.getText().toString().length() > 8) {
+                    etTotalAmount.setError(Html.fromHtml("<font color='red'>amount value is too large</font>"));
+                    return;
+                }
+
+                if(etTotalAmount.getText().toString().length() < 1) {
+                    return;
+                }
 
                 int nTotalAmount = Integer.valueOf(etTotalAmount.getText().toString());
-
                 if(nTotalAmount == 0) return;
 
-                int nMonthlyPayment = nLeftOnMonth * seekBar.getProgress() / 100;
-                if(nMonthlyPayment == 0) nMonthlyPayment = 1;
-                if(nMonthlyPayment > nTotalAmount) nMonthlyPayment = nTotalAmount;
+                int nMaxVal = nTotalAmount;
+                if(nMaxVal > nLeftOnMonth) nMaxVal = nLeftOnMonth;
+
+                int nMonthlyPayment = nMaxVal * seekbarPropotion.getProgress() / 100;
+                if(nMonthlyPayment == 0) return;
 
                 int nTotalMonths = (nTotalAmount + nMonthlyPayment -1) / nMonthlyPayment;
 
@@ -100,13 +111,23 @@ public class NewWishFragment extends CustomFragment {
             @Override
             public void onFocusChange(View view, boolean b) {
                 if(!b) {
-                    int nTotalAmount = Integer.valueOf(etTotalAmount.getText().toString());
+                    if(etTotalAmount.getText().toString().length() > 8) {
+                        etTotalAmount.setError(Html.fromHtml("<font color='red'>amount value is too large</font>"));
+                        return;
+                    }
 
+                    if(etTotalAmount.getText().toString().length() < 1) {
+                        return;
+                    }
+
+                    int nTotalAmount = Integer.valueOf(etTotalAmount.getText().toString());
                     if(nTotalAmount == 0) return;
 
-                    int nMonthlyPayment = nLeftOnMonth * seekbarPropotion.getProgress() / 100;
-                    if(nMonthlyPayment == 0) nMonthlyPayment = 1;
-                    if(nMonthlyPayment > nTotalAmount) nMonthlyPayment = nTotalAmount;
+                    int nMaxVal = nTotalAmount;
+                    if(nMaxVal > nLeftOnMonth) nMaxVal = nLeftOnMonth;
+
+                    int nMonthlyPayment = nMaxVal * seekbarPropotion.getProgress() / 100;
+                    if(nMonthlyPayment == 0) return;
 
                     int nTotalMonths = (nTotalAmount + nMonthlyPayment -1) / nMonthlyPayment;
 
@@ -133,6 +154,71 @@ public class NewWishFragment extends CustomFragment {
                 imm.hideSoftInputFromWindow(etTitle.getWindowToken(), 0);
             }
         });
+
+        final ScrollView scrollView = (ScrollView)mView.findViewById(R.id.scrollView);
+
+        scrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
+            @Override
+            public void onScrollChanged() {
+                int nPropotion = seekbarPropotion.getProgress();
+
+                if(nPropotion > 1) return;
+                if(etTotalAmount.getText().toString().length() == 0) return;
+
+                int nTotalAmount = Integer.valueOf(etTotalAmount.getText().toString());
+
+                if(nTotalAmount == 0) return;
+
+                int nMaxVal= nLeftOnMonth;
+
+                if(nMaxVal > nTotalAmount) nMaxVal = nTotalAmount;
+
+                int nLeftOnThisWeek = Common.getInstance().leftOnThisWeek();
+                int nMonthlyPayment = 0;
+
+                if(nLeftOnThisWeek < 1) {
+                    seekbarPropotion.setProgress(50);
+                    nMonthlyPayment = nMaxVal / 2;
+                } else {
+                    if(nLeftOnThisWeek > nMaxVal) {
+                        seekbarPropotion.setProgress(100);
+                        nMonthlyPayment = nMaxVal;
+                    } else {
+                        nMonthlyPayment = nLeftOnThisWeek;
+                        int nPercent = nMonthlyPayment * 100 / nMaxVal;
+                        seekbarPropotion.setProgress(nPercent);
+                    }
+                }
+
+                if(nMonthlyPayment == 0) nMonthlyPayment = 1;
+
+                int nTotalMonths = (nTotalAmount + nMonthlyPayment -1) / nMonthlyPayment;
+
+                tvMonthlyPayment.setText(nMonthlyPayment + " $");
+                tvPeriod.setText(nTotalMonths + " month");
+
+            }
+        });
+
+//
+//        scrollView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+//            @Override
+//            public void onScrollChange(View view, int i, int i1, int i2, int i3) {
+//
+//            }
+//        });
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        // Checks whether a hardware keyboard is available
+        if (newConfig.hardKeyboardHidden == Configuration.HARDKEYBOARDHIDDEN_NO) {
+            Toast.makeText(mContext, "keyboard visible", Toast.LENGTH_SHORT).show();
+        } else if (newConfig.hardKeyboardHidden == Configuration.HARDKEYBOARDHIDDEN_YES) {
+            Toast.makeText(mContext, "keyboard hidden", Toast.LENGTH_SHORT).show();
+        }
     }
 
     void saveWish() {
@@ -145,6 +231,11 @@ public class NewWishFragment extends CustomFragment {
 
         if(etTotalAmount.getText().toString().length() > 8){
             etTotalAmount.setError(Html.fromHtml("<font color='red'>amount value is too large</font>"));
+            return;
+        }
+
+        if(etTotalAmount.getText().toString().length() < 1) {
+            etTotalAmount.setError(Html.fromHtml("<font color='red'>amount value is empty</font>"));
             return;
         }
 
@@ -203,6 +294,9 @@ public class NewWishFragment extends CustomFragment {
 
     @Override
     public void onClick(View v) {
+        InputMethodManager imm = (InputMethodManager) mContext.getSystemService(mContext.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(etTitle.getWindowToken(), 0);
+
         switch (v.getId()) {
             case R.id.btnBack:
                 mContext.getSupportFragmentManager().popBackStackImmediate();

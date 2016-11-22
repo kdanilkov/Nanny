@@ -86,6 +86,9 @@ public class SettingFragment extends CustomFragment implements DiscreteSeekBar.O
 
     @Override
     public void onClick(View v) {
+        InputMethodManager imm = (InputMethodManager) mContext.getSystemService(mContext.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(etMinimalAmountPerDay.getWindowToken(), 0);
+
         switch (v.getId()) {
             case R.id.btnMenu:
                 boolean isInitSet = UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_IS_INIT_CONFIG, false);

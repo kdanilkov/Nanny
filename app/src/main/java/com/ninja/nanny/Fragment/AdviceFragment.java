@@ -2,6 +2,7 @@ package com.ninja.nanny.Fragment;
 
 
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,6 +62,19 @@ public class AdviceFragment extends CustomFragment {
         lyContainer.removeAllViews();
 
         nChatStatus = 0;
+
+        etText.setOnKeyListener(new View.OnKeyListener() {
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                // If the event is a key-down event on the "enter" button
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
+                        (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                    // Perform action on key press
+                    sendMsg();
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
     void sendMsg() {
@@ -141,7 +155,7 @@ public class AdviceFragment extends CustomFragment {
             ((ImageView)cellLeft.findViewById(R.id.imgvMiddle)).setBackgroundResource(R.drawable.bg_chat_left_middle_blue);
             ((ImageView)cellLeft.findViewById(R.id.imgvBottom)).setBackgroundResource(R.drawable.bg_chat_left_bottom_blue);
 
-            ((TextView)cellLeft.findViewById(R.id.tvText)).setText(strShortAns + ", Details?");
+            ((TextView)cellLeft.findViewById(R.id.tvText)).setText(strShortAns + ", Details? \n Please input the Yes/No");
 
             SimpleDateFormat formatter = new SimpleDateFormat("dd MMM");
             Date date = new Date();

@@ -185,12 +185,12 @@ public class MainActivity extends CustomActivity {
         int yearNow = cal.get(Calendar.YEAR);
         int monthNow = cal.get(Calendar.MONTH);
         int dayNow = cal.get(Calendar.DAY_OF_MONTH);
-        int daySalary = UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_SALARY_DATE, 15);
+
         int nLowDayLimit = 0;
         int nHighDayLimit = 0;
 
-        if(dayNow <= daySalary) {
-            nHighDayLimit = yearNow * 32 * 12 + monthNow * 32 + daySalary;
+        if(dayNow <= Common.getInstance().nSalaryDate) {
+            nHighDayLimit = yearNow * 32 * 12 + monthNow * 32 + Common.getInstance().nSalaryDate;
 
             monthNow --;
             if(monthNow == -1) {
@@ -198,9 +198,9 @@ public class MainActivity extends CustomActivity {
                 yearNow --;
             }
 
-            nLowDayLimit = yearNow * 32 * 12 + monthNow * 32 + daySalary;
+            nLowDayLimit = yearNow * 32 * 12 + monthNow * 32 + Common.getInstance().nSalaryDate;
         } else {
-            nLowDayLimit = yearNow * 32 * 12 + monthNow * 32 + daySalary;
+            nLowDayLimit = yearNow * 32 * 12 + monthNow * 32 + Common.getInstance().nSalaryDate;
 
             monthNow ++;
             if(monthNow == 12) {
@@ -208,7 +208,7 @@ public class MainActivity extends CustomActivity {
                 yearNow ++;
             }
 
-            nHighDayLimit = yearNow * 32 * 12 + monthNow * 32 + daySalary;
+            nHighDayLimit = yearNow * 32 * 12 + monthNow * 32 + Common.getInstance().nSalaryDate;
         }
 
 

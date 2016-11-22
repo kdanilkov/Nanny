@@ -215,6 +215,7 @@ public class EditPaymentFragment extends CustomFragment {
     @Override
     public void onClick(View v) {
         InputMethodManager imm = (InputMethodManager) mContext.getSystemService(mContext.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(etTitle.getWindowToken(), 0);
 
         switch (v.getId()) {
             case R.id.btnBack:
@@ -265,10 +266,6 @@ public class EditPaymentFragment extends CustomFragment {
 //                    etAmount.setEnabled(true);
 //                    etAmount.setText("0");
                 }
-
-                //to hide it, call the method again
-                imm.hideSoftInputFromWindow(etAmount.getWindowToken(), 0);
-
                 break;
         }
     }

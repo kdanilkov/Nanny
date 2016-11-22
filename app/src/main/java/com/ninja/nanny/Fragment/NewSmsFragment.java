@@ -209,6 +209,9 @@ public class NewSmsFragment extends CustomFragment {
 
     @Override
     public void onClick(View v) {
+        InputMethodManager imm = (InputMethodManager) mContext.getSystemService(mContext.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(etTitle.getWindowToken(), 0);
+
         switch (v.getId()) {
             case R.id.btnBack:
                 mContext.getSupportFragmentManager().popBackStackImmediate();

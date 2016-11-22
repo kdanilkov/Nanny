@@ -182,7 +182,7 @@
                     android:layout_weight="1">
 
                     <com.ninja.nanny.Custom.MediumTextView
-                        android:text="AMOUNT ($)"
+                        android:text="AMOUNT (AED)"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColor="@color/label_text_color"
@@ -192,7 +192,6 @@
                     <com.ninja.nanny.Custom.RegularEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="0"
                         android:textSize="16sp"
                         android:ems="10"
                         android:id="@+id/etAmount"
@@ -200,7 +199,8 @@
                         android:layout_marginTop="10dp"
                         android:textColor="@color/black"
                         android:paddingBottom="5dp"
-                        android:inputType="number" />
+                        android:inputType="number"
+                        android:hint="AED 0.00" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -220,7 +220,6 @@
                     <com.ninja.nanny.Custom.RegularEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="1"
                         android:ems="10"
                         android:id="@+id/etDateOfMonth"
                         android:background="@drawable/border_add_bank_editor"
@@ -228,7 +227,8 @@
                         android:textColor="@color/black"
                         android:paddingBottom="5dp"
                         android:textSize="16sp"
-                        android:inputType="number" />
+                        android:inputType="number"
+                        android:hint="10" />
                 </LinearLayout>
             </LinearLayout>
 

@@ -57,7 +57,7 @@
                 android:layout_marginTop="30dp">
 
                 <com.ninja.nanny.Custom.MediumTextView
-                    android:text="MINIMAL AMOUNT PER DAY ($)"
+                    android:text="MINIMAL AMOUNT PER DAY (AED)"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="14sp"
@@ -67,14 +67,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="number"
-                    android:text="10"
                     android:textSize="16sp"
                     android:ems="10"
                     android:id="@+id/etMinimalAmountPerDay"
                     android:background="@drawable/border_setting_editor"
                     android:layout_marginTop="10dp"
                     android:textColor="@color/black"
-                    android:paddingBottom="5dp" />
+                    android:paddingBottom="5dp"
+                    android:hint="AED 0.00" />
             </LinearLayout>
 
             <LinearLayout
@@ -111,7 +111,7 @@
                 android:layout_marginTop="30dp">
 
                 <com.ninja.nanny.Custom.MediumTextView
-                    android:text="MONTHLY INCOME ($)"
+                    android:text="MONTHLY INCOME (AED)"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="14sp"
@@ -120,7 +120,6 @@
                 <com.ninja.nanny.Custom.RegularEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="5000"
                     android:ems="10"
                     android:textSize="16sp"
                     android:id="@+id/etMonthlyIncome"
@@ -128,7 +127,8 @@
                     android:layout_marginTop="10dp"
                     android:textColor="@color/black"
                     android:paddingBottom="5dp"
-                    android:inputType="number" />
+                    android:inputType="number"
+                    android:hint="AED 0.00" />
             </LinearLayout>
 
             <LinearLayout
@@ -138,7 +138,7 @@
                 android:layout_marginTop="30dp">
 
                 <com.ninja.nanny.Custom.MediumTextView
-                    android:text="USED SALARY ($)"
+                    android:text="USED SALARY (AED)"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="14sp"
@@ -147,7 +147,6 @@
                 <com.ninja.nanny.Custom.RegularEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="1334"
                     android:ems="10"
                     android:textSize="16sp"
                     android:id="@+id/etUsedSalary"
@@ -155,7 +154,8 @@
                     android:layout_marginTop="10dp"
                     android:textColor="@color/black"
                     android:paddingBottom="5dp"
-                    android:inputType="number" />
+                    android:inputType="number"
+                    android:hint="AED 0.00" />
             </LinearLayout>
 
             <LinearLayout

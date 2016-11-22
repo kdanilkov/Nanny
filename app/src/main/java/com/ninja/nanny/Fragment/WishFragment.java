@@ -67,12 +67,12 @@ public class WishFragment extends CustomFragment {
 
         initTab();
         nSelectedTab = 0;
-        rlyAllBottom.setVisibility(View.VISIBLE);
+        rlyActiveBottom.setVisibility(View.VISIBLE);
     }
 
     void initTab() {
-        rlyAllBottom.setVisibility(View.INVISIBLE);
         rlyActiveBottom.setVisibility(View.INVISIBLE);
+        rlyAllBottom.setVisibility(View.INVISIBLE);
         rlyFinishedBottom.setVisibility(View.INVISIBLE);
     }
 
@@ -89,10 +89,10 @@ public class WishFragment extends CustomFragment {
 
         switch (nSelectedTab) {
             case 0:
-                listCurrent = Common.getInstance().listAllWishes;
+                listCurrent = Common.getInstance().listActiveWishes;
                 break;
             case 1:
-                listCurrent = Common.getInstance().listActiveWishes;
+                listCurrent = Common.getInstance().listAllWishes;
                 break;
             case 2:
                 listCurrent = Common.getInstance().listFinishedWishes;
@@ -212,16 +212,16 @@ public class WishFragment extends CustomFragment {
                 transaction.add(R.id.content_frame, f, title).addToBackStack(title).commit();
                 break;
 
-            case R.id.rlyAll:
+            case R.id.rlyActive:
                 initTab();
-                rlyAllBottom.setVisibility(View.VISIBLE);
+                rlyActiveBottom.setVisibility(View.VISIBLE);
                 nSelectedTab = 0;
                 presentData();
                 break;
 
-            case R.id.rlyActive:
+            case R.id.rlyAll:
                 initTab();
-                rlyActiveBottom.setVisibility(View.VISIBLE);
+                rlyAllBottom.setVisibility(View.VISIBLE);
                 nSelectedTab = 1;
                 presentData();
                 break;
