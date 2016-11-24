@@ -1,9 +1,12 @@
 package com.ninja.nanny.Utils;
 
+import com.ninja.nanny.Comparator.PaymentComparator;
 import com.ninja.nanny.Comparator.SmsComparator;
 import com.ninja.nanny.Comparator.TransactionComparator;
+import com.ninja.nanny.Comparator.WishComparator;
 import com.ninja.nanny.Helper.DatabaseHelper;
 import com.ninja.nanny.Model.Bank;
+import com.ninja.nanny.Model.Paid;
 import com.ninja.nanny.Model.Payment;
 import com.ninja.nanny.Model.Sms;
 import com.ninja.nanny.Model.Transaction;
@@ -43,15 +46,18 @@ public class Common {
     public List<Wish> listActiveWishes;
     public List<Wish> listFinishedWishes;
     public List<Payment> listAllPayments;
-    public List<Payment> listCurrentPayments;
     public List<Sms> listSms;
-    public List<Transaction> listTransactions;
+    public List<Transaction> listAllTransactions;
+    List<Transaction> listNewTransactions;
+    public long timestampInitConfig;
+    public long timestampSms;
     public int nMonthlyIncome;
     public int nMinimalDayAmount;
     public int nSalaryDate;
     public int nUsedAmount;
     public int nToleranceDays;
     public int nTolerancePercents;
+    public int timeWishSaving;
     public Bank bankActive;
     public JSONArray jsonArrayBankInfo;
 
@@ -76,50 +82,203 @@ public class Common {
         return isExist;
     }
 
-    public void getTransaction() {
+    public List<Payment> getUnPaidPayments() { // get upaid payments from past period.
+        Calendar c = Calendar.getInstance();
+        int nDay = c.get(Calendar.DAY_OF_MONTH);
+
+        if(nDay < nSalaryDate) {
+            c.add(Calendar.MONTH, -1);
+        }
+
+        c.add(Calendar.MONTH, -1);
+        c.set(Calendar.DAY_OF_MONTH, nSalaryDate);
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        c.set(Calendar.MINUTE, 0);
+
+        long timestampPastPeriodStart = c.getTimeInMillis();
+
+        Collections.sort(listAllPayments, new PaymentComparator());
+
+        ArrayList<Payment> listAns = new ArrayList<>();
+
+        for(int i = 0; i < listAllPayments.size(); i ++) {
+            Payment payment = listAllPayments.get(i);
+
+            if((payment.getPaymentMode() == 1 || payment.getPaymentMode() == 3) && payment.getRealTimeStampForSingle() < timestampPastPeriodStart) {
+                break;
+            }
+
+            if(payment.getPaidStatus() == 0) {
+                listAns.add(payment);
+            }
+        }
+
+        return listAns;
+    }
+
+    public void  bindBetweenTransactionAndPayment() {
+        List<Payment> listUnPaidPayments = getUnPaidPayments();
+
+        if(listUnPaidPayments.size() == 0) return;
+
+        for(int i = listNewTransactions.size() - 1; i >= 0; i --) {
+            Transaction trans = listNewTransactions.get(i);
+
+            if(trans.getMode() < 2) continue;
+
+            String strIdentifier = trans.getIdentifier();
+
+            for(int j = 0; j < listUnPaidPayments.size(); j ++) {
+                Payment payment = listUnPaidPayments.get(j);
+
+                String strPaymentIdentifier = payment.getIdentifier();
+
+                if(strIdentifier.toLowerCase().contains(strPaymentIdentifier.toLowerCase())) {
+                    Paid  paid = new Paid();
+
+                    paid.setPaymentId(payment.getId());
+                    paid.setTransactionId(trans.getId());
+                    paid.setTimestampCreated(trans.getTimestampCreated());
+
+                    int paid_id = dbHelper.createPaid(paid);
+
+                    trans.setPaidId(paid_id);
+                    payment.setLastPaidId(paid_id);
+
+                    dbHelper.updateTransaction(trans);
+                    dbHelper.updatePayment(payment);
+
+                    break;
+                }
+            }
+        }
+
+        listAllPayments = dbHelper.getAllPayments();
+    }
+
+    public void checkWishSavingPast() {
+        Calendar c = Calendar.getInstance();
+
+        int nDay = c.get(Calendar.DAY_OF_MONTH);
+
+        if(nDay < nSalaryDate) {
+            c.add(Calendar.MONTH, -1);
+        }
+
+        c.set(Calendar.DAY_OF_MONTH, nSalaryDate);
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        c.set(Calendar.MINUTE, 0);
+
+        long timestampLastSalaryDate = c.getTimeInMillis(); // just prev salary date
+
+        if(timestampInitConfig > timestampLastSalaryDate) return; // app has been installed after salary date, so there is no wish for past period
+
+        int nYear = c.get(Calendar.YEAR);
+        int nMonth = c.get(Calendar.MONTH);
+
+        int nDateWishSaving = nYear * 100 + nMonth;
+
+        if(nDateWishSaving == timeWishSaving) return; // past checking has already been done.
+
+        timeWishSaving = nDateWishSaving;
+        UserPreference.getInstance().putSharedPreference(Constant.PREF_KEY_WISH_SAVING_TIME, nDateWishSaving);
+
+        int nLeftOnPast = leftOnPast(nYear, nMonth);
+
+        Collections.sort(listActiveWishes, new WishComparator());
+
+        for(int i = 0; i < listActiveWishes.size(); i ++) {
+            Wish wish = listActiveWishes.get(i);
+
+            int nTotalAmount = wish.getTotalAmount();
+            int nSavingAmount = wish.getMonthlyPayment();
+            int nUpdatedSavedAmount = wish.getSavedAmount() + nSavingAmount;
+
+            if(nUpdatedSavedAmount > nTotalAmount) {
+                nSavingAmount = nTotalAmount - wish.getSavedAmount();
+            }
+
+            if(nSavingAmount > nLeftOnPast) {
+                nSavingAmount = nLeftOnPast;
+            }
+
+            nLeftOnPast -= nSavingAmount;
+            nUpdatedSavedAmount = wish.getSavedAmount() + nSavingAmount;
+
+            WishSaving wishSaving = new WishSaving(wish.getId(), nSavingAmount, nDateWishSaving);
+            int nWishSavingId = dbHelper.createWishSaving(wishSaving);
+            wishSaving.setId(nWishSavingId);
+
+            wish.setLastSavingId(nWishSavingId);
+            wish.setSavedAmount(nUpdatedSavedAmount);
+
+            if(nUpdatedSavedAmount == nTotalAmount) {
+                wish.setFlagActive(0); // this is finished
+            }
+
+            dbHelper.updateWish(wish);
+        }
+
+        listAllWishes = dbHelper.getAllWishes();
+        listActiveWishes = dbHelper.getActiveWishes();
+        listFinishedWishes = dbHelper.getFinishedWishes();
+    }
+    public void syncBetweenTransactionAndSms() {
         if(!isActiveBankExist()) {
             return;
         }
 
         Collections.sort(listSms, new SmsComparator());
 
-        long timestampCurrent = UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_SMS_TIMESTAMP, (long)0);
         long timestampBankActive = bankActive.getTimestamp();
 
-        if(timestampBankActive > timestampCurrent) timestampCurrent = timestampBankActive;
+        if(timestampBankActive > timestampSms) timestampSms = timestampBankActive;
 
-        long timestampMax = timestampCurrent;
-        listTransactions = new ArrayList<Transaction>();
+        long timestampMax = timestampSms;
+
+        listNewTransactions = new ArrayList<Transaction>();
 
         for(int i = 0; i < listSms.size(); i ++) {
             Sms sms = listSms.get(i);
-            long timestampSMS = sms.getTimestamp();
-            if(timestampSMS <= timestampCurrent) break;
-            if(timestampSMS > timestampMax) timestampMax = timestampSMS;
+            long timestampTmp = sms.getTimestamp();
+            if(timestampTmp <= timestampSms) break;
+            if(timestampTmp > timestampMax) timestampMax = timestampTmp;
 
             Transaction transaction = convertToTransactionFromSms(sms);
 
             if(transaction == null) continue;
 
-            listTransactions.add(transaction);
+            listNewTransactions.add(transaction);
         }
 
-        timestampCurrent = timestampMax;
+        timestampSms = timestampMax;
 
-        UserPreference.getInstance().putSharedPreference(Constant.PREF_KEY_SMS_TIMESTAMP, timestampCurrent);
+        UserPreference.getInstance().putSharedPreference(Constant.PREF_KEY_SMS_TIMESTAMP, timestampSms);
 
-        Collections.sort(listTransactions, new TransactionComparator());
-
-        if(listTransactions.size() > 0) {
-            calculatteBalance();
+        if(listNewTransactions.size() > 0) {
+            calculateBalance();
+            bindBetweenTransactionAndPayment();
+            addNewTransactions();
         }
     }
 
-    public void calculatteBalance() {
+    public void addNewTransactions() {
+        for(int i = listNewTransactions.size() - 1; i >= 0; i --) {
+            Transaction trans = listNewTransactions.get(i);
+            int nTransId = dbHelper.createTransaction(trans);
+
+            trans.setId(nTransId);
+            listAllTransactions.add(trans);
+        }
+
+        Collections.sort(listAllTransactions, new TransactionComparator());
+    }
+
+    public void calculateBalance() {
         int nVal = bankActive.getBalance();
 
-        for(int i = listTransactions.size() - 1; i >= 0 ; i --) {
-            Transaction trans = listTransactions.get(i);
+        for(int i = listNewTransactions.size() - 1; i >= 0 ; i --) {
+            Transaction trans = listNewTransactions.get(i);
 
             if(trans.getMode() == 0) nVal = trans.getAmount();
             if(trans.getMode() == 1) nVal += trans.getAmount();
@@ -132,7 +291,11 @@ public class Common {
     }
 
     public Transaction convertToTransactionFromSms(Sms sms) {
+        String strBankName = bankActive.getBankName().toLowerCase();
+        if(!sms.getAddress().toLowerCase().equals(strBankName)) return null;
+
         Transaction transaction = new Transaction();
+        transaction.setPaidId(-1);
 
         try {
             JSONObject jsonObjBank = jsonArrayBankInfo.getJSONObject(bankActive.getIdxKind());
@@ -224,8 +387,48 @@ public class Common {
         return null;
     }
 
-    public int sumOfPredefinedPaymentsForMonth() {
+    public List<Payment> getCurrentPayments() {
+        List<Payment> listAns = new ArrayList<>();
+
+        Calendar c = Calendar.getInstance();
+        int nDay = c.get(Calendar.DAY_OF_MONTH);
+
+        if(nDay < nSalaryDate) {
+            c.add(Calendar.MONTH, -1);
+        }
+
+        c.set(Calendar.DAY_OF_MONTH, nSalaryDate);
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        c.set(Calendar.MINUTE, 0);
+
+        long timestampCurrentPeriodStart = c.getTimeInMillis();
+
+        c.add(Calendar.MONTH, 1);
+
+        long timestampCurrentPeriodEnd = c.getTimeInMillis();
+
+        Collections.sort(listAllPayments, new PaymentComparator());
+
+        for(int i = 0; i < listAllPayments.size(); i ++) {
+            Payment payment = listAllPayments.get(i);
+
+            if(payment.getPaymentMode() == 0 || payment.getPaymentMode() == 2) {
+                listAns.add(payment);
+            } else {
+                if(payment.getRealTimeStampForSingle() < timestampCurrentPeriodStart) break;
+                if(payment.getRealTimeStampForSingle() >= timestampCurrentPeriodEnd) continue;
+
+                listAns.add(payment);
+            }
+        }
+
+        return listAns;
+    }
+
+    public int sumOfPaymentsForMonth() {
         int nAns = 0;
+
+        List<Payment> listCurrentPayments = getCurrentPayments();
 
         for(int i = 0; i < listCurrentPayments.size(); i ++) {
             Payment paymentItem = listCurrentPayments.get(i);
@@ -239,40 +442,17 @@ public class Common {
     public int sumOfWishesForMonth() {
         int nAns = 0;
 
-        Calendar c = Calendar.getInstance();
-        int nDayOfMonth = c.get(Calendar.DAY_OF_MONTH);
-        int nMonth = c.get(Calendar.MONTH);
-        int nYear = c.get(Calendar.YEAR);
-
-        if(nDayOfMonth >= nSalaryDate) {
-            nMonth ++;
-            if(nMonth == 12) {
-                nYear ++;
-                nMonth = 0;
-            }
-        }
-
-        int nDateSaving = nYear * 100 + nMonth;
-
         for(int i = 0; i < listActiveWishes.size(); i ++) {
-            Wish wishItem = listActiveWishes.get(i);
+            Wish wish = listActiveWishes.get(i);
 
-            int nLastSavingId = wishItem.getLastSavingId();
-
-            if(nLastSavingId == -1) continue;
-
-            WishSaving wishSavingItem = dbHelper.getWishSaving(nLastSavingId);
-
-            if(wishSavingItem.getDateCreated() == nDateSaving) {
-                nAns += wishSavingItem.getSavedAmount();
-            }
+            nAns += wish.getMonthlyPayment();
         }
 
         return nAns;
     }
 
     public int monthlyLimit() {
-        return nMonthlyIncome - sumOfPredefinedPaymentsForMonth() - sumOfWishesForMonth();
+        return nMonthlyIncome - sumOfPaymentsForMonth() - sumOfWishesForMonth();
     }
 
     public int weeklyLimit() {
@@ -296,55 +476,148 @@ public class Common {
         c.add(Calendar.DATE, 7);
         long nHigh = c.getTimeInMillis();
 
-        for(int i = 0; i < listTransactions.size(); i ++) {
-            Transaction transaction = listTransactions.get(i);
+        for(int i = 0; i < listAllTransactions.size(); i ++) {
+            Transaction trans = listAllTransactions.get(i);
 
-            if(transaction.getTimestampCreated() >= nHigh) continue;
-            if(transaction.getTimestampCreated() < nLow) break;
+            if(trans.getTimestampCreated() >= nHigh) continue;
+            if(trans.getTimestampCreated() < nLow) break;
 
-            nAns += transaction.getAmount();
+            nAns += trans.getAmount();
         }
 
         return nAns;
     }
 
-    public int sumOfTransactionThisMonth() { // for B Group Transaction, Transaction.mode = 2
+    public int sumOfTransactionForMonth() { // for B Group Transaction, Transaction.mode = 2
         int nAns = 0;
 
         Calendar c = Calendar.getInstance();
+        long nHigh = c.getTimeInMillis();
         int nDayNow = c.get(Calendar.DAY_OF_MONTH);
+
+        if(nDayNow < nSalaryDate) {
+            c.add(Calendar.MONTH , -1);
+        }
 
         c.set(Calendar.DAY_OF_MONTH, nSalaryDate);
         c.set(Calendar.HOUR_OF_DAY, 0);
         c.set(Calendar.MINUTE, 0);
-        c.set(Calendar.SECOND, 0);
 
-        long nLow = 0;
-        long nHigh = 0;
+        long nLow = c.getTimeInMillis();
 
-        if(nSalaryDate > nDayNow) {
-            nHigh = c.getTimeInMillis();
-            c.add(Calendar.MONTH, -1);
-            nLow = c.getTimeInMillis();
-        } else {
-            nLow = c.getTimeInMillis();
-            c.add(Calendar.MONTH, 1);
-            nHigh = c.getTimeInMillis();
-        }
+        for(int i = 0; i < listAllTransactions.size(); i ++) {
+            Transaction trans = listAllTransactions.get(i);
 
-        for(int i = 0; i < listTransactions.size(); i ++) {
-            Transaction transaction = listTransactions.get(i);
-
-            if(transaction.getTimestampCreated() >= nHigh) continue;
-            if(transaction.getTimestampCreated() < nLow) break;
-
-            nAns += transaction.getAmount();
+            if(trans.getTimestampCreated() > nHigh) continue;
+            if(trans.getTimestampCreated() < nLow) break;
+            if(trans.getMode() < 2) break;
+            nAns += trans.getAmount();
         }
 
         return nAns;
     }
 
-    public int leftOnThisWeek() {
+    public int leftOnPast(int nYear, int nMonth) {
+        Calendar c = Calendar.getInstance();
+        c.add(Calendar.MONTH, -1);
+
+        int nDaysOfMonth = c.getActualMaximum(Calendar.DAY_OF_MONTH);
+
+        return nMonthlyIncome - sumOfPaymentsForPast(nYear, nMonth) - sumOfRestTransactionsForPast(nYear, nMonth) - nMinimalDayAmount * nDaysOfMonth;
+    }
+
+    public int sumOfPaymentsForPast(int nYear, int nMonth) { // sum of paid payments
+        int nAns = 0;
+
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.YEAR, nYear);
+        c.set(Calendar.MONTH, nMonth);
+        c.set(Calendar.DAY_OF_MONTH, nSalaryDate);
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        c.set(Calendar.MINUTE, 0);
+
+        long timestampHigh = c.getTimeInMillis();
+
+        c.add(Calendar.MONTH, -1);
+        long timestampLow = c.getTimeInMillis();
+
+        for(int i = 0; i < listAllPayments.size(); i ++) {
+            Payment payment = listAllPayments.get(i);
+            int nPaidId = payment.getLastPaidId();
+
+            if(nPaidId == -1) continue;
+
+            Paid paid = dbHelper.getPaid(nPaidId);
+
+            if(paid.getTimestampCreated() >= timestampLow && paid.getTimestampCreated() < timestampHigh) {
+                nAns += payment.getAmount();
+            }
+        }
+
+        return nAns;
+    }
+
+    public int sumOfRestTransactionsForPast(int nYear, int nMonth) { // sum of unbinding payments for spending
+        int nAns = 0;
+
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.YEAR, nYear);
+        c.set(Calendar.MONTH, nMonth);
+        c.set(Calendar.DAY_OF_MONTH, nSalaryDate);
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        c.set(Calendar.MINUTE, 0);
+
+        long timestampHigh = c.getTimeInMillis();
+
+        c.add(Calendar.MONTH, -1);
+        long timestampLow = c.getTimeInMillis();
+
+        for(int i = 0; i < listAllTransactions.size(); i ++) {
+            Transaction trans = listAllTransactions.get(i);
+
+            if(trans.getTimestampCreated() >= timestampHigh) continue;
+            if(trans.getTimestampCreated() < timestampLow) break;
+            if(trans.getMode() < 2) continue;
+
+            int nPaidId = trans.getPaidId();
+
+            if(nPaidId == -1){
+                nAns += trans.getAmount();
+            }
+        }
+
+        return nAns;
+    }
+
+    public int sumOfTotalTransactionsForPast(int  nYear, int nMonth) { // sum of paymetns for spending
+        int nAns = 0;
+
+        Calendar c = Calendar.getInstance();
+        c.set(Calendar.YEAR, nYear);
+        c.set(Calendar.MONTH, nMonth);
+        c.set(Calendar.DAY_OF_MONTH, nSalaryDate);
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        c.set(Calendar.MINUTE, 0);
+
+        long timestampHigh = c.getTimeInMillis();
+
+        c.add(Calendar.MONTH, -1);
+        long timestampLow = c.getTimeInMillis();
+
+        for(int i = 0; i < listAllTransactions.size(); i ++) {
+            Transaction trans = listAllTransactions.get(i);
+
+            if(trans.getTimestampCreated() >= timestampHigh) continue;
+            if(trans.getTimestampCreated() < timestampLow) break;
+            if(trans.getMode() < 2) continue;
+
+            nAns += trans.getAmount();
+        }
+
+        return nAns;
+    }
+
+    public int freeOnThisWeek() {
         return weeklyLimit() - sumOfTransactionThisWeek();
     }
 
@@ -377,24 +650,39 @@ public class Common {
 //        return nAns;
 //    }
 
-    public int upcomingPayments() { // SUM(predefiend payments for salary interval)
+    public int upcomingPayments() { // sum of unpaid payments during this period.
         int nAns = 0;
 
         Calendar c = Calendar.getInstance();
-        int nTotalDaysOfMonth = c.getActualMaximum(Calendar.DAY_OF_MONTH);
-        int nDayCurrent = c.get(Calendar.DAY_OF_MONTH);
+
+        int nDay = c.get(Calendar.DAY_OF_MONTH);
+
+        if(nDay < nSalaryDate) {
+            c.add(Calendar.MONTH , -1);
+        }
+
+        c.set(Calendar.DAY_OF_MONTH, nSalaryDate);
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        c.set(Calendar.MINUTE, 0);
+
+        long nLow = c.getTimeInMillis();
+
+        List<Payment> listCurrentPayments = getCurrentPayments();
 
         for(int i = 0; i < listCurrentPayments.size(); i ++) {
-            Payment paymentItem = listCurrentPayments.get(i);
-            int nDayPayment = paymentItem.getDateOfMonth();
+            Payment payment = listCurrentPayments.get(i);
+            int nPaidId = payment.getLastPaidId();
 
-            if(nDayCurrent > nSalaryDate) {
-                if(nDayPayment > nDayCurrent || nDayPayment <= nSalaryDate) {
-                    nAns += paymentItem.getAmount();
-                }
-            } else {
-                if(nDayPayment > nDayCurrent && nDayPayment <= nSalaryDate) {
-                    nAns += paymentItem.getAmount();
+            if(nPaidId == -1) { // not paid
+                nAns += payment.getAmount();
+                continue;
+            }
+
+            if(payment.getPaymentMode() == 0 || payment.getPaymentMode() == 2) {
+                Paid paid = dbHelper.getPaid(nPaidId);
+
+                if(paid.getTimestampCreated() < nLow) { // paid timstamp is older than nLow
+                    nAns += payment.getAmount();
                 }
             }
         }
@@ -403,8 +691,8 @@ public class Common {
     }
 
 
-    public int leftOnThisMonth() {
-        return monthlyLimit() - sumOfTransactionThisMonth();
+    public int freeOnThisMonth() {
+        return monthlyLimit() - sumOfTransactionForMonth();
     }
 
     public int balanceOfActiveBank() {
@@ -432,38 +720,40 @@ public class Common {
     public int totalSavings() { // for checking the advisor
         int nAns = 0;
 
+        List<Payment> listCurrentPayments = getCurrentPayments();
+
         for(int i = 0; i < listCurrentPayments.size(); i ++) {
-            Payment paymentItem = listCurrentPayments.get(i);
-            int nPaymentMode = paymentItem.getPaymentMode();
 
-            if(nPaymentMode == 1 || nPaymentMode == 3) continue;
+            Payment payment = listCurrentPayments.get(i);
 
-            nAns += paymentItem.getAmount();
+            if(payment.getPaymentMode() > 1) continue;
+
+            nAns += payment.getAmount();
         }
 
         return nAns;
     }
 
     public int totalBills() { // for checking the advisor
-        return sumOfPredefinedPaymentsForMonth() - totalSavings();
+        return sumOfPaymentsForMonth() - totalSavings();
     }
 
     public int checkAdvisorStatus(int nAskingAmount) {
         int nStatus = 0;
 
-        if (leftOnThisWeek() - daysLeftForThisWeek() * nMinimalDayAmount >= nAskingAmount) {
+        if (freeOnThisWeek() - daysLeftForThisWeek() * nMinimalDayAmount >= nAskingAmount) {
             nStatus = 0;
-        } else if (leftOnThisWeek() >= nAskingAmount){
+        } else if (freeOnThisWeek() >= nAskingAmount){
             nStatus = 1;
-        } else if (leftOnThisMonth() - daysLeftForThisMonth() * nMinimalDayAmount >= nAskingAmount) {
+        } else if (freeOnThisMonth() - daysLeftForThisMonth() * nMinimalDayAmount >= nAskingAmount) {
             nStatus = 2;
-        } else if (leftOnThisMonth() >= nAskingAmount) {
+        } else if (freeOnThisMonth() >= nAskingAmount) {
             nStatus = 3;
-        } else if(leftOnThisMonth() + totalWishes() >= nAskingAmount) {
+        } else if(freeOnThisMonth() + totalWishes() >= nAskingAmount) {
             nStatus = 4;
-        } else if(leftOnThisMonth() + totalWishes() + totalSavings() >= nAskingAmount) {
+        } else if(freeOnThisMonth() + totalWishes() + totalSavings() >= nAskingAmount) {
             nStatus = 5;
-        } else if(leftOnThisMonth() + totalWishes() + totalSavings() + totalBills() >= nAskingAmount) {
+        } else if(freeOnThisMonth() + totalWishes() + totalSavings() + totalBills() >= nAskingAmount) {
             nStatus = 6;
         } else if(balanceOfActiveBank() >= nAskingAmount) {
             nStatus = 7;

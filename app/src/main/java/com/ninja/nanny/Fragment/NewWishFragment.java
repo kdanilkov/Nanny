@@ -1,9 +1,8 @@
 package com.ninja.nanny.Fragment;
 
 
-import android.content.res.Configuration;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,17 +14,14 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ninja.nanny.AdvisorActivity;
 import com.ninja.nanny.Custom.CustomFragment;
 import com.ninja.nanny.MainActivity;
 import com.ninja.nanny.Model.Wish;
-import com.ninja.nanny.Model.WishSaving;
 import com.ninja.nanny.R;
 import com.ninja.nanny.Utils.Common;
-import com.ninja.nanny.Utils.Constant;
 
 import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar;
-
-import java.util.Calendar;
 
 
 public class NewWishFragment extends CustomFragment {
@@ -41,7 +37,6 @@ public class NewWishFragment extends CustomFragment {
     EditText etTitle, etTotalAmount;
     TextView tvPeriod, tvMonthlyPayment;
     DiscreteSeekBar seekbarPropotion;
-    int nLeftOnMonth;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -82,28 +77,7 @@ public class NewWishFragment extends CustomFragment {
 
             @Override
             public void onStopTrackingTouch(DiscreteSeekBar seekBar) {
-                if(etTotalAmount.getText().toString().length() > 8) {
-                    etTotalAmount.setError(Html.fromHtml("<font color='red'>amount value is too large</font>"));
-                    return;
-                }
-
-                if(etTotalAmount.getText().toString().length() < 1) {
-                    return;
-                }
-
-                int nTotalAmount = Integer.valueOf(etTotalAmount.getText().toString());
-                if(nTotalAmount == 0) return;
-
-                int nMaxVal = nTotalAmount;
-                if(nMaxVal > nLeftOnMonth) nMaxVal = nLeftOnMonth;
-
-                int nMonthlyPayment = nMaxVal * seekbarPropotion.getProgress() / 100;
-                if(nMonthlyPayment == 0) return;
-
-                int nTotalMonths = (nTotalAmount + nMonthlyPayment -1) / nMonthlyPayment;
-
-                tvMonthlyPayment.setText(nMonthlyPayment + " $");
-                tvPeriod.setText(nTotalMonths + " month");
+                calcMonthlyPament();
             }
         });
 
@@ -111,41 +85,10 @@ public class NewWishFragment extends CustomFragment {
             @Override
             public void onFocusChange(View view, boolean b) {
                 if(!b) {
-                    if(etTotalAmount.getText().toString().length() > 8) {
-                        etTotalAmount.setError(Html.fromHtml("<font color='red'>amount value is too large</font>"));
-                        return;
-                    }
-
-                    if(etTotalAmount.getText().toString().length() < 1) {
-                        return;
-                    }
-
-                    int nTotalAmount = Integer.valueOf(etTotalAmount.getText().toString());
-                    if(nTotalAmount == 0) return;
-
-                    int nMaxVal = nTotalAmount;
-                    if(nMaxVal > nLeftOnMonth) nMaxVal = nLeftOnMonth;
-
-                    int nMonthlyPayment = nMaxVal * seekbarPropotion.getProgress() / 100;
-                    if(nMonthlyPayment == 0) return;
-
-                    int nTotalMonths = (nTotalAmount + nMonthlyPayment -1) / nMonthlyPayment;
-
-                    tvMonthlyPayment.setText(nMonthlyPayment + " $");
-                    tvPeriod.setText(nTotalMonths + " month");
+                    calcMonthlyPament();
                 }
             }
         });
-
-        nLeftOnMonth = Common.getInstance().leftOnThisMonth();
-
-        if(nLeftOnMonth <= 0) {
-            Toast.makeText(mContext, "There is no money left on this month!", Toast.LENGTH_SHORT).show();
-            etTotalAmount.setEnabled(false);
-            etTitle.setEnabled(false);
-            seekbarPropotion.setEnabled(false);
-            return;
-        }
 
         mView.findViewById(R.id.lyContainer).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -169,23 +112,19 @@ public class NewWishFragment extends CustomFragment {
 
                 if(nTotalAmount == 0) return;
 
-                int nMaxVal= nLeftOnMonth;
-
-                if(nMaxVal > nTotalAmount) nMaxVal = nTotalAmount;
-
-                int nLeftOnThisWeek = Common.getInstance().leftOnThisWeek();
+                int nLeftOnThisWeek = Common.getInstance().freeOnThisWeek();
                 int nMonthlyPayment = 0;
 
                 if(nLeftOnThisWeek < 1) {
                     seekbarPropotion.setProgress(50);
-                    nMonthlyPayment = nMaxVal / 2;
+                    nMonthlyPayment = nTotalAmount / 2;
                 } else {
-                    if(nLeftOnThisWeek > nMaxVal) {
+                    if(nLeftOnThisWeek > nTotalAmount) {
                         seekbarPropotion.setProgress(100);
-                        nMonthlyPayment = nMaxVal;
+                        nMonthlyPayment = nTotalAmount;
                     } else {
                         nMonthlyPayment = nLeftOnThisWeek;
-                        int nPercent = nMonthlyPayment * 100 / nMaxVal;
+                        int nPercent = nMonthlyPayment * 100 / nTotalAmount;
                         seekbarPropotion.setProgress(nPercent);
                     }
                 }
@@ -199,34 +138,29 @@ public class NewWishFragment extends CustomFragment {
 
             }
         });
-
-//
-//        scrollView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
-//            @Override
-//            public void onScrollChange(View view, int i, int i1, int i2, int i3) {
-//
-//            }
-//        });
     }
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-
-        // Checks whether a hardware keyboard is available
-        if (newConfig.hardKeyboardHidden == Configuration.HARDKEYBOARDHIDDEN_NO) {
-            Toast.makeText(mContext, "keyboard visible", Toast.LENGTH_SHORT).show();
-        } else if (newConfig.hardKeyboardHidden == Configuration.HARDKEYBOARDHIDDEN_YES) {
-            Toast.makeText(mContext, "keyboard hidden", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    void saveWish() {
-        if(nLeftOnMonth <= 0) {
-            Toast.makeText(mContext, "There is no money left on this month!", Toast.LENGTH_SHORT).show();
+    void calcMonthlyPament() {
+        if(etTotalAmount.getText().toString().length() > 8) {
+            etTotalAmount.setError(Html.fromHtml("<font color='red'>amount value is too large</font>"));
             return;
         }
 
+        if(etTotalAmount.getText().toString().length() < 1) {
+            return;
+        }
+
+        int nTotalAmount = Integer.valueOf(etTotalAmount.getText().toString());
+        int nMonthlyPayment = nTotalAmount * seekbarPropotion.getProgress() / 100;
+        if(nMonthlyPayment == 0) return;
+
+        int nTotalMonths = (nTotalAmount + nMonthlyPayment -1) / nMonthlyPayment;
+
+        tvMonthlyPayment.setText(nMonthlyPayment + " $");
+        tvPeriod.setText(nTotalMonths + " month");
+    }
+
+    void saveWish() {
         String strTitle = etTitle.getText().toString();
 
         if(etTotalAmount.getText().toString().length() > 8){
@@ -251,38 +185,13 @@ public class NewWishFragment extends CustomFragment {
             return;
         }
 
-        int nMonthlyPayment = nLeftOnMonth * seekbarPropotion.getProgress() / 100;
+        int nMonthlyPayment = nTotalAmount * seekbarPropotion.getProgress() / 100;
         if(nMonthlyPayment == 0) nMonthlyPayment = 1;
-        if(nMonthlyPayment > nTotalAmount) nMonthlyPayment = nTotalAmount;
 
         Wish wishNew = new Wish(strTitle, nTotalAmount, nMonthlyPayment, 0, Common.getInstance().getTimestamp(), -1, 1);
         int nID = Common.getInstance().dbHelper.createWish(wishNew);
 
         wishNew.setId(nID);
-
-        Calendar c = Calendar.getInstance();
-        int nDayOfMonth = c.get(Calendar.DAY_OF_MONTH);
-        int nMonth = c.get(Calendar.MONTH);
-        int nYear = c.get(Calendar.YEAR);
-
-        if(nDayOfMonth >= Common.getInstance().nSalaryDate) {
-            nMonth ++;
-            if(nMonth == 12) {
-                nYear ++;
-                nMonth = 0;
-            }
-        }
-
-        int nDateSaving = nYear * 100 + nMonth;
-
-        WishSaving wishSaving = new WishSaving(wishNew.getId(), wishNew.getMonthlyPayment(), nDateSaving);
-        int nWishSavingId = Common.getInstance().dbHelper.createWishSaving(wishSaving);
-        wishSaving.setId(nWishSavingId);
-
-        wishNew.setLastSavingId(nWishSavingId);
-        wishNew.setSavedAmount(wishNew.getMonthlyPayment());
-
-        Common.getInstance().dbHelper.updateWish(wishNew);
 
         Common.getInstance().listAllWishes.add(wishNew);
         Common.getInstance().listActiveWishes.add(wishNew);
@@ -305,12 +214,7 @@ public class NewWishFragment extends CustomFragment {
                 saveWish();
                 break;
             case R.id.btnAskAdviser:
-                AdviceFragment f = new AdviceFragment();
-                String title = Constant.FRAGMENT_ADVICE;
-
-                FragmentTransaction transaction = mContext.getSupportFragmentManager()
-                        .beginTransaction();
-                transaction.add(R.id.content_frame, f, title).addToBackStack(title).commit();
+                startActivity(new Intent(mContext, AdvisorActivity.class));
                 break;
         }
     }

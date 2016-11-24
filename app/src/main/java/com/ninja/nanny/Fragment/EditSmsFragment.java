@@ -208,14 +208,7 @@ public class EditSmsFragment extends CustomFragment {
 
         Common.getInstance().dbHelper.updateSms(smsSelected);
 
-        Sms sms = new Sms(strTitle, strText, cal.getTimeInMillis());
-        int nId = Common.getInstance().dbHelper.createSMS(sms);
-
-        sms.setId(nId);
-
-        Common.getInstance().listSms.add(0, sms);
-
-        Toast.makeText(mContext, "new sms has been registered successfully", Toast.LENGTH_SHORT).show();
+        Toast.makeText(mContext, "sms has been updated successfully", Toast.LENGTH_SHORT).show();
         mContext.getSupportFragmentManager().popBackStackImmediate();
     }
 

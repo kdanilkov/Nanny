@@ -20,6 +20,8 @@ import com.ninja.nanny.Utils.Constant;
 
 import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar;
 
+import java.util.Calendar;
+
 
 public class SettingFragment extends CustomFragment implements DiscreteSeekBar.OnProgressChangeListener {
 
@@ -91,8 +93,7 @@ public class SettingFragment extends CustomFragment implements DiscreteSeekBar.O
 
         switch (v.getId()) {
             case R.id.btnMenu:
-                boolean isInitSet = UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_IS_INIT_CONFIG, false);
-                if(!isInitSet) {
+                if(Common.getInstance().timestampInitConfig == 0) {
                     Toast.makeText(mContext, "You should make the initial setting first of all", Toast.LENGTH_SHORT).show();
                     break;
                 }
@@ -142,10 +143,11 @@ public class SettingFragment extends CustomFragment implements DiscreteSeekBar.O
         Common.getInstance().nToleranceDays = nToleranceDays;
         Common.getInstance().nTolerancePercents = nTolerancePercent;
 
-        boolean isInitSet = UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_IS_INIT_CONFIG, false);
-
-        if(!isInitSet) {
-            UserPreference.getInstance().putSharedPreference(Constant.PREF_KEY_IS_INIT_CONFIG, true);
+        if(Common.getInstance().timestampInitConfig == 0) {
+            Calendar c = Calendar.getInstance();
+            long timestamp = c.getTimeInMillis();
+            Common.getInstance().timestampInitConfig = timestamp;
+            UserPreference.getInstance().putSharedPreference(Constant.PREF_KEY_INIT_CONFIG_TIMESTAMP, timestamp);
             mContext.launchFragment(0);
         }
 

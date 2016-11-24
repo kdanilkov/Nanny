@@ -6,14 +6,15 @@ package com.ninja.nanny.Utils;
 
 public class Constant {
     public static final String PREF_NAME = "Nanny";
-    public static final String PREF_KEY_IS_INIT_CONFIG = "is_init_config";
-    public static final String PREF_KEY_MINIMAL_AMOUNT_PER_DAY = "MinimalAmountPerDay";
-    public static final String PREF_KEY_SALARY_DATE = "SalaryDate";
-    public static final String PREF_KEY_MONTHLY_INCOME = "MonthlyIncome";
-    public static final String PREF_KEY_USED_SALARY = "UsedSalary";
-    public static final String PREF_KEY_TOLERANCE_DAYS = "ToleranceDays";
-    public static final String PREF_KEY_TOLERANCE_PERCENT = "TolerancePercent";
+    public static final String PREF_KEY_INIT_CONFIG_TIMESTAMP = "init_config_timestamp";
+    public static final String PREF_KEY_MINIMAL_AMOUNT_PER_DAY = "minimal_amount_per_day";
+    public static final String PREF_KEY_SALARY_DATE = "salary_date";
+    public static final String PREF_KEY_MONTHLY_INCOME = "monthly_income";
+    public static final String PREF_KEY_USED_SALARY = "used_salary";
+    public static final String PREF_KEY_TOLERANCE_DAYS = "tolerance_days";
+    public static final String PREF_KEY_TOLERANCE_PERCENT = "tolerance_percent";
     public static final String PREF_KEY_SMS_TIMESTAMP = "sms_timestamp";
+    public static final String PREF_KEY_WISH_SAVING_TIME = "wish_saving_time";
 
     public static final String JSON_NAME = "name";
     public static final String JSON_TYPE = "type";

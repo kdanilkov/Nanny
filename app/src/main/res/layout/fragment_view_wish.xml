@@ -55,132 +55,73 @@
 
     </RelativeLayout>
 
-    <RelativeLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/rlyTop">
 
-        <at.grabner.circleprogress.CircleProgressView
-            android:id="@+id/circleView"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            CircleProgressView:cpv_autoTextSize="true"
-            CircleProgressView:cpv_barColor="@color/colorPrimary"
-            CircleProgressView:cpv_barWidth="35dp"
-            CircleProgressView:cpv_innerContourSize="0dp"
-            CircleProgressView:cpv_maxValue="100"
-            CircleProgressView:cpv_outerContourSize="0dp"
-            CircleProgressView:cpv_rimColor="@color/gray_lt"
-            CircleProgressView:cpv_rimWidth="35dp"
-            CircleProgressView:cpv_showUnit="true"
-            CircleProgressView:cpv_spinColor="@color/gray_dark"
-            CircleProgressView:cpv_textColor="@color/colorPrimary"
-            CircleProgressView:cpv_textScale="1"
-            CircleProgressView:cpv_unit="%"
-            CircleProgressView:cpv_unitColor="@color/colorPrimary"
-            CircleProgressView:cpv_unitPosition="right_top"
-            CircleProgressView:cpv_unitScale="1"
-            CircleProgressView:cpv_value="30"
-            android:layout_alignParentEnd="true"
-            android:layout_marginRight="30dp"
-            android:layout_marginTop="30dp"
-            android:clickable="false"
-            CircleProgressView:cpv_seekMode="false" />
-
         <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_marginStart="30dp"
-            android:layout_marginTop="30dp"
-            android:id="@+id/lyTitle">
-
-            <com.ninja.nanny.Custom.MediumTextView
-                android:text="TITLE"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/label_text_color"
-                android:textSize="14sp" />
-
-            <com.ninja.nanny.Custom.RegularTextView
-                android:text="Trip to Maldives"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/tvTitle"
-                android:textSize="16sp"
-                android:textColor="@color/gray_dark"
-                android:layout_marginTop="5dp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="false"
-            android:layout_marginTop="15dp"
-            android:id="@+id/lyAmount"
-            android:layout_below="@+id/lyTitle"
-            android:layout_alignStart="@+id/lyTitle">
-
-            <com.ninja.nanny.Custom.MediumTextView
-                android:text="AMOUNT"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/label_text_color"
-                android:textSize="14sp" />
-
-            <com.ninja.nanny.Custom.RegularTextView
-                android:text="10,000$"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/tvAmount"
-                android:textSize="16sp"
-                android:textColor="@color/gray_dark"
-                android:layout_marginTop="5dp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="false"
-            android:layout_marginTop="15dp"
-            android:id="@+id/lyPayment"
-            android:layout_below="@+id/lyAmount"
-            android:layout_alignStart="@+id/lyAmount">
-
-            <com.ninja.nanny.Custom.MediumTextView
-                android:text="MONTHLY PAYMENT"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/label_text_color"
-                android:textSize="14sp" />
-
-            <com.ninja.nanny.Custom.RegularTextView
-                android:text="250$"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/tvPayment"
-                android:textSize="16sp"
-                android:textColor="@color/gray_dark"
-                android:layout_marginTop="5dp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/lyOther"
-            android:layout_below="@+id/lyPayment"
-            android:layout_marginTop="20dp"
-            android:layout_marginRight="30dp"
-            android:layout_alignLeft="@+id/lyPayment">
+            android:orientation="vertical" >
 
             <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1">
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/rlyTop">
+
+                <at.grabner.circleprogress.CircleProgressView
+                    android:id="@+id/circleView"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    CircleProgressView:cpv_autoTextSize="true"
+                    CircleProgressView:cpv_barColor="@color/colorPrimary"
+                    CircleProgressView:cpv_barWidth="35dp"
+                    CircleProgressView:cpv_innerContourSize="0dp"
+                    CircleProgressView:cpv_maxValue="100"
+                    CircleProgressView:cpv_outerContourSize="0dp"
+                    CircleProgressView:cpv_rimColor="@color/gray_lt"
+                    CircleProgressView:cpv_rimWidth="35dp"
+                    CircleProgressView:cpv_showUnit="true"
+                    CircleProgressView:cpv_spinColor="@color/gray_dark"
+                    CircleProgressView:cpv_textColor="@color/colorPrimary"
+                    CircleProgressView:cpv_textScale="1"
+                    CircleProgressView:cpv_unit="%"
+                    CircleProgressView:cpv_unitColor="@color/colorPrimary"
+                    CircleProgressView:cpv_unitPosition="right_top"
+                    CircleProgressView:cpv_unitScale="1"
+                    CircleProgressView:cpv_value="30"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="30dp"
+                    android:clickable="false"
+                    CircleProgressView:cpv_seekMode="false" />
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginTop="30dp"
+                    android:id="@+id/lyTitle">
+
+                    <com.ninja.nanny.Custom.MediumTextView
+                        android:text="TITLE"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/label_text_color"
+                        android:textSize="14sp" />
+
+                    <com.ninja.nanny.Custom.RegularTextView
+                        android:text="Trip to Maldives"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/tvTitle"
+                        android:textSize="16sp"
+                        android:textColor="@color/gray_dark"
+                        android:layout_marginTop="5dp" />
+                </LinearLayout>
 
                 <LinearLayout
                     android:orientation="vertical"
@@ -188,31 +129,26 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="false"
                     android:layout_marginTop="15dp"
-                    android:id="@+id/lySaved">
+                    android:id="@+id/lyAmount"
+                    android:layout_below="@+id/lyTitle"
+                    android:layout_alignStart="@+id/lyTitle">
 
                     <com.ninja.nanny.Custom.MediumTextView
-                        android:text="SAVED"
+                        android:text="AMOUNT"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColor="@color/label_text_color"
                         android:textSize="14sp" />
 
                     <com.ninja.nanny.Custom.RegularTextView
-                        android:text="6,200$"
+                        android:text="10,000$"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/tvSaved"
+                        android:id="@+id/tvAmount"
                         android:textSize="16sp"
                         android:textColor="@color/gray_dark"
                         android:layout_marginTop="5dp" />
                 </LinearLayout>
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1">
 
                 <LinearLayout
                     android:orientation="vertical"
@@ -220,36 +156,111 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="false"
                     android:layout_marginTop="15dp"
-                    android:id="@+id/lyLeft">
+                    android:id="@+id/lyPayment"
+                    android:layout_below="@+id/lyAmount"
+                    android:layout_alignStart="@+id/lyAmount">
 
                     <com.ninja.nanny.Custom.MediumTextView
-                        android:text="LEFT"
+                        android:text="MONTHLY PAYMENT"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColor="@color/label_text_color"
                         android:textSize="14sp" />
 
                     <com.ninja.nanny.Custom.RegularTextView
-                        android:text="3,800$"
+                        android:text="250$"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:id="@+id/tvLeft"
+                        android:id="@+id/tvPayment"
                         android:textSize="16sp"
                         android:textColor="@color/gray_dark"
                         android:layout_marginTop="5dp" />
                 </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/lyOther"
+                    android:layout_below="@+id/lyPayment"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_alignLeft="@+id/lyPayment">
+
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1">
+
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="false"
+                            android:layout_marginTop="15dp"
+                            android:id="@+id/lySaved">
+
+                            <com.ninja.nanny.Custom.MediumTextView
+                                android:text="SAVED"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/label_text_color"
+                                android:textSize="14sp" />
+
+                            <com.ninja.nanny.Custom.RegularTextView
+                                android:text="6,200$"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/tvSaved"
+                                android:textSize="16sp"
+                                android:textColor="@color/gray_dark"
+                                android:layout_marginTop="5dp" />
+                        </LinearLayout>
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1">
+
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="false"
+                            android:layout_marginTop="15dp"
+                            android:id="@+id/lyLeft">
+
+                            <com.ninja.nanny.Custom.MediumTextView
+                                android:text="LEFT"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textColor="@color/label_text_color"
+                                android:textSize="14sp" />
+
+                            <com.ninja.nanny.Custom.RegularTextView
+                                android:text="3,800$"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:id="@+id/tvLeft"
+                                android:textSize="16sp"
+                                android:textColor="@color/gray_dark"
+                                android:layout_marginTop="5dp" />
+                        </LinearLayout>
+                    </RelativeLayout>
+                </LinearLayout>
             </RelativeLayout>
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/chart1"
+                android:layout_width="match_parent"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginRight="5dp"
+                android:layout_marginBottom="20dp"
+                android:layout_height="400dp" />
         </LinearLayout>
-
-        <com.ninja.nanny.FancyChart.FancyChart
-            android:id="@+id/fancyChart"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/lyOther"
-            android:layout_marginTop="20dp">
-        </com.ninja.nanny.FancyChart.FancyChart>
-
-    </RelativeLayout>
+    </ScrollView>
 
 </RelativeLayout>
 

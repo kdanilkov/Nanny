@@ -1,6 +1,7 @@
 package com.ninja.nanny.Fragment;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentTransaction;
@@ -10,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ninja.nanny.AdvisorActivity;
 import com.ninja.nanny.Custom.CustomFragment;
 import com.ninja.nanny.MainActivity;
 import com.ninja.nanny.R;
@@ -62,8 +64,8 @@ public class HomeFragment extends CustomFragment {
     }
 
     void presentData() {
-        tvLeftThisWeek.setText(Common.getInstance().leftOnThisWeek() + " $");
-        tvLeftThisMonth.setText(Common.getInstance().leftOnThisMonth() + " $");
+        tvLeftThisWeek.setText(Common.getInstance().freeOnThisWeek() + " $");
+        tvLeftThisMonth.setText(Common.getInstance().freeOnThisMonth() + " $");
         tvUpcomingPayments.setText(Common.getInstance().upcomingPayments() + " $");
         tvSpentForWish.setText(Common.getInstance().sumOfWishesForMonth() + " $");
         tvShowDebit.setText("");
@@ -109,12 +111,7 @@ public class HomeFragment extends CustomFragment {
     public void onClick(View v) {
         switch(v.getId()) {
             case R.id.btnAdvice:
-                AdviceFragment f = new AdviceFragment();
-                String title = Constant.FRAGMENT_ADVICE;
-
-                FragmentTransaction transaction = mContext.getSupportFragmentManager()
-                        .beginTransaction();
-                transaction.add(R.id.content_frame, f, title).addToBackStack(title).commit();
+                startActivity(new Intent(mContext, AdvisorActivity.class));
                 break;
             case R.id.btnMenu:
                 mContext.toggleMenu();

@@ -91,6 +91,18 @@ public class NewPaymentFragment extends CustomFragment {
         });
     }
 
+    boolean isUniqueIdentifier(String strIdentifier) {
+        List<Payment> listCurrentPayments = Common.getInstance().getCurrentPayments();
+
+        for(int i = 0; i < listCurrentPayments.size(); i ++) {
+            Payment payment = listCurrentPayments.get(i);
+
+            if(strIdentifier.equals(payment.getIdentifier())) return false;
+        }
+
+        return true;
+    }
+
     void saveNewPayment() {
         String strTitle = etTitle.getText().toString();
         String strDetail = etDetail.getText().toString();
@@ -136,6 +148,11 @@ public class NewPaymentFragment extends CustomFragment {
             return;
         }
 
+        if(!isUniqueIdentifier(strDetail)) {
+            etDetail.setError(Html.fromHtml("<font color='red'>your word patterns has been used with other payments, pls use other</font>"));
+            return;
+        }
+
         int nPaymentMode = 0;
 
         if(isRecurrent) {
@@ -144,14 +161,13 @@ public class NewPaymentFragment extends CustomFragment {
             nPaymentMode = isSaving? 1 : 3;
         }
 
-        Payment paymentNew = new Payment(strTitle, strDetail, nAmount, nDateOfMonth, nPaymentMode, 0, Common.getInstance().getTimestamp()); // paid_status = 0 because it is unpaid
+        Payment paymentNew = new Payment(strTitle, strDetail, nAmount, nDateOfMonth, nPaymentMode, -1, Common.getInstance().getTimestamp()); // paid_status = 0 because it is unpaid
 
         int payment_id = Common.getInstance().dbHelper.createPayment(paymentNew);
 
         paymentNew.setId(payment_id);
 
         Common.getInstance().listAllPayments.add(paymentNew);
-        Common.getInstance().listCurrentPayments.add(paymentNew);
 
         Toast.makeText(mContext, "new payment info has been added successfully", Toast.LENGTH_SHORT).show();
         mContext.getSupportFragmentManager().popBackStackImmediate();

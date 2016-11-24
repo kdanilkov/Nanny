@@ -3,17 +3,27 @@ package com.ninja.nanny.Fragment;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.highlight.Highlight;
+import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
+import com.github.mikephil.charting.utils.ColorTemplate;
 import com.ninja.nanny.Custom.CustomFragment;
-import com.ninja.nanny.FancyChart.ChartData;
-import com.ninja.nanny.FancyChart.FancyChart;
 import com.ninja.nanny.MainActivity;
 import com.ninja.nanny.Model.Wish;
 import com.ninja.nanny.Model.WishSaving;
@@ -21,12 +31,13 @@ import com.ninja.nanny.R;
 import com.ninja.nanny.Utils.Common;
 import com.ninja.nanny.Utils.Constant;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import at.grabner.circleprogress.CircleProgressView;
 
 
-public class ViewWishFragment extends CustomFragment {
+public class ViewWishFragment extends CustomFragment implements OnChartValueSelectedListener {
 
 
     public ViewWishFragment() {
@@ -39,6 +50,9 @@ public class ViewWishFragment extends CustomFragment {
     CircleProgressView mCircleView;
     public Wish wishSelected;
     List<WishSaving> listSaving;
+    LineChart mChart;
+    ArrayList<Entry> yVals1, yVals2, yVals3, yVals4;
+    int nLeftHigh, nRightHigh;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -81,47 +95,211 @@ public class ViewWishFragment extends CustomFragment {
 
         mCircleView.setValue(nPercent);
 
-        FancyChart chart = (FancyChart)mView.findViewById(R.id.fancyChart);
+        mChart = (LineChart) mView.findViewById(R.id.chart1);
+        mChart.setOnChartValueSelectedListener(this);
 
-        // First data set
-        ChartData data1 = new ChartData(ChartData.LINE_COLOR_BLUE);
-        ChartData data2 = new ChartData(ChartData.LINE_COLOR_RED);
-//        int[] yValues = new int[]{0, 8, 9, 18, 35, 30, 33, 32, 46, 53, 50, 42};
-        data1.addPoint(0, 0);
-        data2.addPoint(0, 0);
+        setData();
+        configChart();
 
-        data1.addXValue(0, "0");
-        data2.addXValue(0, "0");
+    }
+
+    void configChart() {
+        // no description text
+        mChart.getDescription().setEnabled(false);
+
+        // enable touch gestures
+        mChart.setTouchEnabled(true);
+
+        mChart.setDragDecelerationFrictionCoef(0.9f);
+
+        // enable scaling and dragging
+        mChart.setDragEnabled(true);
+        mChart.setScaleEnabled(true);
+        mChart.setDrawGridBackground(false);
+        mChart.setHighlightPerDragEnabled(true);
+
+        // if disabled, scaling can be done on x- and y-axis separately
+        mChart.setPinchZoom(true);
+
+        // set an alternative background color
+        mChart.setBackgroundColor(Color.LTGRAY);
+
+        // add data
+
+        mChart.animateX(2500);
+
+        // get the legend (only possible after setting data)
+        Legend l = mChart.getLegend();
+
+        // modify the legend ...
+        l.setForm(Legend.LegendForm.LINE);
+//        l.setTypeface(mTfLight);
+        l.setTextSize(11f);
+        l.setTextColor(Color.WHITE);
+        l.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
+        l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.LEFT);
+        l.setOrientation(Legend.LegendOrientation.HORIZONTAL);
+        l.setDrawInside(false);
+//        l.setYOffset(11f);
+
+        XAxis xAxis = mChart.getXAxis();
+//        xAxis.setTypeface(mTfLight);
+        xAxis.setTextSize(11f);
+        xAxis.setTextColor(Color.WHITE);
+        xAxis.setDrawGridLines(false);
+        xAxis.setDrawAxisLine(false);
+
+        YAxis leftAxis = mChart.getAxisLeft();
+//        leftAxis.setTypeface(mTfLight);
+        leftAxis.setTextColor(Color.BLUE);
+        leftAxis.setAxisMaximum(nLeftHigh + 50);
+        leftAxis.setAxisMinimum(0);
+        leftAxis.setDrawGridLines(true);
+        leftAxis.setGranularityEnabled(true);
+
+        YAxis rightAxis = mChart.getAxisRight();
+//        rightAxis.setTypeface(mTfLight);
+        rightAxis.setTextColor(Color.RED);
+        rightAxis.setAxisMaximum(nRightHigh + 50);
+        rightAxis.setAxisMinimum(0);
+        rightAxis.setDrawGridLines(false);
+        rightAxis.setDrawZeroLine(false);
+        rightAxis.setGranularityEnabled(false);
+
+
+        LineDataSet set1, set2, set3, set4;
+
+        if (mChart.getData() != null &&
+                mChart.getData().getDataSetCount() > 0) {
+            set1 = (LineDataSet) mChart.getData().getDataSetByIndex(0);
+            set2 = (LineDataSet) mChart.getData().getDataSetByIndex(1);
+            set3 = (LineDataSet) mChart.getData().getDataSetByIndex(2);
+            set4 = (LineDataSet) mChart.getData().getDataSetByIndex(3);
+            set1.setValues(yVals1);
+            set2.setValues(yVals2);
+            set3.setValues(yVals3);
+            set4.setValues(yVals4);
+            mChart.getData().notifyDataChanged();
+            mChart.notifyDataSetChanged();
+        } else {
+            // create a dataset and give it a type
+            set1 = new LineDataSet(yVals1, "Current");
+
+            set1.setAxisDependency(YAxis.AxisDependency.RIGHT);
+            set1.setColor(Color.RED);
+            set1.setCircleColor(Color.WHITE);
+            set1.setLineWidth(2f);
+            set1.setCircleRadius(3f);
+//            set1.setFillAlpha(255);
+            set1.setFillColor(Color.RED);
+            set1.setHighLightColor(Color.rgb(244, 117, 117));
+            set1.setDrawCircleHole(false);
+
+            set2 = new LineDataSet(yVals2, "Sum");
+            set2.setAxisDependency(YAxis.AxisDependency.LEFT);
+            set2.setColor(Color.BLUE);
+            set2.setCircleColor(Color.WHITE);
+            set2.setLineWidth(2f);
+            set2.setCircleRadius(3f);
+//            set2.setFillAlpha(255);
+            set2.setFillColor(Color.BLUE);
+            set2.setDrawCircleHole(false);
+            set2.setHighLightColor(Color.rgb(244, 117, 117));
+
+            set3 = new LineDataSet(yVals3, "Future");
+            set3.setAxisDependency(YAxis.AxisDependency.RIGHT);
+            set3.setColor(ColorTemplate.colorWithAlpha(Color.RED, 100));
+            set3.setCircleColor(Color.WHITE);
+            set3.setLineWidth(2f);
+            set3.setCircleRadius(3f);
+//            set3.setFillAlpha(65);
+            set3.setFillColor(ColorTemplate.colorWithAlpha(Color.RED, 100));
+            set3.setDrawCircleHole(false);
+            set3.setHighLightColor(Color.rgb(244, 117, 117));
+
+            set4 = new LineDataSet(yVals4, "Sum");
+            set4.setAxisDependency(YAxis.AxisDependency.LEFT);
+            set4.setColor(ColorTemplate.colorWithAlpha(Color.BLUE, 100));
+            set4.setCircleColor(Color.WHITE);
+            set4.setLineWidth(2f);
+            set4.setCircleRadius(3f);
+//            set4.setFillAlpha(65);
+            set4.setFillColor(ColorTemplate.colorWithAlpha(Color.BLUE, 100));
+            set4.setDrawCircleHole(false);
+            set4.setHighLightColor(Color.rgb(244, 117, 117));
+
+            // create a data object with the datasets
+            LineData data = new LineData(set1, set2, set3, set4);
+            data.setValueTextColor(Color.WHITE);
+            data.setValueTextSize(9f);
+
+            // set data
+            mChart.setData(data);
+        }
+    }
+
+    void setData() {
+
+        yVals1 = new ArrayList<Entry>();
+        yVals2 = new ArrayList<Entry>();
+        yVals3 = new ArrayList<Entry>();
+        yVals4 = new ArrayList<Entry>();
+
+        nLeftHigh = 0;
+        nRightHigh = 0;
 
         int nSum = 0;
 
-        for(int i = 1; i < listSaving.size() + 1; i++) {
-            WishSaving wishSaving = listSaving.get(i - 1);
+        for(int i = 0; i < listSaving.size(); i++) {
+            WishSaving wishSaving = listSaving.get(i);
             nSum += wishSaving.getSavedAmount();
 
-            data1.addPoint(i, wishSaving.getSavedAmount());
-            data2.addPoint(i, nSum);
+            yVals1.add(new Entry(i, wishSaving.getSavedAmount()));
+            yVals2.add(new Entry(i, nSum));
 
-            int nSavingDate = wishSaving.getDateCreated();
-            int nMonth = nSavingDate % 100;
-            int nYear = (nSavingDate / 100) % 100; // in case  of 2016, result is 16
+            if(wishSaving.getSavedAmount() > nRightHigh) {
+                nRightHigh = wishSaving.getSavedAmount();
+            }
 
-            data1.addXValue(i, nYear + "/" + nMonth);
-            data2.addXValue(i, nYear + "/" + nMonth);
+            if(nSum > nLeftHigh) {
+                nLeftHigh = nSum;
+            }
+
         }
 
-        chart.addData(data1);
-        chart.addData(data2);
+        if(listSaving.size() > 0) {
+            int nIdx = listSaving.size() - 1;
 
-        // Second data set
-//        ChartData data2 = new ChartData(ChartData.LINE_COLOR_RED);
-//        int[] yValues2 = new int[]{0, 5, 9, 23, 15, 35, 45, 50, 41, 45, 32, 24};
-//        for(int i = 8; i <= 19; i++) {
-//            data2.addPoint(i, yValues2[i-8]);
-//            data2.addXValue(i, i + ":00");
-//        }
-//        chart.addData(data2);
+            yVals3.add(new Entry(nIdx, listSaving.get(nIdx).getSavedAmount()));
+            yVals4.add(new Entry(nIdx, nSum));
+        }
 
+        int nTotalAmount = wishSelected.getTotalAmount();
+
+        for(int j = listSaving.size();; j ++) {
+            int nSavingAmount = wishSelected.getMonthlyPayment();
+
+            int nTmpSum = nSum + nSavingAmount;
+
+            if(nTmpSum > nTotalAmount) {
+                nSavingAmount = nTotalAmount - nSum;
+            }
+
+            if(nSavingAmount == 0) break;
+
+            nSum += nSavingAmount;
+
+            yVals3.add(new Entry(j, nSavingAmount));
+            yVals4.add(new Entry(j, nSum));
+
+            if(nSavingAmount > nRightHigh) {
+                nRightHigh = nSavingAmount;
+            }
+
+            if(nSum > nLeftHigh) {
+                nLeftHigh = nSum;
+            }
+        }
     }
 
     void removeItem() {
@@ -201,4 +379,16 @@ public class ViewWishFragment extends CustomFragment {
         }
     }
 
+    @Override
+    public void onValueSelected(Entry e, Highlight h) {
+        Log.i("Entry selected", e.toString());
+
+        mChart.centerViewToAnimated(e.getX(), e.getY(), mChart.getData().getDataSetByIndex(h.getDataSetIndex())
+                .getAxisDependency(), 500);
+    }
+
+    @Override
+    public void onNothingSelected() {
+        Log.i("Nothing selected", "Nothing selected.");
+    }
 }

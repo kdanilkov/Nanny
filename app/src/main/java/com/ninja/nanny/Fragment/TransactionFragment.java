@@ -9,9 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ninja.nanny.Custom.CustomFragment;
 import com.ninja.nanny.MainActivity;
+import com.ninja.nanny.Model.Paid;
 import com.ninja.nanny.Model.Payment;
 import com.ninja.nanny.Model.Transaction;
 import com.ninja.nanny.R;
@@ -70,8 +72,8 @@ public class TransactionFragment extends CustomFragment {
 
         mLyContainer.removeAllViews();
 
-        for(int i = 0; i < Common.getInstance().listTransactions.size(); i ++) {
-            final Transaction transaction = Common.getInstance().listTransactions.get(i);
+        for(int i = 0; i < Common.getInstance().listAllTransactions.size(); i ++) {
+            Transaction transaction = Common.getInstance().listAllTransactions.get(i);
 
             Calendar cal = Calendar.getInstance();
             cal.setTimeInMillis(transaction.getTimestampCreated());
@@ -89,21 +91,43 @@ public class TransactionFragment extends CustomFragment {
             cell.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(nMode == 1) {
-                        paymentSelected.setPaidStatus(1);
-                        Common.getInstance().dbHelper.updatePayment(paymentSelected);
+                    Transaction transaction = Common.getInstance().listAllTransactions.get(pos);
 
-                        mContext.getSupportFragmentManager().popBackStack(Constant.FRAGMENT_EXPENSE_AS_PAYED, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+                    if(nMode == 1) {
+                        int nPaidId = transaction.getPaidId();
+
+                        if(nPaidId == -1) {
+                            Paid paid = new Paid();
+
+                            paid.setPaymentId(paymentSelected.getId());
+                            paid.setTransactionId(transaction.getId());
+                            paid.setTimestampCreated(transaction.getTimestampCreated());
+
+                            int nPaidID = Common.getInstance().dbHelper.createPaid(paid);
+
+                            paid.setId(nPaidID);
+
+                            paymentSelected.setLastPaidId(nPaidID);
+                            transaction.setPaidId(nPaidID);
+
+                            Common.getInstance().dbHelper.updatePayment(paymentSelected);
+                            Common.getInstance().dbHelper.updateTransaction(transaction);
+
+                            mContext.getSupportFragmentManager().popBackStack(Constant.FRAGMENT_EXPENSE_AS_PAYED, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 //                        mContext.getSupportFragmentManager().popBackStackImmediate();
+                        } else {
+                            Toast.makeText(mContext, "Selected Transaction has already been binded with other payments, pls select another one", Toast.LENGTH_SHORT).show();
+                        }
+
                         return;
                     }
                     TransactionDetailFragment f = new TransactionDetailFragment();
                     String title = Constant.FRAGMENT_TRANSACTION_DETAIL;
                     f.smsItem = Common.getInstance().dbHelper.getSms(transaction.getSmsId());
 
-                    FragmentTransaction transaction = mContext.getSupportFragmentManager()
+                    FragmentTransaction fragmentTransaction = mContext.getSupportFragmentManager()
                             .beginTransaction();
-                    transaction.add(R.id.content_frame, f, title).addToBackStack(title).commit();
+                    fragmentTransaction.add(R.id.content_frame, f, title).addToBackStack(title).commit();
                 }
             });
 

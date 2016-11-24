@@ -152,7 +152,7 @@ public class AddBankFragment extends CustomFragment {
 
         if(bankNew.getFlagActive() == 1) {
             Common.getInstance().bankActive = bankNew;
-            Common.getInstance().getTransaction();
+            Common.getInstance().syncBetweenTransactionAndSms();
         }
 
         Toast.makeText(mContext, "new bank info has been added successfully", Toast.LENGTH_SHORT).show();

@@ -14,19 +14,21 @@ public class Transaction {
     int _smsId;
     int _amount;
     int _mode; //0-balance, 1-income, 2-spending
+    int _paidId;
     long _timestmapCreated;
 
     public Transaction() {
 
     }
 
-    public Transaction(String accountName, String identifier, int bankId, int smsId, int amount, int mode, int timestampCreated) {
+    public Transaction(String accountName, String identifier, int bankId, int smsId, int amount, int mode, int paidId, int timestampCreated) {
         _accountName = accountName;
         _identifier = identifier;
         _bankId = bankId;
         _smsId = smsId;
         _amount = amount;
         _mode = mode;
+        _paidId = paidId;
         _timestmapCreated = timestampCreated;
     }
 
@@ -59,6 +61,10 @@ public class Transaction {
         _mode = mode;
     }
 
+    public void setPaidId(int paidId) {
+        _paidId = paidId;
+    }
+
     public void setTimestampCreated(long timestampCreated) {
         _timestmapCreated = timestampCreated;
     }
@@ -89,6 +95,10 @@ public class Transaction {
 
     public int getMode() {
         return _mode;
+    }
+
+    public int getPaidId() {
+        return _paidId;
     }
 
     public long getTimestampCreated() {

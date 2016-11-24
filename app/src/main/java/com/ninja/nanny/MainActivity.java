@@ -21,7 +21,6 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.ninja.nanny.Adapter.LeftNavAdapter;
-import com.ninja.nanny.Comparator.PaymentComparator;
 import com.ninja.nanny.Comparator.SmsComparator;
 import com.ninja.nanny.Custom.CustomActivity;
 import com.ninja.nanny.Fragment.AddBankFragment;
@@ -33,9 +32,7 @@ import com.ninja.nanny.Fragment.SmsFragment;
 import com.ninja.nanny.Fragment.TransactionFragment;
 import com.ninja.nanny.Fragment.WishFragment;
 import com.ninja.nanny.Helper.DatabaseHelper;
-import com.ninja.nanny.Model.Payment;
 import com.ninja.nanny.Model.Sms;
-import com.ninja.nanny.Model.Transaction;
 import com.ninja.nanny.Model.Wish;
 import com.ninja.nanny.Model.WishSaving;
 import com.ninja.nanny.Preference.UserPreference;
@@ -45,7 +42,6 @@ import com.ninja.nanny.Utils.Constant;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 
@@ -85,6 +81,8 @@ public class MainActivity extends CustomActivity {
         }
 
         UserPreference.getInstance().pref = getSharedPreferences(Constant.PREF_NAME, Context.MODE_PRIVATE);
+        syncSettingInfo();
+
         Common.getInstance().dbHelper = new DatabaseHelper(getApplicationContext());
         Common.getInstance().listBanks = Common.getInstance().dbHelper.getAllBanks();
         Common.getInstance().listAllWishes = Common.getInstance().dbHelper.getAllWishes();
@@ -92,155 +90,74 @@ public class MainActivity extends CustomActivity {
         Common.getInstance().listFinishedWishes = Common.getInstance().dbHelper.getFinishedWishes();
         Common.getInstance().listAllPayments = Common.getInstance().dbHelper.getAllPayments();
         Common.getInstance().listSms = Common.getInstance().dbHelper.getAllSms();
-        Common.getInstance().listTransactions = new ArrayList<Transaction>();
-        syncSettingInfo();
-        checkPayingWishes();
+        Common.getInstance().listAllTransactions = Common.getInstance().dbHelper.getAllTransactions();
 
-        if(Common.getInstance().isActiveBankExist()) {
-            Common.getInstance().getTransaction();
+        if(Common.getInstance().timestampInitConfig > 0) {
+
+            if(Common.getInstance().isActiveBankExist()) {
+                //        if (weHavePermissionToReadSMS()) {
+                //            syncSms();
+                //        } else {
+                //            requestReadSMSPermissionFirst();
+                //        }
+
+                Common.getInstance().syncBetweenTransactionAndSms();
+                Common.getInstance().checkWishSavingPast();
+            }
         }
 
-
-//        if (weHavePermissionToReadSMS()) {
-//            syncSms();
-//        } else {
-//            requestReadSMSPermissionFirst();
-//        }
-
-        processPayments();
-
+        sampleWishData();
     }
 
-    void checkPayingWishes() {
+    void sampleWishData() {
         Calendar c = Calendar.getInstance();
-        int nDayOfMonth = c.get(Calendar.DAY_OF_MONTH);
-        int nMonth = c.get(Calendar.MONTH);
-        int nYear = c.get(Calendar.YEAR);
+        Wish wish = new Wish("wish1", 5000, 500, 1200, c.getTimeInMillis(), -1, 1);
 
-        if(nDayOfMonth >= Common.getInstance().nSalaryDate) {
-            nMonth ++;
-            if(nMonth == 12) {
-                nYear ++;
-                nMonth = 0;
-            }
-        }
+        int nWishId = Common.getInstance().dbHelper.createWish(wish);
+        wish.setId(nWishId);
 
-        int nDateSaving = nYear * 100 + nMonth;
+        WishSaving wishSaving = new WishSaving(nWishId, 100, 201605);
+        int nWishSavingId = Common.getInstance().dbHelper.createWishSaving(wishSaving);
 
-        for(int i = 0; i < Common.getInstance().listActiveWishes.size(); i ++) {
-            Wish wish = Common.getInstance().listActiveWishes.get(i);
+        wish.setLastSavingId(nWishSavingId);
+        Common.getInstance().dbHelper.updateWish(wish);
 
-            int nLastSavingId = wish.getLastSavingId();
+        wishSaving = new WishSaving(nWishId, 200, 201606);
+        nWishSavingId = Common.getInstance().dbHelper.createWishSaving(wishSaving);
 
-            if(nLastSavingId >= 0) {
-                WishSaving wishSaving = Common.getInstance().dbHelper.getWishSaving(nLastSavingId);
+        wish.setLastSavingId(nWishSavingId);
+        Common.getInstance().dbHelper.updateWish(wish);
 
-                if(wishSaving.getDateCreated() == nDateSaving) {
-                    continue;
-                }
-            }
+        wishSaving = new WishSaving(nWishId, 300, 201607);
+        nWishSavingId = Common.getInstance().dbHelper.createWishSaving(wishSaving);
 
-            int nTotalAmount = wish.getTotalAmount();
-            int nSavingAmount = wish.getMonthlyPayment();
-            int nUpdatedSavedAmount = wish.getSavedAmount() + nSavingAmount;
+        wish.setLastSavingId(nWishSavingId);
+        Common.getInstance().dbHelper.updateWish(wish);
 
-            if(nUpdatedSavedAmount > nTotalAmount) {
-                nUpdatedSavedAmount = nTotalAmount;
-                nSavingAmount = nTotalAmount - wish.getSavedAmount();
-            }
+        wishSaving = new WishSaving(nWishId, 400, 201608);
+        nWishSavingId = Common.getInstance().dbHelper.createWishSaving(wishSaving);
 
-            WishSaving wishSaving = new WishSaving(wish.getId(), nSavingAmount, nDateSaving);
-            int nWishSavingId = Common.getInstance().dbHelper.createWishSaving(wishSaving);
-            wishSaving.setId(nWishSavingId);
+        wish.setLastSavingId(nWishSavingId);
+        Common.getInstance().dbHelper.updateWish(wish);
 
-            wish.setLastSavingId(nWishSavingId);
-            wish.setSavedAmount(nUpdatedSavedAmount);
+        wishSaving = new WishSaving(nWishId, 200, 201609);
+        nWishSavingId = Common.getInstance().dbHelper.createWishSaving(wishSaving);
 
-            if(nUpdatedSavedAmount == nTotalAmount) {
-                wish.setFlagActive(0); // this is finished
-            }
+        wish.setLastSavingId(nWishSavingId);
+        Common.getInstance().dbHelper.updateWish(wish);
 
-            Common.getInstance().dbHelper.updateWish(wish);
-        }
-
-        Common.getInstance().listActiveWishes = Common.getInstance().dbHelper.getActiveWishes();
-        Common.getInstance().listFinishedWishes = Common.getInstance().dbHelper.getFinishedWishes();
     }
 
     void syncSettingInfo() {
+        Common.getInstance().timestampInitConfig = UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_INIT_CONFIG_TIMESTAMP, (long)0);
         Common.getInstance().nMinimalDayAmount = UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_MINIMAL_AMOUNT_PER_DAY, 0);
         Common.getInstance().nSalaryDate = UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_SALARY_DATE, 15);
         Common.getInstance().nMonthlyIncome = UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_MONTHLY_INCOME, 0);
         Common.getInstance().nUsedAmount = UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_USED_SALARY, 0);
         Common.getInstance().nToleranceDays = UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_TOLERANCE_DAYS, 2);
         Common.getInstance().nTolerancePercents = UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_TOLERANCE_PERCENT, 5);
-    }
-
-    void processPayments() {
-        Collections.sort(Common.getInstance().listAllPayments, new PaymentComparator());
-
-        Common.getInstance().listCurrentPayments = new ArrayList<Payment>();
-
-        Calendar cal = Calendar.getInstance();
-        int yearNow = cal.get(Calendar.YEAR);
-        int monthNow = cal.get(Calendar.MONTH);
-        int dayNow = cal.get(Calendar.DAY_OF_MONTH);
-
-        int nLowDayLimit = 0;
-        int nHighDayLimit = 0;
-
-        if(dayNow <= Common.getInstance().nSalaryDate) {
-            nHighDayLimit = yearNow * 32 * 12 + monthNow * 32 + Common.getInstance().nSalaryDate;
-
-            monthNow --;
-            if(monthNow == -1) {
-                monthNow = 11;
-                yearNow --;
-            }
-
-            nLowDayLimit = yearNow * 32 * 12 + monthNow * 32 + Common.getInstance().nSalaryDate;
-        } else {
-            nLowDayLimit = yearNow * 32 * 12 + monthNow * 32 + Common.getInstance().nSalaryDate;
-
-            monthNow ++;
-            if(monthNow == 12) {
-                monthNow = 0;
-                yearNow ++;
-            }
-
-            nHighDayLimit = yearNow * 32 * 12 + monthNow * 32 + Common.getInstance().nSalaryDate;
-        }
-
-
-        for(int i = 0; i < Common.getInstance().listAllPayments.size(); i ++) {
-            Payment paymentTmp = Common.getInstance().listAllPayments.get(i);
-            int nPaymentMode = paymentTmp.getPaymentMode();
-
-            if(nPaymentMode == 0 || nPaymentMode == 2) {
-                Common.getInstance().listCurrentPayments.add(paymentTmp);
-                continue;
-            }
-
-            cal.setTimeInMillis(paymentTmp.getTimestampCreated());
-            int monthTmp = cal.get(Calendar.MONTH);
-            int yearTmp = cal.get(Calendar.YEAR);
-            int dayTmp = cal.get(Calendar.DAY_OF_MONTH);
-
-            if(dayTmp > paymentTmp.getDateOfMonth()) {
-                monthTmp ++;
-                if(monthTmp == 12) {
-                    monthTmp = 0;
-                    yearTmp ++;
-                }
-            }
-
-            int nDay = yearTmp * 32 * 12 + monthTmp * 32 + paymentTmp.getDateOfMonth();
-
-            if(nDay <= nLowDayLimit) break;
-            if(nDay > nHighDayLimit) continue;
-
-            Common.getInstance().listCurrentPayments.add(paymentTmp);
-        }
+        Common.getInstance().timeWishSaving = UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_WISH_SAVING_TIME, 0);
+        Common.getInstance().timestampSms = UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_SMS_TIMESTAMP, (long)0);
     }
 
     private boolean weHavePermissionToReadSMS() {
@@ -376,9 +293,7 @@ public class MainActivity extends CustomActivity {
                     }
                 });
 
-        boolean isSetInitConfig = UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_IS_INIT_CONFIG, false);
-
-        if(isSetInitConfig) {
+        if(Common.getInstance().timestampInitConfig > 0) {
             launchFragment(0);
         } else {
             Toast.makeText(getBaseContext(), "You should set initial configuration", Toast.LENGTH_SHORT).show();
@@ -394,9 +309,7 @@ public class MainActivity extends CustomActivity {
 
         Log.e("number", nStackCount + "");
         if(currFrag instanceof SettingFragment) {
-            boolean isSetInitConfig = UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_IS_INIT_CONFIG, false);
-
-            if(!isSetInitConfig) {
+            if(Common.getInstance().timestampInitConfig == 0) {
                 Toast.makeText(getBaseContext(), "You should set initial configuration", Toast.LENGTH_SHORT).show();
                 return;
             }

@@ -68,7 +68,7 @@ public class EditPaymentFragment extends CustomFragment {
         btnCheckSaving.setOnClickListener(this);
 
         etTitle.setText(paymentSelected.getTitle());
-        etDetail.setText(paymentSelected.getDetail());
+        etDetail.setText(paymentSelected.getIdentifier());
         etAmount.setText(paymentSelected.getAmount() + "");
         etDateofMonth.setText(paymentSelected.getDateOfMonth() + "");
 
@@ -168,7 +168,7 @@ public class EditPaymentFragment extends CustomFragment {
         }
 
         paymentSelected.setTitle(strTitle);
-        paymentSelected.setDetail(strDetail);
+        paymentSelected.setIdentifier(strDetail);
         paymentSelected.setAmount(nAmount);
         paymentSelected.setDateOfMonth(nDateOfMonth);
         paymentSelected.setPaymentMode(nPaymentMode);
@@ -189,15 +189,6 @@ public class EditPaymentFragment extends CustomFragment {
                         // continue with delete
                         Common.getInstance().dbHelper.deletePayment(paymentSelected.getId());
                         Common.getInstance().listAllPayments.remove(paymentSelected);
-
-                        for(int i = 0; i < Common.getInstance().listCurrentPayments.size(); i ++) {
-                            Payment paymentTmp = Common.getInstance().listCurrentPayments.get(i);
-
-                            if(paymentTmp.getId() == paymentSelected.getId()){
-                                Common.getInstance().listCurrentPayments.remove(i);
-                                break;
-                            }
-                        }
 
                         mContext.getSupportFragmentManager().popBackStackImmediate();
                         Toast.makeText(mContext, "payment info has been deleted successfully", Toast.LENGTH_SHORT).show();

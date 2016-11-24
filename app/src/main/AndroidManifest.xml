@@ -18,6 +18,9 @@
         <activity android:name=".MainActivity"
             android:windowSoftInputMode="adjustPan">
         </activity>
+        <activity android:name=".AdvisorActivity"
+            android:windowSoftInputMode="adjustResize">
+        </activity>
     </application>
 
 </manifest>

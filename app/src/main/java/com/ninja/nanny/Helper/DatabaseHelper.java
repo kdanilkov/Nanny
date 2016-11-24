@@ -8,6 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 import com.ninja.nanny.Model.Bank;
+import com.ninja.nanny.Model.Paid;
 import com.ninja.nanny.Model.Payment;
 import com.ninja.nanny.Model.Sms;
 import com.ninja.nanny.Model.Transaction;
@@ -37,6 +38,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	private static final String TBL_WISH_SAVING = "wish_saving";
 	private static final String TBL_PAYMENTS = "payments";
 	private static final String TBL_SMS = "sms";
+	private static final String TBL_PAID = "paid";
 
 	//bank table keys
 	private static final String KEY_ID = "id";
@@ -47,11 +49,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	private static final String KEY_FLAG_ACTIVE = "flag_active";
 
 	//transaction table keys
-	private static final String KEY_IDENTIFIER = "identifier";
 	private static final String KEY_BANK_ID = "bank_id";
 	private static final String KEY_SMS_ID = "sms_id";
 	private static final String KEY_AMOUNT = "amount";
 	private static final String KEY_MODE = "mode";
+	private static final String KEY_PAID_ID = "paid_id";
 	private static final String KEY_CREATED_AT = "created_at";
 
 	//wish table keys
@@ -65,27 +67,30 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	private static final String KEY_WISH_ID = "wish_id";
 
 	//payment table keys
-	private static final String KEY_DETAIL = "detail";
+	private static final String KEY_IDENTIFIER = "identifier";
 	private static final String KEY_DATE_OF_MONTH = "date_of_month";
 	private static final String KEY_PAYMENT_MODE = "payment_mode";
-	private static final String KEY_PAID_STATUS = "paid_status";
+	private static final String KEY_LAST_PAID_ID = "last_paid_id";
 
 	//sms table keys
 	private static final String KEY_ADDRESS = "address";
 	private static final String KEY_TEXT = "text";
-	private static final String KEY_TIME_STAMP = "time_stamp";
+
+	//paid table keys
+	private static final String KEY_PAYMENT_ID = "payment_id";
+	private static final String KEY_TRANSACTION_ID = "transaction_id";
 
 	// Banks table create statement
 	private static final String CREATE_TABLE_BANKS = "CREATE TABLE IF NOT EXISTS "
 			+ TBL_BANKS + "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_ACCOUNT_NAME
 			+ " TEXT," + KEY_IDX_KIND + " INTEGER," + KEY_BALANCE + " INTEGER,"
-			 + KEY_NOTIFICATION_MODE + " INTEGER," + KEY_FLAG_ACTIVE + " INTEGER," + KEY_TIME_STAMP + " INTEGER" + ")";
+			 + KEY_NOTIFICATION_MODE + " INTEGER," + KEY_FLAG_ACTIVE + " INTEGER," + KEY_CREATED_AT + " INTEGER" + ")";
 
 	// Transactions table create statement
 	private static final String CREATE_TABLE_TRANSACTIONS = "CREATE TABLE IF NOT EXISTS "
 			+ TBL_TRANSACTION + "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_ACCOUNT_NAME
 			+ " TEXT," + KEY_IDENTIFIER + " TEXT," + KEY_BANK_ID + " INTEGER," + KEY_SMS_ID + " INTEGER,"
-			+ KEY_AMOUNT + " INTEGER," + KEY_MODE + " INTEGER,"	+ KEY_CREATED_AT + " INTEGER" + ")";
+			+ KEY_AMOUNT + " INTEGER," + KEY_MODE + " INTEGER," + KEY_PAID_ID + " INTEGER,"	+ KEY_CREATED_AT + " INTEGER" + ")";
 
 	// Wish table create statement
 	private static final String CREATE_TABLE_WISH = "CREATE TABLE IF NOT EXISTS "
@@ -100,14 +105,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 	// Payments table create statement
 	private static final String CREATE_TABLE_PAYMENTS = "CREATE TABLE IF NOT EXISTS "
-			+ TBL_PAYMENTS + "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_TITLE + " TEXT," + KEY_DETAIL
+			+ TBL_PAYMENTS + "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_TITLE + " TEXT," + KEY_IDENTIFIER
 			+ " TEXT," + KEY_AMOUNT + " INTEGER," + KEY_DATE_OF_MONTH + " INTEGER,"
-			+ KEY_PAYMENT_MODE + " INTEGER," + KEY_PAID_STATUS + " INTEGER," + KEY_CREATED_AT + " INTEGER" + ")";
+			+ KEY_PAYMENT_MODE + " INTEGER," + KEY_LAST_PAID_ID + " INTEGER," + KEY_CREATED_AT + " INTEGER" + ")";
 
 	//Sms table create statement
 	private static final String CREATE_TABLE_SMS = "CREATE TABLE IF NOT EXISTS "
 			+ TBL_SMS + "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_ADDRESS
-			+ " TEXT," + KEY_TEXT + " TEXT," + KEY_TIME_STAMP + " INTEGER" + ")";
+			+ " TEXT," + KEY_TEXT + " TEXT," + KEY_CREATED_AT + " INTEGER" + ")";
+
+	//paid table create statement
+	private static final String CREATE_TABLE_PAID = "CREATE TABLE IF NOT EXISTS "
+			+ TBL_PAID + "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_PAYMENT_ID
+			+ " INTEGER," + KEY_TRANSACTION_ID + " INTEGER," + KEY_CREATED_AT + " INTEGER" + ")";
 
 	public DatabaseHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -122,6 +132,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		db.execSQL(CREATE_TABLE_WISH_SAVING);
 		db.execSQL(CREATE_TABLE_PAYMENTS);
 		db.execSQL(CREATE_TABLE_SMS);
+		db.execSQL(CREATE_TABLE_PAID);
 	}
 
 	@Override
@@ -150,7 +161,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		values.put(KEY_BALANCE, bank.getBalance());
 		values.put(KEY_NOTIFICATION_MODE, bank.getNotificationMode());
 		values.put(KEY_FLAG_ACTIVE, bank.getFlagActive());
-		values.put(KEY_TIME_STAMP, bank.getTimestamp());
+		values.put(KEY_CREATED_AT, bank.getTimestamp());
 
 		// insert row
 		long bank_id = db.insert(TBL_BANKS, null, values);
@@ -182,7 +193,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		bank.setBalance(c.getInt(c.getColumnIndex(KEY_BALANCE)));
 		bank.setNotificationMode(c.getInt(c.getColumnIndex(KEY_NOTIFICATION_MODE)));
 		bank.setFlagActive(c.getInt(c.getColumnIndex(KEY_FLAG_ACTIVE)));
-		bank.setTimestamp(c.getLong(c.getColumnIndex(KEY_TIME_STAMP)));
+		bank.setTimestamp(c.getLong(c.getColumnIndex(KEY_CREATED_AT)));
 
 		return bank;
 	}
@@ -209,7 +220,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 				bank.setBalance(c.getInt(c.getColumnIndex(KEY_BALANCE)));
 				bank.setNotificationMode(c.getInt(c.getColumnIndex(KEY_NOTIFICATION_MODE)));
 				bank.setFlagActive(c.getInt(c.getColumnIndex(KEY_FLAG_ACTIVE)));
-				bank.setTimestamp(c.getLong(c.getColumnIndex(KEY_TIME_STAMP)));
+				bank.setTimestamp(c.getLong(c.getColumnIndex(KEY_CREATED_AT)));
 
 				// adding to bank list
 				banks.add(bank);
@@ -246,7 +257,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		values.put(KEY_BALANCE, bank.getBalance());
 		values.put(KEY_NOTIFICATION_MODE, bank.getNotificationMode());
 		values.put(KEY_FLAG_ACTIVE, bank.getFlagActive());
-		values.put(KEY_TIME_STAMP, bank.getTimestamp());
+		values.put(KEY_CREATED_AT, bank.getTimestamp());
 
 		// updating row
 		return db.update(TBL_BANKS, values, KEY_ID + " = ?",
@@ -581,6 +592,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		values.put(KEY_SMS_ID, transaction.getSmsId());
 		values.put(KEY_AMOUNT, transaction.getAmount());
 		values.put(KEY_MODE, transaction.getMode());
+		values.put(KEY_PAID_ID, transaction.getPaidId());
 		values.put(KEY_CREATED_AT, transaction.getTimestampCreated());
 
 		// insert row
@@ -613,6 +625,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		transaction.setSmsId(c.getInt(c.getColumnIndex(KEY_SMS_ID)));
 		transaction.setAmount(c.getInt(c.getColumnIndex(KEY_AMOUNT)));
 		transaction.setMode(c.getInt(c.getColumnIndex(KEY_MODE)));
+		transaction.setPaidId(c.getInt(c.getColumnIndex(KEY_PAID_ID)));
 		transaction.setTimestampCreated(c.getLong(c.getColumnIndex(KEY_CREATED_AT)));
 
 		return transaction;
@@ -641,6 +654,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 				transaction.setSmsId(c.getInt(c.getColumnIndex(KEY_SMS_ID)));
 				transaction.setAmount(c.getInt(c.getColumnIndex(KEY_AMOUNT)));
 				transaction.setMode(c.getInt(c.getColumnIndex(KEY_MODE)));
+				transaction.setPaidId(c.getInt(c.getColumnIndex(KEY_PAID_ID)));
 				transaction.setTimestampCreated(c.getLong(c.getColumnIndex(KEY_CREATED_AT)));
 
 				// adding to transaction list
@@ -679,6 +693,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		values.put(KEY_SMS_ID, transaction.getSmsId());
 		values.put(KEY_AMOUNT, transaction.getAmount());
 		values.put(KEY_MODE, transaction.getMode());
+		values.put(KEY_PAID_ID, transaction.getPaidId());
 		values.put(KEY_CREATED_AT, transaction.getTimestampCreated());
 
 		// updating row
@@ -706,7 +721,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		ContentValues values = new ContentValues();
 		values.put(KEY_ADDRESS, sms.getAddress());
 		values.put(KEY_TEXT, sms.getText());
-		values.put(KEY_TIME_STAMP, sms.getTimestamp());
+		values.put(KEY_CREATED_AT, sms.getTimestamp());
 
 		// insert row
 		long sms_id = db.insert(TBL_SMS, null, values);
@@ -737,7 +752,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		sms.setId(c.getInt(c.getColumnIndex(KEY_ID)));
 		sms.setAddress(c.getString(c.getColumnIndex(KEY_ADDRESS)));
 		sms.setText(c.getString(c.getColumnIndex(KEY_TEXT)));
-		sms.setTimestamp(c.getLong(c.getColumnIndex(KEY_TIME_STAMP)));
+		sms.setTimestamp(c.getLong(c.getColumnIndex(KEY_CREATED_AT)));
 
 		return sms;
 	}
@@ -761,7 +776,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 				sms.setId(c.getInt(c.getColumnIndex(KEY_ID)));
 				sms.setAddress(c.getString(c.getColumnIndex(KEY_ADDRESS)));
 				sms.setText(c.getString(c.getColumnIndex(KEY_TEXT)));
-				sms.setTimestamp(c.getLong(c.getColumnIndex(KEY_TIME_STAMP)));
+				sms.setTimestamp(c.getLong(c.getColumnIndex(KEY_CREATED_AT)));
 
 				// adding to payment list
 				smses.add(sms);
@@ -796,7 +811,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 		values.put(KEY_ADDRESS, sms.getAddress());
 		values.put(KEY_TEXT, sms.getText());
-		values.put(KEY_TIME_STAMP, sms.getTimestamp());
+		values.put(KEY_CREATED_AT, sms.getTimestamp());
 
 		// updating row
 		return db.update(TBL_SMS, values, KEY_ID + " = ?",
@@ -822,11 +837,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 		ContentValues values = new ContentValues();
 		values.put(KEY_TITLE, payment.getTitle());
-		values.put(KEY_DETAIL, payment.getDetail());
+		values.put(KEY_IDENTIFIER, payment.getIdentifier());
 		values.put(KEY_AMOUNT, payment.getAmount());
 		values.put(KEY_DATE_OF_MONTH, payment.getDateOfMonth());
 		values.put(KEY_PAYMENT_MODE, payment.getPaymentMode());
-		values.put(KEY_PAID_STATUS, payment.getPaidStatus());
+		values.put(KEY_LAST_PAID_ID, payment.getLastPaidId());
 		values.put(KEY_CREATED_AT, payment.getTimestampCreated());
 
 		// insert row
@@ -853,11 +868,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		Payment payment = new Payment();
 		payment.setId(c.getInt(c.getColumnIndex(KEY_ID)));
 		payment.setTitle(c.getString(c.getColumnIndex(KEY_TITLE)));
-		payment.setDetail(c.getString(c.getColumnIndex(KEY_DETAIL)));
+		payment.setIdentifier(c.getString(c.getColumnIndex(KEY_IDENTIFIER)));
 		payment.setAmount(c.getInt(c.getColumnIndex(KEY_AMOUNT)));
 		payment.setDateOfMonth(c.getInt(c.getColumnIndex(KEY_DATE_OF_MONTH)));
 		payment.setPaymentMode(c.getInt(c.getColumnIndex(KEY_PAYMENT_MODE)));
-		payment.setPaidStatus(c.getInt(c.getColumnIndex(KEY_PAID_STATUS)));
+		payment.setLastPaidId(c.getInt(c.getColumnIndex(KEY_LAST_PAID_ID)));
 		payment.setTimestampCreated(c.getLong(c.getColumnIndex(KEY_CREATED_AT)));
 
 		return payment;
@@ -881,11 +896,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 				Payment payment = new Payment();
 				payment.setId(c.getInt(c.getColumnIndex(KEY_ID)));
 				payment.setTitle(c.getString(c.getColumnIndex(KEY_TITLE)));
-				payment.setDetail(c.getString(c.getColumnIndex(KEY_DETAIL)));
+				payment.setIdentifier(c.getString(c.getColumnIndex(KEY_IDENTIFIER)));
 				payment.setAmount(c.getInt(c.getColumnIndex(KEY_AMOUNT)));
 				payment.setDateOfMonth(c.getInt(c.getColumnIndex(KEY_DATE_OF_MONTH)));
 				payment.setPaymentMode(c.getInt(c.getColumnIndex(KEY_PAYMENT_MODE)));
-				payment.setPaidStatus(c.getInt(c.getColumnIndex(KEY_PAID_STATUS)));
+				payment.setLastPaidId(c.getInt(c.getColumnIndex(KEY_LAST_PAID_ID)));
 				payment.setTimestampCreated(c.getLong(c.getColumnIndex(KEY_CREATED_AT)));
 				// adding to payment list
 				payments.add(payment);
@@ -919,11 +934,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		ContentValues values = new ContentValues();
 
 		values.put(KEY_TITLE, payment.getTitle());
-		values.put(KEY_DETAIL, payment.getDetail());
+		values.put(KEY_IDENTIFIER, payment.getIdentifier());
 		values.put(KEY_AMOUNT, payment.getAmount());
 		values.put(KEY_DATE_OF_MONTH, payment.getDateOfMonth());
 		values.put(KEY_PAYMENT_MODE, payment.getPaymentMode());
-		values.put(KEY_PAID_STATUS, payment.getPaidStatus());
+		values.put(KEY_LAST_PAID_ID, payment.getLastPaidId());
 		values.put(KEY_CREATED_AT, payment.getTimestampCreated());
 
 		// updating row
@@ -939,6 +954,94 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		db.delete(TBL_PAYMENTS, KEY_ID + " = ?",
 				new String[] { String.valueOf(payment_id) });
 	}
+
+	// ------------------------ "payments" table methods ----------------//
+
+	/*
+	 * Creating a payment
+	 */
+	public int createPaid(Paid paid) {
+		SQLiteDatabase db = this.getWritableDatabase();
+
+		ContentValues values = new ContentValues();
+		values.put(KEY_PAYMENT_ID, paid.getPaymentId());
+		values.put(KEY_TRANSACTION_ID, paid.getTransactionId());
+		values.put(KEY_CREATED_AT, paid.getTimestampCreated());
+
+		// insert row
+		long paid_id = db.insert(TBL_PAID, null, values);
+		return (int)paid_id;
+	}
+
+	/*
+	 * get single payment
+	 */
+	public Paid getPaid(int paid_id) {
+		SQLiteDatabase db = this.getReadableDatabase();
+
+		String selectQuery = "SELECT  * FROM " + TBL_PAID + " WHERE "
+				+ KEY_ID + " = " + paid_id;
+
+		Log.e(LOG, selectQuery);
+
+		Cursor c = db.rawQuery(selectQuery, null);
+
+		if (c != null)
+			c.moveToFirst();
+
+		Paid paid = new Paid();
+		paid.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+		paid.setPaymentId(c.getInt(c.getColumnIndex(KEY_PAYMENT_ID)));
+		paid.setTransactionId(c.getInt(c.getColumnIndex(KEY_TRANSACTION_ID)));
+		paid.setTimestampCreated(c.getLong(c.getColumnIndex(KEY_CREATED_AT)));
+
+		return paid;
+	}
+
+	/**
+	 * getting all payments
+	 * */
+	public List<Paid> getAllPaids() {
+		List<Paid> paids = new ArrayList<Paid>();
+		String selectQuery = "SELECT  * FROM " + TBL_PAID;
+
+		Log.e(LOG, selectQuery);
+
+		SQLiteDatabase db = this.getReadableDatabase();
+		Cursor c = db.rawQuery(selectQuery, null);
+
+		// looping through all rows and adding to list
+		if (c.moveToFirst()) {
+			do {
+				Paid paid = new Paid();
+				paid.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+				paid.setPaymentId(c.getInt(c.getColumnIndex(KEY_PAYMENT_ID)));
+				paid.setTransactionId(c.getInt(c.getColumnIndex(KEY_TRANSACTION_ID)));
+				paid.setTimestampCreated(c.getLong(c.getColumnIndex(KEY_CREATED_AT)));
+
+				// adding to payment list
+				paids.add(paid);
+			} while (c.moveToNext());
+		}
+
+		return paids;
+	}
+
+	/*
+	 * getting payment count
+	 */
+	public int getPaidCount() {
+		String countQuery = "SELECT  * FROM " + TBL_PAID;
+		SQLiteDatabase db = this.getReadableDatabase();
+		Cursor cursor = db.rawQuery(countQuery, null);
+
+		int count = cursor.getCount();
+		cursor.close();
+
+		// return count
+		return count;
+	}
+
 
 	/**
 	 * get datetime

@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import com.ninja.nanny.Custom.CustomFragment;
 import com.ninja.nanny.MainActivity;
+import com.ninja.nanny.Model.Paid;
 import com.ninja.nanny.Model.Payment;
 import com.ninja.nanny.R;
 import com.ninja.nanny.Utils.Common;
@@ -61,7 +62,15 @@ public class ExpenseAsPayedFragment extends CustomFragment {
                     .beginTransaction();
             transaction.add(R.id.content_frame, f, title).addToBackStack(title).commit();
          } else if(v.getId() == R.id.btnCash) {
-            paymentSelected.setPaidStatus(1);
+            Paid paid = new Paid();
+
+            paid.setTransactionId(-1); // because of cash
+            paid.setPaymentId(paymentSelected.getId());
+
+            int nPaidId = Common.getInstance().dbHelper.createPaid(paid);
+            paid.setId(nPaidId);
+
+            paymentSelected.setLastPaidId(nPaidId);
             Common.getInstance().dbHelper.updatePayment(paymentSelected);
 
             mContext.getSupportFragmentManager().popBackStackImmediate();

@@ -1,5 +1,9 @@
 package com.ninja.nanny.Model;
 
+import com.ninja.nanny.Utils.Common;
+
+import java.util.Calendar;
+
 /**
  * Created by Administrator on 10/28/2016.
  */
@@ -7,24 +11,24 @@ package com.ninja.nanny.Model;
 public class Payment {
     int _id;
     String _title;
-    String _detail;
+    String _identifier;
     int _amount;
     int _dateOfMonth;
     int _paymentMode; //0-saving recurrent, 1-saving single, 2-bill payment recurrent, 3-bill payment single
-    int _paidStatus; //0-Unpaid, 1-Paid
+    int _lastPaidId; //-1 - none,
     long _timestampCreated;
 
     public Payment() {
 
     }
 
-    public Payment(String title, String detail, int amount, int dateOfMonth, int paymentMode, int paidStatus, long timestampCreated) {
+    public Payment(String title, String identifier, int amount, int dateOfMonth, int paymentMode, int lastPaidId, long timestampCreated) {
         _title = title;
-        _detail = detail;
+        _identifier = identifier;
         _amount = amount;
         _dateOfMonth = dateOfMonth;
         _paymentMode = paymentMode;
-        _paidStatus = paidStatus;
+        _lastPaidId = lastPaidId;
         _timestampCreated = timestampCreated;
     }
 
@@ -36,7 +40,7 @@ public class Payment {
         _title = title;
     }
 
-    public void setDetail(String detail) {_detail = detail; }
+    public void setIdentifier(String identifier) {_identifier = identifier; }
 
     public void setAmount(int amount) {
         _amount = amount;
@@ -50,8 +54,8 @@ public class Payment {
         _paymentMode = paymentMode;
     }
 
-    public void setPaidStatus(int paidStatus) {
-        _paidStatus = paidStatus;
+    public void setLastPaidId(int lastPaidId) {
+        _lastPaidId = lastPaidId;
     }
 
     public void setTimestampCreated(long timestampCreated) {
@@ -66,7 +70,7 @@ public class Payment {
         return _title;
     }
 
-    public String getDetail() { return _detail; }
+    public String getIdentifier() { return _identifier; }
 
     public int getAmount() {
         return _amount;
@@ -80,11 +84,58 @@ public class Payment {
         return _paymentMode;
     }
 
-    public int getPaidStatus() {
-        return _paidStatus;
+    public int getLastPaidId() {
+        return _lastPaidId;
     }
 
     public long getTimestampCreated() {
         return _timestampCreated;
+    }
+
+    public int getPaidStatus() { // 0-unpaid, 1-paid
+        if(_lastPaidId == -1) return 0;
+        if(_lastPaidId != -1 && (_paymentMode == 1 || _paymentMode == 3)) {
+            return 1;  // for case of single payment
+        }
+
+        Paid paid = Common.getInstance().dbHelper.getPaid(_lastPaidId);
+        long timestampePaid = paid.getTimestampCreated();
+        Calendar c = Calendar.getInstance();
+        long timestampHigh = c.getTimeInMillis();;
+
+        int nDay = c.get(Calendar.DAY_OF_MONTH);
+
+        if(nDay < Common.getInstance().nSalaryDate) {
+            c.add(Calendar.MONTH, -1);
+        }
+
+        c.set(Calendar.DAY_OF_MONTH, Common.getInstance().nSalaryDate);
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        c.set(Calendar.MINUTE, 0);
+
+        long timestampLow = c.getTimeInMillis();
+
+        if(timestampLow < timestampePaid && timestampePaid < timestampHigh){
+            return 1;
+        }
+
+        return 0;
+    }
+
+    public long getRealTimeStampForSingle() { // for single payment, return the timestamp when real payment will be happened.
+        if(_paymentMode == 0 || _paymentMode == 2) return 0;
+
+        Calendar c = Calendar.getInstance();
+        c.setTimeInMillis(_timestampCreated);
+
+        int nDayCreated = c.get(Calendar.DAY_OF_MONTH);
+
+        if(nDayCreated > _dateOfMonth) {
+            c.add(Calendar.MONTH, 1);
+        }
+
+        c.set(Calendar.DAY_OF_MONTH, _dateOfMonth);
+
+        return c.getTimeInMillis();
     }
 }

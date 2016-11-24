@@ -70,7 +70,7 @@
                         android:textColor="@color/white" />
 
                     <com.ninja.nanny.Custom.RegularTextView
-                        android:text="Left on this week"
+                        android:text="Free money on this week"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/textView2"
@@ -92,7 +92,7 @@
                         android:textSize="36sp" />
 
                     <com.ninja.nanny.Custom.RegularTextView
-                        android:text="Left on this month"
+                        android:text="Free money on this month"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/textView4"
@@ -164,7 +164,7 @@
                     android:textSize="36sp" />
 
                 <com.ninja.nanny.Custom.RegularTextView
-                    android:text="Spent every month to Wishes"
+                    android:text="Reserved for wishes"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/textView9"

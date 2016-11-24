@@ -21,6 +21,8 @@ import com.ninja.nanny.R;
 import com.ninja.nanny.Utils.Common;
 import com.ninja.nanny.Utils.Constant;
 
+import java.util.List;
+
 public class PaymentFragment extends CustomFragment {
 
 
@@ -88,12 +90,14 @@ public class PaymentFragment extends CustomFragment {
             return;
         }
 
-        int nSize = Common.getInstance().listAllPayments.size();
+        List<Payment> listActive = Common.getInstance().listAllPayments;
 
-        if(isCurrent) nSize = Common.getInstance().listCurrentPayments.size();
+        if(isCurrent){
+            listActive = Common.getInstance().getCurrentPayments();
+        }
 
-        for(int i = 0; i < nSize; i ++) {
-            final Payment payment = Common.getInstance().listAllPayments.get(i);
+        for(int i = 0; i < listActive.size(); i ++) {
+            final Payment payment = listActive.get(i);
 
             int nPaymentMode = payment.getPaymentMode();
             int nPaidStatus = payment.getPaidStatus();
