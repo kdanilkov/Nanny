@@ -167,74 +167,106 @@ public class ViewWishFragment extends CustomFragment implements OnChartValueSele
         rightAxis.setGranularityEnabled(false);
 
 
-        LineDataSet set1, set2, set3, set4;
+        LineDataSet set1 = null, set2 = null, set3 = null, set4 = null;
 
         if (mChart.getData() != null &&
                 mChart.getData().getDataSetCount() > 0) {
-            set1 = (LineDataSet) mChart.getData().getDataSetByIndex(0);
-            set2 = (LineDataSet) mChart.getData().getDataSetByIndex(1);
-            set3 = (LineDataSet) mChart.getData().getDataSetByIndex(2);
-            set4 = (LineDataSet) mChart.getData().getDataSetByIndex(3);
-            set1.setValues(yVals1);
-            set2.setValues(yVals2);
-            set3.setValues(yVals3);
-            set4.setValues(yVals4);
+            if(yVals1.size() > 0 && yVals3.size() > 0) {
+                set1 = (LineDataSet) mChart.getData().getDataSetByIndex(0);
+                set2 = (LineDataSet) mChart.getData().getDataSetByIndex(1);
+                set3 = (LineDataSet) mChart.getData().getDataSetByIndex(2);
+                set4 = (LineDataSet) mChart.getData().getDataSetByIndex(3);
+                set1.setValues(yVals1);
+                set2.setValues(yVals2);
+                set3.setValues(yVals3);
+                set4.setValues(yVals4);
+            } else if(yVals1.size() > 0 && yVals3.size() == 0) {
+                set1 = (LineDataSet) mChart.getData().getDataSetByIndex(0);
+                set2 = (LineDataSet) mChart.getData().getDataSetByIndex(1);
+                set1.setValues(yVals1);
+                set2.setValues(yVals2);
+            } else if(yVals1.size() == 0 && yVals3.size() > 0) {
+                set3 = (LineDataSet) mChart.getData().getDataSetByIndex(0);
+                set4 = (LineDataSet) mChart.getData().getDataSetByIndex(1);
+                set3.setValues(yVals3);
+                set4.setValues(yVals4);
+            }
+
             mChart.getData().notifyDataChanged();
             mChart.notifyDataSetChanged();
         } else {
             // create a dataset and give it a type
-            set1 = new LineDataSet(yVals1, "Current");
+            if(yVals1.size() > 0) {
+                set1 = new LineDataSet(yVals1, "Current");
 
-            set1.setAxisDependency(YAxis.AxisDependency.RIGHT);
-            set1.setColor(Color.RED);
-            set1.setCircleColor(Color.WHITE);
-            set1.setLineWidth(2f);
-            set1.setCircleRadius(3f);
+                set1.setAxisDependency(YAxis.AxisDependency.RIGHT);
+                set1.setColor(Color.RED);
+                set1.setCircleColor(Color.WHITE);
+                set1.setLineWidth(2f);
+                set1.setCircleRadius(3f);
 //            set1.setFillAlpha(255);
-            set1.setFillColor(Color.RED);
-            set1.setHighLightColor(Color.rgb(244, 117, 117));
-            set1.setDrawCircleHole(false);
+                set1.setFillColor(Color.RED);
+                set1.setHighLightColor(Color.rgb(244, 117, 117));
+                set1.setDrawCircleHole(false);
+            }
 
-            set2 = new LineDataSet(yVals2, "Sum");
-            set2.setAxisDependency(YAxis.AxisDependency.LEFT);
-            set2.setColor(Color.BLUE);
-            set2.setCircleColor(Color.WHITE);
-            set2.setLineWidth(2f);
-            set2.setCircleRadius(3f);
+            if(yVals2.size() > 0) {
+                set2 = new LineDataSet(yVals2, "Sum");
+                set2.setAxisDependency(YAxis.AxisDependency.LEFT);
+                set2.setColor(Color.BLUE);
+                set2.setCircleColor(Color.WHITE);
+                set2.setLineWidth(2f);
+                set2.setCircleRadius(3f);
 //            set2.setFillAlpha(255);
-            set2.setFillColor(Color.BLUE);
-            set2.setDrawCircleHole(false);
-            set2.setHighLightColor(Color.rgb(244, 117, 117));
+                set2.setFillColor(Color.BLUE);
+                set2.setDrawCircleHole(false);
+                set2.setHighLightColor(Color.rgb(244, 117, 117));
+            }
 
-            set3 = new LineDataSet(yVals3, "Future");
-            set3.setAxisDependency(YAxis.AxisDependency.RIGHT);
-            set3.setColor(ColorTemplate.colorWithAlpha(Color.RED, 100));
-            set3.setCircleColor(Color.WHITE);
-            set3.setLineWidth(2f);
-            set3.setCircleRadius(3f);
+            if(yVals3.size() > 0) {
+                set3 = new LineDataSet(yVals3, "Future");
+                set3.setAxisDependency(YAxis.AxisDependency.RIGHT);
+                set3.setColor(ColorTemplate.colorWithAlpha(Color.RED, 100));
+                set3.setCircleColor(Color.WHITE);
+                set3.setLineWidth(2f);
+                set3.setCircleRadius(3f);
 //            set3.setFillAlpha(65);
-            set3.setFillColor(ColorTemplate.colorWithAlpha(Color.RED, 100));
-            set3.setDrawCircleHole(false);
-            set3.setHighLightColor(Color.rgb(244, 117, 117));
+                set3.setFillColor(ColorTemplate.colorWithAlpha(Color.RED, 100));
+                set3.setDrawCircleHole(false);
+                set3.setHighLightColor(Color.rgb(244, 117, 117));
+            }
 
-            set4 = new LineDataSet(yVals4, "Sum");
-            set4.setAxisDependency(YAxis.AxisDependency.LEFT);
-            set4.setColor(ColorTemplate.colorWithAlpha(Color.BLUE, 100));
-            set4.setCircleColor(Color.WHITE);
-            set4.setLineWidth(2f);
-            set4.setCircleRadius(3f);
+            if(yVals4.size() > 0) {
+                set4 = new LineDataSet(yVals4, "Sum");
+                set4.setAxisDependency(YAxis.AxisDependency.LEFT);
+                set4.setColor(ColorTemplate.colorWithAlpha(Color.BLUE, 100));
+                set4.setCircleColor(Color.WHITE);
+                set4.setLineWidth(2f);
+                set4.setCircleRadius(3f);
 //            set4.setFillAlpha(65);
-            set4.setFillColor(ColorTemplate.colorWithAlpha(Color.BLUE, 100));
-            set4.setDrawCircleHole(false);
-            set4.setHighLightColor(Color.rgb(244, 117, 117));
+                set4.setFillColor(ColorTemplate.colorWithAlpha(Color.BLUE, 100));
+                set4.setDrawCircleHole(false);
+                set4.setHighLightColor(Color.rgb(244, 117, 117));
+            }
 
             // create a data object with the datasets
-            LineData data = new LineData(set1, set2, set3, set4);
-            data.setValueTextColor(Color.WHITE);
-            data.setValueTextSize(9f);
+            LineData data = null;
+            if(yVals1.size() > 0 && yVals3.size() > 0) {
+                data = new LineData(set1, set2, set3, set4);
+            } else if(yVals1.size() > 0 && yVals3.size() == 0) {
+                data = new LineData(set1, set2);
+            } else if(yVals1.size() == 0 && yVals3.size() > 0) {
+                data = new LineData(set3, set4);
+            }
 
-            // set data
-            mChart.setData(data);
+            if(data != null) {
+//                data = new LineData(set1, set2, set3, set4);
+                data.setValueTextColor(Color.WHITE);
+                data.setValueTextSize(9f);
+
+                // set data
+                mChart.setData(data);
+            }
         }
     }
 
