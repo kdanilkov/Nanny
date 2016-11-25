@@ -79,6 +79,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	//paid table keys
 	private static final String KEY_PAYMENT_ID = "payment_id";
 	private static final String KEY_TRANSACTION_ID = "transaction_id";
+	private static final String KEY_PREV_PAID_ID = "prev_paid_id";
+	private static final String KEY_TIMESTAMP_PAYMENT = "timestamp_payment";
 
 	// Banks table create statement
 	private static final String CREATE_TABLE_BANKS = "CREATE TABLE IF NOT EXISTS "
@@ -117,7 +119,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	//paid table create statement
 	private static final String CREATE_TABLE_PAID = "CREATE TABLE IF NOT EXISTS "
 			+ TBL_PAID + "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_PAYMENT_ID
-			+ " INTEGER," + KEY_TRANSACTION_ID + " INTEGER," + KEY_CREATED_AT + " INTEGER" + ")";
+			+ " INTEGER," + KEY_TRANSACTION_ID + " INTEGER," + KEY_PREV_PAID_ID + " INTEGER," + KEY_TIMESTAMP_PAYMENT + " INTEGER," + KEY_CREATED_AT + " INTEGER" + ")";
 
 	public DatabaseHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -955,10 +957,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 				new String[] { String.valueOf(payment_id) });
 	}
 
-	// ------------------------ "payments" table methods ----------------//
+	// ------------------------ "paid" table methods ----------------//
 
 	/*
-	 * Creating a payment
+	 * Creating a paid
 	 */
 	public int createPaid(Paid paid) {
 		SQLiteDatabase db = this.getWritableDatabase();
@@ -966,6 +968,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		ContentValues values = new ContentValues();
 		values.put(KEY_PAYMENT_ID, paid.getPaymentId());
 		values.put(KEY_TRANSACTION_ID, paid.getTransactionId());
+		values.put(KEY_PREV_PAID_ID, paid.getPrevPaidId());
+		values.put(KEY_TIMESTAMP_PAYMENT, paid.getTimestampPayment());
 		values.put(KEY_CREATED_AT, paid.getTimestampCreated());
 
 		// insert row
@@ -993,6 +997,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		paid.setId(c.getInt(c.getColumnIndex(KEY_ID)));
 		paid.setPaymentId(c.getInt(c.getColumnIndex(KEY_PAYMENT_ID)));
 		paid.setTransactionId(c.getInt(c.getColumnIndex(KEY_TRANSACTION_ID)));
+		paid.setPrevPaidId(c.getInt(c.getColumnIndex(KEY_PREV_PAID_ID)));
+		paid.setTimestampPayment(c.getLong(c.getColumnIndex(KEY_TIMESTAMP_PAYMENT)));
 		paid.setTimestampCreated(c.getLong(c.getColumnIndex(KEY_CREATED_AT)));
 
 		return paid;
@@ -1017,6 +1023,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 				paid.setId(c.getInt(c.getColumnIndex(KEY_ID)));
 				paid.setPaymentId(c.getInt(c.getColumnIndex(KEY_PAYMENT_ID)));
 				paid.setTransactionId(c.getInt(c.getColumnIndex(KEY_TRANSACTION_ID)));
+				paid.setPrevPaidId(c.getInt(c.getColumnIndex(KEY_PREV_PAID_ID)));
+				paid.setTimestampPayment(c.getLong(c.getColumnIndex(KEY_TIMESTAMP_PAYMENT)));
 				paid.setTimestampCreated(c.getLong(c.getColumnIndex(KEY_CREATED_AT)));
 
 				// adding to payment list

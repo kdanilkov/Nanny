@@ -97,11 +97,7 @@ public class TransactionFragment extends CustomFragment {
                         int nPaidId = transaction.getPaidId();
 
                         if(nPaidId == -1) {
-                            Paid paid = new Paid();
-
-                            paid.setPaymentId(paymentSelected.getId());
-                            paid.setTransactionId(transaction.getId());
-                            paid.setTimestampCreated(transaction.getTimestampCreated());
+                            Paid paid = new Paid(paymentSelected.getId(), transaction.getId(), paymentSelected.getLastPaidId(), paymentSelected.getRealTimeStamp(), transaction.getTimestampCreated());
 
                             int nPaidID = Common.getInstance().dbHelper.createPaid(paid);
 

@@ -67,8 +67,8 @@ public class Common {
     public boolean isActiveBankExist() {
         boolean isExist = false;
 
-        for(int i = 0; i < Common.getInstance().listBanks.size(); i ++) {
-            Bank bank = Common.getInstance().listBanks.get(i);
+        for(int i = 0; i < listBanks.size(); i ++) {
+            Bank bank = listBanks.get(i);
 
             if(bank.getFlagActive() == 1) {
                 isExist = true;
@@ -149,33 +149,27 @@ public class Common {
                 //set next payment timestamp
                 c.setTimeInMillis(payment.getRealTimeStamp());
                 //subtract tolerance days from it
-                c.add(Calendar.DAY_OF_YEAR, -Common.getInstance().nToleranceDays);
+                c.add(Calendar.DAY_OF_YEAR, - nToleranceDays);
 
                 long nLow = c.getTimeInMillis();
 
                 //set next payment timestamp
                 c.setTimeInMillis(payment.getRealTimeStamp());
                 //add tolerance days to it, and add one day for high limit
-                c.add(Calendar.DAY_OF_YEAR, Common.getInstance().nToleranceDays + 1);
+                c.add(Calendar.DAY_OF_YEAR, nToleranceDays + 1);
 
                 long nHigh = c.getTimeInMillis();
 
                 boolean isMatchDate = (trans.getTimestampCreated() >= nLow) && (trans.getTimestampCreated() < nHigh);
 
                 // --- amount match part --
-                int nAmountLow = payment.getAmount() * (100 - Common.getInstance().nTolerancePercents) / 100;
-                int nAmountHigh = payment.getAmount() * (100 + Common.getInstance().nTolerancePercents) / 100;
+                int nAmountLow = payment.getAmount() * (100 - nTolerancePercents) / 100;
+                int nAmountHigh = payment.getAmount() * (100 + nTolerancePercents) / 100;
 
                 boolean isMatchAmount = (trans.getAmount() >= nAmountLow) && (trans.getAmount() <= nAmountHigh);
 
                 if(isMatchIdentifier && isMatchDate && isMatchAmount) {
-                    Paid  paid = new Paid();
-
-                    paid.setPaymentId(payment.getId());
-                    paid.setTransactionId(trans.getId());
-                    paid.setPrevPaidId(payment.getLastPaidId());
-                    paid.setTimestampPayment(payment.getRealTimeStamp());
-                    paid.setTimestampCreated(trans.getTimestampCreated());
+                    Paid  paid = new Paid(payment.getId(), trans.getId(), payment.getLastPaidId(), payment.getRealTimeStamp(), trans.getTimestampCreated());
 
                     int paid_id = dbHelper.createPaid(paid);
 
