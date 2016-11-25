@@ -92,49 +92,94 @@ public class Payment {
         return _timestampCreated;
     }
 
-    public int getPaidStatus() { // 0-unpaid, 1-paid
+    public int getPaidStatus() { // 0-unpaid, 1-paid for current period
         if(_lastPaidId == -1) return 0;
         if(_lastPaidId != -1 && (_paymentMode == 1 || _paymentMode == 3)) {
             return 1;  // for case of single payment
         }
 
-        Paid paid = Common.getInstance().dbHelper.getPaid(_lastPaidId);
-        long timestampePaid = paid.getTimestampCreated();
         Calendar c = Calendar.getInstance();
-        long timestampHigh = c.getTimeInMillis();;
 
         int nDay = c.get(Calendar.DAY_OF_MONTH);
 
         if(nDay < Common.getInstance().nSalaryDate) {
-            c.add(Calendar.MONTH, -1);
+            c.add(Calendar.MONTH , -1);
         }
 
         c.set(Calendar.DAY_OF_MONTH, Common.getInstance().nSalaryDate);
         c.set(Calendar.HOUR_OF_DAY, 0);
         c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
 
-        long timestampLow = c.getTimeInMillis();
+        long nLow = c.getTimeInMillis();
 
-        if(timestampLow < timestampePaid && timestampePaid < timestampHigh){
+        c.add(Calendar.MONTH, 1);
+
+        long nHigh = c.getTimeInMillis();
+
+        Paid paid = Common.getInstance().dbHelper.getPaid(_lastPaidId);
+
+        long timestampPayment = paid.getTimestampPayment();
+
+        if(timestampPayment >= nLow && timestampPayment < nHigh) {
+            return 1;
+        }
+
+        int nPrevPaidId = paid.getPrevPaidId();
+
+        if(nPrevPaidId == -1) {
+            return 0;
+        }
+
+        Paid paidPrev = Common.getInstance().dbHelper.getPaid(nPrevPaidId);
+
+        long timestampPaymentPrev = paidPrev.getTimestampPayment();
+
+        if(timestampPaymentPrev >= nLow && timestampPaymentPrev < nHigh) {
             return 1;
         }
 
         return 0;
     }
 
-    public long getRealTimeStampForSingle() { // for single payment, return the timestamp when real payment will be happened.
-        if(_paymentMode == 0 || _paymentMode == 2) return 0;
+
+    public long getRealTimeStamp() { // at that moment, timestamp of payment date.
 
         Calendar c = Calendar.getInstance();
-        c.setTimeInMillis(_timestampCreated);
+        int nDayCurrent = c.get(Calendar.DAY_OF_MONTH);
 
-        int nDayCreated = c.get(Calendar.DAY_OF_MONTH);
+        if(_paymentMode == 1 || _paymentMode == 3 || _lastPaidId == -1) { // for single payment and new recurrent payment, return timestamp for real payment, or next payment
+            c.setTimeInMillis(_timestampCreated);
 
-        if(nDayCreated > _dateOfMonth) {
-            c.add(Calendar.MONTH, 1);
+            int nDayCreated = c.get(Calendar.DAY_OF_MONTH);
+
+            if(nDayCreated > _dateOfMonth) {
+                c.add(Calendar.MONTH, 1);
+            }
+
+            c.set(Calendar.DAY_OF_MONTH, _dateOfMonth);
+            c.set(Calendar.HOUR_OF_DAY, 0);
+            c.set(Calendar.MINUTE, 0);
+            c.set(Calendar.SECOND, 0);
+
+            return c.getTimeInMillis();
         }
 
+        //these recurrent payment has been paid before, then return timestamp for next payment.
+
         c.set(Calendar.DAY_OF_MONTH, _dateOfMonth);
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
+
+        c.add(Calendar.MONTH, -1);
+
+        Paid paidLast = Common.getInstance().dbHelper.getPaid(_lastPaidId);
+        long timestampPayment = paidLast.getTimestampPayment();
+
+        while(c.getTimeInMillis() <= timestampPayment) {
+            c.add(Calendar.MONTH, 1);
+        }
 
         return c.getTimeInMillis();
     }

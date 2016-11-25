@@ -106,7 +106,7 @@ public class MainActivity extends CustomActivity {
             }
         }
 
-        sampleWishData();
+//        sampleWishData();
     }
 
     void sampleWishData() {

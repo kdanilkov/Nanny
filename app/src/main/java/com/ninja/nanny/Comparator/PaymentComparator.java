@@ -19,9 +19,9 @@ public class PaymentComparator implements Comparator<Payment> {
         boolean isSingPaymentA = (paymentA.getPaymentMode() == 1 || paymentA.getPaymentMode() == 3);
         boolean isSingPaymentB = (paymentB.getPaymentMode() == 1 || paymentB.getPaymentMode() == 3);
 
-        if(isSingPaymentA && isSingPaymentB) { // A-single, B-single
-            long realTimestampA = paymentA.getRealTimeStampForSingle();
-            long realTimestampB = paymentB.getRealTimeStampForSingle();
+        if((isSingPaymentA && isSingPaymentB) || (!isSingPaymentA && !isSingPaymentB)) { // Both are single, or recurrent
+            long realTimestampA = paymentA.getRealTimeStamp();
+            long realTimestampB = paymentB.getRealTimeStamp();
 
             if(realTimestampB > realTimestampA) {
                 nResult = 1;
@@ -32,8 +32,6 @@ public class PaymentComparator implements Comparator<Payment> {
             nResult = 1;
         } else if(!isSingPaymentA && isSingPaymentB) { // A-recurrent, B-single
             nResult = -1;
-        } else { // A-recurrent, B-recurrent
-            nResult = paymentB.getDateOfMonth() - paymentA.getDateOfMonth();
         }
 
         return nResult;

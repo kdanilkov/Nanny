@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="payment_pattern_name">
+        <item>subscription for music</item>
+        <item>film processing</item>
+    </string-array>
+
+    <string-array name="payment_pattern_words">
+        <item>itunes.com</item>
+        <item>GULF FILM LLC</item>
+    </string-array>
+
+    <string-array name="payment_pattern_date">
+        <item>3</item>
+        <item>25</item>
+    </string-array>
+</resources>

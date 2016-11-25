@@ -5,45 +5,4 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-
-    <string-array name="payment_pattern_name">
-        <item>subscription for music</item>
-        <item>film processing</item>
-    </string-array>
-
-    <string-array name="payment_pattern_words">
-        <item>itunes.com</item>
-        <item>GULF FILM LLC</item>
-    </string-array>
-
-    <string-array name="payment_pattern_date">
-        <item>3</item>
-        <item>25</item>
-    </string-array>
-
-    <string-array name="sms_pattern_type">
-        <item>Type 1</item>
-        <item>Type 2</item>
-        <item>Type 3</item>
-    </string-array>
-
-    <string-array name="sms_pattern_text">
-        <item>Purchase of AED 26.00 with Debit Card ending 1736 at GULF FILM LLC -471203, DUBAI.</item>
-        <item>Cash Withdrawal of AED 500.00 with Debit Card ending 1736 at, DUBAI.</item>
-        <item>AED 22,000.00 has been received as TELEGRAHPHIC TRANSFER.</item>
-    </string-array>
-
-    <string-array name="sample_sms_data">
-        <item>Purchase of AED 26.00 with Debit Card ending 1736 at GULF FILM LLC -471203, DUBAI.</item>
-        <item>Cash Withdrawal of AED 500.00 with Debit Card ending 1736 at, DUBAI.</item>
-        <item>Purchase of AED 1.00 with Debit Card ending 1736 at ITUNES.COM/BILL, ITUNES.COM.</item>
-        <item>Purchase of AED 43.91 with Debit Card ending 1736 at UBER AE SEP24 TZV5A HELP., help.uber.com.</item>
-        <item>Cash Withdrawal of AED 1,000.00 with Debit Card ending 1736 at, DUBAI.</item>
-        <item>Add to the joy of Eid by getting yourself a brand new car with our special Auto Loan. Offer valid until 15th Sept. For more Info SMS ALDE to 4454. TC apply</item>
-        <item>Purchase of AED 37.80 with Debit Card ending 1736 at Dropbox W6G43LCLDY3B, Dublin.</item>
-        <item>Purchase of AED 100.00 with Debit Card ending 1736 at DU(EITC), DUBAI.</item>
-        <item>AED 22,000.00 has been received as TELEGRAHPHIC TRANSFER.</item>
-        <item>Purchase of AED 34.00 with Debit Card ending 1736 at Deliveroo, INTERNET.</item>
-    </string-array>
-
 </resources>

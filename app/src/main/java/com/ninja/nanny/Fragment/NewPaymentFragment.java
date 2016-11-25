@@ -161,7 +161,7 @@ public class NewPaymentFragment extends CustomFragment {
             nPaymentMode = isSaving? 1 : 3;
         }
 
-        Payment paymentNew = new Payment(strTitle, strDetail, nAmount, nDateOfMonth, nPaymentMode, -1, Common.getInstance().getTimestamp()); // paid_status = 0 because it is unpaid
+        Payment paymentNew = new Payment(strTitle, strDetail, nAmount, nDateOfMonth, nPaymentMode, -1, Common.getInstance().getTimestamp()); // lastPaidId = -1 because it is new
 
         int payment_id = Common.getInstance().dbHelper.createPayment(paymentNew);
 

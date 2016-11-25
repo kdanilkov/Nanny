@@ -21,7 +21,6 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -62,8 +61,7 @@ public class Common {
     public JSONArray jsonArrayBankInfo;
 
     public long getTimestamp() {
-        Date date = new Date();
-        return date.getTime();
+        return Calendar.getInstance().getTimeInMillis();
     }
 
     public boolean isActiveBankExist() {
@@ -90,10 +88,12 @@ public class Common {
             c.add(Calendar.MONTH, -1);
         }
 
-        c.add(Calendar.MONTH, -1);
+        c.add(Calendar.MONTH, -1); // go to past period.
+
         c.set(Calendar.DAY_OF_MONTH, nSalaryDate);
         c.set(Calendar.HOUR_OF_DAY, 0);
         c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
 
         long timestampPastPeriodStart = c.getTimeInMillis();
 
@@ -104,13 +104,20 @@ public class Common {
         for(int i = 0; i < listAllPayments.size(); i ++) {
             Payment payment = listAllPayments.get(i);
 
-            if((payment.getPaymentMode() == 1 || payment.getPaymentMode() == 3) && payment.getRealTimeStampForSingle() < timestampPastPeriodStart) {
-                break;
+            if(payment.getPaymentMode() == 1 || payment.getPaymentMode() == 3) {
+
+                if (payment.getRealTimeStamp() < timestampPastPeriodStart) {
+                    // those are single payment, and real payment timestamp is older than timestamp of past period start
+                    break;
+                }
+
+                if(payment.getLastPaidId() > -1) {
+                    //those single payments has been paid.
+                    continue;
+                }
             }
 
-            if(payment.getPaidStatus() == 0) {
-                listAns.add(payment);
-            }
+            listAns.add(payment); // all recurrent payment should be added for tollerance concept.
         }
 
         return listAns;
@@ -121,23 +128,53 @@ public class Common {
 
         if(listUnPaidPayments.size() == 0) return;
 
-        for(int i = listNewTransactions.size() - 1; i >= 0; i --) {
+        for(int i = 0; i < listNewTransactions.size(); i ++) {
             Transaction trans = listNewTransactions.get(i);
 
-            if(trans.getMode() < 2) continue;
+            if(trans.getMode() < 2) continue; // if balance or income transaction
 
             String strIdentifier = trans.getIdentifier();
 
             for(int j = 0; j < listUnPaidPayments.size(); j ++) {
                 Payment payment = listUnPaidPayments.get(j);
 
+                // --- identifer match part --
+
                 String strPaymentIdentifier = payment.getIdentifier();
 
-                if(strIdentifier.toLowerCase().contains(strPaymentIdentifier.toLowerCase())) {
+                boolean isMatchIdentifier = strIdentifier.toLowerCase().contains(strPaymentIdentifier.toLowerCase());
+
+                // --- date match part --
+                Calendar c = Calendar.getInstance();
+                //set next payment timestamp
+                c.setTimeInMillis(payment.getRealTimeStamp());
+                //subtract tolerance days from it
+                c.add(Calendar.DAY_OF_YEAR, -Common.getInstance().nToleranceDays);
+
+                long nLow = c.getTimeInMillis();
+
+                //set next payment timestamp
+                c.setTimeInMillis(payment.getRealTimeStamp());
+                //add tolerance days to it, and add one day for high limit
+                c.add(Calendar.DAY_OF_YEAR, Common.getInstance().nToleranceDays + 1);
+
+                long nHigh = c.getTimeInMillis();
+
+                boolean isMatchDate = (trans.getTimestampCreated() >= nLow) && (trans.getTimestampCreated() < nHigh);
+
+                // --- amount match part --
+                int nAmountLow = payment.getAmount() * (100 - Common.getInstance().nTolerancePercents) / 100;
+                int nAmountHigh = payment.getAmount() * (100 + Common.getInstance().nTolerancePercents) / 100;
+
+                boolean isMatchAmount = (trans.getAmount() >= nAmountLow) && (trans.getAmount() <= nAmountHigh);
+
+                if(isMatchIdentifier && isMatchDate && isMatchAmount) {
                     Paid  paid = new Paid();
 
                     paid.setPaymentId(payment.getId());
                     paid.setTransactionId(trans.getId());
+                    paid.setPrevPaidId(payment.getLastPaidId());
+                    paid.setTimestampPayment(payment.getRealTimeStamp());
                     paid.setTimestampCreated(trans.getTimestampCreated());
 
                     int paid_id = dbHelper.createPaid(paid);
@@ -156,8 +193,163 @@ public class Common {
         listAllPayments = dbHelper.getAllPayments();
     }
 
+    public int sumOfIncomeTransactionsForMonth(long timestampSalaryDate) { // timestampSalaryDate- End of Period.
+        int nAns = 0;
+
+        Calendar c = Calendar.getInstance();
+
+        c.setTimeInMillis(timestampSalaryDate);
+
+        c.add(Calendar.MONTH, -1);
+
+        long timestampStart = c.getTimeInMillis();
+        long timestampEnd = timestampSalaryDate;
+
+        c.add(Calendar.DAY_OF_YEAR, - nToleranceDays);
+
+        long timestampIntervalStart = c.getTimeInMillis();
+
+        c.setTimeInMillis(timestampSalaryDate);
+        c.add(Calendar.DAY_OF_YEAR, nToleranceDays);
+
+        long timestampIntervalEnd = c.getTimeInMillis();
+
+        for(int i = 0; i < listAllTransactions.size(); i ++) {
+            Transaction trans = listAllTransactions.get(i);
+            long timestampTrans = trans.getTimestampCreated();
+
+            if(trans.getMode() != -1) continue;
+            if(timestampTrans >= timestampIntervalEnd) continue;
+            if(timestampTrans < timestampIntervalStart) break;
+
+            int nPaidId = trans.getPaidId();
+
+            Paid paid = dbHelper.getPaid(nPaidId);
+            long timestampPayment = paid.getTimestampPayment();
+
+            if(timestampPayment < timestampStart) continue;
+            if(timestampPayment >= timestampEnd) continue;
+
+            nAns += trans.getAmount();
+        }
+
+        return nAns;
+    }
+
+    public int sumOfSpendingTransactionForMonth(long timestampSalaryDate) { // timestampSalaryDate- End of Period.
+        int nAns = 0;
+
+        Calendar c = Calendar.getInstance();
+
+        c.setTimeInMillis(timestampSalaryDate);
+
+        c.add(Calendar.MONTH, -1);
+
+        long timestampStart = c.getTimeInMillis();
+        long timestampEnd = timestampSalaryDate;
+
+        if(timestampInitConfig > timestampStart) {
+            nAns = nUsedAmount;
+        }
+
+        c.add(Calendar.DAY_OF_YEAR, - nToleranceDays);
+
+        long timestampIntervalStart = c.getTimeInMillis();
+
+        c.setTimeInMillis(timestampSalaryDate);
+        c.add(Calendar.DAY_OF_YEAR, nToleranceDays);
+
+        long timestampIntervalEnd = c.getTimeInMillis();
+
+        for(int i = 0; i < listAllTransactions.size(); i ++) {
+            Transaction trans = listAllTransactions.get(i);
+            long timestampTrans = trans.getTimestampCreated();
+
+            if(trans.getMode() < 2) continue;
+            if(timestampTrans >= timestampIntervalEnd) continue;
+            if(timestampTrans < timestampIntervalStart) break;
+
+            int nPaidId = trans.getPaidId();
+
+            Paid paid = dbHelper.getPaid(nPaidId);
+            long timestampPayment = paid.getTimestampPayment();
+
+            if(timestampPayment < timestampStart) continue;
+            if(timestampPayment >= timestampEnd) continue;
+
+            nAns += trans.getAmount();
+        }
+
+        return nAns;
+    }
+
+    public void checkIncomeTransaction() {
+        Calendar c = Calendar.getInstance();
+
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
+
+        c.set(Calendar.DAY_OF_MONTH, nSalaryDate);
+
+        long timestampSalaryDate = c.getTimeInMillis();
+
+        c.add(Calendar.DAY_OF_YEAR, - nToleranceDays);
+
+        long timestampIntervalStart = c.getTimeInMillis();
+
+        c.setTimeInMillis(timestampSalaryDate);
+
+        c.add(Calendar.DAY_OF_YEAR, nToleranceDays);
+
+        long timestampIntervalEnd = c.getTimeInMillis();
+
+        int nSumTransSoFar = sumOfIncomeTransactionsForMonth(timestampSalaryDate);
+
+        int nAmountHigh = nMonthlyIncome * (100 + nTolerancePercents) / 100;
+        int nAmountLow = nMonthlyIncome * (100 - nTolerancePercents) / 100;
+
+        for(int i = 0; i < listNewTransactions.size(); i ++) {
+            Transaction trans = listNewTransactions.get(i);
+
+            if(trans.getMode() != 1) continue;
+
+            long timestampTrans = trans.getTimestampCreated();
+            long timestampAns = timestampTrans;
+
+            if(timestampTrans >= timestampIntervalStart && timestampTrans < timestampSalaryDate) {
+                if(nSumTransSoFar >= nAmountHigh) {
+                    timestampAns = timestampIntervalEnd;
+                } else {
+                    timestampAns = timestampIntervalStart;
+                    nSumTransSoFar += trans.getAmount();
+                }
+            }
+
+            if(timestampTrans >= timestampSalaryDate && timestampTrans < timestampIntervalEnd) {
+                if(nSumTransSoFar < nAmountLow) {
+                    timestampAns = timestampIntervalStart;
+                    nSumTransSoFar += trans.getAmount();
+                } else {
+                    timestampAns = timestampIntervalEnd;
+                }
+            }
+
+            Paid  paid = new Paid(-1, trans.getId(), -1, timestampAns, trans.getTimestampCreated());
+            int nPaidId = dbHelper.createPaid(paid);
+
+            trans.setPaidId(nPaidId);
+        }
+    }
+
     public void checkWishSavingPast() {
         Calendar c = Calendar.getInstance();
+
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
+
+        long timestampCurretnt = c.getTimeInMillis();
 
         int nDay = c.get(Calendar.DAY_OF_MONTH);
 
@@ -166,12 +358,18 @@ public class Common {
         }
 
         c.set(Calendar.DAY_OF_MONTH, nSalaryDate);
-        c.set(Calendar.HOUR_OF_DAY, 0);
-        c.set(Calendar.MINUTE, 0);
 
         long timestampLastSalaryDate = c.getTimeInMillis(); // just prev salary date
 
+        c.add(Calendar.DAY_OF_YEAR, nSalaryDate);
+
+        long timestampLastPeriodIntervalEnd = c.getTimeInMillis();
+
+        if(timestampLastPeriodIntervalEnd >= timestampCurretnt) return; // current day is bofore tolerance days of preve salary date.
+
         if(timestampInitConfig > timestampLastSalaryDate) return; // app has been installed after salary date, so there is no wish for past period
+
+        c.setTimeInMillis(timestampLastSalaryDate);
 
         int nYear = c.get(Calendar.YEAR);
         int nMonth = c.get(Calendar.MONTH);
@@ -183,7 +381,7 @@ public class Common {
         timeWishSaving = nDateWishSaving;
         UserPreference.getInstance().putSharedPreference(Constant.PREF_KEY_WISH_SAVING_TIME, nDateWishSaving);
 
-        int nLeftOnPast = leftOnPast(nYear, nMonth);
+        int nLeftMoney = leftMoneyForMonth(c.getTimeInMillis());
 
         Collections.sort(listActiveWishes, new WishComparator());
 
@@ -198,11 +396,11 @@ public class Common {
                 nSavingAmount = nTotalAmount - wish.getSavedAmount();
             }
 
-            if(nSavingAmount > nLeftOnPast) {
-                nSavingAmount = nLeftOnPast;
+            if(nSavingAmount > nLeftMoney) {
+                nSavingAmount = nLeftMoney;
             }
 
-            nLeftOnPast -= nSavingAmount;
+            nLeftMoney -= nSavingAmount;
             nUpdatedSavedAmount = wish.getSavedAmount() + nSavingAmount;
 
             WishSaving wishSaving = new WishSaving(wish.getId(), nSavingAmount, nDateWishSaving);
@@ -248,7 +446,7 @@ public class Common {
 
             if(transaction == null) continue;
 
-            listNewTransactions.add(transaction);
+            listNewTransactions.add(0,transaction);
         }
 
         timestampSms = timestampMax;
@@ -258,17 +456,18 @@ public class Common {
         if(listNewTransactions.size() > 0) {
             calculateBalance();
             bindBetweenTransactionAndPayment();
+            checkIncomeTransaction();
             addNewTransactions();
         }
     }
 
     public void addNewTransactions() {
-        for(int i = listNewTransactions.size() - 1; i >= 0; i --) {
+        for(int i = 0; i < listNewTransactions.size(); i ++) {
             Transaction trans = listNewTransactions.get(i);
             int nTransId = dbHelper.createTransaction(trans);
 
             trans.setId(nTransId);
-            listAllTransactions.add(trans);
+            listAllTransactions.add(0, trans);
         }
 
         Collections.sort(listAllTransactions, new TransactionComparator());
@@ -277,7 +476,7 @@ public class Common {
     public void calculateBalance() {
         int nVal = bankActive.getBalance();
 
-        for(int i = listNewTransactions.size() - 1; i >= 0 ; i --) {
+        for(int i = 0; i < listNewTransactions.size() ; i ++) {
             Transaction trans = listNewTransactions.get(i);
 
             if(trans.getMode() == 0) nVal = trans.getAmount();
@@ -291,8 +490,8 @@ public class Common {
     }
 
     public Transaction convertToTransactionFromSms(Sms sms) {
-        String strBankName = bankActive.getBankName().toLowerCase();
-        if(!sms.getAddress().toLowerCase().equals(strBankName)) return null;
+//        String strBankName = bankActive.getBankName().toLowerCase();
+        if(!sms.getAddress().toLowerCase().equals("bank")) return null;
 
         Transaction transaction = new Transaction();
         transaction.setPaidId(-1);
@@ -400,6 +599,7 @@ public class Common {
         c.set(Calendar.DAY_OF_MONTH, nSalaryDate);
         c.set(Calendar.HOUR_OF_DAY, 0);
         c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
 
         long timestampCurrentPeriodStart = c.getTimeInMillis();
 
@@ -413,10 +613,15 @@ public class Common {
             Payment payment = listAllPayments.get(i);
 
             if(payment.getPaymentMode() == 0 || payment.getPaymentMode() == 2) {
+                if(payment.getLastPaidId() == -1 && payment.getRealTimeStamp() >= timestampCurrentPeriodEnd) {
+                    //for this case, payment is new and will be active in next period.
+                    continue;
+                }
+
                 listAns.add(payment);
             } else {
-                if(payment.getRealTimeStampForSingle() < timestampCurrentPeriodStart) break;
-                if(payment.getRealTimeStampForSingle() >= timestampCurrentPeriodEnd) continue;
+                if(payment.getRealTimeStamp() < timestampCurrentPeriodStart) break;
+                if(payment.getRealTimeStamp() >= timestampCurrentPeriodEnd) continue;
 
                 listAns.add(payment);
             }
@@ -462,7 +667,7 @@ public class Common {
         return monthlyLimit() * 7 / nTotalDaysOfMonth;
     }
 
-    public int sumOfTransactionThisWeek() { // for B Group Transaction, Transaction.mode = 2
+    public int sumOfTransactionThisWeek() { // for Transaction.mode = 2
         int nAns = 0;
 
         Calendar c = Calendar.getInstance();
@@ -479,6 +684,7 @@ public class Common {
         for(int i = 0; i < listAllTransactions.size(); i ++) {
             Transaction trans = listAllTransactions.get(i);
 
+            if(trans.getMode() < 2) continue;
             if(trans.getTimestampCreated() >= nHigh) continue;
             if(trans.getTimestampCreated() < nLow) break;
 
@@ -488,202 +694,26 @@ public class Common {
         return nAns;
     }
 
-    public int sumOfTransactionForMonth() { // for B Group Transaction, Transaction.mode = 2
-        int nAns = 0;
-
-        Calendar c = Calendar.getInstance();
-        long nHigh = c.getTimeInMillis();
-        int nDayNow = c.get(Calendar.DAY_OF_MONTH);
-
-        if(nDayNow < nSalaryDate) {
-            c.add(Calendar.MONTH , -1);
-        }
-
-        c.set(Calendar.DAY_OF_MONTH, nSalaryDate);
-        c.set(Calendar.HOUR_OF_DAY, 0);
-        c.set(Calendar.MINUTE, 0);
-
-        long nLow = c.getTimeInMillis();
-
-        for(int i = 0; i < listAllTransactions.size(); i ++) {
-            Transaction trans = listAllTransactions.get(i);
-
-            if(trans.getTimestampCreated() > nHigh) continue;
-            if(trans.getTimestampCreated() < nLow) break;
-            if(trans.getMode() < 2) break;
-            nAns += trans.getAmount();
-        }
-
-        return nAns;
+    public int leftMoneyForMonth(long timestampSalaryDate) { // timestampSalaryDate - End Of Period
+        return sumOfIncomeTransactionsForMonth(timestampSalaryDate) - sumOfSpendingTransactionForMonth(timestampSalaryDate);
     }
 
-    public int leftOnPast(int nYear, int nMonth) {
-        Calendar c = Calendar.getInstance();
-        c.add(Calendar.MONTH, -1);
-
-        int nDaysOfMonth = c.getActualMaximum(Calendar.DAY_OF_MONTH);
-
-        return nMonthlyIncome - sumOfPaymentsForPast(nYear, nMonth) - sumOfRestTransactionsForPast(nYear, nMonth) - nMinimalDayAmount * nDaysOfMonth;
-    }
-
-    public int sumOfPaymentsForPast(int nYear, int nMonth) { // sum of paid payments
-        int nAns = 0;
-
-        Calendar c = Calendar.getInstance();
-        c.set(Calendar.YEAR, nYear);
-        c.set(Calendar.MONTH, nMonth);
-        c.set(Calendar.DAY_OF_MONTH, nSalaryDate);
-        c.set(Calendar.HOUR_OF_DAY, 0);
-        c.set(Calendar.MINUTE, 0);
-
-        long timestampHigh = c.getTimeInMillis();
-
-        c.add(Calendar.MONTH, -1);
-        long timestampLow = c.getTimeInMillis();
-
-        for(int i = 0; i < listAllPayments.size(); i ++) {
-            Payment payment = listAllPayments.get(i);
-            int nPaidId = payment.getLastPaidId();
-
-            if(nPaidId == -1) continue;
-
-            Paid paid = dbHelper.getPaid(nPaidId);
-
-            if(paid.getTimestampCreated() >= timestampLow && paid.getTimestampCreated() < timestampHigh) {
-                nAns += payment.getAmount();
-            }
-        }
-
-        return nAns;
-    }
-
-    public int sumOfRestTransactionsForPast(int nYear, int nMonth) { // sum of unbinding payments for spending
-        int nAns = 0;
-
-        Calendar c = Calendar.getInstance();
-        c.set(Calendar.YEAR, nYear);
-        c.set(Calendar.MONTH, nMonth);
-        c.set(Calendar.DAY_OF_MONTH, nSalaryDate);
-        c.set(Calendar.HOUR_OF_DAY, 0);
-        c.set(Calendar.MINUTE, 0);
-
-        long timestampHigh = c.getTimeInMillis();
-
-        c.add(Calendar.MONTH, -1);
-        long timestampLow = c.getTimeInMillis();
-
-        for(int i = 0; i < listAllTransactions.size(); i ++) {
-            Transaction trans = listAllTransactions.get(i);
-
-            if(trans.getTimestampCreated() >= timestampHigh) continue;
-            if(trans.getTimestampCreated() < timestampLow) break;
-            if(trans.getMode() < 2) continue;
-
-            int nPaidId = trans.getPaidId();
-
-            if(nPaidId == -1){
-                nAns += trans.getAmount();
-            }
-        }
-
-        return nAns;
-    }
-
-    public int sumOfTotalTransactionsForPast(int  nYear, int nMonth) { // sum of paymetns for spending
-        int nAns = 0;
-
-        Calendar c = Calendar.getInstance();
-        c.set(Calendar.YEAR, nYear);
-        c.set(Calendar.MONTH, nMonth);
-        c.set(Calendar.DAY_OF_MONTH, nSalaryDate);
-        c.set(Calendar.HOUR_OF_DAY, 0);
-        c.set(Calendar.MINUTE, 0);
-
-        long timestampHigh = c.getTimeInMillis();
-
-        c.add(Calendar.MONTH, -1);
-        long timestampLow = c.getTimeInMillis();
-
-        for(int i = 0; i < listAllTransactions.size(); i ++) {
-            Transaction trans = listAllTransactions.get(i);
-
-            if(trans.getTimestampCreated() >= timestampHigh) continue;
-            if(trans.getTimestampCreated() < timestampLow) break;
-            if(trans.getMode() < 2) continue;
-
-            nAns += trans.getAmount();
-        }
-
-        return nAns;
-    }
 
     public int freeOnThisWeek() {
         return weeklyLimit() - sumOfTransactionThisWeek();
     }
 
-//    public int upcomingPayments() { // SUM(predefiend payments for next 7 days)
-//        int nAns = 0;
-//
-//        Calendar c = Calendar.getInstance();
-//        int nTotalDaysOfMonth = c.getActualMaximum(Calendar.DAY_OF_MONTH);
-//        int nDayCurrent = c.get(Calendar.DAY_OF_MONTH);
-//
-//        for(int i = 0; i < listCurrentPayments.size(); i ++) {
-//            Payment paymentItem = listCurrentPayments.get(i);
-//            int nDayPayment = paymentItem.getDateOfMonth();
-//
-//            if(nDayCurrent + 7 > nTotalDaysOfMonth) {
-//                if(nDayPayment > nDayCurrent){
-//                    nAns += paymentItem.getAmount();
-//                } else {
-//                    if(nDayPayment <= nDayCurrent + 7 - nTotalDaysOfMonth) {
-//                        nAns += paymentItem.getAmount();
-//                    }
-//                }
-//            } else {
-//                if(nDayPayment > nDayCurrent && nDayPayment <= nDayCurrent + 7) {
-//                    nAns += paymentItem.getAmount();
-//                }
-//            }
-//        }
-//
-//        return nAns;
-//    }
 
     public int upcomingPayments() { // sum of unpaid payments during this period.
         int nAns = 0;
-
-        Calendar c = Calendar.getInstance();
-
-        int nDay = c.get(Calendar.DAY_OF_MONTH);
-
-        if(nDay < nSalaryDate) {
-            c.add(Calendar.MONTH , -1);
-        }
-
-        c.set(Calendar.DAY_OF_MONTH, nSalaryDate);
-        c.set(Calendar.HOUR_OF_DAY, 0);
-        c.set(Calendar.MINUTE, 0);
-
-        long nLow = c.getTimeInMillis();
 
         List<Payment> listCurrentPayments = getCurrentPayments();
 
         for(int i = 0; i < listCurrentPayments.size(); i ++) {
             Payment payment = listCurrentPayments.get(i);
-            int nPaidId = payment.getLastPaidId();
 
-            if(nPaidId == -1) { // not paid
+            if(payment.getPaidStatus() == 0) {
                 nAns += payment.getAmount();
-                continue;
-            }
-
-            if(payment.getPaymentMode() == 0 || payment.getPaymentMode() == 2) {
-                Paid paid = dbHelper.getPaid(nPaidId);
-
-                if(paid.getTimestampCreated() < nLow) { // paid timstamp is older than nLow
-                    nAns += payment.getAmount();
-                }
             }
         }
 
@@ -692,7 +722,19 @@ public class Common {
 
 
     public int freeOnThisMonth() {
-        return monthlyLimit() - sumOfTransactionForMonth();
+        Calendar c = Calendar.getInstance();
+        int nDayCurrent = c.get(Calendar.DAY_OF_MONTH);
+
+        if(nDayCurrent >= nSalaryDate) {
+            c.add(Calendar.MONTH, 1);
+        }
+
+        c.set(Calendar.DAY_OF_MONTH, nSalaryDate);
+        c.set(Calendar.HOUR_OF_DAY, 0);
+        c.set(Calendar.MINUTE, 0);
+        c.set(Calendar.SECOND, 0);
+
+        return nMonthlyIncome - sumOfSpendingTransactionForMonth(c.getTimeInMillis()) - sumOfWishesForMonth();
     }
 
     public int balanceOfActiveBank() {
