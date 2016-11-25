@@ -218,6 +218,8 @@ public class Common {
 
             int nPaidId = trans.getPaidId();
 
+            if(nPaidId == -1) continue;
+
             Paid paid = dbHelper.getPaid(nPaidId);
             long timestampPayment = paid.getTimestampPayment();
 
@@ -264,6 +266,8 @@ public class Common {
             if(timestampTrans < timestampIntervalStart) break;
 
             int nPaidId = trans.getPaidId();
+
+            if(nPaidId == -1) continue;
 
             Paid paid = dbHelper.getPaid(nPaidId);
             long timestampPayment = paid.getTimestampPayment();
