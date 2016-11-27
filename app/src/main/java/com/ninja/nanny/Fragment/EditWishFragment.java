@@ -102,10 +102,26 @@ public class EditWishFragment extends CustomFragment {
             }
         });
 
+        etTitle.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if(!b) {
+                    String strText = etTitle.getText().toString();
+                    if(strText.length() == 0) {
+                        etTitle.setText("wish");
+                    }
+                }
+            }
+        });
+
         etTotalAmount.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
                 if(!b) {
+                    String strText = etTotalAmount.getText().toString();
+                    if(strText.length() == 0) {
+                        etTitle.setText("0");
+                    }
                     calcMonthlyPament();
                 }
             }

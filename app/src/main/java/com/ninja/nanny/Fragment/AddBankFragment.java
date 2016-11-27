@@ -96,14 +96,38 @@ public class AddBankFragment extends CustomFragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
                 String item = parent.getItemAtPosition(position).toString();
-
-                Toast.makeText(parent.getContext(), "selected bank is..." + item, Toast.LENGTH_LONG).show();
                 tvAccountType.setText(myAccountTypeArrayList.get(position));
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
+            }
+        });
+
+        etAccountName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if(!b) {
+                    String strText = etAccountName.getText().toString();
+
+                    if(strText.length() == 0) {
+                        etAccountName.setText("bank");
+                    }
+                }
+            }
+        });
+
+        etBalance.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if(!b) {
+                    String strText = etBalance.getText().toString();
+
+                    if(strText.length() == 0) {
+                        etBalance.setText("0");
+                    }
+                }
             }
         });
 

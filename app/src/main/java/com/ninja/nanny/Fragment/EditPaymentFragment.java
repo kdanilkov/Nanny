@@ -67,6 +67,58 @@ public class EditPaymentFragment extends CustomFragment {
         btnCheckRecurrent.setOnClickListener(this);
         btnCheckSaving.setOnClickListener(this);
 
+        etTitle.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if(!b) {
+                    String strText = etTitle.getText().toString();
+
+                    if(strText.length() == 0) {
+                        etTitle.setText("payment");
+                    }
+                }
+            }
+        });
+
+        etDetail.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if(!b) {
+                    String strText = etDetail.getText().toString();
+
+                    if(strText.length() == 0) {
+                        etDetail.setText("identifier");
+                    }
+                }
+            }
+        });
+
+        etAmount.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if(!b) {
+                    String strText = etAmount.getText().toString();
+
+                    if(strText.length() == 0) {
+                        etAmount.setText("0");
+                    }
+                }
+            }
+        });
+
+        etDateofMonth.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if(!b) {
+                    String strText = etDateofMonth.getText().toString();
+
+                    if(strText.length() == 0) {
+                        etDateofMonth.setText("15");
+                    }
+                }
+            }
+        });
+
         etTitle.setText(paymentSelected.getTitle());
         etDetail.setText(paymentSelected.getIdentifier());
         etAmount.setText(paymentSelected.getAmount() + "");

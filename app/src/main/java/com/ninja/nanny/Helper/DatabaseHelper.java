@@ -12,6 +12,7 @@ import com.ninja.nanny.Model.Paid;
 import com.ninja.nanny.Model.Payment;
 import com.ninja.nanny.Model.Sms;
 import com.ninja.nanny.Model.Transaction;
+import com.ninja.nanny.Model.UsedAmount;
 import com.ninja.nanny.Model.Wish;
 import com.ninja.nanny.Model.WishSaving;
 import com.ninja.nanny.Utils.Common;
@@ -39,6 +40,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	private static final String TBL_PAYMENTS = "payments";
 	private static final String TBL_SMS = "sms";
 	private static final String TBL_PAID = "paid";
+	private static final String TBL_USED_AMOUNT = "used_amount";
 
 	//bank table keys
 	private static final String KEY_ID = "id";
@@ -82,6 +84,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	private static final String KEY_PREV_PAID_ID = "prev_paid_id";
 	private static final String KEY_TIMESTAMP_PAYMENT = "timestamp_payment";
 
+	//used_amount table keys
+	private static final String KEY_USED_AMOUNT = "used_amount";
+	private static final String KEY_TIMESTAMP_PERIOD = "timestamp_period";
+	private static final String KEY_TIMESTAMP_UPDATED = "timestamp_updated";
+
 	// Banks table create statement
 	private static final String CREATE_TABLE_BANKS = "CREATE TABLE IF NOT EXISTS "
 			+ TBL_BANKS + "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_ACCOUNT_NAME
@@ -121,6 +128,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			+ TBL_PAID + "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_PAYMENT_ID
 			+ " INTEGER," + KEY_TRANSACTION_ID + " INTEGER," + KEY_PREV_PAID_ID + " INTEGER," + KEY_TIMESTAMP_PAYMENT + " INTEGER," + KEY_CREATED_AT + " INTEGER" + ")";
 
+	//used_amount table create statement
+	private static final String CREATE_TABLE_USED_AMOUNT = "CREATE TABLE IF NOT EXISTS "
+			+ TBL_USED_AMOUNT + "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_USED_AMOUNT
+			+ " INTEGER," + KEY_TIMESTAMP_PERIOD + " INTEGER," + KEY_TIMESTAMP_UPDATED + " INTEGER" + ")";
+
 	public DatabaseHelper(Context context) {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 	}
@@ -135,6 +147,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		db.execSQL(CREATE_TABLE_PAYMENTS);
 		db.execSQL(CREATE_TABLE_SMS);
 		db.execSQL(CREATE_TABLE_PAID);
+		db.execSQL(CREATE_TABLE_USED_AMOUNT);
 	}
 
 	@Override
@@ -143,8 +156,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		db.execSQL("DROP TABLE IF EXISTS " + TBL_BANKS);
 		db.execSQL("DROP TABLE IF EXISTS " + TBL_TRANSACTION);
 		db.execSQL("DROP TABLE IF EXISTS " + TBL_WISH);
+		db.execSQL("DROP TABLE IF EXISTS " + TBL_WISH_SAVING);
 		db.execSQL("DROP TABLE IF EXISTS " + TBL_PAYMENTS);
 		db.execSQL("DROP TABLE IF EXISTS" + TBL_SMS);
+		db.execSQL("DROP TABLE IF EXISTS" + TBL_PAID);
+		db.execSQL("DROP TABLE IF EXISTS" + TBL_USED_AMOUNT);
+
 		// create new tables
 		onCreate(db);
 	}
@@ -1050,6 +1067,77 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		return count;
 	}
 
+
+	// ------------------------ "used_amount" table methods ----------------//
+
+	/*
+	 * Creating a used_amount
+	 */
+	public int createUsedAmount(UsedAmount usedAmount) {
+		SQLiteDatabase db = this.getWritableDatabase();
+
+		ContentValues values = new ContentValues();
+		values.put(KEY_USED_AMOUNT, usedAmount.getUsedAmount());
+		values.put(KEY_TIMESTAMP_PERIOD, usedAmount.getTimestampPeriod());
+		values.put(KEY_TIMESTAMP_UPDATED, usedAmount.getTimestampUpdated());
+
+		// insert row
+		long used_amount_id = db.insert(TBL_USED_AMOUNT, null, values);
+		return (int)used_amount_id;
+	}
+
+	/*
+	 * get single used amount by timestamp of period
+	 */
+	public UsedAmount getUsedAmount(long timestampPeriod) {
+		SQLiteDatabase db = this.getReadableDatabase();
+
+		String selectQuery = "SELECT  * FROM " + TBL_USED_AMOUNT + " WHERE "
+				+ KEY_TIMESTAMP_PERIOD + " = " + timestampPeriod;
+
+		Log.e(LOG, selectQuery);
+
+		Cursor c = db.rawQuery(selectQuery, null);
+
+		if (c != null)
+			c.moveToFirst();
+
+		if(c.getCount() > 0) {
+			UsedAmount usedAmount = new UsedAmount();
+
+			usedAmount.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+			usedAmount.setUsedAmount(c.getInt(c.getColumnIndex(KEY_USED_AMOUNT)));
+			usedAmount.setTimestampPeriod(c.getLong(c.getColumnIndex(KEY_TIMESTAMP_PERIOD)));
+			usedAmount.setTimestampUpdated(c.getLong(c.getColumnIndex(KEY_TIMESTAMP_UPDATED)));
+
+			return usedAmount;
+		}
+
+		// create new used amount for timestamp of Period
+		UsedAmount usedAmount = new UsedAmount(0, timestampPeriod, Common.getInstance().getTimestamp());
+
+		int used_amount_id = createUsedAmount(usedAmount);
+
+		usedAmount.setId(used_amount_id);
+
+		return usedAmount;
+	}
+
+	/*
+	 * Updating a used amount
+	 */
+	public int updateUsedAmount (UsedAmount usedAmount) {
+		SQLiteDatabase db = this.getWritableDatabase();
+
+		ContentValues values = new ContentValues();
+
+		values.put(KEY_USED_AMOUNT, usedAmount.getUsedAmount());
+		values.put(KEY_TIMESTAMP_UPDATED, usedAmount.getTimestampUpdated());
+
+		// updating row
+		return db.update(TBL_USED_AMOUNT, values, KEY_ID + " = ?",
+				new String[] { String.valueOf(usedAmount.getId()) });
+	}
 
 	/**
 	 * get datetime

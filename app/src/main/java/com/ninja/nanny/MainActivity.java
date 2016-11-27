@@ -42,6 +42,7 @@ import com.ninja.nanny.Utils.Constant;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 
@@ -81,7 +82,7 @@ public class MainActivity extends CustomActivity {
         }
 
         UserPreference.getInstance().pref = getSharedPreferences(Constant.PREF_NAME, Context.MODE_PRIVATE);
-        syncSettingInfo();
+        Common.getInstance().syncSettingInfo();
 
         Common.getInstance().dbHelper = new DatabaseHelper(getApplicationContext());
         Common.getInstance().listBanks = Common.getInstance().dbHelper.getAllBanks();
@@ -148,17 +149,7 @@ public class MainActivity extends CustomActivity {
 
     }
 
-    void syncSettingInfo() {
-        Common.getInstance().timestampInitConfig = UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_INIT_CONFIG_TIMESTAMP, (long)0);
-        Common.getInstance().nMinimalDayAmount = UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_MINIMAL_AMOUNT_PER_DAY, 0);
-        Common.getInstance().nSalaryDate = UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_SALARY_DATE, 15);
-        Common.getInstance().nMonthlyIncome = UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_MONTHLY_INCOME, 0);
-        Common.getInstance().nUsedAmount = UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_USED_SALARY, 0);
-        Common.getInstance().nToleranceDays = UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_TOLERANCE_DAYS, 2);
-        Common.getInstance().nTolerancePercents = UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_TOLERANCE_PERCENT, 5);
-        Common.getInstance().timeWishSaving = UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_WISH_SAVING_TIME, 0);
-        Common.getInstance().timestampSms = UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_SMS_TIMESTAMP, (long)0);
-    }
+
 
     private boolean weHavePermissionToReadSMS() {
         return ContextCompat.checkSelfPermission(this, Manifest.permission.READ_SMS) == PackageManager.PERMISSION_GRANTED;
@@ -191,40 +182,31 @@ public class MainActivity extends CustomActivity {
     }
 
     void syncSms() {
+        Common.getInstance().listSms = new ArrayList<>();
 
-        long currentTimeStamp = UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_SMS_TIMESTAMP, (long)0);
         Uri message = Uri.parse("content://sms/");
         ContentResolver cr = getContentResolver();
         Cursor c = cr.query(message, null, null, null, null);
 
         int totalSMS = c.getCount();
-        long maxTimestamp = currentTimeStamp;
 
         if(c.moveToFirst()) {
             for(int i = 0; i < totalSMS; i ++) {
                 long lTimeStamp = c.getLong(c.getColumnIndexOrThrow("date"));
 
-                if(lTimeStamp > currentTimeStamp) {
-                    Sms objSms = new Sms();
+                Sms objSms = new Sms();
 
-                    objSms.setAddress(c.getString(c.getColumnIndexOrThrow("address")));
-                    objSms.setText(c.getString(c.getColumnIndexOrThrow("body")));
-                    objSms.setTimestamp(lTimeStamp);
+                objSms.setAddress(c.getString(c.getColumnIndexOrThrow("address")));
+                objSms.setText(c.getString(c.getColumnIndexOrThrow("body")));
+                objSms.setTimestamp(lTimeStamp);
 
-                    int sms_id = Common.getInstance().dbHelper.createSMS(objSms);
-                    objSms.setId(sms_id);
+                int sms_id = Common.getInstance().dbHelper.createSMS(objSms);
+                objSms.setId(sms_id);
 
-                    Common.getInstance().listSms.add(objSms);
-
-                    if(lTimeStamp > maxTimestamp) maxTimestamp = lTimeStamp;
-                } else {
-                    break;
-                }
+                Common.getInstance().listSms.add(objSms);
 
                 c.moveToNext();
             }
-
-            UserPreference.getInstance().putSharedPreference(Constant.PREF_KEY_SMS_TIMESTAMP, maxTimestamp);
         }
 
         Collections.sort(Common.getInstance().listSms, new SmsComparator());

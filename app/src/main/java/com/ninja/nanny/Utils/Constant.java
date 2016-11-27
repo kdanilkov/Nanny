@@ -10,10 +10,9 @@ public class Constant {
     public static final String PREF_KEY_MINIMAL_AMOUNT_PER_DAY = "minimal_amount_per_day";
     public static final String PREF_KEY_SALARY_DATE = "salary_date";
     public static final String PREF_KEY_MONTHLY_INCOME = "monthly_income";
-    public static final String PREF_KEY_USED_SALARY = "used_salary";
+    public static final String PREF_KEY_INIT_USED_MONEY = "int_used_money";
     public static final String PREF_KEY_TOLERANCE_DAYS = "tolerance_days";
     public static final String PREF_KEY_TOLERANCE_PERCENT = "tolerance_percent";
-    public static final String PREF_KEY_SMS_TIMESTAMP = "sms_timestamp";
     public static final String PREF_KEY_WISH_SAVING_TIME = "wish_saving_time";
 
     public static final String JSON_NAME = "name";

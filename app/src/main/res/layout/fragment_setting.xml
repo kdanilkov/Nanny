@@ -74,6 +74,7 @@
                     android:layout_marginTop="10dp"
                     android:textColor="@color/black"
                     android:paddingBottom="5dp"
+                    android:selectAllOnFocus="true"
                     android:hint="AED 0.00" />
             </LinearLayout>
 
@@ -99,6 +100,7 @@
                     android:background="@drawable/border_setting_editor"
                     android:layout_marginTop="10dp"
                     android:textColor="@color/black"
+                    android:selectAllOnFocus="true"
                     android:textSize="16sp"
                     android:paddingBottom="5dp"
                     android:inputType="number" />
@@ -127,6 +129,7 @@
                     android:layout_marginTop="10dp"
                     android:textColor="@color/black"
                     android:paddingBottom="5dp"
+                    android:selectAllOnFocus="true"
                     android:inputType="number"
                     android:hint="AED 0.00" />
             </LinearLayout>
@@ -152,6 +155,7 @@
                     android:id="@+id/etUsedSalary"
                     android:background="@drawable/border_setting_editor"
                     android:layout_marginTop="10dp"
+                    android:selectAllOnFocus="true"
                     android:textColor="@color/black"
                     android:paddingBottom="5dp"
                     android:inputType="number"

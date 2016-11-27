@@ -13,14 +13,13 @@ import android.widget.Toast;
 
 import com.ninja.nanny.Custom.CustomFragment;
 import com.ninja.nanny.MainActivity;
+import com.ninja.nanny.Model.UsedAmount;
 import com.ninja.nanny.Preference.UserPreference;
 import com.ninja.nanny.R;
 import com.ninja.nanny.Utils.Common;
 import com.ninja.nanny.Utils.Constant;
 
 import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar;
-
-import java.util.Calendar;
 
 
 public class SettingFragment extends CustomFragment implements DiscreteSeekBar.OnProgressChangeListener {
@@ -51,6 +50,7 @@ public class SettingFragment extends CustomFragment implements DiscreteSeekBar.O
     }
 
     void setUI() {
+
         mView.findViewById(R.id.btnMenu).setOnClickListener(this);
         mView.findViewById(R.id.btnSave).setOnClickListener(this);
 
@@ -68,14 +68,73 @@ public class SettingFragment extends CustomFragment implements DiscreteSeekBar.O
         tvToleranceDays = (TextView)mView.findViewById(R.id.tvToleranceDays);
         tvTolerancePercent = (TextView)mView.findViewById(R.id.tvTolerancePercent);
 
-        etMinimalAmountPerDay.setText(Common.getInstance().nMinimalDayAmount + "");
-        etSalaryDate.setText(Common.getInstance().nSalaryDate + "");
-        etMonthlyIncome.setText(Common.getInstance().nMonthlyIncome + "");
-        etUsedSalary.setText(Common.getInstance().nUsedAmount + "");
-        seekBarDays.setProgress(Common.getInstance().nToleranceDays);
-        seekBarPercent.setProgress(Common.getInstance().nTolerancePercents);
-        tvToleranceDays.setText(Common.getInstance().nToleranceDays + " DAYS");
-        tvTolerancePercent.setText(Common.getInstance().nTolerancePercents + " %");
+        if(Common.getInstance().timestampInitConfig > 0) {
+            long timestampCurrentPeriodEnd = Common.getInstance().getTimestampCurrentPeriodEnd();
+            UsedAmount usedAmount = Common.getInstance().dbHelper.getUsedAmount(timestampCurrentPeriodEnd);
+
+            etMinimalAmountPerDay.setText(Common.getInstance().nMinimalDayAmount + "");
+            etSalaryDate.setText(Common.getInstance().nSalaryDate + "");
+            etMonthlyIncome.setText(Common.getInstance().nMonthlyIncome + "");
+            seekBarDays.setProgress(Common.getInstance().nToleranceDays);
+            seekBarPercent.setProgress(Common.getInstance().nTolerancePercents);
+            tvToleranceDays.setText(Common.getInstance().nToleranceDays + " DAYS");
+            tvTolerancePercent.setText(Common.getInstance().nTolerancePercents + " %");
+            etUsedSalary.setText(usedAmount.getUsedAmount() + "");
+
+
+        }
+
+        etMinimalAmountPerDay.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if(!b) {
+                    String strContent = etMinimalAmountPerDay.getText().toString();
+
+                    if(strContent.length() == 0) {
+                        etMinimalAmountPerDay.setText("0");
+                    }
+                }
+            }
+        });
+
+        etSalaryDate.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if(!b) {
+                    String strContent = etSalaryDate.getText().toString();
+
+                    if(strContent.length() == 0) {
+                        etSalaryDate.setText("0");
+                    }
+                }
+            }
+        });
+
+        etMonthlyIncome.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if(!b) {
+                    String strContent = etMonthlyIncome.getText().toString();
+
+                    if(strContent.length() == 0) {
+                        etMonthlyIncome.setText("0");
+                    }
+                }
+            }
+        });
+
+        etUsedSalary.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if(!b) {
+                    String strContent = etUsedSalary.getText().toString();
+
+                    if(strContent.length() == 0) {
+                        etUsedSalary.setText("0");
+                    }
+                }
+            }
+        });
 
         mView.findViewById(R.id.lyContainer).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -132,22 +191,30 @@ public class SettingFragment extends CustomFragment implements DiscreteSeekBar.O
         UserPreference.getInstance().putSharedPreference(Constant.PREF_KEY_MINIMAL_AMOUNT_PER_DAY, nMinimalAmountPerDay);
         UserPreference.getInstance().putSharedPreference(Constant.PREF_KEY_SALARY_DATE, nSalaryDate);
         UserPreference.getInstance().putSharedPreference(Constant.PREF_KEY_MONTHLY_INCOME, nMonthlyIncome);
-        UserPreference.getInstance().putSharedPreference(Constant.PREF_KEY_USED_SALARY, nUsedSalary);
         UserPreference.getInstance().putSharedPreference(Constant.PREF_KEY_TOLERANCE_DAYS, nToleranceDays);
         UserPreference.getInstance().putSharedPreference(Constant.PREF_KEY_TOLERANCE_PERCENT, nTolerancePercent);
 
         Common.getInstance().nMinimalDayAmount = nMinimalAmountPerDay;
         Common.getInstance().nSalaryDate = nSalaryDate;
         Common.getInstance().nMonthlyIncome = nMonthlyIncome;
-        Common.getInstance().nUsedAmount = nUsedSalary;
         Common.getInstance().nToleranceDays = nToleranceDays;
         Common.getInstance().nTolerancePercents = nTolerancePercent;
 
+        long timestampCurrent = Common.getInstance().getTimestamp();
+        long timestampCurrentPeriodEnd = Common.getInstance().getTimestampCurrentPeriodEnd();
+
+        UsedAmount usedAmount = Common.getInstance().dbHelper.getUsedAmount(timestampCurrentPeriodEnd);
+
+        usedAmount.setUsedAmount(nUsedSalary);
+        usedAmount.setTimestampUpdated(timestampCurrent);
+
+        Common.getInstance().dbHelper.updateUsedAmount(usedAmount);
+
         if(Common.getInstance().timestampInitConfig == 0) {
-            Calendar c = Calendar.getInstance();
-            long timestamp = c.getTimeInMillis();
-            Common.getInstance().timestampInitConfig = timestamp;
-            UserPreference.getInstance().putSharedPreference(Constant.PREF_KEY_INIT_CONFIG_TIMESTAMP, timestamp);
+            Common.getInstance().timestampInitConfig = timestampCurrent;
+            UserPreference.getInstance().putSharedPreference(Constant.PREF_KEY_INIT_CONFIG_TIMESTAMP, timestampCurrent);
+            UserPreference.getInstance().putSharedPreference(Constant.PREF_KEY_INIT_USED_MONEY, nUsedSalary);
+
             mContext.launchFragment(0);
         }
 

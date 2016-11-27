@@ -107,9 +107,7 @@ public class Payment {
         }
 
         c.set(Calendar.DAY_OF_MONTH, Common.getInstance().nSalaryDate);
-        c.set(Calendar.HOUR_OF_DAY, 0);
-        c.set(Calendar.MINUTE, 0);
-        c.set(Calendar.SECOND, 0);
+        Common.getInstance().setInitTime(c);
 
         long nLow = c.getTimeInMillis();
 
@@ -158,9 +156,7 @@ public class Payment {
             }
 
             c.set(Calendar.DAY_OF_MONTH, _dateOfMonth);
-            c.set(Calendar.HOUR_OF_DAY, 0);
-            c.set(Calendar.MINUTE, 0);
-            c.set(Calendar.SECOND, 0);
+            Common.getInstance().setInitTime(c);
 
             return c.getTimeInMillis();
         }
@@ -168,9 +164,7 @@ public class Payment {
         //these recurrent payment has been paid before, then return timestamp for next payment.
 
         c.set(Calendar.DAY_OF_MONTH, _dateOfMonth);
-        c.set(Calendar.HOUR_OF_DAY, 0);
-        c.set(Calendar.MINUTE, 0);
-        c.set(Calendar.SECOND, 0);
+        Common.getInstance().setInitTime(c);
 
         c.add(Calendar.MONTH, -1);
 

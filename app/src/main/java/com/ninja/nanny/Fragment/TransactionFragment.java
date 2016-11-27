@@ -36,7 +36,7 @@ public class TransactionFragment extends CustomFragment {
     View mView;
     MainActivity mContext;
     LinearLayout mLyContainer;
-    final SimpleDateFormat formatter = new SimpleDateFormat("dd MMMM yyyy");
+    final SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy, H:m");
     public int nMode;
     public Payment paymentSelected;
 

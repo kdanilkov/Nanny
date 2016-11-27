@@ -76,6 +76,58 @@ public class NewPaymentFragment extends CustomFragment {
         mView.findViewById(R.id.btnSave).setOnClickListener(this);
         mView.findViewById(R.id.btnPattern).setOnClickListener(this);
 
+        etTitle.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if(!b) {
+                    String strText = etTitle.getText().toString();
+
+                    if(strText.length() == 0) {
+                        etTitle.setText("payment");
+                    }
+                }
+            }
+        });
+
+        etDetail.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if(!b) {
+                    String strText = etDetail.getText().toString();
+
+                    if(strText.length() == 0) {
+                        etDetail.setText("identifier");
+                    }
+                }
+            }
+        });
+
+        etAmount.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if(!b) {
+                    String strText = etAmount.getText().toString();
+
+                    if(strText.length() == 0) {
+                        etAmount.setText("0");
+                    }
+                }
+            }
+        });
+
+        etDateofMonth.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                if(!b) {
+                    String strText = etDateofMonth.getText().toString();
+
+                    if(strText.length() == 0) {
+                        etDateofMonth.setText("15");
+                    }
+                }
+            }
+        });
+
         btnCheckRecurrent.setOnClickListener(this);
         btnCheckSaving.setOnClickListener(this);
 
