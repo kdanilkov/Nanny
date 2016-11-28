@@ -147,7 +147,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:dsb_trackColor = "@color/label_text_color"
-                    app:dsb_min="1"
+                    app:dsb_min="0"
                     app:dsb_max="100"
                     app:dsb_value="2"
                     android:layout_marginTop="25dp"

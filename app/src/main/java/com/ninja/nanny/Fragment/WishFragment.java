@@ -118,7 +118,7 @@ public class WishFragment extends CustomFragment {
 
             ((ToggleButton)cell.findViewById(R.id.tbtnSwitch)).setChecked(flagActive);
             ((TextView)cell.findViewById(R.id.tvName)).setText(wishItem.getTitle());
-            ((TextView)cell.findViewById(R.id.tvDetail)).setText("saved:" + wishItem.getSavedAmount() + "$ / total:" + wishItem.getTotalAmount() + "$");
+            ((TextView)cell.findViewById(R.id.tvDetail)).setText("saved:" + wishItem.getSavedAmount() + "AED / total:" + wishItem.getTotalAmount() + "AED");
 
             cell.setOnClickListener(new View.OnClickListener() {
                 @Override

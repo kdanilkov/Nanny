@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Switch;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -34,9 +34,9 @@ public class PaymentFragment extends CustomFragment {
     View mView;
     MainActivity mContext;
     LinearLayout mLyContainer;
-    boolean isCalendarClicked, isCurrent;
-    Switch switchView;
-
+    boolean isCalendarClicked;
+    RelativeLayout rlyThisPeriodBottom, rlyAllBottom;
+    int nSelectedTab;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -55,20 +55,21 @@ public class PaymentFragment extends CustomFragment {
         mView.findViewById(R.id.btnBack).setOnClickListener(this);
         mView.findViewById(R.id.btnAdd).setOnClickListener(this);
         mView.findViewById(R.id.btnCalendar).setOnClickListener(this);
+        mView.findViewById(R.id.rlyThisPeriod).setOnClickListener(this);
+        mView.findViewById(R.id.rlyAll).setOnClickListener(this);
 
+        rlyThisPeriodBottom = (RelativeLayout)mView.findViewById(R.id.rlyThisPeriodBottom);
+        rlyAllBottom = (RelativeLayout)mView.findViewById(R.id.rlyAllBottom);
         mLyContainer = (LinearLayout)mView.findViewById(R.id.lyContainer);
 
-        switchView = (Switch)mView.findViewById(R.id.switchView);
-        isCurrent = true;
-        switchView.setChecked(true);
+        initTab();
+        nSelectedTab = 0;
+        rlyThisPeriodBottom.setVisibility(View.VISIBLE);
+    }
 
-        switchView.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                isCurrent = b;
-                presentData();
-            }
-        });
+    void initTab() {
+        rlyThisPeriodBottom.setVisibility(View.INVISIBLE);
+        rlyAllBottom.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -92,7 +93,7 @@ public class PaymentFragment extends CustomFragment {
 
         List<Payment> listActive = Common.getInstance().listAllPayments;
 
-        if(isCurrent){
+        if(nSelectedTab == 0){
             listActive = Common.getInstance().getCurrentPayments();
         }
 
@@ -213,6 +214,20 @@ public class PaymentFragment extends CustomFragment {
                     isCalendarClicked = true;
                 }
 
+                break;
+
+            case R.id.rlyThisPeriod:
+                initTab();
+                rlyThisPeriodBottom.setVisibility(View.VISIBLE);
+                nSelectedTab = 0;
+                presentData();
+                break;
+
+            case R.id.rlyAll:
+                initTab();
+                rlyAllBottom.setVisibility(View.VISIBLE);
+                nSelectedTab = 1;
+                presentData();
                 break;
         }
     }

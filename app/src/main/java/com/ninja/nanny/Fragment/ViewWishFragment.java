@@ -113,18 +113,18 @@ public class ViewWishFragment extends CustomFragment implements OnChartValueSele
         mChart.getDescription().setEnabled(false);
 
         // enable touch gestures
-        mChart.setTouchEnabled(true);
+        mChart.setTouchEnabled(false);
 
         mChart.setDragDecelerationFrictionCoef(0.9f);
 
         // enable scaling and dragging
-        mChart.setDragEnabled(true);
-        mChart.setScaleEnabled(true);
+        mChart.setDragEnabled(false);
+        mChart.setScaleEnabled(false);
         mChart.setDrawGridBackground(false);
-        mChart.setHighlightPerDragEnabled(true);
+        mChart.setHighlightPerDragEnabled(false);
 
         // if disabled, scaling can be done on x- and y-axis separately
-        mChart.setPinchZoom(true);
+        mChart.setPinchZoom(false);
 
         // set an alternative background color
         mChart.setBackgroundColor(Color.LTGRAY);
@@ -140,7 +140,7 @@ public class ViewWishFragment extends CustomFragment implements OnChartValueSele
         l.setForm(Legend.LegendForm.LINE);
 //        l.setTypeface(mTfLight);
         l.setTextSize(11f);
-        l.setTextColor(Color.WHITE);
+        l.setTextColor(Color.BLACK);
         l.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
         l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.LEFT);
         l.setOrientation(Legend.LegendOrientation.HORIZONTAL);
@@ -149,8 +149,8 @@ public class ViewWishFragment extends CustomFragment implements OnChartValueSele
 
         XAxis xAxis = mChart.getXAxis();
 //        xAxis.setTypeface(mTfLight);
-        xAxis.setTextSize(11f);
-        xAxis.setTextColor(Color.WHITE);
+        xAxis.setTextSize(1f);
+        xAxis.setTextColor(ColorTemplate.colorWithAlpha(Color.WHITE, 10));
         xAxis.setDrawGridLines(false);
         xAxis.setDrawAxisLine(false);
 
@@ -159,8 +159,9 @@ public class ViewWishFragment extends CustomFragment implements OnChartValueSele
         leftAxis.setTextColor(Color.BLUE);
         leftAxis.setAxisMaximum(nLeftHigh + 50);
         leftAxis.setAxisMinimum(0);
-        leftAxis.setDrawGridLines(true);
-        leftAxis.setGranularityEnabled(true);
+        leftAxis.setDrawGridLines(false);
+        leftAxis.setDrawAxisLine(true);
+        leftAxis.setGranularityEnabled(false);
 
         YAxis rightAxis = mChart.getAxisRight();
 //        rightAxis.setTypeface(mTfLight);
@@ -168,7 +169,8 @@ public class ViewWishFragment extends CustomFragment implements OnChartValueSele
         rightAxis.setAxisMaximum(nRightHigh + 50);
         rightAxis.setAxisMinimum(0);
         rightAxis.setDrawGridLines(false);
-        rightAxis.setDrawZeroLine(false);
+        rightAxis.setDrawAxisLine(true);
+        rightAxis.setDrawZeroLine(true);
         rightAxis.setGranularityEnabled(false);
 
 
@@ -206,9 +208,9 @@ public class ViewWishFragment extends CustomFragment implements OnChartValueSele
 
                 set1.setAxisDependency(YAxis.AxisDependency.RIGHT);
                 set1.setColor(Color.RED);
-                set1.setCircleColor(Color.WHITE);
+                set1.setCircleColor(ColorTemplate.colorWithAlpha(Color.WHITE, 10));
                 set1.setLineWidth(2f);
-                set1.setCircleRadius(3f);
+//                set1.setCircleRadius(3f);
 //                set1.setFillColor(Color.RED);
 //                set1.setHighLightColor(Color.rgb(244, 117, 117));
                 set1.setDrawCircleHole(false);
@@ -218,9 +220,9 @@ public class ViewWishFragment extends CustomFragment implements OnChartValueSele
                 set2 = new LineDataSet(yVals2, "Sum");
                 set2.setAxisDependency(YAxis.AxisDependency.LEFT);
                 set2.setColor(Color.BLUE);
-                set2.setCircleColor(Color.WHITE);
+                set2.setCircleColor(ColorTemplate.colorWithAlpha(Color.WHITE, 10));
                 set2.setLineWidth(2f);
-                set2.setCircleRadius(3f);
+//                set2.setCircleRadius(3f);
 //                set2.setFillColor(Color.BLUE);
                 set2.setDrawCircleHole(false);
 //                set2.setHighLightColor(Color.rgb(244, 117, 117));
@@ -230,9 +232,9 @@ public class ViewWishFragment extends CustomFragment implements OnChartValueSele
                 set3 = new LineDataSet(yVals3, "Future");
                 set3.setAxisDependency(YAxis.AxisDependency.RIGHT);
                 set3.setColor(ColorTemplate.colorWithAlpha(Color.RED, 100));
-                set3.setCircleColor(Color.WHITE);
+                set3.setCircleColor(ColorTemplate.colorWithAlpha(Color.WHITE, 10));
                 set3.setLineWidth(2f);
-                set3.setCircleRadius(3f);
+//                set3.setCircleRadius(3f);
 //            set3.setFillAlpha(65);
 //                set3.setFillColor(ColorTemplate.colorWithAlpha(Color.RED, 100));
                 set3.setDrawCircleHole(false);
@@ -243,9 +245,9 @@ public class ViewWishFragment extends CustomFragment implements OnChartValueSele
                 set4 = new LineDataSet(yVals4, "Sum");
                 set4.setAxisDependency(YAxis.AxisDependency.LEFT);
                 set4.setColor(ColorTemplate.colorWithAlpha(Color.BLUE, 100));
-                set4.setCircleColor(Color.WHITE);
+                set4.setCircleColor(ColorTemplate.colorWithAlpha(Color.WHITE, 10));
                 set4.setLineWidth(2f);
-                set4.setCircleRadius(3f);
+//                set4.setCircleRadius(3f);
 //            set4.setFillAlpha(65);
 //                set4.setFillColor(ColorTemplate.colorWithAlpha(Color.BLUE, 100));
                 set4.setDrawCircleHole(false);

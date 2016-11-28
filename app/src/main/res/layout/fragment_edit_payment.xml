@@ -99,88 +99,6 @@
             </LinearLayout>
 
             <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="30dp">
-
-                <com.ninja.nanny.Custom.MediumTextView
-                    android:text="DETAIL"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:textColor="@color/label_text_color" />
-
-                <com.ninja.nanny.Custom.RegularEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="textPersonName"
-                    android:text=""
-                    android:ems="10"
-                    android:textSize="16sp"
-                    android:id="@+id/etDetail"
-                    android:background="@drawable/border_add_bank_editor"
-                    android:layout_marginTop="10dp"
-                    android:textColor="@color/black"
-                    android:selectAllOnFocus="true"
-                    android:paddingBottom="5dp" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="20dp">
-
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent">
-
-                    <Button
-                        android:layout_height="30dp"
-                        android:id="@+id/btnChkBoxRecurrent"
-                        android:layout_weight="1"
-                        android:layout_width="30dp"
-                        android:background="@drawable/ic_unchecked" />
-
-                    <com.ninja.nanny.Custom.MediumTextView
-                        android:text="RECURRENT"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:textSize="14sp"
-                        android:layout_marginLeft="20dp"
-                        android:textColor="@color/label_text_color" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="10dp">
-
-                    <Button
-                        android:layout_height="30dp"
-                        android:id="@+id/btnChkBoxSaving"
-                        android:layout_weight="1"
-                        android:layout_width="30dp"
-                        android:background="@drawable/ic_unchecked" />
-
-                    <com.ninja.nanny.Custom.MediumTextView
-                        android:text="IS SAVING WISH"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:textSize="14sp"
-                        android:layout_marginLeft="20dp"
-                        android:textColor="@color/label_text_color" />
-
-                </LinearLayout>
-            </LinearLayout>
-
-            <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -244,6 +162,88 @@
                         android:selectAllOnFocus="true"
                         android:hint="10" />
                 </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="20dp">
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
+
+                    <Button
+                        android:layout_height="30dp"
+                        android:id="@+id/btnChkBoxRecurrent"
+                        android:layout_weight="1"
+                        android:layout_width="30dp"
+                        android:background="@drawable/ic_unchecked" />
+
+                    <com.ninja.nanny.Custom.MediumTextView
+                        android:text="RECURRENT"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textSize="14sp"
+                        android:layout_marginLeft="20dp"
+                        android:textColor="@color/label_text_color" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp">
+
+                    <Button
+                        android:layout_height="30dp"
+                        android:id="@+id/btnChkBoxSaving"
+                        android:layout_weight="1"
+                        android:layout_width="30dp"
+                        android:background="@drawable/ic_unchecked" />
+
+                    <com.ninja.nanny.Custom.MediumTextView
+                        android:text="IS SAVING WISH"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textSize="14sp"
+                        android:layout_marginLeft="20dp"
+                        android:textColor="@color/label_text_color" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="30dp">
+
+                <com.ninja.nanny.Custom.MediumTextView
+                    android:text="DETAIL"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="14sp"
+                    android:textColor="@color/label_text_color" />
+
+                <com.ninja.nanny.Custom.RegularEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName"
+                    android:text=""
+                    android:ems="10"
+                    android:textSize="16sp"
+                    android:id="@+id/etDetail"
+                    android:background="@drawable/border_add_bank_editor"
+                    android:layout_marginTop="10dp"
+                    android:textColor="@color/black"
+                    android:selectAllOnFocus="true"
+                    android:paddingBottom="5dp" />
             </LinearLayout>
 
         </LinearLayout>

@@ -124,6 +124,7 @@
                     android:paddingBottom="5dp"
                     android:textSize="16sp"
                     android:inputType="number"
+                    android:imeOptions="actionDone"
                     android:selectAllOnFocus="true"
                     android:hint="AED 0.00" />
             </LinearLayout>
@@ -148,7 +149,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:dsb_trackColor = "@color/label_text_color"
-                    app:dsb_min="1"
+                    app:dsb_min="0"
                     app:dsb_max="100"
                     app:dsb_value="1"
                     android:layout_marginTop="25dp"

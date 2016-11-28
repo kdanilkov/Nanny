@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.Html;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -131,7 +132,19 @@ public class EditWishFragment extends CustomFragment {
                     return;
                 }
 
-                int nMonthlyPayment = (nTotalAmount- nSavedAmount) * seekBar.getProgress() / 100;
+                int nMin = (nTotalAmount - nSavedAmount) / 36;
+                int nMax = Common.getInstance().nMonthlyIncome;
+
+                if(nMin > nMax) {
+                    etTotalAmount.setError(Html.fromHtml("<font color='red'> Your income is not enough to save </font>"));
+
+                    tvMonthlyPayment.setText("");
+                    tvPeriod.setText("");
+                    return;
+                }
+
+                int nPercent = seekbarPropotion.getProgress();
+                int nMonthlyPayment = (nPercent * nMax + (100 - nPercent) * nMin) / 100;
 
                 if(nMonthlyPayment == 0) {
                     nMonthlyPayment = 1;
@@ -185,6 +198,30 @@ public class EditWishFragment extends CustomFragment {
             }
         });
 
+        etTotalAmount.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+
+            @Override
+            public boolean onEditorAction(TextView v, int actionId,
+                                          KeyEvent event) {
+                if (event != null&& (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
+                    InputMethodManager in = (InputMethodManager) mContext.getSystemService(mContext.INPUT_METHOD_SERVICE);
+
+                    // NOTE: In the author's example, he uses an identifier
+                    // called searchBar. If setting this code on your EditText
+                    // then use v.getWindowToken() as a reference to your
+                    // EditText is passed into this callback as a TextView
+
+                    in.hideSoftInputFromWindow(etTotalAmount
+                                    .getApplicationWindowToken(),
+                            InputMethodManager.HIDE_NOT_ALWAYS);
+                    // Must return true here to consume event
+                    return true;
+
+                }
+                return false;
+            }
+        });
+
         mView.findViewById(R.id.lyContainer).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -210,15 +247,18 @@ public class EditWishFragment extends CustomFragment {
 
         if(nTotalAmount == 0 || nTotalAmount <= nSavedAmount) return;
 
-        int nMonthlyPayment = Common.getInstance().freeOnThisWeek();
+        int nMin = (nTotalAmount - nSavedAmount) / 36;
+        int nMax = Common.getInstance().nMonthlyIncome;
 
-        if(nMonthlyPayment == 0) {
-            nMonthlyPayment = Common.getInstance().freeOnThisMonth();
+        if(nMin > nMax) {
+            etTotalAmount.setError(Html.fromHtml("<font color='red'> Your income is not enough to save </font>"));
+
+            tvMonthlyPayment.setText("");
+            tvPeriod.setText("");
+            return;
         }
 
-        if(nMonthlyPayment == 0) {
-            nMonthlyPayment = nTotalAmount / 100;
-        }
+        int nMonthlyPayment = (nMin + nMax) / 2;
 
         if(nMonthlyPayment == 0) {
             nMonthlyPayment = 1;
@@ -231,14 +271,9 @@ public class EditWishFragment extends CustomFragment {
         }
 
         int nTotalMonths = (nTotalAmount + nMonthlyPayment -1) / nMonthlyPayment;
-        int nPercent = nMonthlyPayment * 100 / nTotalAmount;
 
-        if(nPercent == 0) {
-            nPercent = 1;
-        }
-
-        seekbarPropotion.setProgress(nPercent);
-        tvMonthlyPayment.setText(nMonthlyPayment + " $");
+        seekbarPropotion.setProgress(50);
+        tvMonthlyPayment.setText(nMonthlyPayment + " AED");
         tvPeriod.setText(nTotalMonths + " month");
     }
 

@@ -16,7 +16,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".MainActivity"
-            android:windowSoftInputMode="adjustPan">
+            android:windowSoftInputMode="adjustResize">
         </activity>
         <activity android:name=".AdvisorActivity"
             android:windowSoftInputMode="adjustResize">

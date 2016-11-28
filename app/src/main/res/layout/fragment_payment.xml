@@ -46,36 +46,76 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_centerHorizontal="true"
+        android:layout_height="50dp"
         android:layout_below="@+id/rlyTop"
+        android:background="@color/colorPrimary"
+        android:id="@+id/lyTab">
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:id="@+id/rlyThisPeriod">
+
+            <com.ninja.nanny.Custom.MediumTextView
+                android:text="THIS PERIOD"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="@color/white"
+                android:layout_centerInParent="true" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:background="@color/white"
+                android:layout_alignParentBottom="true"
+                android:layout_height="5dp"
+                android:id="@+id/rlyThisPeriodBottom"
+                android:visibility="invisible">
+
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:id="@+id/rlyAll">
+
+            <com.ninja.nanny.Custom.MediumTextView
+                android:text="ALL"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="14sp"
+                android:textColor="@color/white"
+                android:layout_centerInParent="true" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:background="@color/white"
+                android:layout_alignParentBottom="true"
+                android:layout_height="5dp"
+                android:id="@+id/rlyAllBottom">
+
+            </RelativeLayout>
+        </RelativeLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/lyTab"
         android:background="@color/gray_lt"
         android:layout_height="3dp"
         android:id="@+id/lyShadow" />
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/lySwitchView"
-        android:layout_below="@+id/lyShadow"
-        android:layout_marginTop="10dp"
-        android:layout_centerInParent="true">
-
-        <Switch
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/switchView"
-            android:layout_weight="1"
-            android:textOn="This Period"
-            android:textOff="All" />
-    </LinearLayout>
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/lySwitchView"
+        android:layout_below="@+id/lyShadow"
         android:layout_marginBottom="40dp"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="5dp">
 
         <LinearLayout
             android:layout_width="match_parent"
