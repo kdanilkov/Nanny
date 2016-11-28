@@ -81,7 +81,7 @@ public class EditWishFragment extends CustomFragment {
         if(nPercentage > 100) nPercentage = 100;
 
         etTotalAmount.setText(nTotalAmount + "");
-        tvMonthlyPayment.setText(nMonthlyPayment + " $");
+        tvMonthlyPayment.setText(nMonthlyPayment + " AED");
         tvPeriod.setText(nTotalMonths + " month");
         seekbarPropotion.setProgress(nPercentage);
 
@@ -152,7 +152,7 @@ public class EditWishFragment extends CustomFragment {
 
                 int nTotalMonths = (nTotalAmount + nMonthlyPayment -1) / nMonthlyPayment;
 
-                tvMonthlyPayment.setText(nMonthlyPayment + " $");
+                tvMonthlyPayment.setText(nMonthlyPayment + " AED");
                 tvPeriod.setText(nTotalMonths + " month");
             }
         });
