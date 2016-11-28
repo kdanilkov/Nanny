@@ -209,9 +209,8 @@ public class ViewWishFragment extends CustomFragment implements OnChartValueSele
                 set1.setCircleColor(Color.WHITE);
                 set1.setLineWidth(2f);
                 set1.setCircleRadius(3f);
-//            set1.setFillAlpha(255);
-                set1.setFillColor(Color.RED);
-                set1.setHighLightColor(Color.rgb(244, 117, 117));
+//                set1.setFillColor(Color.RED);
+//                set1.setHighLightColor(Color.rgb(244, 117, 117));
                 set1.setDrawCircleHole(false);
             }
 
@@ -222,10 +221,9 @@ public class ViewWishFragment extends CustomFragment implements OnChartValueSele
                 set2.setCircleColor(Color.WHITE);
                 set2.setLineWidth(2f);
                 set2.setCircleRadius(3f);
-//            set2.setFillAlpha(255);
-                set2.setFillColor(Color.BLUE);
+//                set2.setFillColor(Color.BLUE);
                 set2.setDrawCircleHole(false);
-                set2.setHighLightColor(Color.rgb(244, 117, 117));
+//                set2.setHighLightColor(Color.rgb(244, 117, 117));
             }
 
             if(yVals3.size() > 0) {
@@ -236,9 +234,9 @@ public class ViewWishFragment extends CustomFragment implements OnChartValueSele
                 set3.setLineWidth(2f);
                 set3.setCircleRadius(3f);
 //            set3.setFillAlpha(65);
-                set3.setFillColor(ColorTemplate.colorWithAlpha(Color.RED, 100));
+//                set3.setFillColor(ColorTemplate.colorWithAlpha(Color.RED, 100));
                 set3.setDrawCircleHole(false);
-                set3.setHighLightColor(Color.rgb(244, 117, 117));
+//                set3.setHighLightColor(Color.rgb(244, 117, 117));
             }
 
             if(yVals4.size() > 0) {
@@ -249,9 +247,9 @@ public class ViewWishFragment extends CustomFragment implements OnChartValueSele
                 set4.setLineWidth(2f);
                 set4.setCircleRadius(3f);
 //            set4.setFillAlpha(65);
-                set4.setFillColor(ColorTemplate.colorWithAlpha(Color.BLUE, 100));
+//                set4.setFillColor(ColorTemplate.colorWithAlpha(Color.BLUE, 100));
                 set4.setDrawCircleHole(false);
-                set4.setHighLightColor(Color.rgb(244, 117, 117));
+//                set4.setHighLightColor(Color.rgb(244, 117, 117));
             }
 
             // create a data object with the datasets
@@ -266,7 +264,7 @@ public class ViewWishFragment extends CustomFragment implements OnChartValueSele
 
             if(data != null) {
 //                data = new LineData(set1, set2, set3, set4);
-                data.setValueTextColor(Color.WHITE);
+                data.setValueTextColor(ColorTemplate.colorWithAlpha(Color.WHITE, 10));
                 data.setValueTextSize(9f);
 
                 // set data
