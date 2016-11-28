@@ -115,6 +115,7 @@ public class NewPaymentFragment extends CustomFragment {
             }
         });
 
+        etDateofMonth.setText("10");
         etDateofMonth.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {

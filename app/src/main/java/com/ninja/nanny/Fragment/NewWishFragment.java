@@ -112,6 +112,9 @@ public class NewWishFragment extends CustomFragment {
                     return;
                 }
 
+                if(nMin == 0) nMin = 1;
+                if(nMax > nTotalAmount) nMax = nTotalAmount;
+
                 int nPercent = seekbarPropotion.getProgress();
                 int nMonthlyPayment = (nPercent * nMax + (100 - nPercent) * nMin) / 100;
 
@@ -264,6 +267,9 @@ public class NewWishFragment extends CustomFragment {
             return;
         }
 
+        if(nMin == 0) nMin = 1;
+        if(nMax > nTotalAmount) nMax = nTotalAmount;
+
         int nMonthlyPayment = (nMin + nMax) / 2;
         int nTotalMonths = (nTotalAmount + nMonthlyPayment -1) / nMonthlyPayment;
 
@@ -304,7 +310,7 @@ public class NewWishFragment extends CustomFragment {
             return;
         }
 
-        int nMonthlyPayment = Integer.valueOf(strMonthlyPament.substring(0, strMonthlyPament.length() -2));
+        int nMonthlyPayment = Integer.valueOf(strMonthlyPament.substring(0, strMonthlyPament.length() -4));
 
         Wish wishNew = new Wish(strTitle, nTotalAmount, nMonthlyPayment, 0, Common.getInstance().getTimestamp(), -1, 1);
         int nID = Common.getInstance().dbHelper.createWish(wishNew);

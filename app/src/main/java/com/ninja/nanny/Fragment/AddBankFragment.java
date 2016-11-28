@@ -76,6 +76,8 @@ public class AddBankFragment extends CustomFragment {
         CustomSpinnerAdapter spinnerAdapterBank = new CustomSpinnerAdapter(mContext,myBankArrayList);
         spinnerBank.setAdapter(spinnerAdapterBank);
 
+        etAccountName.setText("Bank");
+
         etAccountName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
@@ -83,7 +85,7 @@ public class AddBankFragment extends CustomFragment {
                     String strText = etAccountName.getText().toString();
 
                     if(strText.length() == 0) {
-                        etAccountName.setText("bank");
+                        etAccountName.setText("Bank");
                     }
                 }
             }

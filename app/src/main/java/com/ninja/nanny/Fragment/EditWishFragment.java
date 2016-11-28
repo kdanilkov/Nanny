@@ -72,13 +72,23 @@ public class EditWishFragment extends CustomFragment {
         nSavedAmount = wishSelected.getSavedAmount();
         int nTotalMonths = (nTotalAmount - nSavedAmount + nMonthlyPayment -1) / nMonthlyPayment;
 
-        int nPercentage = 1;
-        if(nTotalAmount > nSavedAmount) {
-            nPercentage = nMonthlyPayment * 100 / (nTotalAmount - nSavedAmount);
+        int nMin = (nTotalAmount - nSavedAmount) / 36;
+        int nMax = Common.getInstance().nMonthlyIncome;
+
+        if(nMin > nMax) {
+            etTotalAmount.setError(Html.fromHtml("<font color='red'> Your income is not enough to save </font>"));
+
+            tvMonthlyPayment.setText("");
+            tvPeriod.setText("");
+            return;
         }
 
+        if(nMin == 0) nMin = 1;
+        if(nMax > nTotalAmount) nMax = nTotalAmount;
+
+        int nPercentage = 100 * (nMonthlyPayment - nMin) / (nMax - nMin);
         if(nPercentage == 0) nPercentage = 1;
-        if(nPercentage > 100) nPercentage = 100;
+        if(nPercentage >= 100) nPercentage = 100;
 
         etTotalAmount.setText(nTotalAmount + "");
         tvMonthlyPayment.setText(nMonthlyPayment + " AED");
@@ -142,6 +152,9 @@ public class EditWishFragment extends CustomFragment {
                     tvPeriod.setText("");
                     return;
                 }
+
+                if(nMin == 0) nMin = 1;
+                if(nMax > nTotalAmount) nMax = nTotalAmount;
 
                 int nPercent = seekbarPropotion.getProgress();
                 int nMonthlyPayment = (nPercent * nMax + (100 - nPercent) * nMin) / 100;
@@ -258,6 +271,9 @@ public class EditWishFragment extends CustomFragment {
             return;
         }
 
+        if(nMin == 0) nMin = 1;
+        if(nMax > nTotalAmount) nMax = nTotalAmount;
+
         int nMonthlyPayment = (nMin + nMax) / 2;
 
         if(nMonthlyPayment == 0) {
@@ -314,7 +330,7 @@ public class EditWishFragment extends CustomFragment {
                 return;
             }
 
-            int nMonthlyPayment = Integer.valueOf(strMonthlyPament.substring(0, strMonthlyPament.length() -2));
+            int nMonthlyPayment = Integer.valueOf(strMonthlyPament.substring(0, strMonthlyPament.length() -4));
 
             wishSelected.setTitle(strTitle);
             wishSelected.setTotalAmount(nTotalAmount);
