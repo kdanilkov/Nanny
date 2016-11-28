@@ -15,7 +15,6 @@ public class Bank {
     String _accountName;
     int _idxKind;
     int _balance;
-    int _notificationMode;// 0-SMS, 1-Email
     int _flagActive; //0-disabled, 1-enabled
     long _timestamp;
 
@@ -23,11 +22,10 @@ public class Bank {
 
     }
 
-    public Bank(String accountName, int idxKind, int balance, int notificationMode, int flagActive, long timestamp) {
+    public Bank(String accountName, int idxKind, int balance, int flagActive, long timestamp) {
         _accountName = accountName;
         _idxKind = idxKind;
         _balance = balance;
-        _notificationMode = notificationMode;
         _flagActive = flagActive;
         _timestamp = timestamp;
     }
@@ -46,10 +44,6 @@ public class Bank {
 
     public void setBalance(int balance) {
         _balance = balance;
-    }
-
-    public void setNotificationMode(int notificationMode) {
-        _notificationMode = notificationMode;
     }
 
     public void setFlagActive(int flagActive) {
@@ -74,10 +68,6 @@ public class Bank {
 
     public int getBalance() {
         return _balance;
-    }
-
-    public int getNotificationMode() {
-        return _notificationMode;
     }
 
     public int getFlagActive() {

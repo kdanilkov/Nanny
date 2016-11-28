@@ -85,6 +85,7 @@ public class MainActivity extends CustomActivity {
         Common.getInstance().syncSettingInfo();
 
         Common.getInstance().dbHelper = new DatabaseHelper(getApplicationContext());
+//        sampleWishData();
         Common.getInstance().listBanks = Common.getInstance().dbHelper.getAllBanks();
         Common.getInstance().listAllWishes = Common.getInstance().dbHelper.getAllWishes();
         Common.getInstance().listActiveWishes = Common.getInstance().dbHelper.getActiveWishes();
@@ -106,8 +107,6 @@ public class MainActivity extends CustomActivity {
                 Common.getInstance().checkWishSavingPast();
             }
         }
-
-//        sampleWishData();
     }
 
     void sampleWishData() {

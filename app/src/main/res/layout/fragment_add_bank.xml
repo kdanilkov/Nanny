@@ -33,6 +33,14 @@
             android:layout_toRightOf="@+id/btnBack"
             android:textColor="@color/white"
             android:textSize="20sp" />
+        <Button
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="15dp"
+            android:id="@+id/btnSave"
+            android:background="@drawable/ic_save" />
 
     </RelativeLayout>
 
@@ -114,31 +122,6 @@
                 android:layout_marginTop="30dp">
 
                 <com.ninja.nanny.Custom.MediumTextView
-                    android:text="ACCOUNT TYPE"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/textView2"
-                    android:textSize="14sp"
-                    android:textColor="@color/label_text_color" />
-
-                <com.ninja.nanny.Custom.RegularTextView
-                    android:text="TextView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/tvAccountType"
-                    android:textColor="@color/gray_dark"
-                    android:textSize="16sp"
-                    android:layout_marginTop="5dp" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="30dp">
-
-                <com.ninja.nanny.Custom.MediumTextView
                     android:text="BALANCE (AED)"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -161,76 +144,7 @@
                     android:hint="AED 0.00" />
             </LinearLayout>
 
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="30dp">
-
-                <com.ninja.nanny.Custom.MediumTextView
-                    android:text="NOTIFICATION"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/textView6"
-                    android:textSize="14sp"
-                    android:textColor="@color/label_text_color" />
-
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="15dp">
-
-                    <Button
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:id="@+id/btnSMS"
-                        android:layout_weight="1"
-                        android:background="@drawable/ic_checked" />
-
-                    <com.ninja.nanny.Custom.MediumTextView
-                        android:text="SMS"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_marginLeft="10dp"
-                        android:textSize="14sp"
-                        android:textColor="@color/label_text_color" />
-
-                    <Button
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:id="@+id/btnEmail"
-                        android:layout_weight="1"
-                        android:background="@drawable/ic_unchecked"
-                        android:layout_marginLeft="40dp" />
-
-                    <com.ninja.nanny.Custom.MediumTextView
-                        android:text="EMAIL"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:textSize="14sp"
-                        android:layout_marginLeft="10dp"
-                        android:textColor="@color/label_text_color" />
-                </LinearLayout>
-
-
-            </LinearLayout>
-
         </LinearLayout>
     </ScrollView>
-
-    <com.ninja.nanny.Custom.MediumButton
-        android:text="SAVE"
-        android:layout_width="100dp"
-        android:layout_height="50dp"
-        android:id="@+id/btnSave"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="10dp"
-        android:layout_marginEnd="10dp" />
-
-
 </RelativeLayout>
 

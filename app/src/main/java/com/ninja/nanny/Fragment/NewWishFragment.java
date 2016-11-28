@@ -3,14 +3,14 @@ package com.ninja.nanny.Fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.Html;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -65,7 +65,6 @@ public class NewWishFragment extends CustomFragment {
         seekbarPropotion.setOnProgressChangeListener(new DiscreteSeekBar.OnProgressChangeListener() {
             @Override
             public void onProgressChanged(DiscreteSeekBar seekBar, int value, boolean fromUser) {
-
             }
 
             @Override
@@ -77,7 +76,40 @@ public class NewWishFragment extends CustomFragment {
 
             @Override
             public void onStopTrackingTouch(DiscreteSeekBar seekBar) {
-                calcMonthlyPament();
+                String strTotalAmount = etTotalAmount.getText().toString();
+
+                if(strTotalAmount.length() > 8) {
+                    etTotalAmount.setError(Html.fromHtml("<font color='red'>amount value is too large</font>"));
+
+                    tvMonthlyPayment.setText("");
+                    tvPeriod.setText("");
+                    return;
+                }
+
+                if(strTotalAmount.length() < 1) {
+                    tvMonthlyPayment.setText("");
+                    tvPeriod.setText("");
+                    return;
+                }
+
+                int nTotalAmount = Integer.valueOf(strTotalAmount);
+
+                if(nTotalAmount == 0) {
+                    tvMonthlyPayment.setText("");
+                    tvPeriod.setText("");
+                    return;
+                }
+
+                int nMonthlyPayment = nTotalAmount * seekBar.getProgress() / 100;
+
+                if(nMonthlyPayment == 0) {
+                    nMonthlyPayment = 1;
+                }
+
+                int nTotalMonths = (nTotalAmount + nMonthlyPayment -1) / nMonthlyPayment;
+
+                tvMonthlyPayment.setText(nMonthlyPayment + " $");
+                tvPeriod.setText(nTotalMonths + " month");
             }
         });
 
@@ -101,8 +133,24 @@ public class NewWishFragment extends CustomFragment {
                     if(strText.length() == 0) {
                         etTitle.setText("0");
                     }
-                    calcMonthlyPament();
                 }
+            }
+        });
+
+        etTotalAmount.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                calcMonthlyPament();
             }
         });
 
@@ -114,95 +162,127 @@ public class NewWishFragment extends CustomFragment {
             }
         });
 
-        final ScrollView scrollView = (ScrollView)mView.findViewById(R.id.scrollView);
-
-        scrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
-            @Override
-            public void onScrollChanged() {
-                int nPropotion = seekbarPropotion.getProgress();
-
-                if(nPropotion > 1) return;
-                if(etTotalAmount.getText().toString().length() == 0) return;
-
-                int nTotalAmount = Integer.valueOf(etTotalAmount.getText().toString());
-
-                if(nTotalAmount == 0) return;
-
-                int nLeftOnThisWeek = Common.getInstance().freeOnThisWeek();
-                int nMonthlyPayment = 0;
-
-                if(nLeftOnThisWeek < 1) {
-                    seekbarPropotion.setProgress(50);
-                    nMonthlyPayment = nTotalAmount / 2;
-                } else {
-                    if(nLeftOnThisWeek > nTotalAmount) {
-                        seekbarPropotion.setProgress(100);
-                        nMonthlyPayment = nTotalAmount;
-                    } else {
-                        nMonthlyPayment = nLeftOnThisWeek;
-                        int nPercent = nMonthlyPayment * 100 / nTotalAmount;
-                        seekbarPropotion.setProgress(nPercent);
-                    }
-                }
-
-                if(nMonthlyPayment == 0) nMonthlyPayment = 1;
-
-                int nTotalMonths = (nTotalAmount + nMonthlyPayment -1) / nMonthlyPayment;
-
-                tvMonthlyPayment.setText(nMonthlyPayment + " $");
-                tvPeriod.setText(nTotalMonths + " month");
-
-            }
-        });
+//        final ScrollView scrollView = (ScrollView)mView.findViewById(R.id.scrollView);
+//
+//        scrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
+//            @Override
+//            public void onScrollChanged() {
+//                int nPropotion = seekbarPropotion.getProgress();
+//
+//                if(nPropotion > 1) return;
+//                if(etTotalAmount.getText().toString().length() == 0) return;
+//
+//                int nTotalAmount = Integer.valueOf(etTotalAmount.getText().toString());
+//
+//                if(nTotalAmount == 0) return;
+//
+//                int nLeftOnThisWeek = Common.getInstance().freeOnThisWeek();
+//                int nMonthlyPayment = 0;
+//
+//                if(nLeftOnThisWeek < 1) {
+//                    seekbarPropotion.setProgress(50);
+//                    nMonthlyPayment = nTotalAmount / 2;
+//                } else {
+//                    if(nLeftOnThisWeek > nTotalAmount) {
+//                        seekbarPropotion.setProgress(100);
+//                        nMonthlyPayment = nTotalAmount;
+//                    } else {
+//                        nMonthlyPayment = nLeftOnThisWeek;
+//                        int nPercent = nMonthlyPayment * 100 / nTotalAmount;
+//                        seekbarPropotion.setProgress(nPercent);
+//                    }
+//                }
+//
+//                if(nMonthlyPayment == 0) nMonthlyPayment = 1;
+//
+//                int nTotalMonths = (nTotalAmount + nMonthlyPayment -1) / nMonthlyPayment;
+//
+//                tvMonthlyPayment.setText(nMonthlyPayment + " $");
+//                tvPeriod.setText(nTotalMonths + " month");
+//
+//            }
+//        });
     }
 
     void calcMonthlyPament() {
-        if(etTotalAmount.getText().toString().length() > 8) {
+        String strTotalAmount = etTotalAmount.getText().toString();
+
+        if(strTotalAmount.length() > 8) {
             etTotalAmount.setError(Html.fromHtml("<font color='red'>amount value is too large</font>"));
             return;
         }
 
-        if(etTotalAmount.getText().toString().length() < 1) {
+        if(strTotalAmount.length() < 1) {
             return;
         }
 
-        int nTotalAmount = Integer.valueOf(etTotalAmount.getText().toString());
-        int nMonthlyPayment = nTotalAmount * seekbarPropotion.getProgress() / 100;
-        if(nMonthlyPayment == 0) return;
+        int nTotalAmount = Integer.valueOf(strTotalAmount);
+
+        if(nTotalAmount == 0) return;
+
+        int nMonthlyPayment = Common.getInstance().freeOnThisWeek();
+
+        if(nMonthlyPayment == 0) {
+            nMonthlyPayment = Common.getInstance().freeOnThisMonth();
+        }
+
+        if(nMonthlyPayment == 0) {
+            nMonthlyPayment = nTotalAmount / 100;
+        }
+
+        if(nMonthlyPayment == 0) {
+            nMonthlyPayment = 1;
+        }
+
+        if(nMonthlyPayment > nTotalAmount) {
+            nMonthlyPayment = nTotalAmount;
+        }
 
         int nTotalMonths = (nTotalAmount + nMonthlyPayment -1) / nMonthlyPayment;
+        int nPercent = nMonthlyPayment * 100 / nTotalAmount;
 
+        if(nPercent == 0) {
+            nPercent = 1;
+        }
+
+        seekbarPropotion.setProgress(nPercent);
         tvMonthlyPayment.setText(nMonthlyPayment + " $");
         tvPeriod.setText(nTotalMonths + " month");
     }
 
     void saveWish() {
         String strTitle = etTitle.getText().toString();
-
-        if(etTotalAmount.getText().toString().length() > 8){
-            etTotalAmount.setError(Html.fromHtml("<font color='red'>amount value is too large</font>"));
-            return;
-        }
-
-        if(etTotalAmount.getText().toString().length() < 1) {
-            etTotalAmount.setError(Html.fromHtml("<font color='red'>amount value is empty</font>"));
-            return;
-        }
-
-        int nTotalAmount = Integer.valueOf(etTotalAmount.getText().toString());
+        String strTotalAmount = etTotalAmount.getText().toString();
+        String strMonthlyPament = tvMonthlyPayment.getText().toString();
 
         if(strTitle.length() == 0) {
             etTitle.setError(Html.fromHtml("<font color='red'>please input the title</font>"));
             return;
         }
 
+        if(strTotalAmount.length() > 8){
+            etTotalAmount.setError(Html.fromHtml("<font color='red'>amount value is too large</font>"));
+            return;
+        }
+
+        if(strTotalAmount.length() < 1) {
+            etTotalAmount.setError(Html.fromHtml("<font color='red'>amount value is empty</font>"));
+            return;
+        }
+
+        int nTotalAmount = Integer.valueOf(strTotalAmount);
+
         if(nTotalAmount == 0) {
             etTotalAmount.setError(Html.fromHtml("<font color='red'>please input the amount value</font>"));
             return;
         }
 
-        int nMonthlyPayment = nTotalAmount * seekbarPropotion.getProgress() / 100;
-        if(nMonthlyPayment == 0) nMonthlyPayment = 1;
+        if(strMonthlyPament.length() == 0) {
+            Toast.makeText(mContext, "please set the monthly pament", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        int nMonthlyPayment = Integer.valueOf(strMonthlyPament.substring(0, strMonthlyPament.length() -2));
 
         Wish wishNew = new Wish(strTitle, nTotalAmount, nMonthlyPayment, 0, Common.getInstance().getTimestamp(), -1, 1);
         int nID = Common.getInstance().dbHelper.createWish(wishNew);

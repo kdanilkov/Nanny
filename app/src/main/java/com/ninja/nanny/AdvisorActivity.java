@@ -1,11 +1,16 @@
 package com.ninja.nanny;
 
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.InputType;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
+import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -23,10 +28,10 @@ public class AdvisorActivity extends CustomActivity {
 
     EditText etText;
     LinearLayout lyContainer;
-    int nChatStatus, nFinanceStatus;
     String strShortAns, strLongAns;
     ScrollView scrollView;
     LayoutInflater mInflater;
+    String[] arrShortAns, arrLongAns;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +42,14 @@ public class AdvisorActivity extends CustomActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
         setContentView(R.layout.activity_advice);
 
+        initData();
+        attachKeyboardListeners();
         setUI();
+    }
+
+    void initData() {
+        arrShortAns = getResources().getStringArray(R.array.advisor_short);
+        arrLongAns = getResources().getStringArray(R.array.advisor_long);
     }
 
     void setUI() {
@@ -52,8 +64,6 @@ public class AdvisorActivity extends CustomActivity {
         scrollView = (ScrollView)findViewById(R.id.scrollViewAdvisor);
 
         lyContainer.removeAllViews();
-
-        nChatStatus = 0;
 
         etText.setOnKeyListener(new View.OnKeyListener() {
             public boolean onKey(View v, int keyCode, KeyEvent event) {
@@ -100,130 +110,56 @@ public class AdvisorActivity extends CustomActivity {
         String strText = etText.getText().toString().trim();
         if(strText.length() == 0) return;
 
-        if(nChatStatus == 0) {
+        String regexStr = "^[0-9]*$";
 
-            String regexStr = "^[0-9]*$";
-
-            if(!strText.matches(regexStr))
-            {
-                Toast.makeText(this, "pls input the number value", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            if(strText.length() > 8) {
-                Toast.makeText(this, "Input value is too large", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            int nVal = Integer.valueOf(strText);
-
-            if(nVal == 0) return;
-
-            View cellRight = mInflater.inflate(R.layout.cell_chat_right_gray, null);
-
-            ((TextView)cellRight.findViewById(R.id.tvTitle)).setText(nVal + "$");
-
-            lyContainer.addView(cellRight);
-
-            nChatStatus = 1;
-
-            nFinanceStatus = Common.getInstance().checkAdvisorStatus(nVal);
-
-            switch (nFinanceStatus) {
-                case 0:
-                    strShortAns = "Perfect";
-                    strLongAns  = "You can get this money with left on this week";
-                    break;
-                case 1:
-                    strShortAns = "Perfect, but!";
-                    strLongAns = "You can get ths money with left on this money by canceling the minmial amount per day during this week";
-                    break;
-                case 2:
-                    strShortAns = "Perfect, but!!";
-                    strLongAns = "You can get this money with left on this money with left on this month";
-                    break;
-                case 3:
-                    strShortAns = "Perfect, but!!!";
-                    strLongAns = "You can get this money with left on this month by canceling the minimal amount per day during this month ";
-                    break;
-                case 4:
-                    strShortAns = "No!";
-                    strLongAns = "You can get this money with left on this month and total wishes for this month";
-                    break;
-                case 5:
-                    strShortAns = "No!!";
-                    strLongAns = "You can get this money with left on this month, total wishes and total savings for this month";
-                    break;
-                case  6:
-                    strShortAns = "No!!!";
-                    strLongAns = "You can get this money with left on this month, total wishes, total savings and total bills for this month";
-                    break;
-                case 7:
-                    strShortAns = "No!!!!";
-                    strLongAns = "You can get this money with bank balance";
-                    break;
-                case 8:
-                    strShortAns = "No!!!!!!!";
-                    strLongAns = "You can not get this money";
-                    break;
-            }
-
-            View cellLeft = mInflater.inflate(R.layout.cell_chat_left_blue, null);
-
-            cellLeft.findViewById(R.id.imgvTop).setBackgroundResource(R.drawable.bg_chat_left_top_blue);
-            cellLeft.findViewById(R.id.imgvMiddle).setBackgroundResource(R.drawable.bg_chat_left_middle_blue);
-            cellLeft.findViewById(R.id.imgvBottom).setBackgroundResource(R.drawable.bg_chat_left_bottom_blue);
-
-            ((TextView)cellLeft.findViewById(R.id.tvText)).setText(strShortAns + ", Details? \n Please input the Yes/No");
-
-            SimpleDateFormat formatter = new SimpleDateFormat("dd MMM");
-            Date date = new Date();
-
-            ((TextView)cellLeft.findViewById(R.id.tvDate)).setText(formatter.format(date));
-            ((TextView)cellLeft.findViewById(R.id.tvDetail)).setText("");
-
-            lyContainer.addView(cellLeft);
-
-            etText.setInputType(InputType.TYPE_CLASS_TEXT);
-
-        } else if(nChatStatus == 1) {
-
-            if(strText.toLowerCase().equals("yes")) {
-                View cell = mInflater.inflate(R.layout.cell_chat_right_gray, null);
-
-                ((TextView)cell.findViewById(R.id.tvTitle)).setText(strText);
-
-                lyContainer.addView(cell);
-
-                nChatStatus = 0;
-
-                View cellLeft = mInflater.inflate(R.layout.cell_chat_left_yellow, null);
-
-                cellLeft.findViewById(R.id.imgvTop).setBackgroundResource(R.drawable.bg_chat_left_top_yellow);
-                cellLeft.findViewById(R.id.imgvMiddle).setBackgroundResource(R.drawable.bg_chat_left_middle_yellow);
-                cellLeft.findViewById(R.id.imgvBottom).setBackgroundResource(R.drawable.bg_chat_left_bottom_yellow);
-
-                ((TextView)cellLeft.findViewById(R.id.tvText)).setText(strLongAns);
-                ((TextView)cellLeft.findViewById(R.id.tvDate)).setText("");
-                ((TextView)cellLeft.findViewById(R.id.tvDetail)).setText("");
-
-                lyContainer.addView(cellLeft);
-
-                firstOperation();
-
-            } else if(strText.toLowerCase().equals("no")) {
-                View cell = mInflater.inflate(R.layout.cell_chat_right_gray, null);
-
-                ((TextView)cell.findViewById(R.id.tvTitle)).setText(strText);
-
-                lyContainer.addView(cell);
-
-                nChatStatus = 0;
-            } else {
-                Toast.makeText(this, "Please input the Yes/No", Toast.LENGTH_SHORT).show();
-                return;
-            }
+        if(!strText.matches(regexStr))
+        {
+            Toast.makeText(this, "pls input the number value", Toast.LENGTH_SHORT).show();
+            return;
         }
+
+        if(strText.length() > 8) {
+            Toast.makeText(this, "Input value is too large", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        int nVal = Integer.valueOf(strText);
+
+        if(nVal == 0) return;
+
+        View cellRight = mInflater.inflate(R.layout.cell_chat_right_gray, null);
+
+        ((TextView)cellRight.findViewById(R.id.tvTitle)).setText(nVal + "$");
+
+        lyContainer.addView(cellRight);
+
+        int nFinanceStatus = Common.getInstance().checkAdvisorStatus(nVal);
+
+        if(nFinanceStatus >= arrShortAns.length) {
+            nFinanceStatus = arrShortAns.length - 1;
+        }
+
+        strShortAns = arrShortAns[nFinanceStatus];
+        strLongAns = arrLongAns[nFinanceStatus];
+
+        View cellLeft = mInflater.inflate(R.layout.cell_chat_left_blue, null);
+
+        cellLeft.findViewById(R.id.imgvTop).setBackgroundResource(R.drawable.bg_chat_left_top_blue);
+        cellLeft.findViewById(R.id.imgvMiddle).setBackgroundResource(R.drawable.bg_chat_left_middle_blue);
+        cellLeft.findViewById(R.id.imgvBottom).setBackgroundResource(R.drawable.bg_chat_left_bottom_blue);
+
+        String strAns = strShortAns;
+        if(strLongAns.length() > 0) strAns += " \n" + strLongAns;
+
+        ((TextView)cellLeft.findViewById(R.id.tvText)).setText(strAns);
+
+        SimpleDateFormat formatter = new SimpleDateFormat("dd MMM");
+        Date date = new Date();
+
+        ((TextView)cellLeft.findViewById(R.id.tvDate)).setText(formatter.format(date));
+        ((TextView)cellLeft.findViewById(R.id.tvDetail)).setText("");
+
+        lyContainer.addView(cellLeft);
 
         etText.setText("");
         scrollView.post(new Runnable() {
@@ -248,6 +184,70 @@ public class AdvisorActivity extends CustomActivity {
             case R.id.btnMic:
                 sendMsg();
                 break;
+        }
+    }
+
+    private ViewTreeObserver.OnGlobalLayoutListener keyboardLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
+        @Override
+        public void onGlobalLayout() {
+            int heightDiff = rootLayout.getRootView().getHeight() - rootLayout.getHeight();
+            int contentViewTop = getWindow().findViewById(Window.ID_ANDROID_CONTENT).getTop();
+
+            LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(AdvisorActivity.this);
+
+            if(heightDiff <= contentViewTop){
+                onHideKeyboard();
+
+                Intent intent = new Intent("KeyboardWillHide");
+                broadcastManager.sendBroadcast(intent);
+            } else {
+                int keyboardHeight = heightDiff - contentViewTop;
+                onShowKeyboard(keyboardHeight);
+
+                Intent intent = new Intent("KeyboardWillShow");
+                intent.putExtra("KeyboardHeight", keyboardHeight);
+                broadcastManager.sendBroadcast(intent);
+            }
+        }
+    };
+
+    private boolean keyboardListenersAttached = false;
+    private ViewGroup rootLayout;
+
+    protected void onShowKeyboard(int keyboardHeight) {
+        scrollView.post(new Runnable() {
+            @Override
+            public void run() {
+                scrollView.fullScroll(View.FOCUS_DOWN);
+            }
+        });
+    }
+    protected void onHideKeyboard() {
+        scrollView.post(new Runnable() {
+            @Override
+            public void run() {
+                scrollView.fullScroll(View.FOCUS_DOWN);
+            }
+        });
+    }
+
+    protected void attachKeyboardListeners() {
+        if (keyboardListenersAttached) {
+            return;
+        }
+
+        rootLayout = (ViewGroup) findViewById(R.id.rootLayout);
+        rootLayout.getViewTreeObserver().addOnGlobalLayoutListener(keyboardLayoutListener);
+
+        keyboardListenersAttached = true;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if (keyboardListenersAttached) {
+            rootLayout.getViewTreeObserver().removeGlobalOnLayoutListener(keyboardLayoutListener);
         }
     }
 }

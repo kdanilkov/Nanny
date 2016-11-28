@@ -3,7 +3,9 @@ package com.ninja.nanny.Fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.Html;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +38,7 @@ public class EditWishFragment extends CustomFragment {
     TextView tvPeriod, tvMonthlyPayment;
     DiscreteSeekBar seekbarPropotion;
     public Wish wishSelected;
+    int nSavedAmount;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -65,10 +68,16 @@ public class EditWishFragment extends CustomFragment {
 
         int nTotalAmount = wishSelected.getTotalAmount();
         int nMonthlyPayment = wishSelected.getMonthlyPayment();
-        int nSavingAmount = wishSelected.getSavedAmount();
-        int nTotalMonths = (nTotalAmount - nSavingAmount + nMonthlyPayment -1) / nMonthlyPayment;
+        nSavedAmount = wishSelected.getSavedAmount();
+        int nTotalMonths = (nTotalAmount - nSavedAmount + nMonthlyPayment -1) / nMonthlyPayment;
 
-        int nPercentage = nMonthlyPayment * 100 / nTotalAmount;
+        int nPercentage = 1;
+        if(nTotalAmount > nSavedAmount) {
+            nPercentage = nMonthlyPayment * 100 / (nTotalAmount - nSavedAmount);
+        }
+
+        if(nPercentage == 0) nPercentage = 1;
+        if(nPercentage > 100) nPercentage = 100;
 
         etTotalAmount.setText(nTotalAmount + "");
         tvMonthlyPayment.setText(nMonthlyPayment + " $");
@@ -98,7 +107,40 @@ public class EditWishFragment extends CustomFragment {
 
             @Override
             public void onStopTrackingTouch(DiscreteSeekBar seekBar) {
-                calcMonthlyPament();
+                String strTotalAmount = etTotalAmount.getText().toString();
+
+                if(strTotalAmount.length() > 8) {
+                    etTotalAmount.setError(Html.fromHtml("<font color='red'>amount value is too large</font>"));
+
+                    tvMonthlyPayment.setText("");
+                    tvPeriod.setText("");
+                    return;
+                }
+
+                if(strTotalAmount.length() < 1) {
+                    tvMonthlyPayment.setText("");
+                    tvPeriod.setText("");
+                    return;
+                }
+
+                int nTotalAmount = Integer.valueOf(strTotalAmount);
+
+                if(nTotalAmount == 0 || nTotalAmount <= nSavedAmount) {
+                    tvMonthlyPayment.setText("");
+                    tvPeriod.setText("");
+                    return;
+                }
+
+                int nMonthlyPayment = (nTotalAmount- nSavedAmount) * seekBar.getProgress() / 100;
+
+                if(nMonthlyPayment == 0) {
+                    nMonthlyPayment = 1;
+                }
+
+                int nTotalMonths = (nTotalAmount + nMonthlyPayment -1) / nMonthlyPayment;
+
+                tvMonthlyPayment.setText(nMonthlyPayment + " $");
+                tvPeriod.setText(nTotalMonths + " month");
             }
         });
 
@@ -122,8 +164,24 @@ public class EditWishFragment extends CustomFragment {
                     if(strText.length() == 0) {
                         etTitle.setText("0");
                     }
-                    calcMonthlyPament();
                 }
+            }
+        });
+
+        etTotalAmount.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                calcMonthlyPament();
             }
         });
 
@@ -137,86 +195,102 @@ public class EditWishFragment extends CustomFragment {
     }
 
     void calcMonthlyPament() {
-        if(etTotalAmount.getText().toString().length() > 8) {
+        String strTotalAmount = etTotalAmount.getText().toString();
+
+        if(strTotalAmount.length() > 8) {
             etTotalAmount.setError(Html.fromHtml("<font color='red'>amount value is too large</font>"));
             return;
         }
 
-        if(etTotalAmount.getText().toString().length() < 1) {
+        if(strTotalAmount.length() < 1) {
             return;
         }
 
-        int nTotalAmount = Integer.valueOf(etTotalAmount.getText().toString());
-        int nMonthlyPayment = nTotalAmount * seekbarPropotion.getProgress() / 100;
-        if(nMonthlyPayment == 0) return;
+        int nTotalAmount = Integer.valueOf(strTotalAmount);
 
-        int nTotalMonths = (nTotalAmount - wishSelected.getSavedAmount() + nMonthlyPayment -1) / nMonthlyPayment;
+        if(nTotalAmount == 0 || nTotalAmount <= nSavedAmount) return;
 
+        int nMonthlyPayment = Common.getInstance().freeOnThisWeek();
+
+        if(nMonthlyPayment == 0) {
+            nMonthlyPayment = Common.getInstance().freeOnThisMonth();
+        }
+
+        if(nMonthlyPayment == 0) {
+            nMonthlyPayment = nTotalAmount / 100;
+        }
+
+        if(nMonthlyPayment == 0) {
+            nMonthlyPayment = 1;
+        }
+
+        nTotalAmount -= nSavedAmount;
+
+        if(nMonthlyPayment > nTotalAmount) {
+            nMonthlyPayment = nTotalAmount;
+        }
+
+        int nTotalMonths = (nTotalAmount + nMonthlyPayment -1) / nMonthlyPayment;
+        int nPercent = nMonthlyPayment * 100 / nTotalAmount;
+
+        if(nPercent == 0) {
+            nPercent = 1;
+        }
+
+        seekbarPropotion.setProgress(nPercent);
         tvMonthlyPayment.setText(nMonthlyPayment + " $");
         tvPeriod.setText(nTotalMonths + " month");
     }
 
     void saveWish() {
         String strTitle = etTitle.getText().toString();
-
-        if(etTotalAmount.getText().toString().length() > 8){
-            etTotalAmount.setError(Html.fromHtml("<font color='red'>amount value is too large</font>"));
-            return;
-        }
-
-        if(etTotalAmount.getText().toString().length() < 1) {
-            etTotalAmount.setError(Html.fromHtml("<font color='red'>pls input the amount value.</font>"));
-            return;
-        }
-
-        int nTotalAmount = Integer.valueOf(etTotalAmount.getText().toString());
+        String strTotalAmount = etTotalAmount.getText().toString();
+        String strMonthlyPament = tvMonthlyPayment.getText().toString();
 
         if(strTitle.length() == 0) {
             etTitle.setError(Html.fromHtml("<font color='red'>please input the title</font>"));
             return;
         }
 
-        if(nTotalAmount == 0) {
-            etTotalAmount.setError(Html.fromHtml("<font color='red'>please input the amount value</font>"));
+        if(strTotalAmount.length() > 8){
+            etTotalAmount.setError(Html.fromHtml("<font color='red'>amount value is too large</font>"));
             return;
         }
 
-        if(nTotalAmount < wishSelected.getSavedAmount()) {
-            etTotalAmount.setError(Html.fromHtml("<font color='red'>please input the amount value larger than saved amount</font>"));
+        if(strTotalAmount.length() < 1) {
+            etTotalAmount.setError(Html.fromHtml("<font color='red'>amount value is empty</font>"));
             return;
         }
 
-        int nMonthlyPayment = nTotalAmount * seekbarPropotion.getProgress() / 100;
-        if(nMonthlyPayment == 0) nMonthlyPayment = 1;
+        int nTotalAmount = Integer.valueOf(strTotalAmount);
 
-        wishSelected.setTitle(strTitle);
-        wishSelected.setTotalAmount(nTotalAmount);
-        wishSelected.setMonthlyPayment(nMonthlyPayment);
-//        wishSelected.setTimestampCreated(Common.getInstance().getTimestamp());
+        if(nTotalAmount == 0 || nTotalAmount < nSavedAmount) {
+            etTotalAmount.setError(Html.fromHtml("<font color='red'>please input the amount value bigger than saved amount</font>"));
+            return;
+        }
+
+        if(nTotalAmount == nSavedAmount) {
+            wishSelected.setTitle(strTitle);
+            wishSelected.setTotalAmount(nTotalAmount);
+            wishSelected.setFlagActive(0);
+        } else {
+            if(strMonthlyPament.length() == 0) {
+                Toast.makeText(mContext, "please set the monthly pament", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            int nMonthlyPayment = Integer.valueOf(strMonthlyPament.substring(0, strMonthlyPament.length() -2));
+
+            wishSelected.setTitle(strTitle);
+            wishSelected.setTotalAmount(nTotalAmount);
+            wishSelected.setMonthlyPayment(nMonthlyPayment);
+        }
 
         Common.getInstance().dbHelper.updateWish(wishSelected);
 
-        int nIdx = 0;
-
-        for(nIdx = 0; nIdx < Common.getInstance().listAllWishes.size(); nIdx ++) {
-            Wish wishTmp = Common.getInstance().listAllWishes.get(nIdx);
-
-            if(wishSelected.getId() == wishTmp.getId()) break;
-        }
-
-        Common.getInstance().listAllWishes.remove(nIdx);
-        Common.getInstance().listAllWishes.add(nIdx, wishSelected);
-
-        if(wishSelected.getFlagActive() == 1) {
-            for(nIdx = 0; nIdx < Common.getInstance().listActiveWishes.size(); nIdx ++){
-                Wish wishTmp = Common.getInstance().listActiveWishes.get(nIdx);
-
-                if(wishSelected.getId() == wishTmp.getId()) break;
-            }
-
-            Common.getInstance().listActiveWishes.remove(nIdx);
-            Common.getInstance().listActiveWishes.add(nIdx, wishSelected);
-        }
+        Common.getInstance().listAllWishes = Common.getInstance().dbHelper.getAllWishes();
+        Common.getInstance().listActiveWishes = Common.getInstance().dbHelper.getActiveWishes();
+        Common.getInstance().listFinishedWishes = Common.getInstance().dbHelper.getFinishedWishes();
 
         Toast.makeText(mContext, "wish info has been updated successfully", Toast.LENGTH_SHORT).show();
         mContext.getSupportFragmentManager().popBackStackImmediate();

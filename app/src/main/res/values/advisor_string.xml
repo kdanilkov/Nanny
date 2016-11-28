@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="advisor_short">
+        <item>Perfect</item>
+        <item>Okay, but!</item>
+        <item>Okay-ish but!!</item>
+        <item>Not really !</item>
+        <item>Don`t do that!!</item>
+        <item>Sorry, dude. If only you get loan.. </item>
+    </string-array>
+
+    <string-array name="advisor_long">
+        <item>You can get this money within your week allowance</item>
+        <item>You can get ths money within week budget but have to lower your daily spending</item>
+        <item>You can get this money within your month allowance and lower your next week spendings to keep on track</item>
+        <item>You can spend using the amout left for month and some or your wishes savings</item>
+        <item>You can spend this money but you`ll have no more wishes and saving balance left</item>
+        <item> </item>
+    </string-array>
+</resources>

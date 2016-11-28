@@ -324,6 +324,38 @@ public class Common {
         return nAns;
     }
 
+    public int sumOfBGrupTransactionForMonth(long timestampSalaryDate) { // timestampSalaryDate- End of Period.
+        int nAns = 0;
+
+        Calendar c = Calendar.getInstance();
+
+        c.setTimeInMillis(timestampSalaryDate);
+
+        c.add(Calendar.MONTH, -1);
+
+        long timestampStart = c.getTimeInMillis();
+        long timestampEnd = timestampSalaryDate;
+
+        if(timestampInitConfig > timestampStart) {
+            nAns = UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_INIT_USED_MONEY, 0);
+        }
+
+        for(int i = 0; i < listAllTransactions.size(); i ++) {
+            Transaction trans = listAllTransactions.get(i);
+            long timestampTrans = trans.getTimestampCreated();
+
+            if(trans.getMode() < 2) continue;
+            if(trans.getPaidId() == -1) {
+                if(timestampTrans < timestampEnd && timestampTrans >= timestampStart) {
+                    nAns += trans.getAmount();
+                }
+                continue;
+            }
+        }
+
+        return nAns;
+    }
+
     public int sumOfSpendingTransactionForMonth(long timestampSalaryDate) { // timestampSalaryDate- End of Period.
         int nAns = 0;
 
@@ -359,7 +391,12 @@ public class Common {
 
             int nPaidId = trans.getPaidId();
 
-            if(nPaidId == -1) continue;
+            if(nPaidId == -1) {
+                if(timestampTrans < timestampEnd && timestampTrans >= timestampStart) {
+                    nAns += trans.getAmount();
+                }
+                continue;
+            }
 
             Paid paid = dbHelper.getPaid(nPaidId);
             long timestampPayment = paid.getTimestampPayment();
@@ -749,8 +786,9 @@ public class Common {
 
     public int weeklyLimit() {
         Calendar c = Calendar.getInstance();
-//        int nTotalDaysOfMonth = c.getActualMaximum(Calendar.DAY_OF_MONTH);
-        int nTotalDaysOfMonth = daysLeftForThisPeriod();
+        int nTotalDaysOfMonth = c.getActualMaximum(Calendar.DAY_OF_MONTH);
+//        int nTotalDaysOfMonth = daysLeftForThisPeriod();
+//        if(nTotalDaysOfMonth < 7) nTotalDaysOfMonth = 7;
 
         return monthlyLimit() * 7 / nTotalDaysOfMonth;
     }
@@ -773,6 +811,7 @@ public class Common {
             Transaction trans = listAllTransactions.get(i);
 
             if(trans.getMode() < 2) continue;
+            if(trans.getPaidId() > -1) continue;
             if(trans.getTimestampCreated() >= nHigh) continue;
             if(trans.getTimestampCreated() < nLow) break;
 
@@ -788,7 +827,9 @@ public class Common {
 
 
     public int freeOnThisWeek() {
-        return weeklyLimit() - sumOfTransactionThisWeek();
+        int nWeeklyLimit = weeklyLimit();
+        int nSumOfTransactionThisWeek = sumOfTransactionThisWeek();
+        return nWeeklyLimit - nSumOfTransactionThisWeek;
     }
 
 
@@ -812,7 +853,10 @@ public class Common {
     public int freeOnThisMonth() {
         long timestampCurrentPeriodEnd = getTimestampCurrentPeriodEnd();
 
-        return nMonthlyIncome - sumOfSpendingTransactionForMonth(timestampCurrentPeriodEnd) - sumOfWishesForMonth();
+        int nMonthlyLimit = monthlyLimit();
+        int nSumOfBGroupTransactionForMonth = sumOfBGrupTransactionForMonth(timestampCurrentPeriodEnd);
+
+        return nMonthlyLimit - nSumOfBGroupTransactionForMonth;
     }
 
     public int balanceOfActiveBank() {
@@ -842,27 +886,6 @@ public class Common {
         return sumOfWishesForMonth();
     }
 
-    public int totalSavings() { // for checking the advisor
-        int nAns = 0;
-
-        List<Payment> listCurrentPayments = getCurrentPayments();
-
-        for(int i = 0; i < listCurrentPayments.size(); i ++) {
-
-            Payment payment = listCurrentPayments.get(i);
-
-            if(payment.getPaymentMode() > 1) continue;
-
-            nAns += payment.getAmount();
-        }
-
-        return nAns;
-    }
-
-    public int totalBills() { // for checking the advisor
-        return sumOfPaymentsForMonth() - totalSavings();
-    }
-
     public int checkAdvisorStatus(int nAskingAmount) {
         int nStatus = 0;
 
@@ -870,20 +893,14 @@ public class Common {
             nStatus = 0;
         } else if (freeOnThisWeek() >= nAskingAmount){
             nStatus = 1;
-        } else if (freeOnThisMonth() - daysLeftForThisPeriod() * nMinimalDayAmount >= nAskingAmount) {
-            nStatus = 2;
         } else if (freeOnThisMonth() >= nAskingAmount) {
-            nStatus = 3;
+            nStatus = 2;
         } else if(freeOnThisMonth() + totalWishes() >= nAskingAmount) {
-            nStatus = 4;
-        } else if(freeOnThisMonth() + totalWishes() + totalSavings() >= nAskingAmount) {
-            nStatus = 5;
-        } else if(freeOnThisMonth() + totalWishes() + totalSavings() + totalBills() >= nAskingAmount) {
-            nStatus = 6;
+            nStatus = 3;
         } else if(balanceOfActiveBank() >= nAskingAmount) {
-            nStatus = 7;
+            nStatus = 4;
         } else {
-            nStatus = 8;
+            nStatus = 5;
         }
 
         return nStatus;

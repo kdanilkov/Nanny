@@ -8,11 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ninja.nanny.Adapter.CustomSpinnerAdapter;
@@ -39,12 +36,9 @@ public class EditBankFragment extends CustomFragment {
     LayoutInflater mInflater;
     View mView;
     MainActivity mContext;
-    TextView tvAccountType;
     EditText etAccountName, etBalance;
-    Button btnSMS, btnEmail;
     Spinner spinnerBank;
-    ArrayList<String> myBankArrayList, myAccountTypeArrayList;
-    boolean isSMS;
+    ArrayList<String> myBankArrayList;
     public int nIndex;
     Bank bankItem;
 
@@ -64,51 +58,26 @@ public class EditBankFragment extends CustomFragment {
 
     void initData() {
         myBankArrayList = new ArrayList<String>();
-        myAccountTypeArrayList = new ArrayList<String>();
 
         for(int i = 0; i < Common.getInstance().jsonArrayBankInfo.length(); i ++) {
             try {
                 JSONObject jsonObject = Common.getInstance().jsonArrayBankInfo.getJSONObject(i);
                 myBankArrayList.add(jsonObject.getString(Constant.JSON_NAME));
-                myAccountTypeArrayList.add(jsonObject.getString(Constant.JSON_TYPE));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
 
-        isSMS = true;
-
         bankItem = Common.getInstance().listBanks.get(nIndex);
     }
 
     void setUI() {
-
-        btnSMS = (Button)mView.findViewById(R.id.btnSMS);
-        btnEmail = (Button)mView.findViewById(R.id.btnEmail);
         etAccountName = (EditText)mView.findViewById(R.id.etAccountName);
         spinnerBank = (Spinner)mView.findViewById(R.id.spinnerBank);
-        tvAccountType = (TextView)mView.findViewById(R.id.tvAccountType);
         etBalance = (EditText) mView.findViewById(R.id.etBalance);
-
-        btnSMS.setOnClickListener(this);
-        btnEmail.setOnClickListener(this);
 
         CustomSpinnerAdapter spinnerAdapterBank = new CustomSpinnerAdapter(mContext,myBankArrayList);
         spinnerBank.setAdapter(spinnerAdapterBank);
-        spinnerBank.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-
-                String item = parent.getItemAtPosition(position).toString();
-
-                tvAccountType.setText(myAccountTypeArrayList.get(position));
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
 
         etAccountName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -143,14 +112,6 @@ public class EditBankFragment extends CustomFragment {
         etAccountName.setText(bankItem.getAccountName());
         etBalance.setText(bankItem.getBalance() + "");
 
-        if(bankItem.getNotificationMode() == 0) {
-            btnSMS.setBackgroundResource(R.drawable.ic_checked);
-            btnEmail.setBackgroundResource(R.drawable.ic_unchecked);
-        } else {
-            btnSMS.setBackgroundResource(R.drawable.ic_unchecked);
-            btnEmail.setBackgroundResource(R.drawable.ic_checked);
-        }
-
         spinnerBank.setSelection(bankItem.getIdxKind());
 
         mView.findViewById(R.id.lyContainer).setOnClickListener(new View.OnClickListener() {
@@ -177,15 +138,12 @@ public class EditBankFragment extends CustomFragment {
         }
 
         int nBalance = Integer.valueOf(strBalance);
-        int nNotificationMode = 1;
 
-        if(isSMS) nNotificationMode = 0;
         int nIdxKind = spinnerBank.getSelectedItemPosition();
 
         bankItem.setAccountName(strAccountName);
         bankItem.setIdxKind(nIdxKind);
         bankItem.setBalance(nBalance);
-        bankItem.setNotificationMode(nNotificationMode);
         bankItem.setTimestamp(Common.getInstance().getTimestamp());
 
         Common.getInstance().dbHelper.updateBank(bankItem);
@@ -210,6 +168,8 @@ public class EditBankFragment extends CustomFragment {
                             Common.getInstance().bankActive = bankFirst;
                             Common.getInstance().dbHelper.updateBank(bankFirst);
                         }
+
+                        Common.getInstance().listAllWishes = Common.getInstance().dbHelper.getAllWishes();
 
                         mContext.getSupportFragmentManager().popBackStackImmediate();
                         Toast.makeText(mContext, "bank info has been deleted successfully", Toast.LENGTH_SHORT).show();

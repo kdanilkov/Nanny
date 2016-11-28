@@ -36,6 +36,24 @@
             android:textColor="@color/white"
             android:textSize="20sp" />
 
+        <Button
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="15dp"
+            android:id="@+id/btnSave"
+            android:background="@drawable/ic_save" />
+
+        <Button
+            android:layout_width="35dp"
+            android:layout_marginEnd="16dp"
+            android:id="@+id/btnAskAdviser"
+            android:background="@drawable/ic_help_white"
+            android:layout_height="35dp"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@+id/btnSave" />
+
     </RelativeLayout>
 
     <ScrollView
@@ -196,32 +214,5 @@
 
         </LinearLayout>
     </ScrollView>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_alignParentBottom="true"
-        android:padding="10dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginRight="15dp">
-
-        <com.ninja.nanny.Custom.MediumButton
-            android:text="ASK ADVISER"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/btnAskAdviser"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp" />
-
-        <com.ninja.nanny.Custom.MediumButton
-            android:text="SAVE"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/btnSave"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
-            android:layout_alignParentRight="true" />
-    </RelativeLayout>
-
 </RelativeLayout>
 

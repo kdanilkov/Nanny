@@ -83,6 +83,11 @@ public class ViewWishFragment extends CustomFragment implements OnChartValueSele
         mView.findViewById(R.id.btnDelete).setOnClickListener(this);
         mView.findViewById(R.id.btnEdit).setOnClickListener(this);
 
+        if(wishSelected.getFlagActive() == 0) {
+            mView.findViewById(R.id.btnDelete).setVisibility(View.INVISIBLE);
+            mView.findViewById(R.id.btnEdit).setVisibility(View.INVISIBLE);
+        }
+
         mCircleView = (CircleProgressView)mView.findViewById(R.id.circleView);
 
         ((TextView)mView.findViewById(R.id.tvTitle)).setText(wishSelected.getTitle());
@@ -341,37 +346,12 @@ public class ViewWishFragment extends CustomFragment implements OnChartValueSele
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         // continue with delete
-                        Common.getInstance().dbHelper.deleteBank(wishSelected.getId());
-
-                        int nIdx = 0;
-
-                        for(nIdx = 0; nIdx < Common.getInstance().listAllWishes.size(); nIdx ++) {
-                            Wish wishTmp = Common.getInstance().listAllWishes.get(nIdx);
-
-                            if(wishTmp.getId() == wishSelected.getId()) break;
-                        }
 
                         Common.getInstance().dbHelper.deleteWish(wishSelected.getId());
-                        Common.getInstance().dbHelper.deleteWishSavingGroup(wishSelected.getId());
-                        Common.getInstance().listAllWishes.remove(nIdx);
 
-                        if(wishSelected.getFlagActive() == 0) {
-                            for(nIdx = 0; nIdx < Common.getInstance().listFinishedWishes.size(); nIdx ++) {
-                                Wish wishTmp = Common.getInstance().listFinishedWishes.get(nIdx);
-
-                                if(wishTmp.getId() == wishSelected.getId()) break;
-                            }
-
-                            Common.getInstance().listFinishedWishes.remove(nIdx);
-                        } else {
-                            for(nIdx = 0; nIdx < Common.getInstance().listActiveWishes.size(); nIdx ++) {
-                                Wish wishTmp = Common.getInstance().listActiveWishes.get(nIdx);
-
-                                if(wishTmp.getId() == wishSelected.getId()) break;
-                            }
-
-                            Common.getInstance().listActiveWishes.remove(nIdx);
-                        }
+                        Common.getInstance().listAllWishes = Common.getInstance().dbHelper.getAllWishes();
+                        Common.getInstance().listActiveWishes = Common.getInstance().dbHelper.getActiveWishes();
+                        Common.getInstance().listFinishedWishes = Common.getInstance().dbHelper.getFinishedWishes();
 
                         mContext.getSupportFragmentManager().popBackStackImmediate();
                         Toast.makeText(mContext, "wish info has been deleted successfully", Toast.LENGTH_SHORT).show();

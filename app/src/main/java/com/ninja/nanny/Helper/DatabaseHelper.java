@@ -47,7 +47,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	private static final String KEY_ACCOUNT_NAME = "account_name";
 	private static final String KEY_IDX_KIND = "idx_kind";
 	private static final String KEY_BALANCE = "balance";
-	private static final String KEY_NOTIFICATION_MODE = "notification_mode";
 	private static final String KEY_FLAG_ACTIVE = "flag_active";
 
 	//transaction table keys
@@ -93,7 +92,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	private static final String CREATE_TABLE_BANKS = "CREATE TABLE IF NOT EXISTS "
 			+ TBL_BANKS + "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_ACCOUNT_NAME
 			+ " TEXT," + KEY_IDX_KIND + " INTEGER," + KEY_BALANCE + " INTEGER,"
-			 + KEY_NOTIFICATION_MODE + " INTEGER," + KEY_FLAG_ACTIVE + " INTEGER," + KEY_CREATED_AT + " INTEGER" + ")";
+			 + KEY_FLAG_ACTIVE + " INTEGER," + KEY_CREATED_AT + " INTEGER" + ")";
 
 	// Transactions table create statement
 	private static final String CREATE_TABLE_TRANSACTIONS = "CREATE TABLE IF NOT EXISTS "
@@ -164,132 +163,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 		// create new tables
 		onCreate(db);
-	}
-
-	// ------------------------ "banks" table methods ----------------//
-
-	/*
-	 * Creating a banks
-	 */
-	public int createBank(Bank bank) {
-		SQLiteDatabase db = this.getWritableDatabase();
-
-		ContentValues values = new ContentValues();
-		values.put(KEY_ACCOUNT_NAME, bank.getAccountName());
-		values.put(KEY_IDX_KIND, bank.getIdxKind());
-		values.put(KEY_BALANCE, bank.getBalance());
-		values.put(KEY_NOTIFICATION_MODE, bank.getNotificationMode());
-		values.put(KEY_FLAG_ACTIVE, bank.getFlagActive());
-		values.put(KEY_CREATED_AT, bank.getTimestamp());
-
-		// insert row
-		long bank_id = db.insert(TBL_BANKS, null, values);
-
-
-		return (int)bank_id;
-	}
-
-	/*
-	 * get single bank
-	 */
-	public Bank getBank(int bank_id) {
-		SQLiteDatabase db = this.getReadableDatabase();
-
-		String selectQuery = "SELECT  * FROM " + TBL_BANKS + " WHERE "
-				+ KEY_ID + " = " + bank_id;
-
-		Log.e(LOG, selectQuery);
-
-		Cursor c = db.rawQuery(selectQuery, null);
-
-		if (c != null)
-			c.moveToFirst();
-
-		Bank bank = new Bank();
-		bank.setId(c.getInt(c.getColumnIndex(KEY_ID)));
-		bank.setAccountName(c.getString(c.getColumnIndex(KEY_ACCOUNT_NAME)));
-		bank.setIdxKind(c.getInt(c.getColumnIndex(KEY_IDX_KIND)));
-		bank.setBalance(c.getInt(c.getColumnIndex(KEY_BALANCE)));
-		bank.setNotificationMode(c.getInt(c.getColumnIndex(KEY_NOTIFICATION_MODE)));
-		bank.setFlagActive(c.getInt(c.getColumnIndex(KEY_FLAG_ACTIVE)));
-		bank.setTimestamp(c.getLong(c.getColumnIndex(KEY_CREATED_AT)));
-
-		return bank;
-	}
-
-	/**
-	 * getting all banks
-	 * */
-	public List<Bank> getAllBanks() {
-		List<Bank> banks = new ArrayList<Bank>();
-		String selectQuery = "SELECT  * FROM " + TBL_BANKS;
-
-		Log.e(LOG, selectQuery);
-
-		SQLiteDatabase db = this.getReadableDatabase();
-		Cursor c = db.rawQuery(selectQuery, null);
-
-		// looping through all rows and adding to list
-		if (c.moveToFirst()) {
-			do {
-				Bank bank = new Bank();
-				bank.setId(c.getInt(c.getColumnIndex(KEY_ID)));
-				bank.setAccountName(c.getString(c.getColumnIndex(KEY_ACCOUNT_NAME)));
-				bank.setIdxKind(c.getInt(c.getColumnIndex(KEY_IDX_KIND)));
-				bank.setBalance(c.getInt(c.getColumnIndex(KEY_BALANCE)));
-				bank.setNotificationMode(c.getInt(c.getColumnIndex(KEY_NOTIFICATION_MODE)));
-				bank.setFlagActive(c.getInt(c.getColumnIndex(KEY_FLAG_ACTIVE)));
-				bank.setTimestamp(c.getLong(c.getColumnIndex(KEY_CREATED_AT)));
-
-				// adding to bank list
-				banks.add(bank);
-			} while (c.moveToNext());
-		}
-
-		return banks;
-	}
-
-	/*
-	 * getting bank count
-	 */
-	public int getBankCount() {
-		String countQuery = "SELECT  * FROM " + TBL_BANKS;
-		SQLiteDatabase db = this.getReadableDatabase();
-		Cursor cursor = db.rawQuery(countQuery, null);
-
-		int count = cursor.getCount();
-		cursor.close();
-
-		// return count
-		return count;
-	}
-
-	/*
-	 * Updating a bank
-	 */
-	public int updateBank(Bank bank) {
-		SQLiteDatabase db = this.getWritableDatabase();
-
-		ContentValues values = new ContentValues();
-		values.put(KEY_ACCOUNT_NAME, bank.getAccountName());
-		values.put(KEY_IDX_KIND, bank.getIdxKind());
-		values.put(KEY_BALANCE, bank.getBalance());
-		values.put(KEY_NOTIFICATION_MODE, bank.getNotificationMode());
-		values.put(KEY_FLAG_ACTIVE, bank.getFlagActive());
-		values.put(KEY_CREATED_AT, bank.getTimestamp());
-
-		// updating row
-		return db.update(TBL_BANKS, values, KEY_ID + " = ?",
-				new String[] { String.valueOf(bank.getId()) });
-	}
-
-	/*
-	 * Deleting a bank
-	 */
-	public void deleteBank(int bank_id) {
-		SQLiteDatabase db = this.getWritableDatabase();
-		db.delete(TBL_BANKS, KEY_ID + " = ?",
-				new String[] { String.valueOf(bank_id) });
 	}
 
 	// ------------------------ "wish" table methods ----------------//
@@ -1137,6 +1010,128 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		// updating row
 		return db.update(TBL_USED_AMOUNT, values, KEY_ID + " = ?",
 				new String[] { String.valueOf(usedAmount.getId()) });
+	}
+
+	// ------------------------ "banks" table methods ----------------//
+
+	/*
+	 * Creating a banks
+	 */
+	public int createBank(Bank bank) {
+		SQLiteDatabase db = this.getWritableDatabase();
+
+		ContentValues values = new ContentValues();
+		values.put(KEY_ACCOUNT_NAME, bank.getAccountName());
+		values.put(KEY_IDX_KIND, bank.getIdxKind());
+		values.put(KEY_BALANCE, bank.getBalance());
+		values.put(KEY_FLAG_ACTIVE, bank.getFlagActive());
+		values.put(KEY_CREATED_AT, bank.getTimestamp());
+
+		// insert row
+		long bank_id = db.insert(TBL_BANKS, null, values);
+
+
+		return (int)bank_id;
+	}
+
+	/*
+	 * get single bank
+	 */
+	public Bank getBank(int bank_id) {
+		SQLiteDatabase db = this.getReadableDatabase();
+
+		String selectQuery = "SELECT  * FROM " + TBL_BANKS + " WHERE "
+				+ KEY_ID + " = " + bank_id;
+
+		Log.e(LOG, selectQuery);
+
+		Cursor c = db.rawQuery(selectQuery, null);
+
+		if (c != null)
+			c.moveToFirst();
+
+		Bank bank = new Bank();
+		bank.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+		bank.setAccountName(c.getString(c.getColumnIndex(KEY_ACCOUNT_NAME)));
+		bank.setIdxKind(c.getInt(c.getColumnIndex(KEY_IDX_KIND)));
+		bank.setBalance(c.getInt(c.getColumnIndex(KEY_BALANCE)));
+		bank.setFlagActive(c.getInt(c.getColumnIndex(KEY_FLAG_ACTIVE)));
+		bank.setTimestamp(c.getLong(c.getColumnIndex(KEY_CREATED_AT)));
+
+		return bank;
+	}
+
+	/**
+	 * getting all banks
+	 * */
+	public List<Bank> getAllBanks() {
+		List<Bank> banks = new ArrayList<Bank>();
+		String selectQuery = "SELECT  * FROM " + TBL_BANKS;
+
+		Log.e(LOG, selectQuery);
+
+		SQLiteDatabase db = this.getReadableDatabase();
+		Cursor c = db.rawQuery(selectQuery, null);
+
+		// looping through all rows and adding to list
+		if (c.moveToFirst()) {
+			do {
+				Bank bank = new Bank();
+				bank.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+				bank.setAccountName(c.getString(c.getColumnIndex(KEY_ACCOUNT_NAME)));
+				bank.setIdxKind(c.getInt(c.getColumnIndex(KEY_IDX_KIND)));
+				bank.setBalance(c.getInt(c.getColumnIndex(KEY_BALANCE)));
+				bank.setFlagActive(c.getInt(c.getColumnIndex(KEY_FLAG_ACTIVE)));
+				bank.setTimestamp(c.getLong(c.getColumnIndex(KEY_CREATED_AT)));
+
+				// adding to bank list
+				banks.add(bank);
+			} while (c.moveToNext());
+		}
+
+		return banks;
+	}
+
+	/*
+	 * getting bank count
+	 */
+	public int getBankCount() {
+		String countQuery = "SELECT  * FROM " + TBL_BANKS;
+		SQLiteDatabase db = this.getReadableDatabase();
+		Cursor cursor = db.rawQuery(countQuery, null);
+
+		int count = cursor.getCount();
+		cursor.close();
+
+		// return count
+		return count;
+	}
+
+	/*
+	 * Updating a bank
+	 */
+	public int updateBank(Bank bank) {
+		SQLiteDatabase db = this.getWritableDatabase();
+
+		ContentValues values = new ContentValues();
+		values.put(KEY_ACCOUNT_NAME, bank.getAccountName());
+		values.put(KEY_IDX_KIND, bank.getIdxKind());
+		values.put(KEY_BALANCE, bank.getBalance());
+		values.put(KEY_FLAG_ACTIVE, bank.getFlagActive());
+		values.put(KEY_CREATED_AT, bank.getTimestamp());
+
+		// updating row
+		return db.update(TBL_BANKS, values, KEY_ID + " = ?",
+				new String[] { String.valueOf(bank.getId()) });
+	}
+
+	/*
+	 * Deleting a bank
+	 */
+	public void deleteBank(int bank_id) {
+		SQLiteDatabase db = this.getWritableDatabase();
+		db.delete(TBL_BANKS, KEY_ID + " = ?",
+				new String[] { String.valueOf(bank_id) });
 	}
 
 	/**

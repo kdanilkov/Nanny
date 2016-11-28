@@ -6,36 +6,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:id="@+id/rlyTop"
-        android:background="@color/colorPrimary">
-
-        <Button
-            android:layout_marginStart="15dp"
-            android:id="@+id/btnMenu"
-            android:layout_centerVertical="true"
-            android:layout_alignParentStart="true"
-            android:background="@drawable/ic_menu"
-            android:layout_width="30dp"
-            android:layout_height="30dp" />
-
-        <com.ninja.nanny.Custom.MediumTextView
-            android:text="Application Settings"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="false"
-            android:layout_marginStart="10dp"
-            android:layout_alignBaseline="@+id/btnMenu"
-            android:layout_toRightOf="@+id/btnMenu"
-            android:textColor="@color/white"
-            android:textSize="20sp" />
-
-    </RelativeLayout>
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -259,15 +229,43 @@
 
         </LinearLayout>
     </ScrollView>
-    <com.ninja.nanny.Custom.MediumButton
-        android:text="SAVE"
-        android:layout_width="100dp"
-        android:layout_height="40dp"
-        android:id="@+id/btnSave"
-        android:textSize="20sp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="10dp"
-        android:layout_marginEnd="10dp" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:id="@+id/rlyTop"
+        android:background="@color/colorPrimary"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
+
+        <Button
+            android:layout_marginStart="15dp"
+            android:id="@+id/btnMenu"
+            android:layout_centerVertical="true"
+            android:layout_alignParentStart="true"
+            android:background="@drawable/ic_menu"
+            android:layout_width="30dp"
+            android:layout_height="30dp" />
+
+        <com.ninja.nanny.Custom.MediumTextView
+            android:text="Application Settings"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="false"
+            android:layout_marginStart="10dp"
+            android:layout_alignBaseline="@+id/btnMenu"
+            android:layout_toRightOf="@+id/btnMenu"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
+
+        <Button
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="15dp"
+            android:id="@+id/btnSave"
+            android:background="@drawable/ic_save" />
+
+    </RelativeLayout>
 </RelativeLayout>
 
