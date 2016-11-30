@@ -219,7 +219,6 @@ public class EditSmsFragment extends CustomFragment {
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         // continue with delete
-                        Common.getInstance().dbHelper.deleteBank(smsSelected.getId());
 
                         int nIdx = 0;
 
@@ -230,7 +229,7 @@ public class EditSmsFragment extends CustomFragment {
                         }
 
                         Common.getInstance().dbHelper.deleteSms(smsSelected.getId());
-                        Common.getInstance().listAllWishes.remove(nIdx);
+                        Common.getInstance().listSms.remove(nIdx);
 
                         mContext.getSupportFragmentManager().popBackStackImmediate();
                         Toast.makeText(mContext, "sms info has been deleted successfully", Toast.LENGTH_SHORT).show();

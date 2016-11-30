@@ -154,9 +154,12 @@ public class ViewWishFragment extends CustomFragment implements OnChartValueSele
         xAxis.setDrawGridLines(false);
         xAxis.setDrawAxisLine(false);
 
+        int colorBlue = getResources().getColor(R.color.blue);
+        int colorGreen = getResources().getColor(R.color.label_text_color);
+
         YAxis leftAxis = mChart.getAxisLeft();
 //        leftAxis.setTypeface(mTfLight);
-        leftAxis.setTextColor(Color.BLUE);
+        leftAxis.setTextColor(colorGreen);
         leftAxis.setAxisMaximum(nLeftHigh + 50);
         leftAxis.setAxisMinimum(0);
         leftAxis.setDrawGridLines(false);
@@ -165,7 +168,7 @@ public class ViewWishFragment extends CustomFragment implements OnChartValueSele
 
         YAxis rightAxis = mChart.getAxisRight();
 //        rightAxis.setTypeface(mTfLight);
-        rightAxis.setTextColor(Color.RED);
+        rightAxis.setTextColor(colorBlue);
         rightAxis.setAxisMaximum(nRightHigh + 50);
         rightAxis.setAxisMinimum(0);
         rightAxis.setDrawGridLines(false);
@@ -209,7 +212,7 @@ public class ViewWishFragment extends CustomFragment implements OnChartValueSele
                 set1 = new LineDataSet(yVals1, "Current");
 
                 set1.setAxisDependency(YAxis.AxisDependency.RIGHT);
-                set1.setColor(Color.RED);
+                set1.setColor(colorBlue);
                 set1.setCircleColor(ColorTemplate.colorWithAlpha(Color.WHITE, 10));
                 set1.setLineWidth(2f);
                 set1.setDrawFilled(true);
@@ -219,18 +222,18 @@ public class ViewWishFragment extends CustomFragment implements OnChartValueSele
                 set1.setDrawCircleHole(false);
 //                Drawable drawable = ContextCompat.getDrawable(mContext, R.drawable.fade_red);
 //                set1.setFillDrawable(drawable);
-                set1.setFillColor(Color.RED);
+                set1.setFillColor(colorBlue);
             }
 
             if(yVals2.size() > 0) {
                 set2 = new LineDataSet(yVals2, "Sum");
                 set2.setAxisDependency(YAxis.AxisDependency.LEFT);
-                set2.setColor(Color.BLUE);
+                set2.setColor(colorGreen);
                 set2.setCircleColor(ColorTemplate.colorWithAlpha(Color.WHITE, 10));
                 set2.setLineWidth(2f);
 //                set2.setCircleRadius(3f);
                 set2.setDrawFilled(true);
-                set2.setFillColor(Color.BLUE);
+                set2.setFillColor(colorGreen);
                 set2.setDrawCircleHole(false);
 //                set2.setHighLightColor(Color.rgb(244, 117, 117));
             }
@@ -238,13 +241,13 @@ public class ViewWishFragment extends CustomFragment implements OnChartValueSele
             if(yVals3.size() > 0) {
                 set3 = new LineDataSet(yVals3, "Future");
                 set3.setAxisDependency(YAxis.AxisDependency.RIGHT);
-                set3.setColor(ColorTemplate.colorWithAlpha(Color.RED, 100));
+                set3.setColor(ColorTemplate.colorWithAlpha(colorBlue, 100));
                 set3.setCircleColor(ColorTemplate.colorWithAlpha(Color.WHITE, 10));
                 set3.setLineWidth(2f);
                 set3.setDrawFilled(true);
 //                set3.setCircleRadius(3f);
 //                set3.setFillAlpha(65);
-                set3.setFillColor(ColorTemplate.colorWithAlpha(Color.RED, 100));
+                set3.setFillColor(ColorTemplate.colorWithAlpha(colorBlue, 100));
                 set3.setDrawCircleHole(false);
 //                set3.setHighLightColor(Color.rgb(244, 117, 117));
             }
@@ -252,13 +255,13 @@ public class ViewWishFragment extends CustomFragment implements OnChartValueSele
             if(yVals4.size() > 0) {
                 set4 = new LineDataSet(yVals4, "Sum");
                 set4.setAxisDependency(YAxis.AxisDependency.LEFT);
-                set4.setColor(ColorTemplate.colorWithAlpha(Color.BLUE, 100));
+                set4.setColor(ColorTemplate.colorWithAlpha(colorGreen, 100));
                 set4.setCircleColor(ColorTemplate.colorWithAlpha(Color.WHITE, 10));
                 set4.setLineWidth(2f);
 //                set4.setCircleRadius(3f);
 //            set4.setFillAlpha(65);
                 set4.setDrawFilled(true);
-                set4.setFillColor(ColorTemplate.colorWithAlpha(Color.BLUE, 100));
+                set4.setFillColor(ColorTemplate.colorWithAlpha(colorGreen, 100));
                 set4.setDrawCircleHole(false);
 //                set4.setHighLightColor(Color.rgb(244, 117, 117));
             }

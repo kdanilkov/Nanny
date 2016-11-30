@@ -3,6 +3,7 @@ package com.ninja.nanny.Fragment;
 
 import android.os.Bundle;
 import android.text.Html;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -104,20 +105,7 @@ public class SettingFragment extends CustomFragment implements DiscreteSeekBar.O
                     String strContent = etSalaryDate.getText().toString();
 
                     if(strContent.length() == 0) {
-                        etSalaryDate.setText("0");
-                    }
-                }
-            }
-        });
-
-        etMonthlyIncome.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                if(!b) {
-                    String strContent = etMonthlyIncome.getText().toString();
-
-                    if(strContent.length() == 0) {
-                        etMonthlyIncome.setText("0");
+                        etSalaryDate.setText("15");
                     }
                 }
             }
@@ -133,6 +121,31 @@ public class SettingFragment extends CustomFragment implements DiscreteSeekBar.O
                         etUsedSalary.setText("0");
                     }
                 }
+            }
+        });
+
+        etUsedSalary.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+
+            @Override
+            public boolean onEditorAction(TextView v, int actionId,
+                                          KeyEvent event) {
+                if (event != null&& (event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
+                    InputMethodManager in = (InputMethodManager) mContext.getSystemService(mContext.INPUT_METHOD_SERVICE);
+
+                    // NOTE: In the author's example, he uses an identifier
+                    // called searchBar. If setting this code on your EditText
+                    // then use v.getWindowToken() as a reference to your
+                    // EditText is passed into this callback as a TextView
+
+                    in.hideSoftInputFromWindow(etUsedSalary
+                                    .getApplicationWindowToken(),
+                            InputMethodManager.HIDE_NOT_ALWAYS);
+                    etUsedSalary.clearFocus();
+                    // Must return true here to consume event
+                    return true;
+
+                }
+                return false;
             }
         });
 

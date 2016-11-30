@@ -93,19 +93,6 @@ public class EditPaymentFragment extends CustomFragment {
             }
         });
 
-        etAmount.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                if(!b) {
-                    String strText = etAmount.getText().toString();
-
-                    if(strText.length() == 0) {
-                        etAmount.setText("0");
-                    }
-                }
-            }
-        });
-
         etDateofMonth.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {

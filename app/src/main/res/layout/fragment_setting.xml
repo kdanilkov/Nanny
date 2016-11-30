@@ -129,6 +129,7 @@
                     android:textColor="@color/black"
                     android:paddingBottom="5dp"
                     android:inputType="number"
+                    android:imeOptions="actionDone"
                     android:hint="AED 0.00" />
             </LinearLayout>
 

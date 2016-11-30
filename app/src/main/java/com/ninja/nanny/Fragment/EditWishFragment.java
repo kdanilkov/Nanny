@@ -182,18 +182,6 @@ public class EditWishFragment extends CustomFragment {
             }
         });
 
-        etTotalAmount.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                if(!b) {
-                    String strText = etTotalAmount.getText().toString();
-                    if(strText.length() == 0) {
-                        etTitle.setText("0");
-                    }
-                }
-            }
-        });
-
         etTotalAmount.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {

@@ -14,7 +14,6 @@ import android.widget.ToggleButton;
 import com.ninja.nanny.Custom.CustomFragment;
 import com.ninja.nanny.MainActivity;
 import com.ninja.nanny.Model.Payment;
-import com.ninja.nanny.Preference.UserPreference;
 import com.ninja.nanny.R;
 import com.ninja.nanny.Utils.Common;
 import com.ninja.nanny.Utils.Constant;
@@ -22,9 +21,11 @@ import com.roomorama.caldroid.CaldroidFragment;
 import com.roomorama.caldroid.CaldroidListener;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 
 public class CalendarPaymentFragment extends CustomFragment implements CompoundButton.OnCheckedChangeListener {
@@ -44,6 +45,7 @@ public class CalendarPaymentFragment extends CustomFragment implements CompoundB
     HashMap<Date, Integer> hashMapTextColor;
     HashMap<String, Integer> hashMapConverter;
     final SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy");
+    List<Date> listWishDate;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -58,33 +60,34 @@ public class CalendarPaymentFragment extends CustomFragment implements CompoundB
         return mView;
     }
 
+    boolean isNewDate(Date date){
+        int dateYear = date.getYear();
+        int dateMonth = date.getMonth();
+        int dateDay = date.getDate();
+
+        for(int i = 0; i < listWishDate.size(); i ++) {
+            Date dateItem = listWishDate.get(i);
+
+            int dateItemYear = dateItem.getYear();
+            int dateItemMonth = dateItem.getMonth();
+            int dateItemDay = dateItem.getDate();
+
+            if((dateYear == dateItemYear) && (dateMonth == dateItemMonth) && (dateDay == dateItemDay)) return false;
+        }
+
+        return true;
+    }
+
     private void displayPayments() {
         hashMapBackgroundDrawble.clear();
         hashMapTextColor.clear();
         hashMapConverter.clear();
 
+        listWishDate = new ArrayList<>();
+
 
         Calendar cal = Calendar.getInstance();
-        int nSalaryDate = UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_SALARY_DATE, 15);
-
-        for(int i = 0; i < 12; i ++) {
-            cal = Calendar.getInstance();
-            cal.set(Calendar.DAY_OF_MONTH, nSalaryDate);
-            cal.add(Calendar.MONTH, i);
-            Date date = cal.getTime();
-            Drawable drawable = getResources().getDrawable(R.drawable.circle_border_blue);
-
-            hashMapBackgroundDrawble.put(date, drawable);
-            hashMapTextColor.put(date, R.color.caldroid_light_red);
-
-            if(i > 0) {
-                cal.add(Calendar.MONTH, - 2 * i);
-                date = cal.getTime();
-                drawable = getResources().getDrawable(R.drawable.circle_border_blue);
-                hashMapBackgroundDrawble.put(date, drawable);
-                hashMapTextColor.put(date, R.color.caldroid_light_red);
-            }
-        }
+        int nSalaryDate = Common.getInstance().nSalaryDate;
 
         boolean isNotPaidBill = tbNotPaidBill.isChecked();
         boolean isPaidBill = tbPaidBill.isChecked();
@@ -137,6 +140,31 @@ public class CalendarPaymentFragment extends CustomFragment implements CompoundB
             hashMapBackgroundDrawble.put(date, drawable);
             hashMapTextColor.put(date, R.color.white);
             hashMapConverter.put(formatter.format(date), i);
+            listWishDate.add(date);
+        }
+
+        for(int i = 0; i < 12; i ++) {
+            cal = Calendar.getInstance();
+            cal.set(Calendar.DAY_OF_MONTH, nSalaryDate);
+            cal.add(Calendar.MONTH, i);
+            Date date = cal.getTime();
+            Drawable drawable = getResources().getDrawable(R.drawable.circle_border_blue);
+
+            if(isNewDate(date)) {
+                hashMapBackgroundDrawble.put(date, drawable);
+                hashMapTextColor.put(date, R.color.caldroid_light_red);
+            }
+
+            if(i > 0) {
+                cal.add(Calendar.MONTH, - 2 * i);
+                date = cal.getTime();
+                drawable = getResources().getDrawable(R.drawable.circle_border_blue);
+
+                if(isNewDate(date)) {
+                    hashMapBackgroundDrawble.put(date, drawable);
+                    hashMapTextColor.put(date, R.color.caldroid_light_red);
+                }
+            }
         }
 
         if (caldroidFragment != null) {
