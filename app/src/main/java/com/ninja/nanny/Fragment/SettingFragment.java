@@ -166,10 +166,35 @@ public class SettingFragment extends CustomFragment implements DiscreteSeekBar.O
     }
 
     void saveSettingInfo() {
-        int nMinimalAmountPerDay = Integer.valueOf(etMinimalAmountPerDay.getText().toString());
-        int nSalaryDate = Integer.valueOf(etSalaryDate.getText().toString());
-        int nMonthlyIncome = Integer.valueOf(etMonthlyIncome.getText().toString());
-        int nUsedSalary = Integer.valueOf(etUsedSalary.getText().toString());
+        String strMinimalAmountPerDay = etMinimalAmountPerDay.getText().toString();
+        String strSalaryDate = etSalaryDate.getText().toString();
+        String strMonthlyIncome = etMonthlyIncome.getText().toString();
+        String strUsedSalary = etUsedSalary.getText().toString();
+
+        if(strMinimalAmountPerDay.length() < 1) {
+            etMinimalAmountPerDay.setError(Html.fromHtml("<font color='red'>please input the minial amount per day</font>"));
+            return;
+        }
+
+        if(strSalaryDate.length() < 1) {
+            etSalaryDate.setError(Html.fromHtml("<font color='red'>please input the salary date</font>"));
+            return;
+        }
+
+        if(strMonthlyIncome.length() < 1) {
+            etMonthlyIncome.setError(Html.fromHtml("<font color='red'>please input the monthly income</font>"));
+            return;
+        }
+
+        if(strUsedSalary.length() < 1) {
+            etUsedSalary.setError(Html.fromHtml("<font color='red'>please input the used salary</font>"));
+            return;
+        }
+
+        int nMinimalAmountPerDay = Integer.valueOf(strMinimalAmountPerDay);
+        int nSalaryDate = Integer.valueOf(strSalaryDate);
+        int nMonthlyIncome = Integer.valueOf(strMonthlyIncome);
+        int nUsedSalary = Integer.valueOf(strUsedSalary);
         int nToleranceDays = seekBarDays.getProgress();
         int nTolerancePercent = seekBarPercent.getProgress();
 
