@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ToggleButton;
 
 import com.ninja.nanny.Custom.CustomFragment;
@@ -64,11 +63,33 @@ public class CalendarPaymentFragment extends CustomFragment implements CompoundB
         hashMapTextColor.clear();
         hashMapConverter.clear();
 
+
+        Calendar cal = Calendar.getInstance();
+        int nSalaryDate = UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_SALARY_DATE, 15);
+
+        for(int i = 0; i < 12; i ++) {
+            cal = Calendar.getInstance();
+            cal.set(Calendar.DAY_OF_MONTH, nSalaryDate);
+            cal.add(Calendar.MONTH, i);
+            Date date = cal.getTime();
+            Drawable drawable = getResources().getDrawable(R.drawable.circle_border_blue);
+
+            hashMapBackgroundDrawble.put(date, drawable);
+            hashMapTextColor.put(date, R.color.caldroid_light_red);
+
+            if(i > 0) {
+                cal.add(Calendar.MONTH, - 2 * i);
+                date = cal.getTime();
+                drawable = getResources().getDrawable(R.drawable.circle_border_blue);
+                hashMapBackgroundDrawble.put(date, drawable);
+                hashMapTextColor.put(date, R.color.caldroid_light_red);
+            }
+        }
+
         boolean isNotPaidBill = tbNotPaidBill.isChecked();
         boolean isPaidBill = tbPaidBill.isChecked();
         boolean isNotPaidSaving = tbNotPaidSaving.isChecked();
         boolean isPaidSaving = tbPaidSaving.isChecked();
-        Calendar cal = Calendar.getInstance();
 
         for(int i = 0; i < Common.getInstance().listAllPayments.size(); i ++) {
             Payment payment = Common.getInstance().listAllPayments.get(i);
@@ -95,8 +116,21 @@ public class CalendarPaymentFragment extends CustomFragment implements CompoundB
 
             if(!flag) continue;
 
-            cal = Calendar.getInstance();
-            cal.set(Calendar.DAY_OF_MONTH, nDateOfMonth);
+            if(payment.getPaymentMode() == 1 || payment.getPaymentMode() == 3 || payment.getLastPaidId() == -1) {
+                cal.setTimeInMillis(payment.getRealTimeStamp());
+            } else {
+                cal = Calendar.getInstance();
+                cal.set(Calendar.DAY_OF_MONTH, nDateOfMonth);
+                long nCurrent = cal.getTimeInMillis();
+                long nLow = Common.getInstance().getTimestampCurrentPeriodStart();
+                long nHigh = Common.getInstance().getTimestampCurrentPeriodEnd();
+
+                if(nLow > nCurrent) {
+                    cal.add(Calendar.MONTH, 1);
+                } else if(nHigh <= nCurrent) {
+                    cal.add(Calendar.MONTH, -1);
+                }
+            }
 
             Date date = cal.getTime();
 
@@ -104,16 +138,6 @@ public class CalendarPaymentFragment extends CustomFragment implements CompoundB
             hashMapTextColor.put(date, R.color.white);
             hashMapConverter.put(formatter.format(date), i);
         }
-
-        int nSalaryDate = UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_SALARY_DATE, 15);
-        cal = Calendar.getInstance();
-        cal.set(Calendar.DAY_OF_MONTH, nSalaryDate);
-
-        Date date = cal.getTime();
-        Drawable drawable = getResources().getDrawable(R.drawable.circle_border_blue);
-
-        hashMapBackgroundDrawble.put(date, drawable);
-        hashMapTextColor.put(date, R.color.caldroid_light_red);
 
         if (caldroidFragment != null) {
             caldroidFragment.setBackgroundDrawableForDates(hashMapBackgroundDrawble);
@@ -164,33 +188,21 @@ public class CalendarPaymentFragment extends CustomFragment implements CompoundB
                     FragmentTransaction transaction = mContext.getSupportFragmentManager()
                             .beginTransaction();
                     transaction.add(R.id.content_frame, f, title).addToBackStack(title).commit();
-                } else {
-                    Toast.makeText(mContext, formatter.format(date),
-                            Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onChangeMonth(int month, int year) {
-                String text = "month: " + month + " year: " + year;
-                Toast.makeText(mContext, text,
-                        Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onLongClickDate(Date date, View view) {
-                Toast.makeText(mContext,
-                        "Long click " + formatter.format(date),
-                        Toast.LENGTH_SHORT).show();
+
             }
 
             @Override
             public void onCaldroidViewCreated() {
-                if (caldroidFragment.getLeftArrowButton() != null) {
-                    Toast.makeText(mContext,
-                            "Caldroid view is created", Toast.LENGTH_SHORT)
-                            .show();
-                }
+
             }
 
         };

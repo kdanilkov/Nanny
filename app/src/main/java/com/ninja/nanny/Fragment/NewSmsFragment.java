@@ -155,6 +155,14 @@ public class NewSmsFragment extends CustomFragment {
         Common.getInstance().listSms.add(0, sms);
 
         Toast.makeText(mContext, "new sms has been registered successfully", Toast.LENGTH_SHORT).show();
+
+        if(Common.getInstance().timestampInitConfig > 0) {
+
+            if(Common.getInstance().isActiveBankExist()) {
+                Common.getInstance().syncBetweenTransactionAndSms();
+            }
+        }
+
         mContext.getSupportFragmentManager().popBackStackImmediate();
     }
 

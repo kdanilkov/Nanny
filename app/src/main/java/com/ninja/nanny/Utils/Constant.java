@@ -49,11 +49,11 @@ public class Constant {
                 "\"type\":\"TYPE 1\", " +
                 "\"transaction\":{" +
                     "\"spending\":[" +
-                        "\"Purchase of xxx with Debit Card ending 1736 at xxx.\", " +
-                        "\"Cash Withdrawal of xxx with Debit Card ending 1736 at, xxx.\"" +
+                        "\"Purchase of xxx with Debit Card ending xxx at xxx.\", " +
+                        "\"Cash Withdrawal of xxx with Debit Card ending xxx at, xxx.\"" +
                     "]," +
                     "\"income\":[" +
-                        "\"xxx has been received as TELEGRAHPHIC TRANSFER.\"" +
+                        "\"xxx has been received as TELEGRAHPHIC TRANSFER\"" +
                     "]" +
                 "}" +
             "}," +

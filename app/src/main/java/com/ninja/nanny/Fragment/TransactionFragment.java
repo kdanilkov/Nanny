@@ -36,7 +36,7 @@ public class TransactionFragment extends CustomFragment {
     View mView;
     MainActivity mContext;
     LinearLayout mLyContainer;
-    final SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy, H:m");
+    final SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy, H:mm");
     public int nMode;
     public Payment paymentSelected;
 
@@ -119,7 +119,7 @@ public class TransactionFragment extends CustomFragment {
                     }
                     TransactionDetailFragment f = new TransactionDetailFragment();
                     String title = Constant.FRAGMENT_TRANSACTION_DETAIL;
-                    f.smsItem = Common.getInstance().dbHelper.getSms(transaction.getSmsId());
+                    f.transactionItem = transaction;
 
                     FragmentTransaction fragmentTransaction = mContext.getSupportFragmentManager()
                             .beginTransaction();

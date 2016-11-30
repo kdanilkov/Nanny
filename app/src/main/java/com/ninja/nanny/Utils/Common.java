@@ -545,10 +545,12 @@ public class Common {
 
                 if(timestampTrans == timestampSms) return false;
 
-                trans = listAllTransactions.get(nEnd);
-                timestampTrans = trans.getTimestampCreated();
+                if(nEnd < listAllTransactions.size()) {
+                    trans = listAllTransactions.get(nEnd);
+                    timestampTrans = trans.getTimestampCreated();
 
-                if(timestampTrans == timestampSms) return false;
+                    if(timestampTrans == timestampSms) return false;
+                }
 
                 break;
             }
@@ -641,7 +643,7 @@ public class Common {
 
             transaction.setAccountName(strAccountName);
             transaction.setBankId(bankActive.getIdxKind());
-            transaction.setSmsId(sms.getId());
+            transaction.setText(sms.getText());
             transaction.setTimestampCreated(sms.getTimestamp());
 
             JSONObject jsonObjTransaction = jsonObjBank.getJSONObject(Constant.JSON_TRANSACTION);
@@ -657,14 +659,19 @@ public class Common {
                 String strSpending = jsonArraySpending.getString(i);
                 String[] arrStrPattern = strSpending.split("xxx");
 
-                if(arrStrPattern.length == 3) {
+                if(arrStrPattern.length == 4) {
                     String strMiddle = arrStrPattern[1];
                     String[] arrStrCurrent = strSmsText.split(strMiddle);
 
                     if(arrStrCurrent.length != 2) continue;
 
                     String[] arrFirst = arrStrCurrent[0].split(arrStrPattern[0]);
-                    String strIdentifier = arrStrCurrent[1];
+                    String[] arrEnd = arrStrCurrent[1].split(arrStrPattern[2]);
+
+                    if(arrFirst.length != 2) continue;
+                    if(arrEnd.length != 2) continue;
+
+                    String strIdentifier = arrEnd[1].trim();
 
                     if(strIdentifier.substring(strIdentifier.length() - 1).equals(".")) {
                         strIdentifier = strIdentifier.substring(0, strIdentifier.length() - 1);

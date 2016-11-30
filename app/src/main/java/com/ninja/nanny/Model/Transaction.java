@@ -1,7 +1,5 @@
 package com.ninja.nanny.Model;
 
-import com.ninja.nanny.Utils.Common;
-
 /**
  * Created by Administrator on 10/28/2016.
  */
@@ -11,7 +9,7 @@ public class Transaction {
     String _accountName;
     String _identifier;
     int _bankId;
-    int _smsId;
+    String _text;
     int _amount;
     int _mode; //0-balance, 1-income, 2-spending
     int _paidId;
@@ -21,11 +19,11 @@ public class Transaction {
 
     }
 
-    public Transaction(String accountName, String identifier, int bankId, int smsId, int amount, int mode, int paidId, int timestampCreated) {
+    public Transaction(String accountName, String identifier, int bankId, String text, int amount, int mode, int paidId, int timestampCreated) {
         _accountName = accountName;
         _identifier = identifier;
         _bankId = bankId;
-        _smsId = smsId;
+        _text = text;
         _amount = amount;
         _mode = mode;
         _paidId = paidId;
@@ -49,8 +47,8 @@ public class Transaction {
         _bankId = bankId;
     }
 
-    public void setSmsId(int smsId) {
-        _smsId = smsId;
+    public void setText(String text) {
+        _text = text;
     }
 
     public void setAmount(int amount) {
@@ -85,8 +83,8 @@ public class Transaction {
         return _bankId;
     }
 
-    public int getSmsId() {
-        return _smsId;
+    public String getText() {
+        return _text;
     }
 
     public int getAmount() {
@@ -103,10 +101,5 @@ public class Transaction {
 
     public long getTimestampCreated() {
         return _timestmapCreated;
-    }
-
-    public String getText() {
-        Sms sms = Common.getInstance().dbHelper.getSms(_smsId);
-        return sms.getText();
     }
 }

@@ -326,7 +326,7 @@ public class EditWishFragment extends CustomFragment {
             wishSelected.setFlagActive(0);
         } else {
             if(strMonthlyPament.length() == 0) {
-                Toast.makeText(mContext, "please set the monthly pament", Toast.LENGTH_SHORT).show();
+                tvMonthlyPayment.setError(Html.fromHtml("<font color='red'>please set the monthly pament</font>"));
                 return;
             }
 

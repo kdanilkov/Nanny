@@ -109,11 +109,8 @@ public class Payment {
         c.set(Calendar.DAY_OF_MONTH, Common.getInstance().nSalaryDate);
         Common.getInstance().setInitTime(c);
 
-        long nLow = c.getTimeInMillis();
-
-        c.add(Calendar.MONTH, 1);
-
-        long nHigh = c.getTimeInMillis();
+        long nLow = Common.getInstance().getTimestampCurrentPeriodStart();
+        long nHigh = Common.getInstance().getTimestampCurrentPeriodEnd();
 
         Paid paid = Common.getInstance().dbHelper.getPaid(_lastPaidId);
 

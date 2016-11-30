@@ -4,6 +4,7 @@ package com.ninja.nanny.Fragment;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -128,12 +129,12 @@ public class EditBankFragment extends CustomFragment {
         String strBalance = etBalance.getText().toString();
 
         if(strAccountName.length() == 0) {
-            Toast.makeText(mContext, "Please input the account name", Toast.LENGTH_SHORT).show();
+            etAccountName.setError(Html.fromHtml("<font color='red'>Please input the account name</font>"));
             return;
         }
 
         if(strBalance.length() == 0) {
-            Toast.makeText(mContext, "Please input the balance value", Toast.LENGTH_SHORT).show();
+            etBalance.setError(Html.fromHtml("<font color='red'>Please input the balance value</font>"));
             return;
         }
 

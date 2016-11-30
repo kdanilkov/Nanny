@@ -1,17 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="payment_pattern_name">
-        <item>subscription for music</item>
-        <item>film processing</item>
-    </string-array>
+<string-array name="payment_pattern_name">
+    <item>Subscription for music</item>
+    <item>Film processing</item>
+    <item>Internet</item>
+    <item>Mobile</item>
+    <item>Utility</item>
+</string-array>
 
-    <string-array name="payment_pattern_words">
-        <item>itunes.com</item>
-        <item>GULF FILM LLC</item>
-    </string-array>
+<string-array name="payment_pattern_words">
+    <item>itunes.com</item>
+    <item>GULF FILM LLC</item>
+    <item>internet</item>
+    <item>mobile</item>
+    <item>utility</item>
+</string-array>
 
-    <string-array name="payment_pattern_date">
-        <item>3</item>
-        <item>25</item>
-    </string-array>
+<string-array name="payment_pattern_date">
+    <item>3</item>
+    <item>25</item>
+    <item>20</item>
+    <item>21</item>
+    <item>20</item>
+</string-array>
 </resources>

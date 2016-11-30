@@ -51,7 +51,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 	//transaction table keys
 	private static final String KEY_BANK_ID = "bank_id";
-	private static final String KEY_SMS_ID = "sms_id";
 	private static final String KEY_AMOUNT = "amount";
 	private static final String KEY_MODE = "mode";
 	private static final String KEY_PAID_ID = "paid_id";
@@ -97,7 +96,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	// Transactions table create statement
 	private static final String CREATE_TABLE_TRANSACTIONS = "CREATE TABLE IF NOT EXISTS "
 			+ TBL_TRANSACTION + "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_ACCOUNT_NAME
-			+ " TEXT," + KEY_IDENTIFIER + " TEXT," + KEY_BANK_ID + " INTEGER," + KEY_SMS_ID + " INTEGER,"
+			+ " TEXT," + KEY_IDENTIFIER + " TEXT," + KEY_BANK_ID + " INTEGER," + KEY_TEXT + " TEXT,"
 			+ KEY_AMOUNT + " INTEGER," + KEY_MODE + " INTEGER," + KEY_PAID_ID + " INTEGER,"	+ KEY_CREATED_AT + " INTEGER" + ")";
 
 	// Wish table create statement
@@ -481,7 +480,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		values.put(KEY_ACCOUNT_NAME, transaction.getAccountName());
 		values.put(KEY_IDENTIFIER, transaction.getIdentifier());
 		values.put(KEY_BANK_ID, transaction.getBankId());
-		values.put(KEY_SMS_ID, transaction.getSmsId());
+		values.put(KEY_TEXT, transaction.getText());
 		values.put(KEY_AMOUNT, transaction.getAmount());
 		values.put(KEY_MODE, transaction.getMode());
 		values.put(KEY_PAID_ID, transaction.getPaidId());
@@ -514,7 +513,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		transaction.setAccountName(c.getString(c.getColumnIndex(KEY_ACCOUNT_NAME)));
 		transaction.setIdentifier(c.getString(c.getColumnIndex(KEY_IDENTIFIER)));
 		transaction.setBankId(c.getInt(c.getColumnIndex(KEY_BANK_ID)));
-		transaction.setSmsId(c.getInt(c.getColumnIndex(KEY_SMS_ID)));
+		transaction.setText(c.getString(c.getColumnIndex(KEY_TEXT)));
 		transaction.setAmount(c.getInt(c.getColumnIndex(KEY_AMOUNT)));
 		transaction.setMode(c.getInt(c.getColumnIndex(KEY_MODE)));
 		transaction.setPaidId(c.getInt(c.getColumnIndex(KEY_PAID_ID)));
@@ -543,7 +542,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 				transaction.setAccountName(c.getString(c.getColumnIndex(KEY_ACCOUNT_NAME)));
 				transaction.setIdentifier(c.getString(c.getColumnIndex(KEY_IDENTIFIER)));
 				transaction.setBankId(c.getInt(c.getColumnIndex(KEY_BANK_ID)));
-				transaction.setSmsId(c.getInt(c.getColumnIndex(KEY_SMS_ID)));
+				transaction.setText(c.getString(c.getColumnIndex(KEY_TEXT)));
 				transaction.setAmount(c.getInt(c.getColumnIndex(KEY_AMOUNT)));
 				transaction.setMode(c.getInt(c.getColumnIndex(KEY_MODE)));
 				transaction.setPaidId(c.getInt(c.getColumnIndex(KEY_PAID_ID)));
@@ -582,7 +581,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		values.put(KEY_ACCOUNT_NAME, transaction.getAccountName());
 		values.put(KEY_IDENTIFIER, transaction.getIdentifier());
 		values.put(KEY_BANK_ID, transaction.getBankId());
-		values.put(KEY_SMS_ID, transaction.getSmsId());
+		values.put(KEY_TEXT, transaction.getText());
 		values.put(KEY_AMOUNT, transaction.getAmount());
 		values.put(KEY_MODE, transaction.getMode());
 		values.put(KEY_PAID_ID, transaction.getPaidId());
