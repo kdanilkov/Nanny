@@ -206,6 +206,7 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:id="@+id/btnAdd"
+        android:visibility="invisible"
         android:background="@drawable/circle_view_blue"
         android:textColor="@color/white"
         android:textSize="40sp"

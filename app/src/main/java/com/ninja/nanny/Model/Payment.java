@@ -137,9 +137,7 @@ public class Payment {
         return 0;
     }
 
-
-    public long getRealTimeStamp() { // at that moment, timestamp of payment date.
-
+    public long getNextPaymentTimestamp(){
         Calendar c = Calendar.getInstance();
         int nDayCurrent = c.get(Calendar.DAY_OF_MONTH);
 
@@ -157,21 +155,75 @@ public class Payment {
 
             return c.getTimeInMillis();
         }
-
         //these recurrent payment has been paid before, then return timestamp for next payment.
-
-        c.set(Calendar.DAY_OF_MONTH, _dateOfMonth);
-        Common.getInstance().setInitTime(c);
-
-        c.add(Calendar.MONTH, -1);
 
         Paid paidLast = Common.getInstance().dbHelper.getPaid(_lastPaidId);
         long timestampPayment = paidLast.getTimestampPayment();
+
+        c.setTimeInMillis(timestampPayment);
+        c.set(Calendar.DAY_OF_MONTH, _dateOfMonth);
+        Common.getInstance().setInitTime(c);
 
         while(c.getTimeInMillis() <= timestampPayment) {
             c.add(Calendar.MONTH, 1);
         }
 
         return c.getTimeInMillis();
+    }
+
+    public long getPaymentTimstampInCurrentPeriod() {
+        long timestampCurrentPeriodStart = Common.getInstance().getTimestampCurrentPeriodStart();
+        long timestampCurrentPeriodEnd = Common.getInstance().getTimestampCurrentPeriodEnd();
+        long timestampAns = getPaymentTimestampBetween(timestampCurrentPeriodStart, timestampCurrentPeriodEnd);
+
+        if(timestampAns > 0) return timestampAns;
+        if(_lastPaidId == -1) return 0;
+
+        Paid paidLast = Common.getInstance().dbHelper.getPaid(_lastPaidId);
+        long timestampPaymentForLastPaid = paidLast.getTimestampPayment();
+
+        if(timestampPaymentForLastPaid >= timestampCurrentPeriodStart && timestampPaymentForLastPaid < timestampCurrentPeriodEnd){
+            return timestampPaymentForLastPaid;
+        }
+
+        int nPrevPaidId = paidLast.getPrevPaidId();
+
+        if(nPrevPaidId != -1) {
+            Paid paidPrev = Common.getInstance().dbHelper.getPaid(nPrevPaidId);
+            long timestampPaymentForPrevPaid = paidPrev.getTimestampPayment();
+
+            if(timestampPaymentForPrevPaid >= timestampCurrentPeriodStart && timestampPaymentForPrevPaid < timestampCurrentPeriodEnd){
+                return timestampPaymentForPrevPaid;
+            }
+        }
+
+        return 0;
+    }
+
+    public long getPaymentTimestampBetween(long timestampLow, long timestampHigh) {
+        long timestampAns = getNextPaymentTimestamp();
+
+        if(_paymentMode == 1 || _paymentMode == 3) {
+            if(timestampAns >= timestampLow && timestampAns < timestampHigh) {
+                return timestampAns;
+            }
+
+            return 0;
+        }
+
+        Calendar c = Calendar.getInstance();
+
+        c.setTimeInMillis(timestampAns);
+
+        while(timestampAns < timestampLow) {
+            c.add(Calendar.MONTH, 1);
+            timestampAns = c.getTimeInMillis();
+        }
+
+        if(timestampAns >= timestampLow && timestampAns < timestampHigh) {
+            return timestampAns;
+        }
+
+        return 0;
     }
 }

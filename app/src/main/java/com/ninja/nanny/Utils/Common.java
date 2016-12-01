@@ -172,7 +172,7 @@ public class Common {
 
             if(payment.getPaymentMode() == 1 || payment.getPaymentMode() == 3) {
 
-                if (payment.getRealTimeStamp() < timestampPastPeriodStart) {
+                if (payment.getNextPaymentTimestamp() < timestampPastPeriodStart) {
                     // those are single payment, and real payment timestamp is older than timestamp of past period start
                     break;
                 }
@@ -238,21 +238,25 @@ public class Common {
 
                 // --- date match part --
                 Calendar c = Calendar.getInstance();
-                //set next payment timestamp
-                c.setTimeInMillis(payment.getRealTimeStamp());
+                //set timestamp of transaction
+                c.setTimeInMillis(trans.getTimestampCreated());
                 //subtract tolerance days from it
                 c.add(Calendar.DAY_OF_YEAR, - nToleranceDays);
+                setInitTime(c);
 
                 long nLow = c.getTimeInMillis();
 
-                //set next payment timestamp
-                c.setTimeInMillis(payment.getRealTimeStamp());
+                //set timestamp of transaction
+                c.setTimeInMillis(trans.getTimestampCreated());
                 //add tolerance days to it, and add one day for high limit
                 c.add(Calendar.DAY_OF_YEAR, nToleranceDays + 1);
+                setInitTime(c);
 
                 long nHigh = c.getTimeInMillis();
 
-                boolean isMatchDate = (trans.getTimestampCreated() >= nLow) && (trans.getTimestampCreated() < nHigh);
+                long timestampReal = payment.getPaymentTimestampBetween(nLow, nHigh);
+
+                boolean isMatchDate = (timestampReal != 0);
 
                 // --- amount match part --
                 int nAmountLow = payment.getAmount() * (100 - nTolerancePercents) / 100;
@@ -261,7 +265,7 @@ public class Common {
                 boolean isMatchAmount = (trans.getAmount() >= nAmountLow) && (trans.getAmount() <= nAmountHigh);
 
                 if(isMatchIdentifier && isMatchDate && isMatchAmount) {
-                    Paid  paid = new Paid(payment.getId(), trans.getId(), payment.getLastPaidId(), payment.getRealTimeStamp(), trans.getTimestampCreated());
+                    Paid  paid = new Paid(payment.getId(), trans.getId(), payment.getLastPaidId(), timestampReal, trans.getTimestampCreated());
 
                     int paid_id = dbHelper.createPaid(paid);
 
@@ -304,7 +308,7 @@ public class Common {
             Transaction trans = listAllTransactions.get(i);
             long timestampTrans = trans.getTimestampCreated();
 
-            if(trans.getMode() != -1) continue;
+            if(trans.getMode() != 1) continue;
             if(timestampTrans >= timestampIntervalEnd) continue;
             if(timestampTrans < timestampIntervalStart) break;
 
@@ -504,7 +508,7 @@ public class Common {
                 nSavingAmount = nTotalAmount - wish.getSavedAmount();
             }
 
-            if(nSavingAmount > nLeftMoney) {
+            if(nSavingAmount > nLeftMoney && nLeftMoney >= 0) {
                 nSavingAmount = nLeftMoney;
             }
 
@@ -735,25 +739,13 @@ public class Common {
     public List<Payment> getCurrentPayments() {
         List<Payment> listAns = new ArrayList<>();
 
-        long timestampCurrentPeriodStart = getTimestampCurrentPeriodStart();
-        long timestampCurrentPeriodEnd = getTimestampCurrentPeriodEnd();
-
         Collections.sort(listAllPayments, new PaymentComparator());
 
         for(int i = 0; i < listAllPayments.size(); i ++) {
             Payment payment = listAllPayments.get(i);
+            long timestampAns = payment.getPaymentTimstampInCurrentPeriod();
 
-            if(payment.getPaymentMode() == 0 || payment.getPaymentMode() == 2) {
-                if(payment.getLastPaidId() == -1 && payment.getRealTimeStamp() >= timestampCurrentPeriodEnd) {
-                    //for this case, payment is new and will be active in next period.
-                    continue;
-                }
-
-                listAns.add(payment);
-            } else {
-                if(payment.getRealTimeStamp() < timestampCurrentPeriodStart) break;
-                if(payment.getRealTimeStamp() >= timestampCurrentPeriodEnd) continue;
-
+            if(timestampAns > 0) {
                 listAns.add(payment);
             }
         }
@@ -788,7 +780,9 @@ public class Common {
     }
 
     public int monthlyLimit() {
-        return nMonthlyIncome - sumOfPaymentsForMonth() - sumOfWishesForMonth();
+        int nSumOfPaymentsForMonth = sumOfPaymentsForMonth();
+        int nSumOfWishesForMonth = sumOfWishesForMonth();
+        return nMonthlyIncome - nSumOfPaymentsForMonth - nSumOfWishesForMonth;
     }
 
     public int weeklyLimit() {

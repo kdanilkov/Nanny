@@ -20,8 +20,8 @@ public class PaymentComparator implements Comparator<Payment> {
         boolean isSingPaymentB = (paymentB.getPaymentMode() == 1 || paymentB.getPaymentMode() == 3);
 
         if((isSingPaymentA && isSingPaymentB) || (!isSingPaymentA && !isSingPaymentB)) { // Both are single, or recurrent
-            long realTimestampA = paymentA.getRealTimeStamp();
-            long realTimestampB = paymentB.getRealTimeStamp();
+            long realTimestampA = paymentA.getNextPaymentTimestamp();
+            long realTimestampB = paymentB.getNextPaymentTimestamp();
 
             if(realTimestampB > realTimestampA) {
                 nResult = 1;

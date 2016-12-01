@@ -46,6 +46,7 @@ public class CalendarPaymentFragment extends CustomFragment implements CompoundB
     HashMap<String, Integer> hashMapConverter;
     final SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy");
     List<Date> listWishDate;
+    List<Payment> listCurrentPayment;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -85,6 +86,7 @@ public class CalendarPaymentFragment extends CustomFragment implements CompoundB
 
         listWishDate = new ArrayList<>();
 
+        listCurrentPayment = Common.getInstance().getCurrentPayments();
 
         Calendar cal = Calendar.getInstance();
         int nSalaryDate = Common.getInstance().nSalaryDate;
@@ -94,8 +96,8 @@ public class CalendarPaymentFragment extends CustomFragment implements CompoundB
         boolean isNotPaidSaving = tbNotPaidSaving.isChecked();
         boolean isPaidSaving = tbPaidSaving.isChecked();
 
-        for(int i = 0; i < Common.getInstance().listAllPayments.size(); i ++) {
-            Payment payment = Common.getInstance().listAllPayments.get(i);
+        for(int i = 0; i < listCurrentPayment.size(); i ++) {
+            Payment payment = listCurrentPayment.get(i);
 
             int nPaymentMode = payment.getPaymentMode();
             int nPaidStatus = payment.getPaidStatus();
@@ -119,21 +121,25 @@ public class CalendarPaymentFragment extends CustomFragment implements CompoundB
 
             if(!flag) continue;
 
-            if(payment.getPaymentMode() == 1 || payment.getPaymentMode() == 3 || payment.getLastPaidId() == -1) {
-                cal.setTimeInMillis(payment.getRealTimeStamp());
-            } else {
-                cal = Calendar.getInstance();
-                cal.set(Calendar.DAY_OF_MONTH, nDateOfMonth);
-                long nCurrent = cal.getTimeInMillis();
-                long nLow = Common.getInstance().getTimestampCurrentPeriodStart();
-                long nHigh = Common.getInstance().getTimestampCurrentPeriodEnd();
+//            if(payment.getPaymentMode() == 1 || payment.getPaymentMode() == 3 || payment.getLastPaidId() == -1) {
+//                cal.setTimeInMillis(payment.getRealTimeStamp());
+//            } else {
+//                cal = Calendar.getInstance();
+//                cal.set(Calendar.DAY_OF_MONTH, nDateOfMonth);
+//                long nCurrent = cal.getTimeInMillis();
+//                long nLow = Common.getInstance().getTimestampCurrentPeriodStart();
+//                long nHigh = Common.getInstance().getTimestampCurrentPeriodEnd();
+//
+//                if(nLow > nCurrent) {
+//                    cal.add(Calendar.MONTH, 1);
+//                } else if(nHigh <= nCurrent) {
+//                    cal.add(Calendar.MONTH, -1);
+//                }
+//            }
 
-                if(nLow > nCurrent) {
-                    cal.add(Calendar.MONTH, 1);
-                } else if(nHigh <= nCurrent) {
-                    cal.add(Calendar.MONTH, -1);
-                }
-            }
+            long timestampPayment = payment.getPaymentTimstampInCurrentPeriod();
+
+            cal.setTimeInMillis(timestampPayment);
 
             Date date = cal.getTime();
 
@@ -211,7 +217,7 @@ public class CalendarPaymentFragment extends CustomFragment implements CompoundB
                     int nSelected = hashMapConverter.get(formatter.format(date));
                     EditPaymentFragment f = new EditPaymentFragment();
                     String title = Constant.FRAGMENT_EDIT_PAYMENT;
-                    f.paymentSelected = Common.getInstance().listAllPayments.get(nSelected);
+                    f.paymentSelected = listCurrentPayment.get(nSelected);
 
                     FragmentTransaction transaction = mContext.getSupportFragmentManager()
                             .beginTransaction();

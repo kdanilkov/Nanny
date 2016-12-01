@@ -62,7 +62,7 @@ public class ExpenseAsPayedFragment extends CustomFragment {
                     .beginTransaction();
             transaction.add(R.id.content_frame, f, title).addToBackStack(title).commit();
          } else if(v.getId() == R.id.btnCash) {
-            Paid paid = new Paid(paymentSelected.getId(), 0, paymentSelected.getLastPaidId(), paymentSelected.getRealTimeStamp(), Common.getInstance().getTimestamp());
+            Paid paid = new Paid(paymentSelected.getId(), 0, paymentSelected.getLastPaidId(), paymentSelected.getPaymentTimstampInCurrentPeriod(), Common.getInstance().getTimestamp());
 
             int nPaidId = Common.getInstance().dbHelper.createPaid(paid);
             paid.setId(nPaidId);
