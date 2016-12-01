@@ -168,6 +168,8 @@ public class Payment {
             c.add(Calendar.MONTH, 1);
         }
 
+        c.set(Calendar.DAY_OF_MONTH, _dateOfMonth);
+
         return c.getTimeInMillis();
     }
 
@@ -217,6 +219,7 @@ public class Payment {
 
         while(timestampAns < timestampLow) {
             c.add(Calendar.MONTH, 1);
+            c.set(Calendar.DAY_OF_MONTH, _dateOfMonth);
             timestampAns = c.getTimeInMillis();
         }
 

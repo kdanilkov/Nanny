@@ -66,7 +66,7 @@
                         android:id="@+id/tvLeftThisWeek"
                         android:layout_marginLeft="10dp"
                         android:layout_marginTop="10dp"
-                        android:textSize="36sp"
+                        android:textSize="30sp"
                         android:textColor="@color/white" />
 
                     <com.ninja.nanny.Custom.RegularTextView
@@ -89,7 +89,7 @@
                         android:layout_below="@+id/textView2"
                         android:layout_marginTop="15dp"
                         android:textColor="@color/white"
-                        android:textSize="36sp" />
+                        android:textSize="30sp" />
 
                     <com.ninja.nanny.Custom.RegularTextView
                         android:text="Free money on this month"
@@ -116,7 +116,7 @@
                         android:id="@+id/tvUpcomingPayment"
                         android:layout_marginLeft="10dp"
                         android:layout_marginTop="10dp"
-                        android:textSize="36sp"
+                        android:textSize="30sp"
                         android:textColor="@color/white" />
 
                     <com.ninja.nanny.Custom.RegularTextView
@@ -161,7 +161,7 @@
                     android:layout_marginBottom="5dp"
                     android:layout_marginStart="5dp"
                     android:textColor="@color/white"
-                    android:textSize="36sp" />
+                    android:textSize="30sp" />
 
                 <com.ninja.nanny.Custom.RegularTextView
                     android:text="Reserved for wishes"
@@ -191,7 +191,7 @@
                     android:id="@+id/tvMoneyDebit"
                     android:layout_marginLeft="5dp"
                     android:layout_marginBottom="5dp"
-                    android:textSize="36sp"
+                    android:textSize="30sp"
                     android:textColor="@color/white" />
 
                 <com.ninja.nanny.Custom.RegularTextView

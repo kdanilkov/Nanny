@@ -340,10 +340,6 @@ public class Common {
         long timestampStart = c.getTimeInMillis();
         long timestampEnd = timestampSalaryDate;
 
-        if(timestampInitConfig > timestampStart) {
-            nAns = UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_INIT_USED_MONEY, 0);
-        }
-
         for(int i = 0; i < listAllTransactions.size(); i ++) {
             Transaction trans = listAllTransactions.get(i);
             long timestampTrans = trans.getTimestampCreated();
@@ -780,9 +776,14 @@ public class Common {
     }
 
     public int monthlyLimit() {
+        int nRealIncome = nMonthlyIncome;
+        if(timestampInitConfig > getTimestampCurrentPeriodStart()) {
+            nRealIncome -= UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_INIT_USED_MONEY, 0);
+        }
+
         int nSumOfPaymentsForMonth = sumOfPaymentsForMonth();
         int nSumOfWishesForMonth = sumOfWishesForMonth();
-        return nMonthlyIncome - nSumOfPaymentsForMonth - nSumOfWishesForMonth;
+        return nRealIncome - nSumOfPaymentsForMonth - nSumOfWishesForMonth;
     }
 
     public int weeklyLimit() {
