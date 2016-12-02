@@ -32,7 +32,7 @@
             android:layout_alignBaseline="@+id/btnBack"
             android:layout_toRightOf="@+id/btnBack"
             android:textColor="@color/white"
-            android:textSize="20sp" />
+            android:textSize="@dimen/title_font_size" />
         <Button
             android:layout_width="30dp"
             android:layout_height="30dp"
@@ -69,7 +69,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/textView"
-                    android:textSize="14sp"
+                    android:textSize="@dimen/label_font_size"
                     android:textColor="@color/label_text_color" />
 
                 <com.ninja.nanny.Custom.RegularEditText
@@ -81,7 +81,7 @@
                     android:background="@drawable/border_add_bank_editor"
                     android:layout_marginTop="10dp"
                     android:textColor="@color/black"
-                    android:textSize="16sp"
+                    android:textSize="@dimen/editor_font_size"
                     android:paddingBottom="5dp"
                     android:enabled="true"
                     android:selectAllOnFocus="true"
@@ -99,7 +99,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/textView4"
-                    android:textSize="14sp"
+                    android:textSize="@dimen/label_font_size"
                     android:textColor="@color/label_text_color" />
 
                 <com.ninja.nanny.Custom.RegularEditText
@@ -110,7 +110,7 @@
                     android:background="@drawable/border_add_bank_editor"
                     android:layout_marginTop="10dp"
                     android:textColor="@color/black"
-                    android:textSize="16sp"
+                    android:textSize="@dimen/editor_font_size"
                     android:paddingBottom="5dp"
                     android:inputType="number"
                     android:selectAllOnFocus="true"
@@ -128,7 +128,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/textView1"
-                    android:textSize="14sp"
+                    android:textSize="@dimen/label_font_size"
                     android:textColor="@color/label_text_color" />
 
                 <RelativeLayout

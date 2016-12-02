@@ -34,172 +34,191 @@
             android:layout_alignBaseline="@+id/btnBack"
             android:layout_toRightOf="@+id/btnBack"
             android:textColor="@color/white"
-            android:textSize="20sp" />
+            android:textSize="@dimen/title_font_size" />
 
     </RelativeLayout>
 
-    <RelativeLayout
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/rlyTop"
-        android:id="@+id/rlyCover">
+        android:layout_marginBottom="40dp"
+        android:layout_marginTop="5dp">
 
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:id="@+id/lySwitch"
-            android:background="@color/white">
-
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1">
-
-                <com.ninja.nanny.Custom.MediumTextView
-                    android:text="Not Paid Bill"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/label_text_color"
-                    android:textSize="14sp"
-                    android:layout_gravity="center_horizontal" />
-
-                <ToggleButton
-                    android:layout_width="44dp"
-                    android:layout_height="23dp"
-                    android:background="@drawable/tbtn_selector_blue"
-                    android:textOff=""
-                    android:textOn=""
-                    android:id="@+id/tbtnNotPaidBill"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:checked="true"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="10dp" />
-            </LinearLayout>
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1">
-
-                <com.ninja.nanny.Custom.MediumTextView
-                    android:text="Paid Bill"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/label_text_color"
-                    android:textSize="14sp"
-                    android:layout_gravity="center_horizontal" />
-
-                <ToggleButton
-                    android:layout_width="44dp"
-                    android:layout_height="23dp"
-                    android:background="@drawable/tbtn_selector_green"
-                    android:textOff=""
-                    android:textOn=""
-                    android:id="@+id/tbtnPaidBill"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:checked="true"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="10dp" />
-            </LinearLayout>
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1">
-
-                <com.ninja.nanny.Custom.MediumTextView
-                    android:text="Not Paid Saving"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="@color/label_text_color"
-                    android:layout_gravity="center_horizontal"
-                    android:textSize="13sp" />
-
-                <ToggleButton
-                    android:layout_width="44dp"
-                    android:layout_height="23dp"
-                    android:background="@drawable/tbtn_selector_yellow"
-                    android:textOff=""
-                    android:textOn=""
-                    android:id="@+id/tbtnNotPaidSaving"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:checked="true"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="10dp" />
-            </LinearLayout>
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1">
-
-                <com.ninja.nanny.Custom.MediumTextView
-                    android:text="Paid Saving"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="14sp"
-                    android:textColor="@color/label_text_color"
-                    android:layout_gravity="center_horizontal" />
-
-                <ToggleButton
-                    android:layout_width="44dp"
-                    android:layout_height="23dp"
-                    android:background="@drawable/tbtn_selector_orange"
-                    android:textOff=""
-                    android:textOn=""
-                    android:id="@+id/tbtnPaidSaving"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"
-                    android:checked="true"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="10dp" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:id="@+id/rlyDateLabel"
-            android:layout_below="@+id/lySwitch"
-            android:layout_marginTop="30dp">
-
-            <com.ninja.nanny.Custom.RegularTextView
-                android:text="TextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/tvDay"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="20dp"
-                android:textSize="36sp" />
-
-            <com.ninja.nanny.Custom.RegularTextView
-                android:text="TextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/tvYear"
-                android:textSize="16sp"
-                android:layout_centerVertical="true"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="20dp" />
-        </RelativeLayout>
-        <LinearLayout
             android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/rlyDateLabel"
-            android:id="@+id/lyCalendar"
-            android:layout_marginTop="10dp" />
-    </RelativeLayout>
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:id="@+id/lyContainer">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/rlyCover">
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:id="@+id/lySwitch"
+                    android:background="@color/white">
+
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3">
+
+                        <com.ninja.nanny.Custom.MediumTextView
+                            android:text="Not Paid Bill"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/label_text_color"
+                            android:textSize="@dimen/small_font_size"
+                            android:layout_gravity="center_horizontal" />
+
+                        <ToggleButton
+                            android:layout_width="44dp"
+                            android:layout_height="23dp"
+                            android:background="@drawable/tbtn_selector_blue"
+                            android:textOff=""
+                            android:textOn=""
+                            android:id="@+id/tbtnNotPaidBill"
+                            android:layout_alignParentRight="true"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:checked="true"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="10dp" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2">
+
+                        <com.ninja.nanny.Custom.MediumTextView
+                            android:text="Paid Bill"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/label_text_color"
+                            android:textSize="@dimen/small_font_size"
+                            android:layout_gravity="center_horizontal" />
+
+                        <ToggleButton
+                            android:layout_width="44dp"
+                            android:layout_height="23dp"
+                            android:background="@drawable/tbtn_selector_green"
+                            android:textOff=""
+                            android:textOn=""
+                            android:id="@+id/tbtnPaidBill"
+                            android:layout_alignParentRight="true"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:checked="true"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="10dp" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3">
+
+                        <com.ninja.nanny.Custom.MediumTextView
+                            android:text="Not Paid Saving"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/label_text_color"
+                            android:layout_gravity="center_horizontal"
+                            android:textSize="@dimen/small_font_size" />
+
+                        <ToggleButton
+                            android:layout_width="44dp"
+                            android:layout_height="23dp"
+                            android:background="@drawable/tbtn_selector_yellow"
+                            android:textOff=""
+                            android:textOn=""
+                            android:id="@+id/tbtnNotPaidSaving"
+                            android:layout_alignParentRight="true"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:checked="true"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="10dp" />
+                    </LinearLayout>
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2">
+
+                        <com.ninja.nanny.Custom.MediumTextView
+                            android:text="Paid Saving"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="@dimen/small_font_size"
+                            android:textColor="@color/label_text_color"
+                            android:layout_gravity="center_horizontal" />
+
+                        <ToggleButton
+                            android:layout_width="44dp"
+                            android:layout_height="23dp"
+                            android:background="@drawable/tbtn_selector_orange"
+                            android:textOff=""
+                            android:textOn=""
+                            android:id="@+id/tbtnPaidSaving"
+                            android:layout_alignParentRight="true"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:checked="true"
+                            android:layout_gravity="center_horizontal"
+                            android:layout_marginTop="10dp" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:id="@+id/rlyDateLabel"
+                    android:layout_below="@+id/lySwitch"
+                    android:layout_marginTop="30dp">
+
+                    <com.ninja.nanny.Custom.RegularTextView
+                        android:text="TextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/tvDay"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="20dp"
+                        android:textSize="@dimen/big_font_size" />
+
+                    <com.ninja.nanny.Custom.RegularTextView
+                        android:text="TextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/tvYear"
+                        android:textSize="@dimen/editor_font_size"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="20dp" />
+                </RelativeLayout>
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/rlyDateLabel"
+                    android:id="@+id/lyCalendar"
+                    android:layout_marginTop="10dp" />
+            </RelativeLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+
 
     <Button
         android:text="+"

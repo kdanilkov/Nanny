@@ -33,7 +33,7 @@
             android:layout_alignBaseline="@+id/btnBack"
             android:layout_toRightOf="@+id/btnBack"
             android:textColor="@color/white"
-            android:textSize="20sp" />
+            android:textSize="@dimen/title_font_size" />
 
     </RelativeLayout>
 
@@ -105,7 +105,7 @@
             android:id="@+id/editText"
             android:hint="Enter amount..."
             android:background="@null"
-            android:textSize="16sp"
+            android:textSize="@dimen/editor_font_size"
             android:textColor="@color/black"
             android:layout_centerVertical="true"
             android:layout_toEndOf="@+id/btnHelp"

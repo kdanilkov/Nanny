@@ -21,7 +21,7 @@
         android:layout_centerVertical="true"
         android:layout_toEndOf="@+id/imgvLogo"
         android:layout_marginStart="20dp"
-        android:textSize="14sp"
+        android:textSize="@dimen/label_font_size"
         android:id="@+id/tvTitle" />
 
 </RelativeLayout>

@@ -24,7 +24,7 @@
         android:layout_toEndOf="@+id/imgvCircle"
         android:layout_marginStart="20dp"
         android:id="@+id/tvName"
-        android:textSize="16sp"
+        android:textSize="@dimen/editor_font_size"
         android:textStyle="normal|bold" />
 
     <com.ninja.nanny.Custom.RegularTextView
@@ -35,7 +35,7 @@
         android:layout_alignStart="@+id/tvName"
         android:id="@+id/tvDetail"
         android:layout_marginTop="3dp"
-        android:textSize="14sp"
+        android:textSize="@dimen/label_font_size"
         android:textColor="@color/gray_dark" />
 
     <ToggleButton

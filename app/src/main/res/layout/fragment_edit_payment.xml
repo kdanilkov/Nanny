@@ -52,7 +52,7 @@
             android:layout_alignBaseline="@+id/btnBack"
             android:layout_toRightOf="@+id/btnBack"
             android:textColor="@color/white"
-            android:textSize="20sp" />
+            android:textSize="@dimen/title_font_size" />
 
     </RelativeLayout>
 
@@ -80,7 +80,7 @@
                     android:text="TITLE"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="14sp"
+                    android:textSize="@dimen/label_font_size"
                     android:textColor="@color/label_text_color" />
 
                 <com.ninja.nanny.Custom.RegularEditText
@@ -89,7 +89,7 @@
                     android:inputType="textPersonName"
                     android:text=""
                     android:ems="10"
-                    android:textSize="16sp"
+                    android:textSize="@dimen/editor_font_size"
                     android:id="@+id/etTitle"
                     android:background="@drawable/border_add_bank_editor"
                     android:layout_marginTop="10dp"
@@ -115,13 +115,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColor="@color/label_text_color"
-                        android:textSize="14sp"
+                        android:textSize="@dimen/label_font_size"
                         android:id="@+id/tvAmount" />
 
                     <com.ninja.nanny.Custom.RegularEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="16sp"
+                        android:textSize="@dimen/editor_font_size"
                         android:ems="10"
                         android:id="@+id/etAmount"
                         android:background="@drawable/border_add_bank_editor"
@@ -145,7 +145,7 @@
                         android:text="DATE OF MONTH"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textSize="14sp"
+                        android:textSize="@dimen/label_font_size"
                         android:textColor="@color/label_text_color" />
 
                     <com.ninja.nanny.Custom.RegularEditText
@@ -157,7 +157,7 @@
                         android:layout_marginTop="10dp"
                         android:textColor="@color/black"
                         android:paddingBottom="5dp"
-                        android:textSize="16sp"
+                        android:textSize="@dimen/editor_font_size"
                         android:inputType="number"
                         android:selectAllOnFocus="true"
                         android:hint="10" />
@@ -187,7 +187,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:textSize="14sp"
+                        android:textSize="@dimen/label_font_size"
                         android:layout_marginLeft="20dp"
                         android:textColor="@color/label_text_color" />
 
@@ -211,7 +211,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:textSize="14sp"
+                        android:textSize="@dimen/label_font_size"
                         android:layout_marginLeft="20dp"
                         android:textColor="@color/label_text_color" />
 
@@ -228,7 +228,7 @@
                     android:text="DETAIL"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textSize="14sp"
+                    android:textSize="@dimen/label_font_size"
                     android:textColor="@color/label_text_color" />
 
                 <com.ninja.nanny.Custom.RegularEditText
@@ -237,7 +237,7 @@
                     android:inputType="textPersonName"
                     android:text=""
                     android:ems="10"
-                    android:textSize="16sp"
+                    android:textSize="@dimen/editor_font_size"
                     android:id="@+id/etDetail"
                     android:background="@drawable/border_add_bank_editor"
                     android:layout_marginTop="10dp"

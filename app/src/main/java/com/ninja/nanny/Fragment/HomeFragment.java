@@ -28,7 +28,7 @@ public class HomeFragment extends CustomFragment {
     LayoutInflater mInflater;
     View mView;
     MainActivity mContext;
-    TextView tvLeftThisWeek, tvLeftThisMonth, tvUpcomingPayments, tvSpentForWish, tvShowDebit, tvLabelDebit;
+    TextView tvLeftThisWeek, tvLeftThisMonth, tvUpcomingPayments, tvSpentForWish, tvShowDebit, tvLabelDebit, tvCurrencyDebit;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -64,11 +64,12 @@ public class HomeFragment extends CustomFragment {
     }
 
     void presentData() {
-        tvLeftThisWeek.setText(Common.getInstance().freeOnThisWeek() + " $");
-        tvLeftThisMonth.setText(Common.getInstance().freeOnThisMonth() + " $");
-        tvUpcomingPayments.setText(Common.getInstance().upcomingPayments() + " $");
-        tvSpentForWish.setText(Common.getInstance().sumOfWishesForMonth() + " $");
+        tvLeftThisWeek.setText(Common.getInstance().freeOnThisWeek() + "");
+        tvLeftThisMonth.setText(Common.getInstance().freeOnThisMonth() + "");
+        tvUpcomingPayments.setText(Common.getInstance().upcomingPayments() + "");
+        tvSpentForWish.setText(Common.getInstance().sumOfWishesForMonth() + "");
         tvShowDebit.setText("");
+        tvCurrencyDebit.setVisibility(View.INVISIBLE);
         tvLabelDebit.setVisibility(View.VISIBLE);
 
 
@@ -84,12 +85,14 @@ public class HomeFragment extends CustomFragment {
         tvSpentForWish = (TextView)mView.findViewById(R.id.tvSpentForWish);
         tvShowDebit = (TextView)mView.findViewById(R.id.tvMoneyDebit);
         tvLabelDebit = (TextView)mView.findViewById(R.id.tvLabelDebitCard);
+        tvCurrencyDebit = (TextView)mView.findViewById(R.id.tvCurrencyDebit);
 
         mView.findViewById(R.id.rlytDebitCard).setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                tvShowDebit.setText(Common.getInstance().balanceOfActiveBank() + " $");
+                tvShowDebit.setText(Common.getInstance().balanceOfActiveBank() + "");
                 tvLabelDebit.setVisibility(View.INVISIBLE);
+                tvCurrencyDebit.setVisibility(View.VISIBLE);
 
                 Handler handler = new Handler();
                 handler.postDelayed(new Runnable() {
@@ -97,6 +100,7 @@ public class HomeFragment extends CustomFragment {
                     public void run() {
                         tvShowDebit.setText("");
                         tvLabelDebit.setVisibility(View.VISIBLE);
+                        tvCurrencyDebit.setVisibility(View.INVISIBLE);
                     }
                 }, 3000);
 

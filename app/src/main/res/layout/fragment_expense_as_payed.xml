@@ -34,7 +34,7 @@
             android:layout_alignBaseline="@+id/btnBack"
             android:layout_toRightOf="@+id/btnBack"
             android:textColor="@color/white"
-            android:textSize="20sp" />
+            android:textSize="@dimen/title_font_size" />
 
     </RelativeLayout>
 
@@ -49,24 +49,26 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:textSize="14sp"
-            android:layout_marginTop="40dp" />
+            android:textSize="@dimen/label_font_size"
+            android:layout_marginTop="40dp"
+            android:id="@+id/tvIdentifier" />
 
         <com.ninja.nanny.Custom.RegularTextView
             android:text="20 day payment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:textSize="14sp"
-            android:layout_marginTop="5dp" />
+            android:textSize="@dimen/label_font_size"
+            android:layout_marginTop="5dp"
+            android:id="@+id/tvDateOfMonth" />
 
         <com.ninja.nanny.Custom.RegularTextView
-            android:text="30$"
+            android:text="30 AED"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textView12"
+            android:id="@+id/tvAmount"
             android:layout_gravity="center_horizontal"
-            android:textSize="14sp"
+            android:textSize="@dimen/label_font_size"
             android:layout_marginTop="5dp" />
 
         <com.ninja.nanny.Custom.MediumOrangeButton
@@ -74,6 +76,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/btnWire"
+            android:textSize="@dimen/title_font_size"
             android:background="@color/orange"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
@@ -85,6 +88,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/btnCash"
+
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
             android:layout_gravity="center_horizontal"

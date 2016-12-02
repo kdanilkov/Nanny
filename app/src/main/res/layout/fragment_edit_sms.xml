@@ -34,7 +34,7 @@
             android:layout_alignBaseline="@+id/btnBack"
             android:layout_toRightOf="@+id/btnBack"
             android:textColor="@color/white"
-            android:textSize="20sp" />
+            android:textSize="@dimen/title_font_size" />
 
         <Button
             android:layout_width="30dp"
@@ -73,7 +73,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/textView"
-                    android:textSize="14sp"
+                    android:textSize="@dimen/label_font_size"
                     android:textColor="@color/label_text_color" />
 
                 <com.ninja.nanny.Custom.RegularEditText
@@ -85,7 +85,7 @@
                     android:background="@drawable/border_add_bank_editor"
                     android:layout_marginTop="10dp"
                     android:textColor="@color/black"
-                    android:textSize="16sp"
+                    android:textSize="@dimen/editor_font_size"
                     android:paddingBottom="5dp" />
             </LinearLayout>
 
@@ -100,7 +100,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/textView1"
-                    android:textSize="14sp"
+                    android:textSize="@dimen/label_font_size"
                     android:textColor="@color/label_text_color" />
 
                 <com.ninja.nanny.Custom.RegularEditText
@@ -109,7 +109,7 @@
                     android:inputType="textMultiLine"
                     android:ems="10"
                     android:textColor="@color/black"
-                    android:textSize="16sp"
+                    android:textSize="@dimen/editor_font_size"
                     android:id="@+id/etText" />
             </LinearLayout>
             <LinearLayout
@@ -123,14 +123,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/textView2"
-                    android:textSize="14sp"
+                    android:textSize="@dimen/label_font_size"
                     android:textColor="@color/label_text_color" />
 
                 <com.ninja.nanny.Custom.RegularTextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/tvDateTime"
-                    android:textSize="16sp"
+                    android:textSize="@dimen/editor_font_size"
                     android:textColor="@color/black"
                     android:layout_marginTop="10dp" />
 
@@ -165,12 +165,14 @@
             android:id="@+id/btnSave"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
+            android:textSize="@dimen/title_font_size"
             android:layout_alignParentRight="true" />
 
         <com.ninja.nanny.Custom.MediumButton
             android:text="COPY TEMPLATE"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textSize="@dimen/title_font_size"
             android:id="@+id/btnCopy"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"

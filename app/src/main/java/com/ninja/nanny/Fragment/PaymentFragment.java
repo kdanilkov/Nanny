@@ -82,10 +82,6 @@ public class PaymentFragment extends CustomFragment {
     void presentData() {
         mLyContainer.removeAllViews();
 
-//        String[] arrName = {"Savings 30%", "Tenancy", "Hot Water", "Mobile", "Internet", "TV"};
-//        String[] arrDetail = {"500$, to Savings Account", "500$, to Provider", "500$, to Provider", "200$, to Provider", "200$, to Provider", "75$, to Provider"};
-//        int[] arrStatus = {2, 1, 1, 1, 1, 0}; //2-green, 1-blue, 0-false(gray)
-
         if(Common.getInstance().listAllPayments.size() == 0) {
             Toast.makeText(mContext, "There is no data to show", Toast.LENGTH_SHORT).show();
             return;
@@ -103,10 +99,10 @@ public class PaymentFragment extends CustomFragment {
             int nPaymentMode = payment.getPaymentMode();
             int nPaidStatus = payment.getPaidStatus();
 
-            String strDetail = payment.getAmount() + "$, to Savings Account";
+            String strDetail = payment.getAmount() + "AED, to Savings Account";
 
             if(nPaymentMode > 1) {
-                strDetail = payment.getAmount() + "$, to Provider";
+                strDetail = payment.getAmount() + "AED, to Provider";
             }
 
             View cell = mInflater.inflate(R.layout.cell_payment_item, null);

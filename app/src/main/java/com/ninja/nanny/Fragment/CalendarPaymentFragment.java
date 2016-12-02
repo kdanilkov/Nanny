@@ -121,22 +121,6 @@ public class CalendarPaymentFragment extends CustomFragment implements CompoundB
 
             if(!flag) continue;
 
-//            if(payment.getPaymentMode() == 1 || payment.getPaymentMode() == 3 || payment.getLastPaidId() == -1) {
-//                cal.setTimeInMillis(payment.getRealTimeStamp());
-//            } else {
-//                cal = Calendar.getInstance();
-//                cal.set(Calendar.DAY_OF_MONTH, nDateOfMonth);
-//                long nCurrent = cal.getTimeInMillis();
-//                long nLow = Common.getInstance().getTimestampCurrentPeriodStart();
-//                long nHigh = Common.getInstance().getTimestampCurrentPeriodEnd();
-//
-//                if(nLow > nCurrent) {
-//                    cal.add(Calendar.MONTH, 1);
-//                } else if(nHigh <= nCurrent) {
-//                    cal.add(Calendar.MONTH, -1);
-//                }
-//            }
-
             long timestampPayment = payment.getPaymentTimstampInCurrentPeriod();
 
             cal.setTimeInMillis(timestampPayment);
@@ -149,35 +133,57 @@ public class CalendarPaymentFragment extends CustomFragment implements CompoundB
             listWishDate.add(date);
         }
 
-        for(int i = 0; i < 12; i ++) {
-            cal = Calendar.getInstance();
-            cal.set(Calendar.DAY_OF_MONTH, nSalaryDate);
-            cal.add(Calendar.MONTH, i);
-            Date date = cal.getTime();
+
+
+//        for(int i = 0; i < 12; i ++) {
+//            cal = Calendar.getInstance();
+//            cal.set(Calendar.DAY_OF_MONTH, nSalaryDate);
+//            cal.add(Calendar.MONTH, i);
+//            Date date = cal.getTime();
+//            Drawable drawable = getResources().getDrawable(R.drawable.circle_border_blue);
+//
+//            if(isNewDate(date)) {
+//                hashMapBackgroundDrawble.put(date, drawable);
+//                hashMapTextColor.put(date, R.color.caldroid_light_red);
+//            }
+//
+//            if(i > 0) {
+//                cal.add(Calendar.MONTH, - 2 * i);
+//                date = cal.getTime();
+//                drawable = getResources().getDrawable(R.drawable.circle_border_blue);
+//
+//                if(isNewDate(date)) {
+//                    hashMapBackgroundDrawble.put(date, drawable);
+//                    hashMapTextColor.put(date, R.color.caldroid_light_red);
+//                }
+//            }
+//        }
+
+        long timestampCurrentPeriodStart = Common.getInstance().getTimestampCurrentPeriodStart();
+        long timestampCurrentPeriodEnd = Common.getInstance().getTimestampCurrentPeriodEnd();
+
+        cal.setTimeInMillis(timestampCurrentPeriodStart);
+
+        Date dateCurrentPeriodStart = cal.getTime();
+
+        if(isNewDate(dateCurrentPeriodStart)) {
             Drawable drawable = getResources().getDrawable(R.drawable.circle_border_blue);
-
-            if(isNewDate(date)) {
-                hashMapBackgroundDrawble.put(date, drawable);
-                hashMapTextColor.put(date, R.color.caldroid_light_red);
-            }
-
-            if(i > 0) {
-                cal.add(Calendar.MONTH, - 2 * i);
-                date = cal.getTime();
-                drawable = getResources().getDrawable(R.drawable.circle_border_blue);
-
-                if(isNewDate(date)) {
-                    hashMapBackgroundDrawble.put(date, drawable);
-                    hashMapTextColor.put(date, R.color.caldroid_light_red);
-                }
-            }
+            hashMapBackgroundDrawble.put(dateCurrentPeriodStart, drawable);
+            hashMapTextColor.put(dateCurrentPeriodStart, R.color.caldroid_light_red);
         }
+
 
         if (caldroidFragment != null) {
             caldroidFragment.setBackgroundDrawableForDates(hashMapBackgroundDrawble);
             caldroidFragment.setTextColorForDates(hashMapTextColor);
             caldroidFragment.refreshView();
         }
+
+        caldroidFragment.setMinDate(dateCurrentPeriodStart);
+
+        cal.setTimeInMillis(timestampCurrentPeriodEnd);
+        cal.add(Calendar.DAY_OF_YEAR, -1);
+        caldroidFragment.setMaxDate(cal.getTime());
     }
 
     @Override

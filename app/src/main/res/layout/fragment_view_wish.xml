@@ -33,7 +33,7 @@
             android:layout_alignBaseline="@+id/btnBack"
             android:layout_toRightOf="@+id/btnBack"
             android:textColor="@color/white"
-            android:textSize="20sp" />
+            android:textSize="@dimen/title_font_size" />
 
         <Button
             android:layout_width="30dp"
@@ -77,13 +77,14 @@
                     CircleProgressView:cpv_autoTextSize="true"
                     CircleProgressView:cpv_barColor="@color/colorPrimary"
                     CircleProgressView:cpv_barWidth="35dp"
-                    CircleProgressView:cpv_innerContourSize="0dp"
+                    CircleProgressView:cpv_innerContourSize="1dp"
                     CircleProgressView:cpv_maxValue="100"
                     CircleProgressView:cpv_outerContourSize="0dp"
-                    CircleProgressView:cpv_rimColor="@color/gray_lt"
+                    CircleProgressView:cpv_innerContourColor="@color/gray_lt"
+                    CircleProgressView:cpv_rimColor="@color/green_lt"
                     CircleProgressView:cpv_rimWidth="35dp"
                     CircleProgressView:cpv_showUnit="true"
-                    CircleProgressView:cpv_spinColor="@color/gray_dark"
+                    CircleProgressView:cpv_spinColor="@color/black"
                     CircleProgressView:cpv_textColor="@color/colorPrimary"
                     CircleProgressView:cpv_textScale="1"
                     CircleProgressView:cpv_unit="%"
@@ -111,14 +112,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColor="@color/label_text_color"
-                        android:textSize="14sp" />
+                        android:textSize="@dimen/label_font_size" />
 
                     <com.ninja.nanny.Custom.RegularTextView
                         android:text="Trip to Maldives"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/tvTitle"
-                        android:textSize="16sp"
+                        android:textSize="@dimen/editor_font_size"
                         android:textColor="@color/gray_dark"
                         android:layout_marginTop="5dp" />
                 </LinearLayout>
@@ -138,14 +139,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColor="@color/label_text_color"
-                        android:textSize="14sp" />
+                        android:textSize="@dimen/label_font_size" />
 
                     <com.ninja.nanny.Custom.RegularTextView
                         android:text="10,000$"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/tvAmount"
-                        android:textSize="16sp"
+                        android:textSize="@dimen/editor_font_size"
                         android:textColor="@color/gray_dark"
                         android:layout_marginTop="5dp" />
                 </LinearLayout>
@@ -165,14 +166,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColor="@color/label_text_color"
-                        android:textSize="14sp" />
+                        android:textSize="@dimen/label_font_size" />
 
                     <com.ninja.nanny.Custom.RegularTextView
                         android:text="250$"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/tvPayment"
-                        android:textSize="16sp"
+                        android:textSize="@dimen/editor_font_size"
                         android:textColor="@color/gray_dark"
                         android:layout_marginTop="5dp" />
                 </LinearLayout>
@@ -205,14 +206,14 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:textColor="@color/label_text_color"
-                                android:textSize="14sp" />
+                                android:textSize="@dimen/label_font_size" />
 
                             <com.ninja.nanny.Custom.RegularTextView
                                 android:text="6,200$"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:id="@+id/tvSaved"
-                                android:textSize="16sp"
+                                android:textSize="@dimen/editor_font_size"
                                 android:textColor="@color/gray_dark"
                                 android:layout_marginTop="5dp" />
                         </LinearLayout>
@@ -237,14 +238,14 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:textColor="@color/label_text_color"
-                                android:textSize="14sp" />
+                                android:textSize="@dimen/label_font_size" />
 
                             <com.ninja.nanny.Custom.RegularTextView
                                 android:text="3,800$"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:id="@+id/tvLeft"
-                                android:textSize="16sp"
+                                android:textSize="@dimen/editor_font_size"
                                 android:textColor="@color/gray_dark"
                                 android:layout_marginTop="5dp" />
                         </LinearLayout>

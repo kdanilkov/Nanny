@@ -19,5 +19,5 @@
         android:paddingRight="20dp"
         android:paddingLeft="20dp"
         android:textColor="@color/white"
-        android:textSize="18sp" />
+        android:textSize="@dimen/label_font_size" />
 </RelativeLayout>

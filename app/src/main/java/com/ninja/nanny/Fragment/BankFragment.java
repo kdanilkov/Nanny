@@ -78,7 +78,7 @@ public class BankFragment extends CustomFragment {
 
             ((TextView)cell.findViewById(R.id.tvBankName)).setText(bankItem.getAccountName());
             ((TextView)cell.findViewById(R.id.tvDetail)).setText(bankItem.getBankName() + ", " + bankItem.getBankType());
-            ((TextView)cell.findViewById(R.id.tvBalance)).setText("Balance: " + bankItem.getBalance() + "$");
+            ((TextView)cell.findViewById(R.id.tvBalance)).setText("Balance: " + bankItem.getBalance() + "AED");
 
             final ImageView imgvCircle = (ImageView)cell.findViewById(R.id.imgvCircle);
             final Button btnCheck = (Button)cell.findViewById(R.id.btnCheck);

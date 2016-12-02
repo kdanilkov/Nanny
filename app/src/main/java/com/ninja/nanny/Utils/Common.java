@@ -1,5 +1,8 @@
 package com.ninja.nanny.Utils;
 
+import android.content.Context;
+import android.widget.Toast;
+
 import com.ninja.nanny.Comparator.PaymentComparator;
 import com.ninja.nanny.Comparator.TransactionComparator;
 import com.ninja.nanny.Comparator.WishComparator;
@@ -13,11 +16,20 @@ import com.ninja.nanny.Model.UsedAmount;
 import com.ninja.nanny.Model.Wish;
 import com.ninja.nanny.Model.WishSaving;
 import com.ninja.nanny.Preference.UserPreference;
+import com.ninja.nanny.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -435,23 +447,32 @@ public class Common {
             if(trans.getMode() != 1) continue;
 
             long timestampTrans = trans.getTimestampCreated();
+            int nAmountTrans = trans.getAmount();
             long timestampAns = timestampTrans;
 
             if(timestampTrans >= timestampIntervalStart && timestampTrans < timestampSalaryDate) {
-                if(nSumTransSoFar >= nAmountHigh) {
+                if(nAmountTrans >= nAmountLow) {
                     timestampAns = timestampIntervalEnd;
                 } else {
-                    timestampAns = timestampIntervalStart;
-                    nSumTransSoFar += trans.getAmount();
+                    if(nSumTransSoFar >= nAmountHigh) {
+                        timestampAns = timestampIntervalEnd;
+                    } else {
+                        timestampAns = timestampIntervalStart;
+                        nSumTransSoFar += trans.getAmount();
+                    }
                 }
             }
 
             if(timestampTrans >= timestampSalaryDate && timestampTrans < timestampIntervalEnd) {
-                if(nSumTransSoFar < nAmountLow) {
-                    timestampAns = timestampIntervalStart;
-                    nSumTransSoFar += trans.getAmount();
-                } else {
+                if(nAmountTrans >= nAmountLow) {
                     timestampAns = timestampIntervalEnd;
+                } else {
+                    if(nSumTransSoFar < nAmountLow) {
+                        timestampAns = timestampIntervalStart;
+                        nSumTransSoFar += trans.getAmount();
+                    } else {
+                        timestampAns = timestampIntervalEnd;
+                    }
                 }
             }
 
@@ -632,7 +653,6 @@ public class Common {
 
     public Transaction convertToTransactionFromSms(Sms sms) {
 //        String strBankName = bankActive.getBankName().toLowerCase();
-        if(!sms.getAddress().toLowerCase().equals("bank")) return null;
 
         Transaction transaction = new Transaction();
         transaction.setPaidId(-1);
@@ -640,6 +660,9 @@ public class Common {
         try {
             JSONObject jsonObjBank = jsonArrayBankInfo.getJSONObject(bankActive.getIdxKind());
             String strAccountName = jsonObjBank.getString(Constant.JSON_NAME);
+            String strAddress = jsonObjBank.getString(Constant.JSON_ADDRESS);
+
+            if(!sms.getAddress().toLowerCase().equals(strAddress)) return null;
 
             transaction.setAccountName(strAccountName);
             transaction.setBankId(bankActive.getIdxKind());
@@ -906,6 +929,38 @@ public class Common {
         }
 
         return nStatus;
+    }
+
+    public void readBankJsonData(Context mContext) {
+        InputStream is = mContext.getResources().openRawResource(R.raw.bank_json);
+        Writer writer = new StringWriter();
+        char[] buffer = new char[1024];
+        try {
+            Reader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+            int n;
+            while ((n = reader.read(buffer)) != -1) {
+                writer.write(buffer, 0, n);
+            }
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                is.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        String jsonString = writer.toString();
+
+        try {
+            jsonArrayBankInfo = new JSONArray(jsonString);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Toast.makeText(mContext, e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 
 

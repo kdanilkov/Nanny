@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.ninja.nanny.Custom.CustomFragment;
 import com.ninja.nanny.MainActivity;
@@ -45,6 +46,10 @@ public class ExpenseAsPayedFragment extends CustomFragment {
         mView.findViewById(R.id.btnBack).setOnClickListener(this);
         mView.findViewById(R.id.btnWire).setOnClickListener(this);
         mView.findViewById(R.id.btnCash).setOnClickListener(this);
+
+        ((TextView)mView.findViewById(R.id.tvIdentifier)).setText(paymentSelected.getTitle());
+        ((TextView)mView.findViewById(R.id.tvDateOfMonth)).setText(paymentSelected.getDateOfMonth() + " day payment");
+        ((TextView)mView.findViewById(R.id.tvAmount)).setText(paymentSelected.getAmount() + " AED");
     }
 
 

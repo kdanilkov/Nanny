@@ -16,6 +16,7 @@ public class Constant {
     public static final String PREF_KEY_WISH_SAVING_TIME = "wish_saving_time";
 
     public static final String JSON_NAME = "name";
+    public static final String JSON_ADDRESS = "address";
     public static final String JSON_TYPE = "type";
     public static final String JSON_TRANSACTION = "transaction";
     public static final String JSON_SPENDING = "spending";
@@ -42,64 +43,5 @@ public class Constant {
     public static final String FRAGMENT_SMS = "sms";
     public static final String FRAGMENT_NEW_SMS = "new_sms";
     public static final String FRAGMENT_EDIT_SMS = "edit_sms";
-
-    public static final String strBankJsonData = "[" +
-            "{" +
-                "\"name\":\"EmiratesNBD\", " +
-                "\"type\":\"TYPE 1\", " +
-                "\"transaction\":{" +
-                    "\"spending\":[" +
-                        "\"Purchase of xxx with Debit Card ending xxx at xxx.\", " +
-                        "\"Cash Withdrawal of xxx with Debit Card ending xxx at, xxx.\"" +
-                    "]," +
-                    "\"income\":[" +
-                        "\"xxx has been received as TELEGRAHPHIC TRANSFER\"" +
-                    "]" +
-                "}" +
-            "}," +
-
-            "{" +
-                "\"name\":\"ADIB\", " +
-                "\"type\":\"TYPE 2\", " +
-                "\"transaction\":{" +
-                    "\"spending\":[" +
-                        "\"Purchase of xxx with Debit Card ending 1736 at xxx\", " +
-                        "\"Cash Withdrawal of xxx with Debit Card ending 1736 at, xxx\"" +
-                    "]," +
-                    "\"income\":[" +
-                        "\"xxx has been received as TELEGRAHPHIC TRANSFER.\"" +
-                    "]" +
-                "}" +
-            "}," +
-
-            "{" +
-                "\"name\":\"HSBC\", " +
-                "\"type\":\"TYPE 3\", " +
-                "\"transaction\":{" +
-                    "\"spending\":[" +
-                        "\"Purchase of xxx with Debit Card ending 1736 at xxx\", " +
-                        "\"Cash Withdrawal of xxx with Debit Card ending 1736 at, xxx\"" +
-                    "]," +
-                    "\"income\":[" +
-                        "\"xxx has been received as TELEGRAHPHIC TRANSFER.\"" +
-                    "]" +
-                "}" +
-            "}," +
-
-            "{" +
-                "\"name\":\"UNB\", " +
-                "\"type\":\"TYPE 4\", " +
-                "\"transaction\":{" +
-                    "\"spending\":[" +
-                        "\"Purchase of xxx with Debit Card ending 1736 at xxx\", " +
-                        "\"Cash Withdrawal of xxx with Debit Card ending 1736 at, xxx\"" +
-                    "]," +
-                    "\"income\":[" +
-                        "\"xxx has been received as TELEGRAHPHIC TRANSFER.\"" +
-                    "]" +
-                "}" +
-            "}" +
-
-            "]";
 
 }

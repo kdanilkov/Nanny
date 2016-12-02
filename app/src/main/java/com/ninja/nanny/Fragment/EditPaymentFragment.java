@@ -284,17 +284,10 @@ public class EditPaymentFragment extends CustomFragment {
                 if(isSaving) {
                     btnCheckSaving.setBackgroundResource(R.drawable.ic_checked);
 
-//                    MonthlySavingFragment f = new MonthlySavingFragment();
-//                    String title = Constant.FRAGMENT_MONTHLY_SAVINGS;
-//
-//                    FragmentTransaction transaction = mContext.getSupportFragmentManager()
-//                            .beginTransaction();
-//                    transaction.add(R.id.content_frame, f, title).addToBackStack(title).commit();
+
                 } else {
                     btnCheckSaving.setBackgroundResource(R.drawable.ic_unchecked);
-//                    tvAmount.setText("Amount ($)");
-//                    etAmount.setEnabled(true);
-//                    etAmount.setText("0");
+
                 }
                 break;
         }

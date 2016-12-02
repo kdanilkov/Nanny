@@ -67,8 +67,6 @@ public class TransactionFragment extends CustomFragment {
     }
 
     void presentData() {
-//        String[] arrDate = {"12 October 2016", "11 October 2016", "10 October 2016", "09 October 2016", "12 September 2016", "12 August 2016"};
-//        String[] arrDetail = {"Emirates NBD, 100$ > Internet", "Emirates NBD, 100$ > TV", "Emirates NBD, 100$ > Loan", "Emirates NBD, 100$ > Credit Card", "Emirates NBD, 100$ > Coffee", "Emirates NBD, 100$ > Internet"};
 
         mLyContainer.removeAllViews();
 

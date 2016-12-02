@@ -39,9 +39,6 @@ import com.ninja.nanny.Preference.UserPreference;
 import com.ninja.nanny.Utils.Common;
 import com.ninja.nanny.Utils.Constant;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -75,11 +72,8 @@ public class MainActivity extends CustomActivity {
     }
 
     void initSetting() {
-        try {
-            Common.getInstance().jsonArrayBankInfo = new JSONArray(Constant.strBankJsonData);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+
+        Common.getInstance().readBankJsonData(MainActivity.this);
 
         UserPreference.getInstance().pref = getSharedPreferences(Constant.PREF_NAME, Context.MODE_PRIVATE);
         Common.getInstance().syncSettingInfo();
@@ -91,17 +85,22 @@ public class MainActivity extends CustomActivity {
         Common.getInstance().listActiveWishes = Common.getInstance().dbHelper.getActiveWishes();
         Common.getInstance().listFinishedWishes = Common.getInstance().dbHelper.getFinishedWishes();
         Common.getInstance().listAllPayments = Common.getInstance().dbHelper.getAllPayments();
-        Common.getInstance().listSms = Common.getInstance().dbHelper.getAllSms();
         Common.getInstance().listAllTransactions = Common.getInstance().dbHelper.getAllTransactions();
 
         if(Common.getInstance().timestampInitConfig > 0) {
 
+            Common.getInstance().listSms = new ArrayList<>();
+
             if(Common.getInstance().isActiveBankExist()) {
-                //        if (weHavePermissionToReadSMS()) {
-                //            syncSms();
-                //        } else {
-                //            requestReadSMSPermissionFirst();
-                //        }
+                        if (weHavePermissionToReadSMS()) {
+                            syncSms();
+                        } else {
+                            requestReadSMSPermissionFirst();
+                        }
+
+                if(Common.getInstance().listSms.size() == 0) {
+                    Common.getInstance().listSms = Common.getInstance().dbHelper.getAllSms();
+                }
 
                 Common.getInstance().syncBetweenTransactionAndSms();
                 Common.getInstance().checkWishSavingPast();

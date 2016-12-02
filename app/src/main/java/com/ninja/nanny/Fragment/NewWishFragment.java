@@ -186,46 +186,6 @@ public class NewWishFragment extends CustomFragment {
             }
         });
 
-//        final ScrollView scrollView = (ScrollView)mView.findViewById(R.id.scrollView);
-//
-//        scrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
-//            @Override
-//            public void onScrollChanged() {
-//                int nPropotion = seekbarPropotion.getProgress();
-//
-//                if(nPropotion > 1) return;
-//                if(etTotalAmount.getText().toString().length() == 0) return;
-//
-//                int nTotalAmount = Integer.valueOf(etTotalAmount.getText().toString());
-//
-//                if(nTotalAmount == 0) return;
-//
-//                int nLeftOnThisWeek = Common.getInstance().freeOnThisWeek();
-//                int nMonthlyPayment = 0;
-//
-//                if(nLeftOnThisWeek < 1) {
-//                    seekbarPropotion.setProgress(50);
-//                    nMonthlyPayment = nTotalAmount / 2;
-//                } else {
-//                    if(nLeftOnThisWeek > nTotalAmount) {
-//                        seekbarPropotion.setProgress(100);
-//                        nMonthlyPayment = nTotalAmount;
-//                    } else {
-//                        nMonthlyPayment = nLeftOnThisWeek;
-//                        int nPercent = nMonthlyPayment * 100 / nTotalAmount;
-//                        seekbarPropotion.setProgress(nPercent);
-//                    }
-//                }
-//
-//                if(nMonthlyPayment == 0) nMonthlyPayment = 1;
-//
-//                int nTotalMonths = (nTotalAmount + nMonthlyPayment -1) / nMonthlyPayment;
-//
-//                tvMonthlyPayment.setText(nMonthlyPayment + " $");
-//                tvPeriod.setText(nTotalMonths + " month");
-//
-//            }
-//        });
     }
 
     void calcMonthlyPament() {
