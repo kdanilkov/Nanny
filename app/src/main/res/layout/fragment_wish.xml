@@ -22,7 +22,7 @@
             android:layout_width="30dp"
             android:layout_height="30dp" />
         <com.ninja.nanny.Custom.MediumTextView
-            android:text="Wishes"
+            android:text="Wishlist"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="false"
@@ -99,7 +99,7 @@
             android:id="@+id/rlyFinished">
 
             <com.ninja.nanny.Custom.MediumTextView
-                android:text="FINISHED"
+                android:text="DONE DEAL"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/label_font_size"

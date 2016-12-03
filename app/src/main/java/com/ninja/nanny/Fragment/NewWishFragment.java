@@ -268,7 +268,7 @@ public class NewWishFragment extends CustomFragment {
         Common.getInstance().listAllWishes.add(wishNew);
         Common.getInstance().listActiveWishes.add(wishNew);
 
-        Toast.makeText(mContext, "new wish info has been added successfully", Toast.LENGTH_SHORT).show();
+        Toast.makeText(mContext, "new item info has been added successfully", Toast.LENGTH_SHORT).show();
         mContext.getSupportFragmentManager().popBackStackImmediate();
     }
 

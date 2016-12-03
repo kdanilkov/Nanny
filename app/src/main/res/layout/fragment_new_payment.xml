@@ -206,7 +206,7 @@
                         android:background="@drawable/ic_unchecked" />
 
                     <com.ninja.nanny.Custom.MediumTextView
-                        android:text="IS SAVING WISH"
+                        android:text="SAVINGS"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -224,7 +224,7 @@
                 android:layout_marginTop="30dp">
 
                 <com.ninja.nanny.Custom.MediumTextView
-                    android:text="IDENTIFIER"
+                    android:text="Key words"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/label_font_size"

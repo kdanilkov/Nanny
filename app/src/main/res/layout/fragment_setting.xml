@@ -55,7 +55,7 @@
                 android:layout_marginTop="30dp">
 
                 <com.ninja.nanny.Custom.MediumTextView
-                    android:text="SALARY DATE"
+                    android:text="Income DEPOSIT / accounting period start DATE"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/label_font_size"
@@ -111,7 +111,7 @@
                 android:layout_marginTop="30dp">
 
                 <com.ninja.nanny.Custom.MediumTextView
-                    android:text="USED SALARY (AED)"
+                    android:text="Spent from current income (AED)"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/label_font_size"
@@ -145,7 +145,7 @@
                     android:layout_height="match_parent">
 
                     <com.ninja.nanny.Custom.MediumTextView
-                        android:text="PAYMENTS TOLERANCE (DAYS)"
+                        android:text="Incoming and outgoing payments buffer (DAYS)"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/label_text_color"

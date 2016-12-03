@@ -166,7 +166,7 @@ public class SettingFragment extends CustomFragment implements DiscreteSeekBar.O
         switch (v.getId()) {
             case R.id.btnMenu:
                 if(Common.getInstance().timestampInitConfig == 0) {
-                    Toast.makeText(mContext, "You should make the initial setting first of all", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "Please update the initial setting before", Toast.LENGTH_SHORT).show();
                     break;
                 }
                 mContext.toggleMenu();

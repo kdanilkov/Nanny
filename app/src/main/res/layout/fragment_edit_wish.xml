@@ -25,7 +25,7 @@
             android:layout_height="30dp" />
 
         <com.ninja.nanny.Custom.MediumTextView
-            android:text="Edit Wish"
+            android:text="Edit Wishlist item"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="false"
@@ -135,7 +135,7 @@
                 android:layout_marginTop="30dp">
 
                 <com.ninja.nanny.Custom.MediumTextView
-                    android:text="PROPOTION"
+                    android:text="PAYMENT PERIOD"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/textView4"

@@ -80,7 +80,7 @@
                         android:layout_alignBaseline="@+id/tvLeftThisWeek" />
 
                     <com.ninja.nanny.Custom.RegularTextView
-                        android:text="Free money on this week"
+                        android:text="Available amount for current work"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/textView2"
@@ -112,7 +112,7 @@
                         android:layout_alignBaseline="@+id/tvLeftThisMonth" />
 
                     <com.ninja.nanny.Custom.RegularTextView
-                        android:text="Free money on this month"
+                        android:text="Available amount for current month"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/textView4"
@@ -206,7 +206,7 @@
                     android:layout_alignBaseline="@+id/tvSpentForWish" />
 
                 <com.ninja.nanny.Custom.RegularTextView
-                    android:text="Reserved for wishes"
+                    android:text="Reserved for wishlist"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/textView9"
@@ -248,7 +248,7 @@
                     android:layout_alignBaseline="@+id/tvMoneyDebit" />
 
                 <com.ninja.nanny.Custom.RegularTextView
-                    android:text="show my Debit"
+                    android:text="My Debit"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignBottom="@+id/tvMoneyDebit"

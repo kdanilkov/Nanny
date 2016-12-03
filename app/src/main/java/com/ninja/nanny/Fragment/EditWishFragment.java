@@ -331,7 +331,7 @@ public class EditWishFragment extends CustomFragment {
         Common.getInstance().listActiveWishes = Common.getInstance().dbHelper.getActiveWishes();
         Common.getInstance().listFinishedWishes = Common.getInstance().dbHelper.getFinishedWishes();
 
-        Toast.makeText(mContext, "wish info has been updated successfully", Toast.LENGTH_SHORT).show();
+        Toast.makeText(mContext, "wishlist item info has been updated successfully", Toast.LENGTH_SHORT).show();
         mContext.getSupportFragmentManager().popBackStackImmediate();
     }
 

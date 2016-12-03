@@ -24,7 +24,7 @@
             android:layout_height="30dp" />
 
         <com.ninja.nanny.Custom.MediumTextView
-            android:text="View Wish"
+            android:text="View wishlist item"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="false"
