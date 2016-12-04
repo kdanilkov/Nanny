@@ -80,7 +80,7 @@
                         android:layout_alignBaseline="@+id/tvLeftThisWeek" />
 
                     <com.ninja.nanny.Custom.RegularTextView
-                        android:text="Available amount for current work"
+                        android:text="Available amount for current week"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/textView2"
