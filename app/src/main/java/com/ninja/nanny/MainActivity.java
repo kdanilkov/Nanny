@@ -71,6 +71,32 @@ public class MainActivity extends CustomActivity {
 
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        Common.getInstance().listSms = new ArrayList<>();
+
+        if(Common.getInstance().timestampInitConfig > 0) {
+
+            if(Common.getInstance().isActiveBankExist()) {
+                if (weHavePermissionToReadSMS()) {
+                    syncSms();
+                } else {
+                    requestReadSMSPermissionFirst();
+                }
+
+                if(Common.getInstance().listSms.size() == 0) {
+                    Common.getInstance().listSms = Common.getInstance().dbHelper.getAllSms();
+                }
+
+                Common.getInstance().syncBetweenTransactionAndSms();
+                Common.getInstance().checkWishSavingPast();
+            }
+        }
+
+    }
+
     void initSetting() {
 
         Common.getInstance().readBankJsonData(MainActivity.this);
@@ -86,17 +112,16 @@ public class MainActivity extends CustomActivity {
         Common.getInstance().listFinishedWishes = Common.getInstance().dbHelper.getFinishedWishes();
         Common.getInstance().listAllPayments = Common.getInstance().dbHelper.getAllPayments();
         Common.getInstance().listAllTransactions = Common.getInstance().dbHelper.getAllTransactions();
+        Common.getInstance().listSms = new ArrayList<>();
 
         if(Common.getInstance().timestampInitConfig > 0) {
 
-            Common.getInstance().listSms = new ArrayList<>();
-
             if(Common.getInstance().isActiveBankExist()) {
-                        if (weHavePermissionToReadSMS()) {
-                            syncSms();
-                        } else {
-                            requestReadSMSPermissionFirst();
-                        }
+                if (weHavePermissionToReadSMS()) {
+                    syncSms();
+                } else {
+                    requestReadSMSPermissionFirst();
+                }
 
                 if(Common.getInstance().listSms.size() == 0) {
                     Common.getInstance().listSms = Common.getInstance().dbHelper.getAllSms();
@@ -359,6 +384,8 @@ public class MainActivity extends CustomActivity {
     void setupLeftNavDrawer()
     {
         drawerLeft = (ListView) findViewById(R.id.left_drawer);
+
+//        drawerLeft.removeAllViews();
 
         View header = getLayoutInflater().inflate(R.layout.left_nav_header, null);
 

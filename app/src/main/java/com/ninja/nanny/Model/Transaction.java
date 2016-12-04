@@ -10,8 +10,9 @@ public class Transaction {
     String _identifier;
     int _bankId;
     String _text;
-    int _amount;
-    int _mode; //0-balance, 1-income, 2-spending
+    int _amountChange;
+    int _amountBalance; // -1: there is no balance value
+    int _mode; //1-income, 2-spending
     int _paidId;
     long _timestmapCreated;
 
@@ -19,12 +20,13 @@ public class Transaction {
 
     }
 
-    public Transaction(String accountName, String identifier, int bankId, String text, int amount, int mode, int paidId, int timestampCreated) {
+    public Transaction(String accountName, String identifier, int bankId, String text, int amountChange, int amountBalance, int mode, int paidId, int timestampCreated) {
         _accountName = accountName;
         _identifier = identifier;
         _bankId = bankId;
         _text = text;
-        _amount = amount;
+        _amountChange = amountChange;
+        _amountBalance = amountBalance;
         _mode = mode;
         _paidId = paidId;
         _timestmapCreated = timestampCreated;
@@ -51,8 +53,12 @@ public class Transaction {
         _text = text;
     }
 
-    public void setAmount(int amount) {
-        _amount = amount;
+    public void setAmountChange(int amountChange) {
+        _amountChange = amountChange;
+    }
+
+    public void setAmountBalance(int amountBalance) {
+        _amountBalance = amountBalance;
     }
 
     public void setMode(int mode) {
@@ -87,8 +93,12 @@ public class Transaction {
         return _text;
     }
 
-    public int getAmount() {
-        return _amount;
+    public int getAmountChange() {
+        return _amountChange;
+    }
+
+    public int getAmountBalance() {
+        return _amountBalance;
     }
 
     public int getMode() {

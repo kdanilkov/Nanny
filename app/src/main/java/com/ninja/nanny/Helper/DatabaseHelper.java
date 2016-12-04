@@ -51,7 +51,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 	//transaction table keys
 	private static final String KEY_BANK_ID = "bank_id";
-	private static final String KEY_AMOUNT = "amount";
+	private static final String KEY_AMOUNT_CHANGE = "amount_change";
+	private static final String KEY_AMOUNT_BALANCE = "amount_balance";
 	private static final String KEY_MODE = "mode";
 	private static final String KEY_PAID_ID = "paid_id";
 	private static final String KEY_CREATED_AT = "created_at";
@@ -71,6 +72,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	private static final String KEY_DATE_OF_MONTH = "date_of_month";
 	private static final String KEY_PAYMENT_MODE = "payment_mode";
 	private static final String KEY_LAST_PAID_ID = "last_paid_id";
+	private static final String KEY_AMOUNT = "amount";
 
 	//sms table keys
 	private static final String KEY_ADDRESS = "address";
@@ -97,7 +99,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	private static final String CREATE_TABLE_TRANSACTIONS = "CREATE TABLE IF NOT EXISTS "
 			+ TBL_TRANSACTION + "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_ACCOUNT_NAME
 			+ " TEXT," + KEY_IDENTIFIER + " TEXT," + KEY_BANK_ID + " INTEGER," + KEY_TEXT + " TEXT,"
-			+ KEY_AMOUNT + " INTEGER," + KEY_MODE + " INTEGER," + KEY_PAID_ID + " INTEGER,"	+ KEY_CREATED_AT + " INTEGER" + ")";
+			+ KEY_AMOUNT_CHANGE + " INTEGER," + KEY_AMOUNT_BALANCE + " INTEGER," + KEY_MODE + " INTEGER," + KEY_PAID_ID + " INTEGER,"	+ KEY_CREATED_AT + " INTEGER" + ")";
 
 	// Wish table create statement
 	private static final String CREATE_TABLE_WISH = "CREATE TABLE IF NOT EXISTS "
@@ -481,7 +483,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		values.put(KEY_IDENTIFIER, transaction.getIdentifier());
 		values.put(KEY_BANK_ID, transaction.getBankId());
 		values.put(KEY_TEXT, transaction.getText());
-		values.put(KEY_AMOUNT, transaction.getAmount());
+		values.put(KEY_AMOUNT_CHANGE, transaction.getAmountChange());
+		values.put(KEY_AMOUNT_BALANCE, transaction.getAmountBalance());
 		values.put(KEY_MODE, transaction.getMode());
 		values.put(KEY_PAID_ID, transaction.getPaidId());
 		values.put(KEY_CREATED_AT, transaction.getTimestampCreated());
@@ -514,7 +517,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		transaction.setIdentifier(c.getString(c.getColumnIndex(KEY_IDENTIFIER)));
 		transaction.setBankId(c.getInt(c.getColumnIndex(KEY_BANK_ID)));
 		transaction.setText(c.getString(c.getColumnIndex(KEY_TEXT)));
-		transaction.setAmount(c.getInt(c.getColumnIndex(KEY_AMOUNT)));
+		transaction.setAmountChange(c.getInt(c.getColumnIndex(KEY_AMOUNT_CHANGE)));
+		transaction.setAmountBalance(c.getInt(c.getColumnIndex(KEY_AMOUNT_BALANCE)));
 		transaction.setMode(c.getInt(c.getColumnIndex(KEY_MODE)));
 		transaction.setPaidId(c.getInt(c.getColumnIndex(KEY_PAID_ID)));
 		transaction.setTimestampCreated(c.getLong(c.getColumnIndex(KEY_CREATED_AT)));
@@ -543,7 +547,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 				transaction.setIdentifier(c.getString(c.getColumnIndex(KEY_IDENTIFIER)));
 				transaction.setBankId(c.getInt(c.getColumnIndex(KEY_BANK_ID)));
 				transaction.setText(c.getString(c.getColumnIndex(KEY_TEXT)));
-				transaction.setAmount(c.getInt(c.getColumnIndex(KEY_AMOUNT)));
+				transaction.setAmountChange(c.getInt(c.getColumnIndex(KEY_AMOUNT_CHANGE)));
+				transaction.setAmountBalance(c.getInt(c.getColumnIndex(KEY_AMOUNT_BALANCE)));
 				transaction.setMode(c.getInt(c.getColumnIndex(KEY_MODE)));
 				transaction.setPaidId(c.getInt(c.getColumnIndex(KEY_PAID_ID)));
 				transaction.setTimestampCreated(c.getLong(c.getColumnIndex(KEY_CREATED_AT)));
@@ -582,7 +587,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		values.put(KEY_IDENTIFIER, transaction.getIdentifier());
 		values.put(KEY_BANK_ID, transaction.getBankId());
 		values.put(KEY_TEXT, transaction.getText());
-		values.put(KEY_AMOUNT, transaction.getAmount());
+		values.put(KEY_AMOUNT_CHANGE, transaction.getAmountChange());
+		values.put(KEY_AMOUNT_BALANCE, transaction.getAmountBalance());
 		values.put(KEY_MODE, transaction.getMode());
 		values.put(KEY_PAID_ID, transaction.getPaidId());
 		values.put(KEY_CREATED_AT, transaction.getTimestampCreated());

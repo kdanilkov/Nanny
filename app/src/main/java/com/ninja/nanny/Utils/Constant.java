@@ -21,6 +21,8 @@ public class Constant {
     public static final String JSON_TRANSACTION = "transaction";
     public static final String JSON_SPENDING = "spending";
     public static final String JSON_INCOME = "income";
+    public static final String JSON_CHANGE = "change";
+    public static final String JSON_BALANCE = "balance";
 
     public static final String FRAGMENT_HOME = "home";
     public static final String FRAGMENT_BANK = "bank";
@@ -28,7 +30,6 @@ public class Constant {
     public static final String FRAGMENT_PAYMENT = "payment";
     public static final String FRAGMENT_TRANSACTION = "transaction";
     public static final String FRAGMENT_SETTING = "setting";
-    public static final String FRAGMENT_ADVICE = "advice";
     public static final String FRAGMENT_ADD_BANK = "add_bank";
     public static final String FRAGMENT_EDIT_BANK = "edit_bank";
     public static final String FRAGMENT_TRANSACTION_DETAIL = "transaction_detail";

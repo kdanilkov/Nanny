@@ -218,7 +218,7 @@ public class Common {
             }
 
             UsedAmount usedAmount = dbHelper.getUsedAmount(timestampPeriodEnd);
-            int nUpdatedUsedAmount = usedAmount.getUsedAmount() + trans.getAmount();
+            int nUpdatedUsedAmount = usedAmount.getUsedAmount() + trans.getAmountChange();
 
             usedAmount.setUsedAmount(nUpdatedUsedAmount);
             usedAmount.setTimestampUpdated(getTimestamp());
@@ -274,7 +274,7 @@ public class Common {
                 int nAmountLow = payment.getAmount() * (100 - nTolerancePercents) / 100;
                 int nAmountHigh = payment.getAmount() * (100 + nTolerancePercents) / 100;
 
-                boolean isMatchAmount = (trans.getAmount() >= nAmountLow) && (trans.getAmount() <= nAmountHigh);
+                boolean isMatchAmount = (trans.getAmountChange() >= nAmountLow) && (trans.getAmountChange() <= nAmountHigh);
 
                 if(isMatchIdentifier && isMatchDate && isMatchAmount) {
                     Paid  paid = new Paid(payment.getId(), trans.getId(), payment.getLastPaidId(), timestampReal, trans.getTimestampCreated());
@@ -334,7 +334,7 @@ public class Common {
             if(timestampPayment < timestampStart) continue;
             if(timestampPayment >= timestampEnd) continue;
 
-            nAns += trans.getAmount();
+            nAns += trans.getAmountChange();
         }
 
         return nAns;
@@ -359,7 +359,7 @@ public class Common {
             if(trans.getMode() < 2) continue;
             if(trans.getPaidId() == -1) {
                 if(timestampTrans < timestampEnd && timestampTrans >= timestampStart) {
-                    nAns += trans.getAmount();
+                    nAns += trans.getAmountChange();
                 }
                 continue;
             }
@@ -405,7 +405,7 @@ public class Common {
 
             if(nPaidId == -1) {
                 if(timestampTrans < timestampEnd && timestampTrans >= timestampStart) {
-                    nAns += trans.getAmount();
+                    nAns += trans.getAmountChange();
                 }
                 continue;
             }
@@ -416,7 +416,7 @@ public class Common {
             if(timestampPayment < timestampStart) continue;
             if(timestampPayment >= timestampEnd) continue;
 
-            nAns += trans.getAmount();
+            nAns += trans.getAmountChange();
         }
 
         return nAns;
@@ -447,7 +447,7 @@ public class Common {
             if(trans.getMode() != 1) continue;
 
             long timestampTrans = trans.getTimestampCreated();
-            int nAmountTrans = trans.getAmount();
+            int nAmountTrans = trans.getAmountChange();
             long timestampAns = timestampTrans;
 
             if(timestampTrans >= timestampIntervalStart && timestampTrans < timestampSalaryDate) {
@@ -458,7 +458,7 @@ public class Common {
                         timestampAns = timestampIntervalEnd;
                     } else {
                         timestampAns = timestampIntervalStart;
-                        nSumTransSoFar += trans.getAmount();
+                        nSumTransSoFar += trans.getAmountChange();
                     }
                 }
             }
@@ -469,7 +469,7 @@ public class Common {
                 } else {
                     if(nSumTransSoFar < nAmountLow) {
                         timestampAns = timestampIntervalStart;
-                        nSumTransSoFar += trans.getAmount();
+                        nSumTransSoFar += trans.getAmountChange();
                     } else {
                         timestampAns = timestampIntervalEnd;
                     }
@@ -641,9 +641,12 @@ public class Common {
         for(int i = 0; i < listNewTransactions.size() ; i ++) {
             Transaction trans = listNewTransactions.get(i);
 
-            if(trans.getMode() == 0) nVal = trans.getAmount();
-            if(trans.getMode() == 1) nVal += trans.getAmount();
-            if(trans.getMode() == 2) nVal -= trans.getAmount();
+            if(trans.getMode() == 1) nVal += trans.getAmountChange();
+            if(trans.getMode() == 2) nVal -= trans.getAmountChange();
+
+            if(trans.getAmountBalance() >= 0) {
+                nVal = trans.getAmountBalance();
+            }
         }
 
         bankActive.setBalance(nVal);
@@ -671,58 +674,91 @@ public class Common {
 
             JSONObject jsonObjTransaction = jsonObjBank.getJSONObject(Constant.JSON_TRANSACTION);
 
-            JSONArray jsonArraySpending = jsonObjTransaction.getJSONArray(Constant.JSON_SPENDING);
-            JSONArray jsonArrayIncome = jsonObjTransaction.getJSONArray(Constant.JSON_INCOME);
+            JSONObject jsonObjectSpending = jsonObjTransaction.getJSONObject(Constant.JSON_SPENDING);
+            JSONObject jsonObjectIncome = jsonObjTransaction.getJSONObject(Constant.JSON_INCOME);
 
             String strSmsText = sms.getText();
 
+            String[] arrSenteces = strSmsText.split("\\. ");
+
+            JSONArray jsonArrayChange = jsonObjectSpending.getJSONArray(Constant.JSON_CHANGE);
+            JSONArray jsonArrayBalance = jsonObjectSpending.getJSONArray(Constant.JSON_BALANCE);
+
             boolean isGetResult = false;
+            int nAmountBalance = -1;
 
-            for(int i  = 0; i < jsonArraySpending.length(); i ++) {
-                String strSpending = jsonArraySpending.getString(i);
-                String[] arrStrPattern = strSpending.split("xxx");
+            // **********************-------- for spending part ------------*************
 
-                if(arrStrPattern.length == 4) {
-                    String strMiddle = arrStrPattern[1];
-                    String[] arrStrCurrent = strSmsText.split(strMiddle);
+            // change part
+            for(int i  = 0; i < jsonArrayChange.length(); i ++) {
+                String strChange = jsonArrayChange.getString(i);
+                String[] arrStrPattern = strChange.split("xxx");
 
-                    if(arrStrCurrent.length != 2) continue;
+                if(arrStrPattern.length != 3) continue;
 
-                    String[] arrFirst = arrStrCurrent[0].split(arrStrPattern[0]);
-                    String[] arrEnd = arrStrCurrent[1].split(arrStrPattern[2]);
+                String strMiddle = arrStrPattern[1];
+                String[] arrStrCurrent = arrSenteces[0].split(strMiddle);
 
-                    if(arrFirst.length != 2) continue;
-                    if(arrEnd.length != 2) continue;
+                if(arrStrCurrent.length != 2) continue;
 
-                    String strIdentifier = arrEnd[1].trim();
+                String[] arrFirst = arrStrCurrent[0].split(arrStrPattern[0]);
+                String[] arrEnd = arrStrCurrent[1].split(arrStrPattern[2]);
 
-                    if(strIdentifier.substring(strIdentifier.length() - 1).equals(".")) {
-                        strIdentifier = strIdentifier.substring(0, strIdentifier.length() - 1);
-                    }
+                if(arrFirst.length != 2) continue;
+                if(arrEnd.length != 2) continue;
 
-                    String strAmount = arrFirst[1];
+                String strIdentifier = arrEnd[1].trim();
 
-                    String[] strArrAmount = strAmount.split(" ");
-
-                    String strCurrency = strArrAmount[0];
-                    String strRealAmount = strArrAmount[1].replace(",", "");
-
-                    int nAmount = Double.valueOf(strRealAmount).intValue();
-
-                    transaction.setAmount(nAmount);
-                    transaction.setIdentifier(strIdentifier);
-                    transaction.setMode(2);
-
-                    isGetResult = true;
-
-                    break;
+                if(strIdentifier.substring(strIdentifier.length() - 1).equals(".")) {
+                    strIdentifier = strIdentifier.substring(0, strIdentifier.length() - 1);
                 }
+
+                String strAmount = arrFirst[1];
+                String[] strArrAmount = strAmount.split(" ");
+//                String strCurrency = strArrAmount[0];
+                String strRealAmount = strArrAmount[1].replace(",", "");
+                int nAmount = Double.valueOf(strRealAmount).intValue();
+
+                transaction.setAmountChange(nAmount);
+                transaction.setIdentifier(strIdentifier);
+                transaction.setMode(2);
+
+                isGetResult = true;
+
+                break;
             }
 
-            if(isGetResult) return transaction;
+            if(isGetResult) {
+                if(arrSenteces.length > 1) { // balance part
+                    for(int i = 0; i < jsonArrayBalance.length(); i ++) {
+                        String strBalance = jsonArrayBalance.getString(i);
+                        String[] arrStrPattern = strBalance.split("xxx");
+                        String[] arrStrCurrent = arrSenteces[1].split(arrStrPattern[0]);
+                        if(arrStrCurrent[0].length() == arrSenteces[1].length()) continue;
+                        String strAmountPart = arrStrCurrent[1].trim();
+                        String[] strArrAmount = strAmountPart.split(" ");
+                        //                String strCurrency = strArrAmount[0];
+                        String strRealAmount = strArrAmount[1].replace(",", "");
+                        if(strRealAmount.substring(strRealAmount.length() - 1).equals(".")) {
+                            strRealAmount = strRealAmount.substring(0, strRealAmount.length() - 1);
+                        }
+                        nAmountBalance = Double.valueOf(strRealAmount).intValue();
+                        break;
+                    }
+                }
 
-            for(int i = 0; i < jsonArrayIncome.length(); i ++) {
-                String strIncome = jsonArrayIncome.getString(i);
+                transaction.setAmountBalance(nAmountBalance);
+                return transaction;
+            }
+
+            // **********************-------- for income part ------------*************
+
+            //change part
+            jsonArrayChange = jsonObjectIncome.getJSONArray(Constant.JSON_CHANGE);
+            jsonArrayBalance = jsonObjectIncome.getJSONArray(Constant.JSON_BALANCE);
+
+            for(int i = 0; i < jsonArrayChange.length(); i ++) {
+                String strIncome = jsonArrayChange.getString(i);
                 String[] arrStrPattern = strIncome.split("xxx");
 
                 if(arrStrPattern.length == 2 && arrStrPattern[0].length() == 0) {
@@ -738,7 +774,7 @@ public class Common {
                     int nAmount = Double.valueOf(strRealAmount).intValue();
 
                     transaction.setMode(1);
-                    transaction.setAmount(nAmount);
+                    transaction.setAmountChange(nAmount);
 
                     isGetResult = true;
 
@@ -746,7 +782,28 @@ public class Common {
                 }
             }
 
-            if(isGetResult) return transaction;
+            if(isGetResult) {
+                if(arrSenteces.length > 1) { // balance part
+                    for(int i = 0; i < jsonArrayBalance.length(); i ++) {
+                        String strBalance = jsonArrayBalance.getString(i);
+                        String[] arrStrPattern = strBalance.split("xxx");
+                        String[] arrStrCurrent = arrSenteces[1].split(arrStrPattern[0]);
+                        if(arrStrCurrent[0].length() == arrSenteces[1].length()) continue;
+                        String strAmountPart = arrStrCurrent[1].trim();
+                        String[] strArrAmount = strAmountPart.split(" ");
+                        //                String strCurrency = strArrAmount[0];
+                        String strRealAmount = strArrAmount[1].replace(",", "");
+                        if(strRealAmount.substring(strRealAmount.length() - 1).equals(".")) {
+                            strRealAmount = strRealAmount.substring(0, strRealAmount.length() - 1);
+                        }
+                        nAmountBalance = Double.valueOf(strRealAmount).intValue();
+                        break;
+                    }
+                }
+
+                transaction.setAmountBalance(nAmountBalance);
+                return transaction;
+            }
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -840,7 +897,7 @@ public class Common {
             if(trans.getTimestampCreated() >= nHigh) continue;
             if(trans.getTimestampCreated() < nLow) break;
 
-            nAns += trans.getAmount();
+            nAns += trans.getAmountChange();
         }
 
         return nAns;

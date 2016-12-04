@@ -3,13 +3,27 @@
             "name" : "EmiratesNBD",
             "address": "bank",
             "transaction" : {
-                                "spending" : [
-                                                "Purchase of xxx with Debit Card ending xxx at xxx.",
-                                                "Cash Withdrawal of xxx with Debit Card ending xxx at, xxx."
-                                              ],
-                                "income" : [
-                                                "xxx has been received as TELEGRAHPHIC TRANSFER"
-                                            ]
+                                "spending" : {
+                                                "change" : [
+                                                                    "Purchase of xxx with Debit Card ending xxx at xxx",
+                                                                    "Cash Withdrawal of xxx with Debit Card ending xxx at, xxx"
+                                                                ],
+
+                                                "balance" : [
+                                                                    "Avl Bal is xxx",
+                                                                    "Avl Balance is xxx"
+                                                            ]
+                                             },
+
+                                "income" : {
+                                                "change" : [
+                                                                 "xxx has been received as TELEGRAHPHIC TRANSFER"
+                                                            ],
+
+                                                "balance" : [
+                                                                 "The available balance of your account is xxx"
+                                                            ]
+                                           }
                             }
         },
 
@@ -17,13 +31,27 @@
              "name" : "ADIB",
              "address": "bank",
              "transaction" : {
-                                 "spending" : [
-                                                 "Purchase of xxx with Debit Card ending xxx at xxx.",
-                                                 "Cash Withdrawal of xxx with Debit Card ending xxx at, xxx."
-                                               ],
-                                 "income" : [
-                                                 "xxx has been received as TELEGRAHPHIC TRANSFER"
-                                             ]
+                                 "spending" : {
+                                                 "change" : [
+                                                                 "Purchase of xxx with Debit Card ending xxx at xxx",
+                                                                 "Cash Withdrawal of xxx with Debit Card ending xxx at, xxx"
+                                                             ],
+
+                                                 "balance" : [
+                                                                     "Avl Bal is xxx",
+                                                                     "Avl Balance is xxx"
+                                                             ]
+                                              },
+
+                                 "income" : {
+                                                 "change" : [
+                                                                  "xxx has been received as TELEGRAHPHIC TRANSFER"
+                                                             ],
+
+                                                 "balance" : [
+                                                                  "The available balance of your account is xxx"
+                                                             ]
+                                            }
                              }
         },
 
@@ -31,27 +59,55 @@
              "name" : "HSBC",
              "address": "bank",
              "transaction" : {
-                                  "spending" : [
-                                                  "Purchase of xxx with Debit Card ending xxx at xxx.",
-                                                  "Cash Withdrawal of xxx with Debit Card ending xxx at, xxx."
-                                                ],
-                                  "income" : [
-                                                  "xxx has been received as TELEGRAHPHIC TRANSFER"
-                                              ]
-                              }
+                                 "spending" : {
+                                                 "change" : [
+                                                                 "Purchase of xxx with Debit Card ending xxx at xxx",
+                                                                 "Cash Withdrawal of xxx with Debit Card ending xxx at, xxx"
+                                                             ],
+
+                                                 "balance" : [
+                                                                 "Avl Bal is xxx",
+                                                                 "Avl Balance is xxx"
+                                                             ]
+                                              },
+
+                                 "income" : {
+                                                 "change" : [
+                                                                  "xxx has been received as TELEGRAHPHIC TRANSFER"
+                                                             ],
+
+                                                 "balance" : [
+                                                                  "The available balance of your account is xxx"
+                                                             ]
+                                            }
+                             }
         },
 
         {
               "name" : "UNB",
               "address": "bank",
               "transaction" : {
-                                "spending" : [
-                                                "Purchase of xxx with Debit Card ending xxx at xxx.",
-                                                "Cash Withdrawal of xxx with Debit Card ending xxx at, xxx."
-                                              ],
-                                "income" : [
-                                                "xxx has been received as TELEGRAHPHIC TRANSFER"
-                                            ]
-                            }
+                                  "spending" : {
+                                                  "change" : [
+                                                                  "Purchase of xxx with Debit Card ending xxx at xxx",
+                                                                  "Cash Withdrawal of xxx with Debit Card ending xxx at, xxx"
+                                                              ],
+
+                                                  "balance" : [
+                                                                  "Avl Bal is xxx",
+                                                                  "Avl Balance is xxx"
+                                                              ]
+                                               },
+
+                                  "income" : {
+                                                  "change" : [
+                                                                   "xxx has been received as TELEGRAHPHIC TRANSFER"
+                                                              ],
+
+                                                  "balance" : [
+                                                                   "The available balance of your account is xxx"
+                                                              ]
+                                             }
+                              }
         }
 ]

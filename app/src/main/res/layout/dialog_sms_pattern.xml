@@ -87,8 +87,49 @@
                     android:id="@+id/etText" />
             </LinearLayout>
 
+            <CheckBox
+                android:text="Balance Text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/checkBoxBalance"
+                android:layout_marginTop="30dp" />
+
+            <com.ninja.nanny.Custom.RegularEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textMultiLine"
+                android:ems="10"
+                android:background="@drawable/border_add_bank_editor"
+                android:textColor="@color/black"
+                android:textSize="@dimen/editor_font_size"
+                android:enabled="false"
+                android:layout_marginTop="20dp"
+                android:id="@+id/etTextBalance" />
+
+            <CheckBox
+                android:text="Any Text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/checkBoxAnyText"
+                android:layout_marginTop="30dp" />
+
+            <com.ninja.nanny.Custom.RegularEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textMultiLine"
+                android:ems="10"
+                android:background="@drawable/border_add_bank_editor"
+                android:textColor="@color/black"
+                android:textSize="@dimen/editor_font_size"
+                android:enabled="false"
+                android:layout_marginTop="20dp"
+                android:id="@+id/etTextAny"
+                android:text="Pls refer stmt for exact amt" />
+
         </LinearLayout>
     </ScrollView>
+
+
 
     <RelativeLayout
         android:layout_width="match_parent"

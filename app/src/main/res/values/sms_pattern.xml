@@ -1,26 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<string-array name="sms_pattern_type">
-    <item>GULF FILM LLC</item>
-    <item>Cash</item>
-    <item>Income</item>
-    <item>Itunes</item>
-    <item>Food</item>
-    <item>Taxi</item>
-    <item>Mobile phone</item>
-    <item>Internet</item>
-    <item>Utility</item>
-</string-array>
+    <string-array name="sms_pattern_type">
+        <item>GULF FILM LLC</item>
+        <item>Cash</item>
+        <item>Income</item>
+        <item>Itunes</item>
+        <item>Food</item>
+        <item>Taxi</item>
+        <item>Mobile phone</item>
+        <item>Internet</item>
+        <item>Utility</item>
+    </string-array>
 
-<string-array name="sms_pattern_text">
-    <item>Purchase of AED 26.00 with Debit Card ending 0000 at GULF FILM LLC -471203, DUBAI.</item>
-    <item>Cash Withdrawal of AED 500.00 with Debit Card ending 0000 at, DUBAI.</item>
-    <item>AED 22,000.00 has been received as TELEGRAHPHIC TRANSFER.</item>
-    <item>Purchase of AED 70.00 with Debit Card ending 0000 at itunes.com </item>
-    <item>Purchase of AED 10.00 with Debit Card ending 0000 at food </item>
-    <item>Purchase of AED 10.00 with Debit Card ending 0000 at taxi </item>
-    <item>Purchase of AED 30.00 with Debit Card ending 0000 at mobile </item>
-    <item>Purchase of AED 20.00 with Debit Card ending 0000 at internet </item>
-    <item>Purchase of AED 100.00 with Debit Card ending 0000 at utility </item>
-</string-array>
+    <string-array name="sms_pattern_text">
+        <item>Purchase of AED 26.00 with Debit Card ending 0000 at GULF FILM LLC -471203, DUBAI</item>
+        <item>Cash Withdrawal of AED 500.00 with Debit Card ending 0000 at, DUBAI</item>
+        <item>AED 22,000.00 has been received as TELEGRAHPHIC TRANSFER</item>
+        <item>Purchase of AED 70.00 with Debit Card ending 0000 at itunes.com</item>
+        <item>Purchase of AED 10.00 with Debit Card ending 0000 at food</item>
+        <item>Purchase of AED 10.00 with Debit Card ending 0000 at taxi</item>
+        <item>Purchase of AED 30.00 with Debit Card ending 0000 at mobile</item>
+        <item>Purchase of AED 20.00 with Debit Card ending 0000 at internet</item>
+        <item>Purchase of AED 100.00 with Debit Card ending 0000 at utility</item>
+    </string-array>
+    <string-array name="balance_pattern_text">
+        <item>Avl Balance is AED 26.00</item>
+        <item>Avl Balance is AED 26.00</item>
+        <item>The available balance of your account is AED 26.00</item>
+        <item>Avl Balance is AED 26.00</item>
+        <item>Avl Balance is AED 26.00</item>
+        <item>Avl Balance is AED 26.00</item>
+        <item>Avl Balance is AED 26.00</item>
+        <item>Avl Balance is AED 26.00</item>
+        <item>Avl Balance is AED 26.00</item>
+    </string-array>
 </resources>

@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -44,7 +45,7 @@ public class NewSmsFragment extends CustomFragment {
     EditText etTitle, etText;
     DatePicker datePicker;
     TimePicker timePicker;
-    String[] arrPatternTypes, arrPatternTexts;
+    String[] arrPatternTypes, arrPatternTexts, arrBalanceTexts;
 
     int nYear, nMonth, nDay, nHour, nMinute;
 
@@ -65,6 +66,7 @@ public class NewSmsFragment extends CustomFragment {
     void initData() {
         arrPatternTypes = getResources().getStringArray(R.array.sms_pattern_type);
         arrPatternTexts = getResources().getStringArray(R.array.sms_pattern_text);
+        arrBalanceTexts = getResources().getStringArray(R.array.balance_pattern_text);
     }
 
     void setUI() {
@@ -176,8 +178,13 @@ public class NewSmsFragment extends CustomFragment {
         alertDialog.show();
 
         final EditText etTextDlg = (EditText)dialogView.findViewById(R.id.etText);
+        final EditText etTextBalanceDlg = (EditText)dialogView.findViewById(R.id.etTextBalance);
+        final EditText etTextAnyDlg = (EditText)dialogView.findViewById(R.id.etTextAny);
+        final CheckBox cbBalance = (CheckBox)dialogView.findViewById(R.id.checkBoxBalance);
+        final CheckBox cbAnyText = (CheckBox)dialogView.findViewById(R.id.checkBoxAnyText);
 
         etTextDlg.setText(arrPatternTexts[0]);
+        etTextBalanceDlg.setText(arrBalanceTexts[0]);
 
         final Spinner spinnerType = (Spinner)dialogView.findViewById(R.id.spinnerType);
         List<String> myTypeList = Arrays.asList(arrPatternTypes);
@@ -189,6 +196,7 @@ public class NewSmsFragment extends CustomFragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 etTextDlg.setText(arrPatternTexts[position]);
+                etTextBalanceDlg.setText(arrBalanceTexts[position]);
             }
 
             @Override
@@ -200,7 +208,17 @@ public class NewSmsFragment extends CustomFragment {
         dialogView.findViewById(R.id.btnSelect).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                etText.setText(etTextDlg.getText().toString());
+                String strText = etTextDlg.getText().toString() + ".";
+
+                if(cbBalance.isChecked()) {
+                    strText += " " + etTextBalanceDlg.getText().toString() + ".";
+                }
+
+                if(cbAnyText.isChecked()) {
+                    strText += " " + etTextAnyDlg.getText().toString() + ".";
+                }
+
+                etText.setText(strText);
                 alertDialog.dismiss();
             }
         });
