@@ -2,112 +2,90 @@
         {
             "name" : "EmiratesNBD",
             "address": "bank",
-            "transaction" : {
-                                "spending" : {
-                                                "change" : [
-                                                                    "Purchase of xxx with Debit Card ending xxx at xxx",
-                                                                    "Cash Withdrawal of xxx with Debit Card ending xxx at, xxx"
-                                                                ],
-
-                                                "balance" : [
-                                                                    "Avl Bal is xxx",
-                                                                    "Avl Balance is xxx"
-                                                            ]
-                                             },
-
-                                "income" : {
-                                                "change" : [
-                                                                 "xxx has been received as TELEGRAHPHIC TRANSFER"
-                                                            ],
-
-                                                "balance" : [
-                                                                 "The available balance of your account is xxx"
-                                                            ]
-                                           }
-                            }
+            "sms_pattern_type" : [
+                                    "GULF FILM LLC",
+                                    "Cash",
+                                    "Income",
+                                    "Itunes",
+                                    "Food",
+                                    "Taxi",
+                                    "Mobile phone",
+                                    "Internet",
+                                    "Utility"
+                                 ],
+            "sms_pattern_text" : [
+                                    "Purchase of AED 26.00 with Debit Card ending 0000 at GULF FILM LLC -471203, DUBAI",
+                                    "Cash Withdrawal of AED 500.00 with Debit Card ending 0000 at, DUBAI",
+                                    "AED 22,000.00 has been received as TELEGRAHPHIC TRANSFER",
+                                    "Purchase of AED 70.00 with Debit Card ending 0000 at itunes.com",
+                                    "Purchase of AED 10.00 with Debit Card ending 0000 at food",
+                                    "Purchase of AED 10.00 with Debit Card ending 0000 at taxi",
+                                    "Purchase of AED 30.00 with Debit Card ending 0000 at mobile",
+                                    "Purchase of AED 20.00 with Debit Card ending 0000 at internet",
+                                    "Purchase of AED 100.00 with Debit Card ending 0000 at utility"
+                                 ],
+            "balance_pattern_text": [
+                                        "Avl Balance is AED 26.00",
+                                        "Avl Balance is AED 26.00",
+                                        "The available balance of your account is AED 26.00",
+                                        "Avl Balance is AED 26.00",
+                                        "Avl Balance is AED 26.00",
+                                        "Avl Balance is AED 26.00",
+                                        "Avl Balance is AED 26.00",
+                                        "Avl Balance is AED 26.00",
+                                        "Avl Balance is AED 26.00"
+                                    ]
         },
 
         {
-             "name" : "ADIB",
+             "name" : "CBD",
              "address": "bank",
-             "transaction" : {
-                                 "spending" : {
-                                                 "change" : [
-                                                                 "Purchase of xxx with Debit Card ending xxx at xxx",
-                                                                 "Cash Withdrawal of xxx with Debit Card ending xxx at, xxx"
-                                                             ],
-
-                                                 "balance" : [
-                                                                     "Avl Bal is xxx",
-                                                                     "Avl Balance is xxx"
-                                                             ]
-                                              },
-
-                                 "income" : {
-                                                 "change" : [
-                                                                  "xxx has been received as TELEGRAHPHIC TRANSFER"
-                                                             ],
-
-                                                 "balance" : [
-                                                                  "The available balance of your account is xxx"
-                                                             ]
-                                            }
-                             }
+             "sms_pattern_type" : [
+                                     "Uber",
+                                     "Radission"
+                                  ],
+             "sms_pattern_text" : [
+                                     "Transaction AED80.30 credit card 9401 UBER AE DEC07JZSBV4",
+                                     "Transaction AED80.30 credit card RADISSON BLU HTL-3C F&"
+                                  ],
+             "balance_pattern_text": [
+                                         "Bal AED4829.59",
+                                         "Bal AED4829.59"
+                                     ]
         },
 
         {
              "name" : "HSBC",
              "address": "bank",
-             "transaction" : {
-                                 "spending" : {
-                                                 "change" : [
-                                                                 "Purchase of xxx with Debit Card ending xxx at xxx",
-                                                                 "Cash Withdrawal of xxx with Debit Card ending xxx at, xxx"
-                                                             ],
-
-                                                 "balance" : [
-                                                                 "Avl Bal is xxx",
-                                                                 "Avl Balance is xxx"
-                                                             ]
-                                              },
-
-                                 "income" : {
-                                                 "change" : [
-                                                                  "xxx has been received as TELEGRAHPHIC TRANSFER"
-                                                             ],
-
-                                                 "balance" : [
-                                                                  "The available balance of your account is xxx"
-                                                             ]
-                                            }
-                             }
+             "sms_pattern_type" : [
+                                      "Uber",
+                                      "Radission"
+                                   ],
+             "sms_pattern_text" : [
+                                      "Transaction AED80.30 credit card 9401 UBER AE DEC07JZSBV4",
+                                      "Transaction AED80.30 credit card RADISSON BLU HTL-3C F&"
+                                   ],
+             "balance_pattern_text": [
+                                          "Bal AED4829.59",
+                                          "Bal AED4829.59"
+                                      ]
         },
 
         {
               "name" : "UNB",
               "address": "bank",
-              "transaction" : {
-                                  "spending" : {
-                                                  "change" : [
-                                                                  "Purchase of xxx with Debit Card ending xxx at xxx",
-                                                                  "Cash Withdrawal of xxx with Debit Card ending xxx at, xxx"
-                                                              ],
+              "sms_pattern_type" : [
+                                       "Uber",
+                                       "Radission"
+                                    ],
+              "sms_pattern_text" : [
+                                       "Transaction AED80.30 credit card 9401 UBER AE DEC07JZSBV4",
+                                       "Transaction AED80.30 credit card RADISSON BLU HTL-3C F&"
+                                    ],
+              "balance_pattern_text": [
+                                           "Bal AED4829.59",
+                                           "Bal AED4829.59"
+                                       ]
 
-                                                  "balance" : [
-                                                                  "Avl Bal is xxx",
-                                                                  "Avl Balance is xxx"
-                                                              ]
-                                               },
-
-                                  "income" : {
-                                                  "change" : [
-                                                                   "xxx has been received as TELEGRAHPHIC TRANSFER"
-                                                              ],
-
-                                                  "balance" : [
-                                                                   "The available balance of your account is xxx"
-                                                              ]
-                                             }
-                              }
         }
 ]

@@ -18,11 +18,9 @@ public class Constant {
     public static final String JSON_NAME = "name";
     public static final String JSON_ADDRESS = "address";
     public static final String JSON_TYPE = "type";
-    public static final String JSON_TRANSACTION = "transaction";
-    public static final String JSON_SPENDING = "spending";
-    public static final String JSON_INCOME = "income";
-    public static final String JSON_CHANGE = "change";
-    public static final String JSON_BALANCE = "balance";
+    public static final String JSON_SMS_PATTERN_TYPE = "sms_pattern_type";
+    public static final String JSON_SMS_PATTERN_TEXT = "sms_pattern_text";
+    public static final String JSON_BALANCE_PATTERN_TEXT = "balance_pattern_text";
 
     public static final String FRAGMENT_HOME = "home";
     public static final String FRAGMENT_BANK = "bank";
@@ -44,5 +42,7 @@ public class Constant {
     public static final String FRAGMENT_SMS = "sms";
     public static final String FRAGMENT_NEW_SMS = "new_sms";
     public static final String FRAGMENT_EDIT_SMS = "edit_sms";
+
+    public static final String TAG_CURRENT = "current";
 
 }

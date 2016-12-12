@@ -23,11 +23,14 @@ import com.ninja.nanny.MainActivity;
 import com.ninja.nanny.Model.Sms;
 import com.ninja.nanny.R;
 import com.ninja.nanny.Utils.Common;
+import com.ninja.nanny.Utils.Constant;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.List;
 
 
 public class NewSmsFragment extends CustomFragment {
@@ -45,7 +48,7 @@ public class NewSmsFragment extends CustomFragment {
     EditText etTitle, etText;
     DatePicker datePicker;
     TimePicker timePicker;
-    String[] arrPatternTypes, arrPatternTexts, arrBalanceTexts;
+    ArrayList<String> listPatternTypes, listPatternTexts, listBalanceTexts;
 
     int nYear, nMonth, nDay, nHour, nMinute;
 
@@ -64,9 +67,24 @@ public class NewSmsFragment extends CustomFragment {
     }
 
     void initData() {
-        arrPatternTypes = getResources().getStringArray(R.array.sms_pattern_type);
-        arrPatternTexts = getResources().getStringArray(R.array.sms_pattern_text);
-        arrBalanceTexts = getResources().getStringArray(R.array.balance_pattern_text);
+        listPatternTypes = new ArrayList<>();
+        listPatternTexts = new ArrayList<>();
+        listBalanceTexts = new ArrayList<>();
+
+        try {
+            JSONObject jsonObjBank = Common.getInstance().jsonArrayBankInfo.getJSONObject(Common.getInstance().bankActive.getIdxKind());
+            JSONArray jsonArrayPatternType = jsonObjBank.getJSONArray(Constant.JSON_SMS_PATTERN_TYPE);
+            JSONArray jsonArrayPatternText = jsonObjBank.getJSONArray(Constant.JSON_SMS_PATTERN_TEXT);
+            JSONArray jsonArrayBalanceText = jsonObjBank.getJSONArray(Constant.JSON_BALANCE_PATTERN_TEXT);
+
+            for(int i = 0; i < jsonArrayPatternType.length(); i ++) {
+                listPatternTypes.add(jsonArrayPatternType.getString(i));
+                listPatternTexts.add(jsonArrayPatternText.getString(i));
+                listBalanceTexts.add(jsonArrayBalanceText.getString(i));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     void setUI() {
@@ -183,20 +201,18 @@ public class NewSmsFragment extends CustomFragment {
         final CheckBox cbBalance = (CheckBox)dialogView.findViewById(R.id.checkBoxBalance);
         final CheckBox cbAnyText = (CheckBox)dialogView.findViewById(R.id.checkBoxAnyText);
 
-        etTextDlg.setText(arrPatternTexts[0]);
-        etTextBalanceDlg.setText(arrBalanceTexts[0]);
+        etTextDlg.setText(listPatternTexts.get(0));
+        etTextBalanceDlg.setText(listBalanceTexts.get(0));
 
         final Spinner spinnerType = (Spinner)dialogView.findViewById(R.id.spinnerType);
-        List<String> myTypeList = Arrays.asList(arrPatternTypes);
-        ArrayList<String> myTypeArrayList = new ArrayList<String>(myTypeList);
 
-        CustomSpinnerAdapter spinnerAdapterType = new CustomSpinnerAdapter(mContext,myTypeArrayList);
+        CustomSpinnerAdapter spinnerAdapterType = new CustomSpinnerAdapter(mContext, listPatternTypes);
         spinnerType.setAdapter(spinnerAdapterType);
         spinnerType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                etTextDlg.setText(arrPatternTexts[position]);
-                etTextBalanceDlg.setText(arrBalanceTexts[position]);
+                etTextDlg.setText(listPatternTexts.get(position));
+                etTextBalanceDlg.setText(listBalanceTexts.get(position));
             }
 
             @Override

@@ -1,6 +1,7 @@
 package com.ninja.nanny.Utils;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.ninja.nanny.Comparator.PaymentComparator;
@@ -30,6 +31,7 @@ import java.io.Reader;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -607,11 +609,11 @@ public class Common {
             if(timestampSms <= timestampBankActive) continue;
             if(!isNewSms(sms)) continue;
 
-            Transaction transaction = convertToTransactionFromSms(sms);
-
+            Transaction transaction = parseSmsUsingRegex(sms);
             if(transaction == null) continue;
 
             listNewTransactions.add(0,transaction);
+            Log.e(Constant.TAG_CURRENT, "added transaction to the listNewTransaction");
         }
 
         if(listNewTransactions.size() > 0) {
@@ -623,6 +625,48 @@ public class Common {
         }
     }
 
+    Transaction parseSmsUsingRegex(Sms sms) {
+        String strAccountName = "";
+        String strAddress = "";
+
+        try {
+            JSONObject jsonObjBank = jsonArrayBankInfo.getJSONObject(bankActive.getIdxKind());
+            strAccountName = jsonObjBank.getString(Constant.JSON_NAME);
+            strAddress = jsonObjBank.getString(Constant.JSON_ADDRESS);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        if (!sms.getAddress().toLowerCase().equals(strAddress)) return null;
+
+        for(int i = 0; i < 5; i ++) {
+            Transaction transaction = null;
+
+            try {
+                Class c = Class.forName("com.ninja.nanny.Utils.ParseSms");
+                Method m = c.getDeclaredMethod("getSmsByTemplate" + i, String.class);
+                Object instance = c.newInstance();
+                transaction = (Transaction) m.invoke(instance, sms.getText());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            if(transaction == null) continue;
+
+            Log.e(Constant.TAG_CURRENT, "success on parsing sms in the parseSmsUsingRegex");
+
+            transaction.setPaidId(-1);
+            transaction.setAccountName(strAccountName);
+            transaction.setBankId(Common.getInstance().bankActive.getIdxKind());
+            transaction.setText(sms.getText());
+            transaction.setTimestampCreated(sms.getTimestamp());
+
+            return transaction;
+        }
+
+        return null;
+    }
+
+
     public void addNewTransactions() {
         for(int i = 0; i < listNewTransactions.size(); i ++) {
             Transaction trans = listNewTransactions.get(i);
@@ -630,6 +674,7 @@ public class Common {
 
             trans.setId(nTransId);
             listAllTransactions.add(0, trans);
+            Log.e(Constant.TAG_CURRENT, "added transaction to the listAllTransactions");
         }
 
         Collections.sort(listAllTransactions, new TransactionComparator());
@@ -652,164 +697,6 @@ public class Common {
         bankActive.setBalance(nVal);
 
         dbHelper.updateBank(bankActive);
-    }
-
-    public Transaction convertToTransactionFromSms(Sms sms) {
-//        String strBankName = bankActive.getBankName().toLowerCase();
-
-        Transaction transaction = new Transaction();
-        transaction.setPaidId(-1);
-
-        try {
-            JSONObject jsonObjBank = jsonArrayBankInfo.getJSONObject(bankActive.getIdxKind());
-            String strAccountName = jsonObjBank.getString(Constant.JSON_NAME);
-            String strAddress = jsonObjBank.getString(Constant.JSON_ADDRESS);
-
-            if(!sms.getAddress().toLowerCase().equals(strAddress)) return null;
-
-            transaction.setAccountName(strAccountName);
-            transaction.setBankId(bankActive.getIdxKind());
-            transaction.setText(sms.getText());
-            transaction.setTimestampCreated(sms.getTimestamp());
-
-            JSONObject jsonObjTransaction = jsonObjBank.getJSONObject(Constant.JSON_TRANSACTION);
-
-            JSONObject jsonObjectSpending = jsonObjTransaction.getJSONObject(Constant.JSON_SPENDING);
-            JSONObject jsonObjectIncome = jsonObjTransaction.getJSONObject(Constant.JSON_INCOME);
-
-            String strSmsText = sms.getText();
-
-            String[] arrSenteces = strSmsText.split("\\. ");
-
-            JSONArray jsonArrayChange = jsonObjectSpending.getJSONArray(Constant.JSON_CHANGE);
-            JSONArray jsonArrayBalance = jsonObjectSpending.getJSONArray(Constant.JSON_BALANCE);
-
-            boolean isGetResult = false;
-            int nAmountBalance = -1;
-
-            // **********************-------- for spending part ------------*************
-
-            // change part
-            for(int i  = 0; i < jsonArrayChange.length(); i ++) {
-                String strChange = jsonArrayChange.getString(i);
-                String[] arrStrPattern = strChange.split("xxx");
-
-                if(arrStrPattern.length != 3) continue;
-
-                String strMiddle = arrStrPattern[1];
-                String[] arrStrCurrent = arrSenteces[0].split(strMiddle);
-
-                if(arrStrCurrent.length != 2) continue;
-
-                String[] arrFirst = arrStrCurrent[0].split(arrStrPattern[0]);
-                String[] arrEnd = arrStrCurrent[1].split(arrStrPattern[2]);
-
-                if(arrFirst.length != 2) continue;
-                if(arrEnd.length != 2) continue;
-
-                String strIdentifier = arrEnd[1].trim();
-
-                if(strIdentifier.substring(strIdentifier.length() - 1).equals(".")) {
-                    strIdentifier = strIdentifier.substring(0, strIdentifier.length() - 1);
-                }
-
-                String strAmount = arrFirst[1];
-                String[] strArrAmount = strAmount.split(" ");
-//                String strCurrency = strArrAmount[0];
-                String strRealAmount = strArrAmount[1].replace(",", "");
-                int nAmount = Double.valueOf(strRealAmount).intValue();
-
-                transaction.setAmountChange(nAmount);
-                transaction.setIdentifier(strIdentifier);
-                transaction.setMode(2);
-
-                isGetResult = true;
-
-                break;
-            }
-
-            if(isGetResult) {
-                if(arrSenteces.length > 1) { // balance part
-                    for(int i = 0; i < jsonArrayBalance.length(); i ++) {
-                        String strBalance = jsonArrayBalance.getString(i);
-                        String[] arrStrPattern = strBalance.split("xxx");
-                        String[] arrStrCurrent = arrSenteces[1].split(arrStrPattern[0]);
-                        if(arrStrCurrent[0].length() == arrSenteces[1].length()) continue;
-                        String strAmountPart = arrStrCurrent[1].trim();
-                        String[] strArrAmount = strAmountPart.split(" ");
-                        //                String strCurrency = strArrAmount[0];
-                        String strRealAmount = strArrAmount[1].replace(",", "");
-                        if(strRealAmount.substring(strRealAmount.length() - 1).equals(".")) {
-                            strRealAmount = strRealAmount.substring(0, strRealAmount.length() - 1);
-                        }
-                        nAmountBalance = Double.valueOf(strRealAmount).intValue();
-                        break;
-                    }
-                }
-
-                transaction.setAmountBalance(nAmountBalance);
-                return transaction;
-            }
-
-            // **********************-------- for income part ------------*************
-
-            //change part
-            jsonArrayChange = jsonObjectIncome.getJSONArray(Constant.JSON_CHANGE);
-            jsonArrayBalance = jsonObjectIncome.getJSONArray(Constant.JSON_BALANCE);
-
-            for(int i = 0; i < jsonArrayChange.length(); i ++) {
-                String strIncome = jsonArrayChange.getString(i);
-                String[] arrStrPattern = strIncome.split("xxx");
-
-                if(arrStrPattern.length == 2 && arrStrPattern[0].length() == 0) {
-                    String strLater = arrStrPattern[1];
-                    String[] arrStrCurrent = strSmsText.split(strLater);
-
-                    if(arrStrCurrent.length == 1) continue;
-
-                    String[] arrStrAmount = arrStrCurrent[0].split(" ");
-
-                    String strCurrency = arrStrAmount[0];
-                    String strRealAmount = arrStrAmount[1].replace(",", "");
-                    int nAmount = Double.valueOf(strRealAmount).intValue();
-
-                    transaction.setMode(1);
-                    transaction.setAmountChange(nAmount);
-
-                    isGetResult = true;
-
-                    break;
-                }
-            }
-
-            if(isGetResult) {
-                if(arrSenteces.length > 1) { // balance part
-                    for(int i = 0; i < jsonArrayBalance.length(); i ++) {
-                        String strBalance = jsonArrayBalance.getString(i);
-                        String[] arrStrPattern = strBalance.split("xxx");
-                        String[] arrStrCurrent = arrSenteces[1].split(arrStrPattern[0]);
-                        if(arrStrCurrent[0].length() == arrSenteces[1].length()) continue;
-                        String strAmountPart = arrStrCurrent[1].trim();
-                        String[] strArrAmount = strAmountPart.split(" ");
-                        //                String strCurrency = strArrAmount[0];
-                        String strRealAmount = strArrAmount[1].replace(",", "");
-                        if(strRealAmount.substring(strRealAmount.length() - 1).equals(".")) {
-                            strRealAmount = strRealAmount.substring(0, strRealAmount.length() - 1);
-                        }
-                        nAmountBalance = Double.valueOf(strRealAmount).intValue();
-                        break;
-                    }
-                }
-
-                transaction.setAmountBalance(nAmountBalance);
-                return transaction;
-            }
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        return null;
     }
 
     public List<Payment> getCurrentPayments() {
@@ -1019,6 +906,7 @@ public class Common {
             Toast.makeText(mContext, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
     }
+
 
 
 }
