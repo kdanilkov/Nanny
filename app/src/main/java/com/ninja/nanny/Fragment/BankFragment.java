@@ -116,6 +116,7 @@ public class BankFragment extends CustomFragment {
 
                     bankSelected.setFlagActive(1);
                     Common.getInstance().dbHelper.updateBank(bankSelected);
+                    Common.getInstance().bankActive = bankSelected;
 
                     Bank bankPrevious = Common.getInstance().listBanks.get(nActiveIndex);
                     View cellPrevious = lyContainer.getChildAt(nActiveIndex);

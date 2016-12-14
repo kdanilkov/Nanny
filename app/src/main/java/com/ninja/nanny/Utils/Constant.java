@@ -21,6 +21,14 @@ public class Constant {
     public static final String JSON_SMS_PATTERN_TYPE = "sms_pattern_type";
     public static final String JSON_SMS_PATTERN_TEXT = "sms_pattern_text";
     public static final String JSON_BALANCE_PATTERN_TEXT = "balance_pattern_text";
+    public static final String JSON_REGEX = "regex";
+    public static final String JSON_MODE = "mode";
+    public static final String JSON_INCOME = "income";
+    public static final String JSON_SPENDING = "spending";
+    public static final String JSON_PARAMS = "params";
+    public static final String JSON_CHANGE = "change";
+    public static final String JSON_WORDS = "words";
+    public static final String JSON_BALANCE = "balance";
 
     public static final String FRAGMENT_HOME = "home";
     public static final String FRAGMENT_BANK = "bank";

@@ -33,14 +33,13 @@ import com.ninja.nanny.Fragment.TransactionFragment;
 import com.ninja.nanny.Fragment.WishFragment;
 import com.ninja.nanny.Helper.DatabaseHelper;
 import com.ninja.nanny.Model.Sms;
-import com.ninja.nanny.Model.Wish;
-import com.ninja.nanny.Model.WishSaving;
+import com.ninja.nanny.Model.Transaction;
 import com.ninja.nanny.Preference.UserPreference;
 import com.ninja.nanny.Utils.Common;
 import com.ninja.nanny.Utils.Constant;
+import com.ninja.nanny.Utils.ParseSms;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 
 public class MainActivity extends CustomActivity {
@@ -99,7 +98,9 @@ public class MainActivity extends CustomActivity {
 
     void initSetting() {
 
+//        testRegex();
         Common.getInstance().readBankJsonData(MainActivity.this);
+        Common.getInstance().readTemplateJsonData(MainActivity.this);
 
         UserPreference.getInstance().pref = getSharedPreferences(Constant.PREF_NAME, Context.MODE_PRIVATE);
         Common.getInstance().syncSettingInfo();
@@ -133,45 +134,16 @@ public class MainActivity extends CustomActivity {
         }
     }
 
-    void sampleWishData() {
-        Calendar c = Calendar.getInstance();
-        Wish wish = new Wish("wish1", 5000, 500, 1200, c.getTimeInMillis(), -1, 1);
+    void testRegex() {
+        String strSms = "Loan installment AED 6678.63 from ACCT 3392";
+        Transaction trans = ParseSms.getInstance().getSmsByTemplate6(strSms);
 
-        int nWishId = Common.getInstance().dbHelper.createWish(wish);
-        wish.setId(nWishId);
-
-        WishSaving wishSaving = new WishSaving(nWishId, 100, 201605);
-        int nWishSavingId = Common.getInstance().dbHelper.createWishSaving(wishSaving);
-
-        wish.setLastSavingId(nWishSavingId);
-        Common.getInstance().dbHelper.updateWish(wish);
-
-        wishSaving = new WishSaving(nWishId, 200, 201606);
-        nWishSavingId = Common.getInstance().dbHelper.createWishSaving(wishSaving);
-
-        wish.setLastSavingId(nWishSavingId);
-        Common.getInstance().dbHelper.updateWish(wish);
-
-        wishSaving = new WishSaving(nWishId, 300, 201607);
-        nWishSavingId = Common.getInstance().dbHelper.createWishSaving(wishSaving);
-
-        wish.setLastSavingId(nWishSavingId);
-        Common.getInstance().dbHelper.updateWish(wish);
-
-        wishSaving = new WishSaving(nWishId, 400, 201608);
-        nWishSavingId = Common.getInstance().dbHelper.createWishSaving(wishSaving);
-
-        wish.setLastSavingId(nWishSavingId);
-        Common.getInstance().dbHelper.updateWish(wish);
-
-        wishSaving = new WishSaving(nWishId, 200, 201609);
-        nWishSavingId = Common.getInstance().dbHelper.createWishSaving(wishSaving);
-
-        wish.setLastSavingId(nWishSavingId);
-        Common.getInstance().dbHelper.updateWish(wish);
-
+        if(trans == null) {
+            Log.e(Constant.TAG_CURRENT, "parsing failed");
+        } else {
+            Log.e(Constant.TAG_CURRENT, "parsing success");
+        }
     }
-
 
 
     private boolean weHavePermissionToReadSMS() {

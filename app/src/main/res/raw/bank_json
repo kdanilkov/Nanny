@@ -42,31 +42,31 @@
              "address": "bank",
              "sms_pattern_type" : [
                                      "Uber",
-                                     "Radission"
+                                     "Radission",
+                                     "Loan"
                                   ],
              "sms_pattern_text" : [
                                      "Transaction AED80.30 credit card 9401 UBER AE DEC07JZSBV4",
-                                     "Transaction AED80.30 credit card RADISSON BLU HTL-3C F&"
+                                     "Transaction AED80.30 credit card RADISSON BLU HTL-3C F&",
+                                     "Loan installment AED 6678.63 from ACCT 3392"
                                   ],
              "balance_pattern_text": [
+                                         "Bal AED4829.59",
                                          "Bal AED4829.59",
                                          "Bal AED4829.59"
                                      ]
         },
 
         {
-             "name" : "HSBC",
+             "name" : "ADCB",
              "address": "bank",
              "sms_pattern_type" : [
-                                      "Uber",
-                                      "Radission"
+                                      "Salary"
                                    ],
              "sms_pattern_text" : [
-                                      "Transaction AED80.30 credit card 9401 UBER AE DEC07JZSBV4",
-                                      "Transaction AED80.30 credit card RADISSON BLU HTL-3C F&"
+                                      "Your salary AED99800 has been credited to your account no. XXX132001 on Nov 24 2016 2:03PM. The available balance AED7890"
                                    ],
              "balance_pattern_text": [
-                                          "Bal AED4829.59",
                                           "Bal AED4829.59"
                                       ]
         },
@@ -80,7 +80,7 @@
                                     ],
               "sms_pattern_text" : [
                                        "Transaction AED80.30 credit card 9401 UBER AE DEC07JZSBV4",
-                                       "Transaction AED80.30 credit card RADISSON BLU HTL-3C F&"
+                                       "Transaction AED80.30 credit card 9401 RADISSON BLU HTL-3C F&"
                                     ],
               "balance_pattern_text": [
                                            "Bal AED4829.59",

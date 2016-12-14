@@ -2,7 +2,6 @@ package com.ninja.nanny.Utils;
 
 import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.ninja.nanny.Comparator.PaymentComparator;
 import com.ninja.nanny.Comparator.TransactionComparator;
@@ -31,11 +30,12 @@ import java.io.Reader;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by Administrator on 10/28/2016.
@@ -71,6 +71,7 @@ public class Common {
     public int timeWishSaving;
     public Bank bankActive;
     public JSONArray jsonArrayBankInfo;
+    public JSONArray jsonArrayTemplates;
 
     public long getTimestamp() {
         return Calendar.getInstance().getTimeInMillis();
@@ -609,7 +610,7 @@ public class Common {
             if(timestampSms <= timestampBankActive) continue;
             if(!isNewSms(sms)) continue;
 
-            Transaction transaction = parseSmsUsingRegex(sms);
+            Transaction transaction = convertSmsToTransaction(sms);
             if(transaction == null) continue;
 
             listNewTransactions.add(0,transaction);
@@ -625,7 +626,7 @@ public class Common {
         }
     }
 
-    Transaction parseSmsUsingRegex(Sms sms) {
+    Transaction convertSmsToTransaction(Sms sms) {
         String strAccountName = "";
         String strAddress = "";
 
@@ -639,14 +640,12 @@ public class Common {
 
         if (!sms.getAddress().toLowerCase().equals(strAddress)) return null;
 
-        for(int i = 0; i < 5; i ++) {
+        for(int i = 0; i < jsonArrayTemplates.length(); i ++) {
             Transaction transaction = null;
 
             try {
-                Class c = Class.forName("com.ninja.nanny.Utils.ParseSms");
-                Method m = c.getDeclaredMethod("getSmsByTemplate" + i, String.class);
-                Object instance = c.newInstance();
-                transaction = (Transaction) m.invoke(instance, sms.getText());
+                JSONObject jsonTemplate = jsonArrayTemplates.getJSONObject(i);
+                transaction = parseTextUsingTempalte(sms.getText(), jsonTemplate);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -664,6 +663,81 @@ public class Common {
         }
 
         return null;
+    }
+
+    Transaction parseTextUsingTempalte(String strMsg, JSONObject jsonTemplate) {
+        try {
+            String strRegex = jsonTemplate.getString(Constant.JSON_REGEX);
+            String strMode = jsonTemplate.getString(Constant.JSON_MODE);
+            JSONObject jsonParams = jsonTemplate.getJSONObject(Constant.JSON_PARAMS);
+            int nPosChange = -1, nPosWords = -1, nPosBalance = -1;
+
+            if(jsonParams.has(Constant.JSON_CHANGE)) {
+                nPosChange = jsonParams.getInt(Constant.JSON_CHANGE);
+            }
+
+            if(jsonParams.has(Constant.JSON_WORDS)) {
+                nPosWords = jsonParams.getInt(Constant.JSON_WORDS);
+            }
+
+            if(jsonParams.has(Constant.JSON_BALANCE)) {
+                nPosBalance = jsonParams.getInt(Constant.JSON_BALANCE);
+            }
+
+            Pattern p = Pattern.compile(strRegex);
+            Matcher m = p.matcher(strMsg);
+
+            if(m.find()) {
+                Transaction transaction = new Transaction();
+
+                if(nPosChange > 0) {
+                    String strChange = m.group(nPosChange);
+                    transaction.setAmountChange(getIntValueFrom(strChange));
+                } else {
+                    transaction.setAmountChange(0);
+                }
+
+                if(nPosWords > 0) {
+                    String strIdentifier = m.group(nPosWords);
+                    transaction.setIdentifier(strIdentifier);
+                } else {
+                    transaction.setIdentifier("");
+                }
+
+                if(nPosBalance > 0) {
+                    String strBalance = m.group(nPosBalance);
+                    transaction.setAmountBalance(getIntValueFrom(strBalance));
+                } else {
+                    transaction.setAmountBalance(-1);
+                }
+
+                if(strMode.equals(Constant.JSON_INCOME)) {
+                    transaction.setMode(1);
+                } else if(strMode.equals(Constant.JSON_SPENDING)) {
+                    transaction.setMode(2);
+                } else {
+                    transaction.setMode(0);
+                }
+
+                Log.e(Constant.TAG_CURRENT, "success on the parse sms with template 0");
+
+                return transaction;
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    int getIntValueFrom(String strVal) {
+        strVal = strVal.replace(",", "");
+        double d = 0;
+
+        d = Double.parseDouble(strVal);
+
+        return (int)d;
     }
 
 
@@ -903,7 +977,37 @@ public class Common {
             jsonArrayBankInfo = new JSONArray(jsonString);
         } catch (JSONException e) {
             e.printStackTrace();
-            Toast.makeText(mContext, e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void readTemplateJsonData(Context mContext) {
+        InputStream is = mContext.getResources().openRawResource(R.raw.template_json);
+        Writer writer = new StringWriter();
+        char[] buffer = new char[1024];
+        try {
+            Reader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+            int n;
+            while ((n = reader.read(buffer)) != -1) {
+                writer.write(buffer, 0, n);
+            }
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                is.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        String jsonString = writer.toString();
+
+        try {
+            jsonArrayTemplates = new JSONArray(jsonString);
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 
