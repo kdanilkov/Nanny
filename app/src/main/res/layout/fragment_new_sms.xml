@@ -78,7 +78,7 @@
                     android:textColor="@color/black"
                     android:textSize="@dimen/editor_font_size"
                     android:paddingBottom="5dp"
-                    android:text="bank" />
+                    android:text="emiratesnbd" />
             </LinearLayout>
 
             <LinearLayout

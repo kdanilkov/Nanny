@@ -1,7 +1,7 @@
 [
         {
             "name" : "EmiratesNBD",
-            "address": "bank",
+            "address": "emiratesnbd",
             "sms_pattern_type" : [
                                     "GULF FILM LLC",
                                     "Cash",
@@ -16,7 +16,7 @@
             "sms_pattern_text" : [
                                     "Purchase of AED 26.00 with Debit Card ending 0000 at GULF FILM LLC -471203, DUBAI",
                                     "Cash Withdrawal of AED 500.00 with Debit Card ending 0000 at, DUBAI",
-                                    "AED 22,000.00 has been received as TELEGRAHPHIC TRANSFER",
+                                    "AED 22,000.00 has been received as TELEGRAHPHIC TRANSFER. The available balance of your account is AED 70,000.10.",
                                     "Purchase of AED 70.00 with Debit Card ending 0000 at itunes.com",
                                     "Purchase of AED 10.00 with Debit Card ending 0000 at food",
                                     "Purchase of AED 10.00 with Debit Card ending 0000 at taxi",
@@ -39,7 +39,7 @@
 
         {
              "name" : "CBD",
-             "address": "bank",
+             "address": "cbd",
              "sms_pattern_type" : [
                                      "Uber",
                                      "Radission",
@@ -59,7 +59,7 @@
 
         {
              "name" : "ADCB",
-             "address": "bank",
+             "address": "adcb",
              "sms_pattern_type" : [
                                       "Salary"
                                    ],
@@ -73,7 +73,7 @@
 
         {
               "name" : "UNB",
-              "address": "bank",
+              "address": "unb",
               "sms_pattern_type" : [
                                        "Uber",
                                        "Radission"

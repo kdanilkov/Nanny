@@ -638,13 +638,17 @@ public class Common {
             e.printStackTrace();
         }
 
-        if (!sms.getAddress().toLowerCase().equals(strAddress)) return null;
+        if (!sms.getAddress().toLowerCase().equals(strAddress.toLowerCase())) return null;
 
         for(int i = 0; i < jsonArrayTemplates.length(); i ++) {
             Transaction transaction = null;
 
             try {
                 JSONObject jsonTemplate = jsonArrayTemplates.getJSONObject(i);
+                //check that template is for the right bank
+                String strBankAddress = jsonTemplate.getString(Constant.JSON_ADDRESS);
+                if(!strAddress.toLowerCase().equals(strBankAddress.toLowerCase()))continue;
+                //process template
                 transaction = parseTextUsingTempalte(sms.getText(), jsonTemplate);
             } catch (Exception e) {
                 e.printStackTrace();
