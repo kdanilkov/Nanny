@@ -18,8 +18,8 @@ public class LeftNavAdapter extends BaseAdapter
 {
 
 	/** The items. */
-	//private String titles[] = {"Home", "Bank / Cards", "Wishes", "Predefined Payments", "Transactions", "Application Settings", "SMS Register"};
-	private String titles[] = {"Home", "Bank / Cards", "Wishes", "Predefined Payments", "Transactions", "Application Settings"};
+	private String titles[] = {"Home", "Bank / Cards", "Wishes", "Predefined Payments", "Transactions", "Application Settings", "SMS Register"};
+//	private String titles[] = {"Home", "Bank / Cards", "Wishes", "Predefined Payments", "Transactions", "Application Settings"};
 	/** The context. */
 	private Context context;
 
@@ -27,8 +27,8 @@ public class LeftNavAdapter extends BaseAdapter
 	private int selected;
 
 	/** The icons. */
-	//private int icons[] = { R.drawable.ic_home, R.drawable.ic_bank, R.drawable.ic_wish,	R.drawable.ic_payment, R.drawable.ic_transaction, R.drawable.ic_setting, R.drawable.ic_sms};
-	private int icons[] = { R.drawable.ic_home, R.drawable.ic_bank, R.drawable.ic_wish,	R.drawable.ic_payment, R.drawable.ic_transaction, R.drawable.ic_setting};
+	private int icons[] = { R.drawable.ic_home, R.drawable.ic_bank, R.drawable.ic_wish,	R.drawable.ic_payment, R.drawable.ic_transaction, R.drawable.ic_setting, R.drawable.ic_sms};
+//	private int icons[] = { R.drawable.ic_home, R.drawable.ic_bank, R.drawable.ic_wish,	R.drawable.ic_payment, R.drawable.ic_transaction, R.drawable.ic_setting};
 
 	/**
 	 * Setup the current selected position of adapter.
