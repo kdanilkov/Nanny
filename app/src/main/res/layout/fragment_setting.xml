@@ -145,12 +145,13 @@
                     android:layout_height="match_parent">
 
                     <com.ninja.nanny.Custom.MediumTextView
-                        android:text="Incoming and outgoing payments buffer (DAYS)"
+                        android:id="@+id/mediumTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Incoming and outgoing payments buffer (DAYS)"
                         android:textColor="@color/label_text_color"
-                        android:textSize="@dimen/label_font_size"
-                        android:layout_weight="1" />
+                        android:textSize="@dimen/label_font_size" />
 
                     <com.ninja.nanny.Custom.RegularTextView
                         android:text="3 DAYS"

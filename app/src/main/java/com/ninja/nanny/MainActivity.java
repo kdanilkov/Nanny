@@ -31,6 +31,7 @@ import com.ninja.nanny.Fragment.SettingFragment;
 import com.ninja.nanny.Fragment.SmsFragment;
 import com.ninja.nanny.Fragment.TransactionFragment;
 import com.ninja.nanny.Fragment.WishFragment;
+import com.ninja.nanny.Fragment.WizardSelectBankFragment;
 import com.ninja.nanny.Helper.DatabaseHelper;
 import com.ninja.nanny.Model.Sms;
 import com.ninja.nanny.Model.Transaction;
@@ -97,24 +98,6 @@ public class MainActivity extends CustomActivity {
     }
 
     void initSetting() {
-
-//        testRegex();
-        Common.getInstance().readBankJsonData(MainActivity.this);
-        Common.getInstance().readTemplateJsonData(MainActivity.this);
-
-        UserPreference.getInstance().pref = getSharedPreferences(Constant.PREF_NAME, Context.MODE_PRIVATE);
-        Common.getInstance().syncSettingInfo();
-
-        Common.getInstance().dbHelper = new DatabaseHelper(getApplicationContext());
-//        sampleWishData();
-        Common.getInstance().listBanks = Common.getInstance().dbHelper.getAllBanks();
-        Common.getInstance().listAllWishes = Common.getInstance().dbHelper.getAllWishes();
-        Common.getInstance().listActiveWishes = Common.getInstance().dbHelper.getActiveWishes();
-        Common.getInstance().listFinishedWishes = Common.getInstance().dbHelper.getFinishedWishes();
-        Common.getInstance().listAllPayments = Common.getInstance().dbHelper.getAllPayments();
-        Common.getInstance().listAllTransactions = Common.getInstance().dbHelper.getAllTransactions();
-        Common.getInstance().listSms = new ArrayList<>();
-
         if(Common.getInstance().timestampInitConfig > 0) {
 
             if(Common.getInstance().isActiveBankExist()) {
@@ -176,7 +159,7 @@ public class MainActivity extends CustomActivity {
         }
     }
 
-    void syncSms() {
+   void syncSms() {
         Common.getInstance().listSms = new ArrayList<>();
 
         Uri message = Uri.parse("content://sms/");
@@ -427,6 +410,15 @@ public class MainActivity extends CustomActivity {
             case 6:
                 f = new SmsFragment();
                 title = Constant.FRAGMENT_SMS;
+                break;
+            case 7:
+                f = new WizardSelectBankFragment();
+                title = Constant.FRAGMENT_WIZARD_BANK;
+                if(!weHavePermissionToReadSMS())
+                {
+                    requestReadSMSPermissionFirst();
+                }
+                break;
         }
 
         getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);

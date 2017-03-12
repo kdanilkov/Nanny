@@ -48,6 +48,7 @@ public class Constant {
     public static final String FRAGMENT_MONTHLY_SAVINGS = "monthly_savings";
     public static final String FRAGMENT_CALENDAR_PAYMENT = "calendar_payment";
     public static final String FRAGMENT_SMS = "sms";
+    public static final String FRAGMENT_WIZARD_BANK = "wizard_bank";
     public static final String FRAGMENT_NEW_SMS = "new_sms";
     public static final String FRAGMENT_EDIT_SMS = "edit_sms";
 

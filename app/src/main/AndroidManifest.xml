@@ -21,6 +21,9 @@
         <activity android:name=".AdvisorActivity"
             android:windowSoftInputMode="adjustResize">
         </activity>
+        <activity android:name=".WizardActivity"
+            android:windowSoftInputMode="adjustResize">
+        </activity>
     </application>
 
 </manifest>
