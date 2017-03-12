@@ -1,8 +1,5 @@
 package com.ninja.nanny;
 
-import android.*;
-import android.app.Activity;
-import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -12,18 +9,24 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.view.View;
 import android.widget.Toast;
 
 import com.ninja.nanny.Comparator.SmsComparator;
 import com.ninja.nanny.Custom.CustomActivity;
+import com.ninja.nanny.Fragment.BaseWizardFragment;
+import com.ninja.nanny.Fragment.WizardAverageIncomeFragment;
+import com.ninja.nanny.Fragment.WizardBalanceFragment;
 import com.ninja.nanny.Fragment.WizardSelectBankFragment;
+import com.ninja.nanny.Fragment.WizardSpentFragment;
+import com.ninja.nanny.Fragment.WizardStartPeriodFragment;
+import com.ninja.nanny.Model.SettingWizardModel;
 import com.ninja.nanny.Model.Sms;
 import com.ninja.nanny.Utils.Common;
 import com.ninja.nanny.Utils.WizardSteps;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.logging.Handler;
 
 /**
  * Created by petra on 10.03.2017.
@@ -32,6 +35,8 @@ import java.util.logging.Handler;
 public class WizardActivity extends CustomActivity {
 
     private WizardSteps mCurrentStep = WizardSteps.Bank;
+    private SettingWizardModel mWizardModel;
+    private BaseWizardFragment mCurrentFragment;
     public WizardActivity(){
     }
 
@@ -43,9 +48,11 @@ public class WizardActivity extends CustomActivity {
         {
             requestReadSMSPermissionFirst();
         }
-        else {
+        else
+        {
             syncSms();
         }
+        mWizardModel = new SettingWizardModel();
         setStep();
     }
 
@@ -106,20 +113,56 @@ public class WizardActivity extends CustomActivity {
                 c.moveToNext();
             }
         }
+        c.close();
 
         Collections.sort(Common.getInstance().listSms, new SmsComparator());
+    }
+
+    public void onNextStep(View v)
+    {
+
+        switch (mCurrentStep)
+        {
+            case Bank:
+                mCurrentStep = WizardSteps.Balance;
+                break;
+            case Balance:
+                mCurrentStep = WizardSteps.Period;
+                break;
+            case Period:
+                mCurrentStep = WizardSteps.Spent;
+                break;
+            case Spent:
+                mCurrentStep = WizardSteps.AverageIncome;
+                break;
+        }
+        setStep();
     }
 
     private void setStep()
     {
         String title = "";
-        Fragment f = null;
-        switch (this.mCurrentStep)
+        BaseWizardFragment f = null;
+        switch (mCurrentStep)
         {
             case Bank:
                 f = new WizardSelectBankFragment();
                 break;
+            case Balance:
+                f = new WizardBalanceFragment();
+                break;
+            case Period:
+                f = new WizardStartPeriodFragment();
+                break;
+            case Spent:
+                f = new WizardSpentFragment();
+                break;
+            case AverageIncome:
+                f = new WizardAverageIncomeFragment();
+                break;
         }
+        f.setModel(mWizardModel);
         getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, f, title).commit();
+        mCurrentFragment = f;
     }
 }

@@ -5,5 +5,9 @@ package com.ninja.nanny.Utils;
  */
 
 public enum WizardSteps {
-    Bank
+    Bank,
+    Balance,
+    Period,
+    Spent,
+    AverageIncome
 }

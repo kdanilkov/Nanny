@@ -7,8 +7,6 @@ import android.view.ViewGroup;
 import android.widget.Spinner;
 
 import com.ninja.nanny.Adapter.CustomSpinnerAdapter;
-import com.ninja.nanny.Custom.CustomFragment;
-import com.ninja.nanny.MainActivity;
 import com.ninja.nanny.R;
 import com.ninja.nanny.Utils.Common;
 import com.ninja.nanny.Utils.Constant;
@@ -24,16 +22,14 @@ import java.util.ArrayList;
  */
 
 public class WizardSelectBankFragment extends BaseWizardFragment  {
-
-    private View mView;
-    private Spinner mSpinnerBank;
+        private Spinner mSpinnerBank;
     private ArrayList<String> mMyBankArrayList;
     public  WizardSelectBankFragment(){
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mView = inflater.inflate(R.layout.fragment_wizzard_bank, container, false);
+        mView = inflater.inflate(R.layout.fragment_wizard_bank, container, false);
         mContext = (WizardActivity)getActivity();
         initData();
         setUI();
