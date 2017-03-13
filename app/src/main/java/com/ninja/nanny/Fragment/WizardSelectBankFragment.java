@@ -22,9 +22,10 @@ import java.util.ArrayList;
  */
 
 public class WizardSelectBankFragment extends BaseWizardFragment  {
-        private Spinner mSpinnerBank;
+    private Spinner mSpinnerBank;
     private ArrayList<String> mMyBankArrayList;
-    public  WizardSelectBankFragment(){
+
+    public  WizardSelectBankFragment() {
     }
 
     @Override
@@ -51,8 +52,7 @@ public class WizardSelectBankFragment extends BaseWizardFragment  {
         //bankItem = Common.getInstance().listBanks.get(nIndex);
     }
 
-    private void setUI()
-    {
+    private void setUI() {
         mSpinnerBank = (Spinner) mView.findViewById(R.id.spinnerBank);
         CustomSpinnerAdapter spinnerAdapterBank = new CustomSpinnerAdapter(mContext,mMyBankArrayList);
         mSpinnerBank.setAdapter(spinnerAdapterBank);
