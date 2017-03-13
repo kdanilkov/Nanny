@@ -1,6 +1,7 @@
 package com.ninja.nanny.Fragment;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.KeyEvent;
@@ -17,8 +18,10 @@ import com.ninja.nanny.MainActivity;
 import com.ninja.nanny.Model.UsedAmount;
 import com.ninja.nanny.Preference.UserPreference;
 import com.ninja.nanny.R;
+import com.ninja.nanny.SplashActivity;
 import com.ninja.nanny.Utils.Common;
 import com.ninja.nanny.Utils.Constant;
+import com.ninja.nanny.WizardActivity;
 
 import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar;
 
@@ -54,6 +57,7 @@ public class SettingFragment extends CustomFragment implements DiscreteSeekBar.O
 
         mView.findViewById(R.id.btnMenu).setOnClickListener(this);
         mView.findViewById(R.id.btnSave).setOnClickListener(this);
+        mView.findViewById(R.id.btnWizard).setOnClickListener(this);
 
         etMinimalAmountPerDay = (EditText)mView.findViewById(R.id.etMinimalAmountPerDay);
         etSalaryDate = (EditText)mView.findViewById(R.id.etSalaryDate);
@@ -174,6 +178,9 @@ public class SettingFragment extends CustomFragment implements DiscreteSeekBar.O
 
             case R.id.btnSave:
                 saveSettingInfo();
+                break;
+            case R.id.btnWizard:
+                startActivity(new Intent(mContext, WizardActivity.class));
                 break;
         }
     }

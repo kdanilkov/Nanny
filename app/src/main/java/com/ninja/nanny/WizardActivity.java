@@ -87,6 +87,12 @@ public class WizardActivity extends CustomActivity {
     }
 
     void syncSms() {
+        if(Common.getInstance().listSms != null) {
+            if (Common.getInstance().listAllTransactions == null || Common.getInstance().listAllTransactions.size() == 0) {
+                Common.getInstance().fillAllTransactions();
+            }
+            return;
+        }
         Common.getInstance().listSms = new ArrayList<>();
 
         Uri message = Uri.parse("content://sms/");
@@ -116,6 +122,7 @@ public class WizardActivity extends CustomActivity {
         c.close();
 
         Collections.sort(Common.getInstance().listSms, new SmsComparator());
+        Common.getInstance().fillAllTransactions();
     }
 
     public void onNextStep(View v)
@@ -162,7 +169,7 @@ public class WizardActivity extends CustomActivity {
                 break;
         }
         f.setModel(mWizardModel);
-        getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, f, title).commit();
         mCurrentFragment = f;
+        getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, mCurrentFragment, title).commit();
     }
 }

@@ -54,4 +54,6 @@ public class Constant {
 
     public static final String TAG_CURRENT = "current";
 
+    public static final String LAUNCH_FRAGMENT_PARAM = "LAUNCH_FRAGMENT";
+
 }

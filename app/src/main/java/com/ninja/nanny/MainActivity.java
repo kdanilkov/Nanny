@@ -2,7 +2,6 @@ package com.ninja.nanny;
 
 import android.Manifest;
 import android.content.ContentResolver;
-import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -32,10 +31,8 @@ import com.ninja.nanny.Fragment.SmsFragment;
 import com.ninja.nanny.Fragment.TransactionFragment;
 import com.ninja.nanny.Fragment.WishFragment;
 import com.ninja.nanny.Fragment.WizardSelectBankFragment;
-import com.ninja.nanny.Helper.DatabaseHelper;
 import com.ninja.nanny.Model.Sms;
 import com.ninja.nanny.Model.Transaction;
-import com.ninja.nanny.Preference.UserPreference;
 import com.ninja.nanny.Utils.Common;
 import com.ninja.nanny.Utils.Constant;
 import com.ninja.nanny.Utils.ParseSms;
@@ -67,8 +64,8 @@ public class MainActivity extends CustomActivity {
 
         initSetting();
         setupDrawer();
-        setupContainer();
-
+        Bundle extra = getIntent().getExtras();
+        setupContainer(extra != null ? extra.getInt(Constant.LAUNCH_FRAGMENT_PARAM, -1) : -1);
     }
 
     @Override
@@ -238,7 +235,7 @@ public class MainActivity extends CustomActivity {
 //        return smsMap;
 //    }
 
-    void setupContainer()
+    void setupContainer(int launchFragment)
     {
         getSupportFragmentManager().addOnBackStackChangedListener(
                 new FragmentManager.OnBackStackChangedListener() {
@@ -253,11 +250,17 @@ public class MainActivity extends CustomActivity {
                     }
                 });
 
-        if(Common.getInstance().timestampInitConfig > 0) {
-            launchFragment(0);
-        } else {
-            Toast.makeText(getBaseContext(), "You should set initial configuration", Toast.LENGTH_SHORT).show();
-            launchFragment(5);
+        if(launchFragment == -1) {
+            if (Common.getInstance().timestampInitConfig > 0) {
+                launchFragment(0);
+            } else {
+                Toast.makeText(getBaseContext(), "You should set initial configuration", Toast.LENGTH_SHORT).show();
+                launchFragment(5);
+            }
+        }
+        else
+        {
+            launchFragment(launchFragment);
         }
     }
 
@@ -424,6 +427,4 @@ public class MainActivity extends CustomActivity {
         getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
         getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, f, title).addToBackStack(title).commit();
     }
-
-
 }

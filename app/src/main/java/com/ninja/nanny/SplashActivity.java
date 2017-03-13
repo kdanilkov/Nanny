@@ -57,11 +57,11 @@ public class SplashActivity extends Activity {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            if (Common.getInstance().timestampInitConfig > 0) {
+            //if (Common.getInstance().timestampInitConfig > 0) {
                 startActivity(new Intent(SplashActivity.this, MainActivity.class));
-            } else {
+            /*} else {
                 startActivity(new Intent(SplashActivity.this, WizardActivity.class));
-            }
+            }*/
             finish();
         }
     }

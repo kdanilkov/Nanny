@@ -43,7 +43,7 @@ import java.util.regex.Pattern;
 
 public class Common {
 
-    static Common instance = null;
+    private static Common instance = null;
 
     public static Common getInstance() {
         if(instance == null){
@@ -626,6 +626,8 @@ public class Common {
         }
     }
 
+
+
     Transaction convertSmsToTransaction(Sms sms) {
         String strAccountName = "";
         String strAddress = "";
@@ -1014,7 +1016,53 @@ public class Common {
             e.printStackTrace();
         }
     }
+    // Fill all transactions
+    public  void fillAllTransactions(){
+        for (Sms sms : listSms)
+        {
+            for (int j = 0; j < jsonArrayBankInfo.length(); j++) {
+                String strAddress = "";
+                String strAccountName = "";
+                try {
+                    JSONObject bank = jsonArrayBankInfo.getJSONObject(j);
+                    strAccountName = bank.getString(Constant.JSON_NAME);
+                    strAddress = bank.getString(Constant.JSON_ADDRESS);
+                }
+                catch (Exception ex)
+                {
+                    Log.e(Constant.TAG_CURRENT, "error get bank address");
+                }
+                if(!strAddress.toLowerCase().equals(sms.getAddress().toLowerCase())) {
+                    continue;
+                }
+                for (int i = 0; i < jsonArrayTemplates.length(); i++) {
+                    Transaction transaction = null;
 
+                    try {
+                        JSONObject jsonTemplate = jsonArrayTemplates.getJSONObject(i);
+                        //check that template is for the right bank
+                        String strBankAddress = jsonTemplate.getString(Constant.JSON_ADDRESS);
+                        if (!strAddress.toLowerCase().equals(strBankAddress.toLowerCase()))
+                            continue;
+                        //process template
+                        transaction = parseTextUsingTempalte(sms.getText(), jsonTemplate);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    if (transaction == null) continue;
 
+                    Log.i(Constant.TAG_CURRENT, "success on parsing sms in the parseSmsUsingRegex");
 
+                    transaction.setPaidId(-1);
+                    transaction.setAccountName(strAccountName);
+                    transaction.setBankId(j);
+                    transaction.setText(sms.getText());
+                    transaction.setTimestampCreated(sms.getTimestamp());
+
+                    listAllTransactions.add(transaction);
+                }
+            }
+        }
+        Collections.sort(listAllTransactions, new TransactionComparator());
+    }
 }

@@ -258,15 +258,24 @@
             android:layout_toRightOf="@+id/btnMenu"
             android:textColor="@color/white"
             android:textSize="@dimen/title_font_size" />
-
+        <Button
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="50dp"
+            android:id="@+id/btnSave"
+            android:background="@drawable/ic_save" />
         <Button
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_centerVertical="true"
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="15dp"
-            android:id="@+id/btnSave"
-            android:background="@drawable/ic_save" />
+            android:id="@+id/btnWizard"
+            android:clickable="true"
+            android:background="@drawable/ic_wizard" />
+
 
     </RelativeLayout>
 </RelativeLayout>

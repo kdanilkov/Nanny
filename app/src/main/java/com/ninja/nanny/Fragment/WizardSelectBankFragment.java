@@ -1,12 +1,15 @@
 package com.ninja.nanny.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Spinner;
 
 import com.ninja.nanny.Adapter.CustomSpinnerAdapter;
+import com.ninja.nanny.MainActivity;
 import com.ninja.nanny.R;
 import com.ninja.nanny.Utils.Common;
 import com.ninja.nanny.Utils.Constant;
@@ -21,8 +24,9 @@ import java.util.ArrayList;
  * Created by petra on 10.03.2017.
  */
 
-public class WizardSelectBankFragment extends BaseWizardFragment  {
-        private Spinner mSpinnerBank;
+public class WizardSelectBankFragment extends BaseWizardFragment implements AdapterView.OnItemSelectedListener {
+    private Spinner mSpinnerBank;
+    private int mIndex = 0;
     private ArrayList<String> mMyBankArrayList;
     public  WizardSelectBankFragment(){
     }
@@ -48,18 +52,42 @@ public class WizardSelectBankFragment extends BaseWizardFragment  {
             }
         }
 
-        //bankItem = Common.getInstance().listBanks.get(nIndex);
     }
 
     private void setUI()
     {
         mSpinnerBank = (Spinner) mView.findViewById(R.id.spinnerBank);
-        CustomSpinnerAdapter spinnerAdapterBank = new CustomSpinnerAdapter(mContext,mMyBankArrayList);
+
+        CustomSpinnerAdapter spinnerAdapterBank = new CustomSpinnerAdapter(mContext, mMyBankArrayList);
         mSpinnerBank.setAdapter(spinnerAdapterBank);
+        // set bank from messages
+        if(Common.getInstance().listAllTransactions.size()>0)
+        {
+            mIndex = Common.getInstance().listAllTransactions.get(Common.getInstance().listAllTransactions.size()-1).getBankId();
+        }
+        mSpinnerBank.setSelection(mIndex);
+        mSpinnerBank.setOnItemSelectedListener(this);
     }
 
     @Override
     public boolean isValidate() {
-        return false;
+        return true;
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        if (i != mIndex) {
+            Intent intent = new Intent(getActivity(), MainActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putInt(Constant.LAUNCH_FRAGMENT_PARAM, 5);
+            intent.putExtras(bundle);
+            startActivity(intent);
+            getActivity().finish();
+        }
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+
     }
 }
