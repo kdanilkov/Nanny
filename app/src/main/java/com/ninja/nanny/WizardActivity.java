@@ -150,8 +150,7 @@ public class WizardActivity extends CustomActivity {
     {
         String title = "";
         BaseWizardFragment f = null;
-        switch (mCurrentStep)
-        {
+        switch (mCurrentStep) {
             case Bank:
                 f = new WizardSelectBankFragment();
                 break;

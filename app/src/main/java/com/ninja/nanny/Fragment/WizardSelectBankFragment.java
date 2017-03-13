@@ -28,7 +28,8 @@ public class WizardSelectBankFragment extends BaseWizardFragment implements Adap
     private Spinner mSpinnerBank;
     private int mIndex = 0;
     private ArrayList<String> mMyBankArrayList;
-    public  WizardSelectBankFragment(){
+
+    public  WizardSelectBankFragment() {
     }
 
     @Override
@@ -54,8 +55,7 @@ public class WizardSelectBankFragment extends BaseWizardFragment implements Adap
 
     }
 
-    private void setUI()
-    {
+    private void setUI() {
         mSpinnerBank = (Spinner) mView.findViewById(R.id.spinnerBank);
 
         CustomSpinnerAdapter spinnerAdapterBank = new CustomSpinnerAdapter(mContext, mMyBankArrayList);

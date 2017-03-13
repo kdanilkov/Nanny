@@ -417,8 +417,7 @@ public class MainActivity extends CustomActivity {
             case 7:
                 f = new WizardSelectBankFragment();
                 title = Constant.FRAGMENT_WIZARD_BANK;
-                if(!weHavePermissionToReadSMS())
-                {
+                if(!weHavePermissionToReadSMS()) {
                     requestReadSMSPermissionFirst();
                 }
                 break;

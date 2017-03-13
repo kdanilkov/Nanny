@@ -12,8 +12,7 @@ import com.ninja.nanny.R;
  */
 
 public class WizardSpentFragment extends BaseWizardFragment {
-    public WizardSpentFragment()
-    {
+    public WizardSpentFragment() {
 
     }
 
