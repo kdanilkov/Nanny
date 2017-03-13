@@ -1,5 +1,7 @@
 package com.ninja.nanny.Model;
 
+import java.util.Calendar;
+
 /**
  * Created by Administrator on 10/28/2016.
  */
@@ -9,9 +11,9 @@ public class Sms {
     private String _address;
     private String _text;
     private long _timestamp;
+    private int day;
 
     public Sms() {
-
     }
 
     public Sms(String address, String text, long timestamp) {
@@ -25,6 +27,9 @@ public class Sms {
         _address = address;
         _text = text;
         _timestamp = timestamp;
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(timestamp);
+        day = cal.getTime().getDay();
     }
 
     public int getId() {
@@ -57,5 +62,13 @@ public class Sms {
 
     public void setTimestamp(long timestamp) {
         _timestamp = timestamp;
+    }
+
+    public int getDay() {
+        return day;
+    }
+
+    public void setDay(int day) {
+        this.day = day;
     }
 }
