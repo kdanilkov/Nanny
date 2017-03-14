@@ -38,7 +38,7 @@ public class WizardStartPeriodFragment extends BaseWizardFragment {
         return mView;
     }
 
-    void initData() {
+    private void initData() {
         trySetSalaryDay();
     }
 
@@ -70,5 +70,10 @@ public class WizardStartPeriodFragment extends BaseWizardFragment {
     @Override
     public boolean isValidate() {
         return false;
+    }
+
+    @Override
+    public void setData() {
+
     }
 }

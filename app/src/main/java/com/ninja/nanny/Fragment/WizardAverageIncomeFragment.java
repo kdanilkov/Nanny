@@ -24,4 +24,9 @@ public class WizardAverageIncomeFragment extends BaseWizardFragment {
     public boolean isValidate() {
         return false;
     }
+
+    @Override
+    public void setData() {
+
+    }
 }

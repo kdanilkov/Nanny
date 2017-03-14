@@ -1,6 +1,7 @@
 package com.ninja.nanny;
 
 import android.content.ContentResolver;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
@@ -10,6 +11,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.ninja.nanny.Comparator.SmsComparator;
@@ -127,7 +129,13 @@ public class WizardActivity extends CustomActivity {
 
     public void onNextStep(View v)
     {
-
+        // validate data on current step
+        if(!mCurrentFragment.isValidate())
+        {
+            return;
+        }
+        // fill wizard data in current fragment
+        mCurrentFragment.setData();
         switch (mCurrentStep)
         {
             case Bank:
@@ -149,7 +157,7 @@ public class WizardActivity extends CustomActivity {
     private void setStep()
     {
         String title = "";
-        BaseWizardFragment f = null;
+        BaseWizardFragment f;
         switch (mCurrentStep) {
             case Bank:
                 f = new WizardSelectBankFragment();
@@ -165,7 +173,12 @@ public class WizardActivity extends CustomActivity {
                 break;
             case AverageIncome:
                 f = new WizardAverageIncomeFragment();
+                ((Button)findViewById(R.id.btnNext)).setText(getString(R.string.save_button));
                 break;
+            default:
+                startActivity(new Intent(WizardActivity.this, MainActivity.class));
+                finish();
+                return;
         }
         f.setModel(mWizardModel);
         mCurrentFragment = f;

@@ -2,6 +2,7 @@ package com.ninja.nanny.Fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.Spinner;
 
 import com.ninja.nanny.Adapter.CustomSpinnerAdapter;
 import com.ninja.nanny.MainActivity;
+import com.ninja.nanny.Model.Bank;
 import com.ninja.nanny.R;
 import com.ninja.nanny.Utils.Common;
 import com.ninja.nanny.Utils.Constant;
@@ -41,7 +43,7 @@ public class WizardSelectBankFragment extends BaseWizardFragment implements Adap
         return mView;
     }
 
-    void initData() {
+    private void initData() {
         mMyBankArrayList = new ArrayList<>();
 
         for(int i = 0; i < Common.getInstance().jsonArrayBankInfo.length(); i ++) {
@@ -61,9 +63,8 @@ public class WizardSelectBankFragment extends BaseWizardFragment implements Adap
         CustomSpinnerAdapter spinnerAdapterBank = new CustomSpinnerAdapter(mContext, mMyBankArrayList);
         mSpinnerBank.setAdapter(spinnerAdapterBank);
         // set bank from messages
-        if(Common.getInstance().listAllTransactions.size()>0)
-        {
-            mIndex = Common.getInstance().listAllTransactions.get(Common.getInstance().listAllTransactions.size()-1).getBankId();
+        if(Common.getInstance().listAllTransactions.size() > 0) {
+            mIndex = Common.getInstance().listAllTransactions.get(Common.getInstance().listAllTransactions.size() - 1).getBankId();
         }
         mSpinnerBank.setSelection(mIndex);
         mSpinnerBank.setOnItemSelectedListener(this);
@@ -72,6 +73,21 @@ public class WizardSelectBankFragment extends BaseWizardFragment implements Adap
     @Override
     public boolean isValidate() {
         return true;
+    }
+
+    @Override
+    public void setData() {
+        Bank bank = new Bank();
+        try{
+            JSONObject bankObj = Common.getInstance().jsonArrayBankInfo.getJSONObject(mIndex);
+            bank.setAccountName(bankObj.getString(Constant.JSON_NAME));
+            bank.setIdxKind(mIndex);
+        }
+        catch (Exception ex)
+        {
+            Log.e(Constant.TAG_CURRENT, ex.getMessage());
+        }
+        mModel.setBank(bank);
     }
 
     @Override

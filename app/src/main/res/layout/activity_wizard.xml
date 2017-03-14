@@ -13,6 +13,7 @@
         android:layout_height="40dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
+        android:id="@+id/btnNext"
         android:onClick="onNextStep"
         android:text="@string/next_button" />
 </RelativeLayout>
