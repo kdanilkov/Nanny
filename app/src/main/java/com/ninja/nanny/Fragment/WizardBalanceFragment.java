@@ -23,10 +23,12 @@ public class WizardBalanceFragment extends BaseWizardFragment {
     }
 
     private void initData() {
+        // todo: consider using listIterator, like in WizardStartPeriodFragment?
         for (int i = Common.getInstance().listAllTransactions.size() - 1; i>=0;i--) {
             Transaction transaction = Common.getInstance().listAllTransactions.get(Common.getInstance().listAllTransactions.size() - 1);
             if(transaction.getAccountName().equals(mModel.getBank().getAccountName())) {
                 mBalanceEdit.setText(transaction.getAmountBalance() + "");
+                //todo: add break condition here? or else we find our value, but go on searching for more, resetting the value already found!
             }
         }
     }

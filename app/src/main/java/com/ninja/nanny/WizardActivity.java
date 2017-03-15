@@ -46,12 +46,10 @@ public class WizardActivity extends CustomActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wizard);
-        if(!weHavePermissionToReadSMS())
-        {
+        if(!weHavePermissionToReadSMS()) {
             requestReadSMSPermissionFirst();
         }
-        else
-        {
+        else {
             syncSms();
         }
         mWizardModel = new SettingWizardModel();
@@ -127,35 +125,7 @@ public class WizardActivity extends CustomActivity {
         Common.getInstance().fillAllTransactions();
     }
 
-    public void onNextStep(View v)
-    {
-        // validate data on current step
-        if(!mCurrentFragment.isValidate())
-        {
-            return;
-        }
-        // fill wizard data in current fragment
-        mCurrentFragment.setData();
-        switch (mCurrentStep)
-        {
-            case Bank:
-                mCurrentStep = WizardSteps.Balance;
-                break;
-            case Balance:
-                mCurrentStep = WizardSteps.Period;
-                break;
-            case Period:
-                mCurrentStep = WizardSteps.Spent;
-                break;
-            case Spent:
-                mCurrentStep = WizardSteps.AverageIncome;
-                break;
-        }
-        setStep();
-    }
-
-    private void setStep()
-    {
+    private void setStep() {
         String title = "";
         BaseWizardFragment f;
         switch (mCurrentStep) {
@@ -183,5 +153,29 @@ public class WizardActivity extends CustomActivity {
         f.setModel(mWizardModel);
         mCurrentFragment = f;
         getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, mCurrentFragment, title).commit();
+    }
+
+    public void onNextStep(View v) {
+        // validate data on current step
+        if(!mCurrentFragment.isValidate()) {
+            return;
+        }
+        // fill wizard data in current fragment
+        mCurrentFragment.setData();
+        switch (mCurrentStep) {
+            case Bank:
+                mCurrentStep = WizardSteps.Balance;
+                break;
+            case Balance:
+                mCurrentStep = WizardSteps.Period;
+                break;
+            case Period:
+                mCurrentStep = WizardSteps.Spent;
+                break;
+            case Spent:
+                mCurrentStep = WizardSteps.AverageIncome;
+                break;
+        }
+        setStep();
     }
 }
