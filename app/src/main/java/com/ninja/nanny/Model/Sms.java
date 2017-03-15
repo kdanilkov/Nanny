@@ -16,20 +16,15 @@ public class Sms {
     public Sms() {
     }
 
-    public Sms(String address, String text, long timestamp) {
+    public Sms(String address, String text, long timestamp)  {
         _address = address;
         _text = text;
-        _timestamp = timestamp;
+        setTimestamp(timestamp); // day logic is bound to timestamp, so we have to use the setter
     }
 
     public Sms(int id, String address, String text, long timestamp) {
+        this(address, text, timestamp);
         _id = id;
-        _address = address;
-        _text = text;
-        _timestamp = timestamp;
-        Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(timestamp);
-        day = cal.getTime().getDay();
     }
 
     public int getId() {
@@ -62,11 +57,12 @@ public class Sms {
 
     public void setTimestamp(long timestamp) {
         _timestamp = timestamp;
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(timestamp);
+        day = cal.get(Calendar.DAY_OF_MONTH);
     }
 
-    public int getDay() {
-        return day;
-    }
+    public int getDay() { return day; }
 
     public void setDay(int day) {
         this.day = day;

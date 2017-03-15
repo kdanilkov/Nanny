@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.ninja.nanny.Custom.RegularEditText;
 import com.ninja.nanny.Model.Sms;
@@ -33,8 +34,8 @@ public class WizardStartPeriodFragment extends BaseWizardFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_wizard_period, container, false);
         mContext = (WizardActivity)getActivity();
+        setUI(mView);
         initData();
-        setUI();
         return mView;
     }
 
@@ -42,29 +43,34 @@ public class WizardStartPeriodFragment extends BaseWizardFragment {
         trySetSalaryDay();
     }
 
-    // todo: check the logic when the Wizard is running. We have to create a proper SMS for that, manually.
+    // todo: Sms order is unstable, and is changing from direct to reverse. Thus the logic below doesn't work properly.
     private void trySetSalaryDay() {
-        ListIterator<Sms> iter = Common.getInstance().listSms.listIterator(Common.getInstance().listSms.size());
-        while (iter.hasPrevious()) {
-            final Sms sms = iter.previous();
-            Transaction tran = ParseSms.getInstance().getSmsByTemplate4(sms.getText());
-            if (tran != null) {
-                int change = tran.getAmountChange();
-                if (change > getResources().getInteger(R.integer.salary_limit)) {
-                    setSalaryDay(sms.getDay());
-                    break;
+        try {
+            ListIterator<Sms> iter = Common.getInstance().listSms.listIterator(Common.getInstance().listSms.size());
+            while (iter.hasPrevious()) {
+                final Sms sms = iter.previous();
+                Transaction tran = ParseSms.getInstance().getSmsByTemplate4(sms.getText());
+                if (tran != null) {
+                    int change = tran.getAmountChange();
+                    if (change > getResources().getInteger(R.integer.salary_limit)) {
+                        setSalaryDay(sms.getDay());
+                        break;
+                    }
                 }
             }
+        } catch(Exception e) {
+            e.printStackTrace();
         }
     }
 
     private void setSalaryDay(int day) {
-        mTextPeriodStart.setText(day);
+        mTextPeriodStart.setText(String.valueOf(day), TextView.BufferType.EDITABLE);
         UserPreference.getInstance().putSharedPreference(Constant.PREF_KEY_SALARY_DATE, day);
     }
 
-    private void setUI() {
-        mTextPeriodStart = (RegularEditText) mView.findViewById(R.id.etSalaryDate);
+    private void setUI(View mView) {
+        View view = mView.findViewById(R.id.etSalaryDate);
+        mTextPeriodStart = (RegularEditText) view;
     }
 
     @Override
