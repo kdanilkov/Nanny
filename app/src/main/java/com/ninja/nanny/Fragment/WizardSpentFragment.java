@@ -24,7 +24,7 @@ public class WizardSpentFragment extends BaseWizardFragment {
 
     @Override
     public boolean isValidate() {
-        return false;
+        return true;
     }
 
     @Override

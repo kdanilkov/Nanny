@@ -1065,4 +1065,16 @@ public class Common {
         }
         Collections.sort(listAllTransactions, new TransactionComparator());
     }
+
+    public  void saveBank(Bank bank){
+        int nID =  Common.getInstance().dbHelper.createBank(bank);
+
+        bank.setId(nID);
+        Common.getInstance().listBanks.add(bank);
+
+        if(bank.getFlagActive() == 1) {
+            Common.getInstance().bankActive = bank;
+            Common.getInstance().syncBetweenTransactionAndSms();
+        }
+    }
 }

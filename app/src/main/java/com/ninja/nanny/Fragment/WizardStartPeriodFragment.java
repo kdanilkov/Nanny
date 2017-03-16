@@ -75,7 +75,7 @@ public class WizardStartPeriodFragment extends BaseWizardFragment {
 
     @Override
     public boolean isValidate() {
-        return false;
+        return true;
     }
 
     @Override
