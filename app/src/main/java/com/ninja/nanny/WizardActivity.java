@@ -134,6 +134,7 @@ public class WizardActivity extends CustomActivity {
                 break;
             case Balance:
                 f = new WizardBalanceFragment();
+                ((Button)findViewById(R.id.btnNext)).setText(getString(R.string.save_and_next_button));
                 break;
             case Period:
                 f = new WizardStartPeriodFragment();
@@ -143,7 +144,7 @@ public class WizardActivity extends CustomActivity {
                 break;
             case AverageIncome:
                 f = new WizardAverageIncomeFragment();
-                ((Button)findViewById(R.id.btnNext)).setText(getString(R.string.save_button));
+                ((Button)findViewById(R.id.btnNext)).setText(getString(R.string.finish_button));
                 break;
             default:
                 startActivity(new Intent(WizardActivity.this, MainActivity.class));
@@ -174,6 +175,9 @@ public class WizardActivity extends CustomActivity {
                 break;
             case Spent:
                 mCurrentStep = WizardSteps.AverageIncome;
+                break;
+            case AverageIncome:
+                startActivity(new Intent(WizardActivity.this, MainActivity.class));
                 break;
         }
         setStep();
