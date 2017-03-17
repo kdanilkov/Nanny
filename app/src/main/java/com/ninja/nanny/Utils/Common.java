@@ -41,6 +41,7 @@ import java.util.regex.Pattern;
  * Created by Administrator on 10/28/2016.
  */
 
+// todo: God class. Consider breaking it down.
 public class Common {
 
     private static Common instance = null;

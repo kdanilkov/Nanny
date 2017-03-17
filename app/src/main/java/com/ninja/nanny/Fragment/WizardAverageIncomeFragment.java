@@ -33,6 +33,7 @@ public class WizardAverageIncomeFragment extends BaseWizardFragment {
     }
 
     public void initData() {
+        //todo: consider moving '15' to named constant maybe?
         int salaryDate = UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_SALARY_DATE, 15);
         Calendar currentCalendar = Calendar.getInstance();
         Calendar calendar = Calendar.getInstance();
