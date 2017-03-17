@@ -2,19 +2,40 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <LinearLayout
-        android:orientation="vertical"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="30dp">
-
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/rlyTop"
+        android:background="@color/colorPrimary">
         <com.ninja.nanny.Custom.MediumTextView
-            android:text="Income DEPOSIT / accounting period start DATE"
-            android:layout_width="match_parent"
+            android:text="Step 3 of 5. Period start date"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/label_font_size"
-            android:textColor="@color/label_text_color" />
+            android:layout_alignParentStart="false"
+            android:layout_marginStart="10dp"
+            android:id="@+id/textView3"
+            android:layout_alignBaseline="@+id/btnBack"
+            android:layout_toRightOf="@+id/btnBack"
+            android:textColor="@color/white"
+            android:textSize="@dimen/title_font_size" />
+    </RelativeLayout>
 
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <com.ninja.nanny.Custom.MediumTextView
+                android:text="Income DEPOSIT / accounting period start DATE"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/label_font_size"
+                android:textColor="@color/label_text_color" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
         <com.ninja.nanny.Custom.RegularEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -28,5 +49,5 @@
             android:textSize="@dimen/editor_font_size"
             android:paddingBottom="5dp"
             android:inputType="number" />
-    </LinearLayout>
+    </RelativeLayout>
 </LinearLayout>
