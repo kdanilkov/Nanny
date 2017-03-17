@@ -40,7 +40,6 @@ public class WizardStartPeriodFragment extends BaseWizardFragment {
         trySetSalaryDay();
     }
 
-    // todo: test with Transaction list instead of Sms list
     private void trySetSalaryDay() {
         try {
             for (Transaction tran : Common.getInstance().listAllTransactions) {
