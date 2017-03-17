@@ -56,4 +56,5 @@ public class Constant {
 
     public static final String LAUNCH_FRAGMENT_PARAM = "LAUNCH_FRAGMENT";
 
+    public static final int DEFAULT_SALARY_DATE = 15;
 }

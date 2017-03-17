@@ -4,4 +4,6 @@
     <string name="loading"> loading </string>
     <string name="next_button">Next</string>
     <string name="save_button">Save</string>
+    <string name="save_and_next_button">Save and Next</string>
+    <string name="finish_button">Finish</string>
 </resources>

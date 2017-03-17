@@ -41,15 +41,16 @@ public class WizardStartPeriodFragment extends BaseWizardFragment {
     }
 
     private void trySetSalaryDay() {
+        int day = UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_SALARY_DATE, Constant.DEFAULT_SALARY_DATE);
         try {
             for (Transaction tran : Common.getInstance().listAllTransactions) {
                 int change = tran.getAmountChange();
                 if (change > getResources().getInteger(R.integer.salary_limit)) {
-                    int day = TimestampHelper.getDayOfMonthFromTimestamp(tran.getTimestampCreated());
-                    mTextPeriodStart.setText(String.valueOf(day), TextView.BufferType.EDITABLE);
+                    day = TimestampHelper.getDayOfMonthFromTimestamp(tran.getTimestampCreated());
                     break;
                 }
             }
+        mTextPeriodStart.setText(String.valueOf(day), TextView.BufferType.EDITABLE);
         } catch(Exception e) {
             e.printStackTrace();
         }

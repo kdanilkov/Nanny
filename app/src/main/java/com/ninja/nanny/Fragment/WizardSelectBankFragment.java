@@ -12,6 +12,7 @@ import android.widget.Spinner;
 import com.ninja.nanny.Adapter.CustomSpinnerAdapter;
 import com.ninja.nanny.MainActivity;
 import com.ninja.nanny.Model.Bank;
+import com.ninja.nanny.Preference.UserPreference;
 import com.ninja.nanny.R;
 import com.ninja.nanny.Utils.Common;
 import com.ninja.nanny.Utils.Constant;
@@ -65,6 +66,8 @@ public class WizardSelectBankFragment extends BaseWizardFragment implements Adap
         // set bank from messages
         if(Common.getInstance().listAllTransactions.size() > 0) {
             mIndex = Common.getInstance().listAllTransactions.get(Common.getInstance().listAllTransactions.size() - 1).getBankId();
+        } else {
+            // todo: read from UserPreferences
         }
         mSpinnerBank.setSelection(mIndex);
         mSpinnerBank.setOnItemSelectedListener(this);

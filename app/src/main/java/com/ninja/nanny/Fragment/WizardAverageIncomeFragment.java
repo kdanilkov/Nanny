@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.github.mikephil.charting.utils.Utils;
 import com.ninja.nanny.Custom.RegularEditText;
 import com.ninja.nanny.Model.Transaction;
 import com.ninja.nanny.Preference.UserPreference;
@@ -13,28 +12,28 @@ import com.ninja.nanny.R;
 import com.ninja.nanny.Utils.Common;
 import com.ninja.nanny.Utils.Constant;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Iterator;
-import java.util.ListIterator;
 
 /**
  * Created by petra on 12.03.2017.
  */
 
 public class WizardAverageIncomeFragment extends BaseWizardFragment {
+
+    private RegularEditText mIncomeText;
+
     public WizardAverageIncomeFragment(){}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_wizard_average_income, container, false);
+        mIncomeText = ((RegularEditText) mView.findViewById(R.id.etText));
         initData();
         return mView;
     }
 
     public void initData() {
-        //todo: consider moving '15' to named constant maybe?
-        int salaryDate = UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_SALARY_DATE, 15);
+        int salaryDate = UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_SALARY_DATE, Constant.DEFAULT_SALARY_DATE);
         Calendar currentCalendar = Calendar.getInstance();
         Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
@@ -71,7 +70,7 @@ public class WizardAverageIncomeFragment extends BaseWizardFragment {
                 previewsBalance = transaction.getAmountBalance();
             }
         }
-        ((RegularEditText)mView.findViewById(R.id.etText)).setText(income + "");
+        mIncomeText.setText(String.valueOf(income));
     }
 
     @Override
@@ -81,6 +80,11 @@ public class WizardAverageIncomeFragment extends BaseWizardFragment {
 
     @Override
     public void setData() {
-
+        try {
+            int income = Integer.parseInt(mIncomeText.getText().toString());
+            UserPreference.getInstance().putSharedPreference(Constant.PREF_KEY_MONTHLY_INCOME, income);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
