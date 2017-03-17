@@ -156,6 +156,7 @@ public class MainActivity extends CustomActivity {
         }
     }
 
+    //todo: move this code out of this class
    void syncSms() {
         Common.getInstance().listSms = new ArrayList<>();
 
