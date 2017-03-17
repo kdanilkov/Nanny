@@ -27,6 +27,7 @@ public class WizardAverageIncomeFragment extends BaseWizardFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        //todo: somehow this code is launched twice. Perhaps something wrong in WizardActivity?
         mView = inflater.inflate(R.layout.fragment_wizard_average_income, container, false);
         mIncomeEdit = ((RegularEditText) mView.findViewById(R.id.etText));
         initData();
@@ -104,6 +105,7 @@ public class WizardAverageIncomeFragment extends BaseWizardFragment {
 
     @Override
     public void setData() {
+        //todo: looks like it doesn't save properly - check out Settings fragment
         try {
             int income = Integer.parseInt(mIncomeEdit.getText().toString());
             UserPreference.getInstance().putSharedPreference(Constant.PREF_KEY_MONTHLY_INCOME, income);
