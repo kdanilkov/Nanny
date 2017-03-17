@@ -34,6 +34,26 @@ public class WizardAverageIncomeFragment extends BaseWizardFragment {
 
     public void initData() {
         int salaryDate = UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_SALARY_DATE, Constant.DEFAULT_SALARY_DATE);
+        int income = calculateIncomeForLastPeriod(salaryDate);
+        mIncomeText.setText(String.valueOf(income));
+    }
+
+    private int calculateIncomeForLastPeriod(int salaryDate) {
+        // todo: works differently in different cases.
+        // Case 1:
+        // currentdate: 12.02.2017
+        // income day: 20
+        // startPeriod: 20.01.2017
+        // endPeriod: 20.02.2017
+        // not a full month
+
+        // Case 2:
+        // currentdate: 12.02.2017
+        // income day: 10
+        // startPeriod: 10.01.2017
+        // endPeriod: 10.02.2017
+        // full month
+
         Calendar currentCalendar = Calendar.getInstance();
         Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
@@ -42,21 +62,19 @@ public class WizardAverageIncomeFragment extends BaseWizardFragment {
             month = 0;
             year -= 1;
         }
-        // set period income
+        // set period time range
         calendar.set(year, month, salaryDate);
-        long startPreviewRage = calendar.getTimeInMillis();
+        long startPreviewRange = calendar.getTimeInMillis();
         calendar.set(currentCalendar.get(Calendar.YEAR), currentCalendar.get(Calendar.MONTH), salaryDate);
-        long endPreviewRage = calendar.getTimeInMillis();
+        long endPreviewRange = calendar.getTimeInMillis();
         // get income in preview period
         int income = 0;
         int previewsBalance = 0;
-        for (int i = Common.getInstance().listAllTransactions.size() -1;i>=0;i--)
-        {
+        for (int i = Common.getInstance().listAllTransactions.size() -1; i>=0; i--) {
             Transaction transaction = Common.getInstance().listAllTransactions.get(i);
             if(transaction.getAccountName().equals(mModel.getBank().getAccountName())
-                    && startPreviewRage<=transaction.getTimestampCreated()
-                    && endPreviewRage >= transaction.getTimestampCreated())
-            {
+                    && startPreviewRange<=transaction.getTimestampCreated()
+                    && endPreviewRange >= transaction.getTimestampCreated()) {
                 if (previewsBalance == 0) {
                     previewsBalance = transaction.getAmountBalance();
                     continue;
@@ -70,7 +88,7 @@ public class WizardAverageIncomeFragment extends BaseWizardFragment {
                 previewsBalance = transaction.getAmountBalance();
             }
         }
-        mIncomeText.setText(String.valueOf(income));
+        return income;
     }
 
     @Override
