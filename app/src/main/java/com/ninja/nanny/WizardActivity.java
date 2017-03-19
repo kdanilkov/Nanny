@@ -178,7 +178,8 @@ public class WizardActivity extends CustomActivity {
                 break;
             case AverageIncome:
                 startActivity(new Intent(WizardActivity.this, MainActivity.class));
-                break;
+                finish();
+                return;
         }
         setStep();
     }

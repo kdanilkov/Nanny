@@ -25,12 +25,15 @@ public class WizardBalanceFragment extends BaseWizardFragment {
     }
 
     private void initData() {
-        //todo: get value from UserPreferences first, as a default value
-        for (Transaction transaction : Common.getInstance().listAllTransactions) {
-            if (transaction.getAccountName().equals(mModel.getBank().getAccountName())) {
-                mBalanceEdit.setText(transaction.getAmountBalance() + "");
-                break;
+        if (!Common.getInstance().isActiveBankExist()) {
+            for (Transaction transaction : Common.getInstance().listAllTransactions) {
+                if (transaction.getAccountName().equals(mModel.getBank().getAccountName())) {
+                    mBalanceEdit.setText(transaction.getAmountBalance() + "");
+                    break;
+                }
             }
+        } else {
+            mBalanceEdit.setText(Common.getInstance().bankActive.getBalance() + "");
         }
     }
 

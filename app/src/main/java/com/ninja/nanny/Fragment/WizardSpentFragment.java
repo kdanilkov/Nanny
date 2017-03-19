@@ -79,7 +79,7 @@ public class WizardSpentFragment extends BaseWizardFragment {
 
     @Override
     public void setData() {
-        //todo: looks like it doesn't save properly - check out Settings fragment
+        //todo: looks like it doesn't save properly - check out Settings fragment (Can use PREF_KEY_MINIMAL_AMOUNT_PER_DAY key?)
         try {
             int spendings = Integer.parseInt(mSpendingsEdit.getText().toString());
             UserPreference.getInstance().putSharedPreference(Constant.PREF_KEY_INIT_USED_MONEY, spendings);

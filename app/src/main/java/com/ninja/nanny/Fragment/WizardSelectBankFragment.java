@@ -66,8 +66,8 @@ public class WizardSelectBankFragment extends BaseWizardFragment implements Adap
         // set bank from messages
         if(Common.getInstance().listAllTransactions.size() > 0) {
             mIndex = Common.getInstance().listAllTransactions.get(Common.getInstance().listAllTransactions.size() - 1).getBankId();
-        } else {
-            // todo: read from UserPreferences
+        } else if(Common.getInstance().isActiveBankExist()) {
+            mIndex = Common.getInstance().bankActive.getIdxKind();
         }
         mSpinnerBank.setSelection(mIndex);
         mSpinnerBank.setOnItemSelectedListener(this);

@@ -1,7 +1,9 @@
 package com.ninja.nanny.Fragment;
 
 import android.os.Bundle;
+import android.provider.SyncStateContract;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +16,7 @@ import com.ninja.nanny.Utils.Common;
 import com.ninja.nanny.Utils.Constant;
 
 import java.util.Calendar;
+import java.util.TimeZone;
 
 /**
  * Created by petra on 12.03.2017.
@@ -27,7 +30,6 @@ public class WizardAverageIncomeFragment extends BaseWizardFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        //todo: somehow this code is launched twice. Perhaps something wrong in WizardActivity?
         mView = inflater.inflate(R.layout.fragment_wizard_average_income, container, false);
         mIncomeEdit = ((RegularEditText) mView.findViewById(R.id.etText));
         initData();
@@ -56,32 +58,31 @@ public class WizardAverageIncomeFragment extends BaseWizardFragment {
         // endPeriod: 10.02.2017
         // full month
 
-        Calendar currentCalendar = Calendar.getInstance();
-        Calendar calendar = Calendar.getInstance();
+        Calendar currentCalendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH) - 1;
-        if(month == -1) {
+        if (month == -1) {
             month = 0;
             year -= 1;
         }
         // set period time range
-        calendar.set(year, month, salaryDate);
+        calendar.set(year, month, salaryDate, 0, 0, 0);
         long startPreviewRange = calendar.getTimeInMillis();
-        calendar.set(currentCalendar.get(Calendar.YEAR), currentCalendar.get(Calendar.MONTH), salaryDate);
+        calendar.set(currentCalendar.get(Calendar.YEAR), currentCalendar.get(Calendar.MONTH), salaryDate, 23, 59, 59);
         long endPreviewRange = calendar.getTimeInMillis();
         // get income in preview period
         int income = 0;
         int previewsBalance = 0;
-        for (int i = Common.getInstance().listAllTransactions.size() -1; i>=0; i--) {
+        for (int i = Common.getInstance().listAllTransactions.size() - 1; i >= 0; i--) {
             Transaction transaction = Common.getInstance().listAllTransactions.get(i);
-            if(transaction.getAccountName().equals(mModel.getBank().getAccountName())
-                    && startPreviewRange<=transaction.getTimestampCreated()
+            if (transaction.getAccountName().equals(mModel.getBank().getAccountName())
+                    && startPreviewRange <= transaction.getTimestampCreated()
                     && endPreviewRange >= transaction.getTimestampCreated()) {
                 if (previewsBalance == 0) {
                     previewsBalance = transaction.getAmountBalance();
                     continue;
-                }
-                else {
+                } else {
                     int diff = transaction.getAmountBalance() - previewsBalance;
                     if (diff > 0) {
                         income += diff;
@@ -96,7 +97,7 @@ public class WizardAverageIncomeFragment extends BaseWizardFragment {
     @Override
     public boolean isValidate() {
         String text = mIncomeEdit.getText().toString();
-        if (text.isEmpty()) {
+        if (text.isEmpty() || Integer.valueOf(text) == 0) {
             mIncomeEdit.setError(Html.fromHtml("<font color='red'>please input the income value</font>"));
             return false;
         }
@@ -105,12 +106,12 @@ public class WizardAverageIncomeFragment extends BaseWizardFragment {
 
     @Override
     public void setData() {
-        //todo: looks like it doesn't save properly - check out Settings fragment
+        //todo: looks like it doesn't save properly - check out Settings fragment (Save)
         try {
             int income = Integer.parseInt(mIncomeEdit.getText().toString());
             UserPreference.getInstance().putSharedPreference(Constant.PREF_KEY_MONTHLY_INCOME, income);
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(Constant.TAG_CURRENT, e.getMessage());
         }
     }
 }
