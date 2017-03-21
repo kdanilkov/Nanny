@@ -7,7 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.ninja.nanny.Custom.RegularEditText;
+import com.ninja.nanny.Model.SettingWizardModel;
 import com.ninja.nanny.Model.Transaction;
+import com.ninja.nanny.Model.UsedAmount;
 import com.ninja.nanny.Preference.UserPreference;
 import com.ninja.nanny.R;
 import com.ninja.nanny.Utils.Common;
@@ -46,6 +48,9 @@ public class WizardSpentFragment extends BaseWizardFragment {
     private void initData() {
         int salaryDate = UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_SALARY_DATE, Constant.DEFAULT_SALARY_DATE);
         int spendings = calculateSpendingsForCurrentPeriod(salaryDate);
+        if (spendings == 0) {
+            spendings = Common.getInstance().getUsedAmount(Common.getInstance().getTimestampCurrentPeriodEnd()).getUsedAmount();
+        }
         mSpendingsEdit.setText(String.valueOf(spendings));
     }
 
@@ -79,9 +84,11 @@ public class WizardSpentFragment extends BaseWizardFragment {
 
     @Override
     public void setData() {
-        //todo: looks like it doesn't save properly - check out Settings fragment (Can use PREF_KEY_MINIMAL_AMOUNT_PER_DAY key?)
         try {
             int spendings = Integer.parseInt(mSpendingsEdit.getText().toString());
+
+            Common.getInstance().updateUsedAmount(Common.getInstance().getTimestampCurrentPeriodEnd(), spendings);
+
             UserPreference.getInstance().putSharedPreference(Constant.PREF_KEY_INIT_USED_MONEY, spendings);
         } catch (Exception e) {
             e.printStackTrace();

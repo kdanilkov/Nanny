@@ -54,7 +54,9 @@ public class Common {
         return instance;
     }
 
+    // todo: making it public, seriously? What about goddamn incapsulation!!
     public DatabaseHelper dbHelper;
+
     public List<Bank> listBanks;
     public List<Wish> listAllWishes;
     public List<Wish> listActiveWishes;
@@ -221,14 +223,18 @@ public class Common {
                 timestampPeriodEnd = getTimestampPeriodEndOf(paid.getTimestampPayment());
             }
 
-            UsedAmount usedAmount = dbHelper.getUsedAmount(timestampPeriodEnd);
-            int nUpdatedUsedAmount = usedAmount.getUsedAmount() + trans.getAmountChange();
-
-            usedAmount.setUsedAmount(nUpdatedUsedAmount);
-            usedAmount.setTimestampUpdated(getTimestamp());
-
-            dbHelper.updateUsedAmount(usedAmount);
+            increaseUsedAmount(trans.getAmountChange(), timestampPeriodEnd);
         }
+    }
+
+    private void increaseUsedAmount(int inrease, long timestampPeriodEnd) {
+        UsedAmount usedAmount = getUsedAmount(timestampPeriodEnd);
+        int nUpdatedUsedAmount = usedAmount.getUsedAmount() + inrease;
+
+        usedAmount.setUsedAmount(nUpdatedUsedAmount);
+        usedAmount.setTimestampUpdated(getTimestamp());
+
+        dbHelper.updateUsedAmount(usedAmount);
     }
 
     public void  bindBetweenTransactionAndPayment() {
@@ -1077,5 +1083,18 @@ public class Common {
             Common.getInstance().bankActive = bank;
             Common.getInstance().syncBetweenTransactionAndSms();
         }
+    }
+
+    public UsedAmount getUsedAmount(long timestampPeriod) {
+        return dbHelper.getUsedAmount(timestampPeriod);
+    }
+
+    public void updateUsedAmount(long timestamp, int amount) {
+        UsedAmount usedAmount = dbHelper.getUsedAmount(timestamp);
+
+        usedAmount.setUsedAmount(amount);
+        usedAmount.setTimestampUpdated(getTimestamp());
+
+        dbHelper.updateUsedAmount(usedAmount);
     }
 }

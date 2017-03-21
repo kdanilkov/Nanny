@@ -54,7 +54,7 @@ public class SettingFragment extends CustomFragment implements DiscreteSeekBar.O
     }
 
     void setUI() {
-
+        Common.getInstance().syncSettingInfo();
         mView.findViewById(R.id.btnMenu).setOnClickListener(this);
         mView.findViewById(R.id.btnSave).setOnClickListener(this);
         mView.findViewById(R.id.btnWizard).setOnClickListener(this);
@@ -75,7 +75,7 @@ public class SettingFragment extends CustomFragment implements DiscreteSeekBar.O
 
         if(Common.getInstance().timestampInitConfig > 0) {
             long timestampCurrentPeriodEnd = Common.getInstance().getTimestampCurrentPeriodEnd();
-            UsedAmount usedAmount = Common.getInstance().dbHelper.getUsedAmount(timestampCurrentPeriodEnd);
+            UsedAmount usedAmount = Common.getInstance().getUsedAmount(timestampCurrentPeriodEnd);
 
             etMinimalAmountPerDay.setText(Common.getInstance().nMinimalDayAmount + "");
             etSalaryDate.setText(Common.getInstance().nSalaryDate + "");
@@ -248,12 +248,7 @@ public class SettingFragment extends CustomFragment implements DiscreteSeekBar.O
         long timestampCurrent = Common.getInstance().getTimestamp();
         long timestampCurrentPeriodEnd = Common.getInstance().getTimestampCurrentPeriodEnd();
 
-        UsedAmount usedAmount = Common.getInstance().dbHelper.getUsedAmount(timestampCurrentPeriodEnd);
-
-        usedAmount.setUsedAmount(nUsedSalary);
-        usedAmount.setTimestampUpdated(timestampCurrent);
-
-        Common.getInstance().dbHelper.updateUsedAmount(usedAmount);
+        Common.getInstance().updateUsedAmount(timestampCurrentPeriodEnd, nUsedSalary);
 
         if(Common.getInstance().timestampInitConfig == 0) {
             Common.getInstance().timestampInitConfig = timestampCurrent;

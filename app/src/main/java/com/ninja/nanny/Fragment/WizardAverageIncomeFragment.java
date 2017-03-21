@@ -106,7 +106,6 @@ public class WizardAverageIncomeFragment extends BaseWizardFragment {
 
     @Override
     public void setData() {
-        //todo: looks like it doesn't save properly - check out Settings fragment (Save)
         try {
             int income = Integer.parseInt(mIncomeEdit.getText().toString());
             UserPreference.getInstance().putSharedPreference(Constant.PREF_KEY_MONTHLY_INCOME, income);
