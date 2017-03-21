@@ -145,12 +145,13 @@
                     android:layout_height="match_parent">
 
                     <com.ninja.nanny.Custom.MediumTextView
-                        android:text="Incoming and outgoing payments buffer (DAYS)"
+                        android:id="@+id/mediumTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Incoming and outgoing payments buffer (DAYS)"
                         android:textColor="@color/label_text_color"
-                        android:textSize="@dimen/label_font_size"
-                        android:layout_weight="1" />
+                        android:textSize="@dimen/label_font_size" />
 
                     <com.ninja.nanny.Custom.RegularTextView
                         android:text="3 DAYS"
@@ -257,15 +258,24 @@
             android:layout_toRightOf="@+id/btnMenu"
             android:textColor="@color/white"
             android:textSize="@dimen/title_font_size" />
-
+        <Button
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="50dp"
+            android:id="@+id/btnSave"
+            android:background="@drawable/ic_save" />
         <Button
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_centerVertical="true"
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="15dp"
-            android:id="@+id/btnSave"
-            android:background="@drawable/ic_save" />
+            android:id="@+id/btnWizard"
+            android:clickable="true"
+            android:background="@drawable/ic_wizard" />
+
 
     </RelativeLayout>
 </RelativeLayout>

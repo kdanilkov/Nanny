@@ -1004,7 +1004,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	/*
 	 * Updating a used amount
 	 */
-	public int updateUsedAmount (UsedAmount usedAmount) {
+	public void updateUsedAmount (UsedAmount usedAmount) {
 		SQLiteDatabase db = this.getWritableDatabase();
 
 		ContentValues values = new ContentValues();
@@ -1013,8 +1013,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		values.put(KEY_TIMESTAMP_UPDATED, usedAmount.getTimestampUpdated());
 
 		// updating row
-		return db.update(TBL_USED_AMOUNT, values, KEY_ID + " = ?",
+		int errorCode = db.update(TBL_USED_AMOUNT, values, KEY_ID + " = ?",
 				new String[] { String.valueOf(usedAmount.getId()) });
+		if (errorCode != 0) {
+			Log.w("usedAmountUpdateFailure", String.format("Failed to update used amount. Error code: %d", errorCode));
+		}
 	}
 
 	// ------------------------ "banks" table methods ----------------//

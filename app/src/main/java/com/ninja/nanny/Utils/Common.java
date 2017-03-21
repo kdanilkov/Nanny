@@ -41,9 +41,10 @@ import java.util.regex.Pattern;
  * Created by Administrator on 10/28/2016.
  */
 
+// todo: God class. Consider breaking it down.
 public class Common {
 
-    static Common instance = null;
+    private static Common instance = null;
 
     public static Common getInstance() {
         if(instance == null){
@@ -53,7 +54,9 @@ public class Common {
         return instance;
     }
 
+    // todo: making it public, seriously? What about goddamn incapsulation!!
     public DatabaseHelper dbHelper;
+
     public List<Bank> listBanks;
     public List<Wish> listAllWishes;
     public List<Wish> listActiveWishes;
@@ -220,14 +223,18 @@ public class Common {
                 timestampPeriodEnd = getTimestampPeriodEndOf(paid.getTimestampPayment());
             }
 
-            UsedAmount usedAmount = dbHelper.getUsedAmount(timestampPeriodEnd);
-            int nUpdatedUsedAmount = usedAmount.getUsedAmount() + trans.getAmountChange();
-
-            usedAmount.setUsedAmount(nUpdatedUsedAmount);
-            usedAmount.setTimestampUpdated(getTimestamp());
-
-            dbHelper.updateUsedAmount(usedAmount);
+            increaseUsedAmount(trans.getAmountChange(), timestampPeriodEnd);
         }
+    }
+
+    private void increaseUsedAmount(int inrease, long timestampPeriodEnd) {
+        UsedAmount usedAmount = getUsedAmount(timestampPeriodEnd);
+        int nUpdatedUsedAmount = usedAmount.getUsedAmount() + inrease;
+
+        usedAmount.setUsedAmount(nUpdatedUsedAmount);
+        usedAmount.setTimestampUpdated(getTimestamp());
+
+        dbHelper.updateUsedAmount(usedAmount);
     }
 
     public void  bindBetweenTransactionAndPayment() {
@@ -626,6 +633,8 @@ public class Common {
         }
     }
 
+
+
     Transaction convertSmsToTransaction(Sms sms) {
         String strAccountName = "";
         String strAddress = "";
@@ -1014,7 +1023,78 @@ public class Common {
             e.printStackTrace();
         }
     }
+    // Fill all transactions
+    public  void fillAllTransactions(){
+        for (Sms sms : listSms)
+        {
+            for (int j = 0; j < jsonArrayBankInfo.length(); j++) {
+                String strAddress = "";
+                String strAccountName = "";
+                try {
+                    JSONObject bank = jsonArrayBankInfo.getJSONObject(j);
+                    strAccountName = bank.getString(Constant.JSON_NAME);
+                    strAddress = bank.getString(Constant.JSON_ADDRESS);
+                }
+                catch (Exception ex)
+                {
+                    Log.e(Constant.TAG_CURRENT, "error get bank address");
+                }
+                if(!strAddress.toLowerCase().equals(sms.getAddress().toLowerCase())) {
+                    continue;
+                }
+                for (int i = 0; i < jsonArrayTemplates.length(); i++) {
+                    Transaction transaction = null;
 
+                    try {
+                        JSONObject jsonTemplate = jsonArrayTemplates.getJSONObject(i);
+                        //check that template is for the right bank
+                        String strBankAddress = jsonTemplate.getString(Constant.JSON_ADDRESS);
+                        if (!strAddress.toLowerCase().equals(strBankAddress.toLowerCase()))
+                            continue;
+                        //process template
+                        transaction = parseTextUsingTempalte(sms.getText(), jsonTemplate);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    if (transaction == null) continue;
 
+                    Log.i(Constant.TAG_CURRENT, "success on parsing sms in the parseSmsUsingRegex");
 
+                    transaction.setPaidId(-1);
+                    transaction.setAccountName(strAccountName);
+                    transaction.setBankId(j);
+                    transaction.setText(sms.getText());
+                    transaction.setTimestampCreated(sms.getTimestamp());
+
+                    listAllTransactions.add(transaction);
+                }
+            }
+        }
+        Collections.sort(listAllTransactions, new TransactionComparator());
+    }
+
+    public  void saveBank(Bank bank){
+        int nID =  Common.getInstance().dbHelper.createBank(bank);
+
+        bank.setId(nID);
+        Common.getInstance().listBanks.add(bank);
+
+        if(bank.getFlagActive() == 1) {
+            Common.getInstance().bankActive = bank;
+            Common.getInstance().syncBetweenTransactionAndSms();
+        }
+    }
+
+    public UsedAmount getUsedAmount(long timestampPeriod) {
+        return dbHelper.getUsedAmount(timestampPeriod);
+    }
+
+    public void updateUsedAmount(long timestamp, int amount) {
+        UsedAmount usedAmount = dbHelper.getUsedAmount(timestamp);
+
+        usedAmount.setUsedAmount(amount);
+        usedAmount.setTimestampUpdated(getTimestamp());
+
+        dbHelper.updateUsedAmount(usedAmount);
+    }
 }
