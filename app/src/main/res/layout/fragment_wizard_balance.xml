@@ -10,21 +10,25 @@
         android:id="@+id/rlyTop"
         android:background="@color/colorPrimary">
         <com.ninja.nanny.Custom.MediumTextView
-            android:text="Step 2 of 5. Current balance"
+            android:text="@string/step_2_of_5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="false"
             android:layout_marginStart="10dp"
             android:id="@+id/textView3"
             android:layout_alignBaseline="@+id/btnBack"
+            android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/btnBack"
             android:textColor="@color/white"
             android:textSize="@dimen/title_font_size" />
     </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+    <LinearLayout
+        android:id="@+id/lyContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp">
         <com.ninja.nanny.Custom.MediumTextView
             android:text="BALANCE"
             android:layout_width="match_parent"
@@ -32,11 +36,6 @@
             android:id="@+id/textView1"
             android:textSize="@dimen/label_font_size"
             android:textColor="@color/label_text_color" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
         <com.ninja.nanny.Custom.RegularEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -50,6 +49,6 @@
             android:inputType="number"
             android:selectAllOnFocus="true"
             android:hint="AED 0.00" />
-    </RelativeLayout>
+    </LinearLayout>
 
 </LinearLayout>

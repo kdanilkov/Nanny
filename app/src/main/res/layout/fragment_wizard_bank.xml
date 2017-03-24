@@ -10,11 +10,12 @@
         android:id="@+id/rlyTop"
         android:background="@color/colorPrimary">
         <com.ninja.nanny.Custom.MediumTextView
-            android:text="Step 1 of 5. Bank selection"
+            android:text="@string/step_1_of_5"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="false"
             android:layout_marginStart="10dp"
+            android:layout_centerVertical="true"
             android:id="@+id/textView3"
             android:layout_alignBaseline="@+id/btnBack"
             android:layout_toRightOf="@+id/btnBack"
@@ -22,26 +23,24 @@
             android:textSize="@dimen/title_font_size" />
     </RelativeLayout>
 
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-        <com.ninja.nanny.Custom.MediumTextView
-            android:text="BANK"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/textView1"
-            android:textSize="@dimen/label_font_size"
-            android:textColor="@color/label_text_color" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-        <Spinner
-            android:id="@+id/spinnerBank"
-            android:layout_marginTop="10dp"
-            android:layout_height="60dp"
-            android:layout_width="200dp" />
-    </RelativeLayout>
+    <LinearLayout
+        android:id="@+id/lyContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp">
+            <com.ninja.nanny.Custom.MediumTextView
+                android:text="@string/select_bank"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView1"
+                android:textSize="@dimen/label_font_size"
+                android:textColor="@color/label_text_color" />
+            <Spinner
+                android:id="@+id/spinnerBank"
+                android:layout_height="60dp"
+                android:layout_width="200dp" />
+    </LinearLayout>
 
 </LinearLayout>
