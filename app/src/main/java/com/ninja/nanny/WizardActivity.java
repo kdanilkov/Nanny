@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.ninja.nanny.Comparator.SmsComparator;
 import com.ninja.nanny.Custom.CustomActivity;
+import com.ninja.nanny.Custom.MediumTextView;
 import com.ninja.nanny.Fragment.BaseWizardFragment;
 import com.ninja.nanny.Fragment.WizardAverageIncomeFragment;
 import com.ninja.nanny.Fragment.WizardBalanceFragment;
@@ -131,20 +132,23 @@ public class WizardActivity extends CustomActivity {
         switch (mCurrentStep) {
             case Bank:
                 f = new WizardSelectBankFragment();
+                ((MediumTextView)findViewById(R.id.textView3)).setText(getString(R.string.step_1_of_5));
                 break;
             case Balance:
                 f = new WizardBalanceFragment();
-                ((Button)findViewById(R.id.btnNext)).setText(getString(R.string.save_and_next_button));
+                ((MediumTextView)findViewById(R.id.textView3)).setText(getString(R.string.step_2_of_5));
                 break;
             case Period:
                 f = new WizardStartPeriodFragment();
+                ((MediumTextView)findViewById(R.id.textView3)).setText(getString(R.string.step_3_of_5));
                 break;
             case Spent:
                 f = new WizardSpentFragment();
+                ((MediumTextView)findViewById(R.id.textView3)).setText(getString(R.string.step_4_of_5));
                 break;
             case AverageIncome:
                 f = new WizardAverageIncomeFragment();
-                ((Button)findViewById(R.id.btnNext)).setText(getString(R.string.finish_button));
+                ((MediumTextView)findViewById(R.id.textView3)).setText(getString(R.string.step_5_of_5));
                 break;
             default:
                 startActivity(new Intent(WizardActivity.this, MainActivity.class));
