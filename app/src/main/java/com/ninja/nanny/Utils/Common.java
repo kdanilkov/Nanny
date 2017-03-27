@@ -1086,11 +1086,13 @@ public class Common {
     }
 
     public void updateBank(Bank bank) {
-        Bank existing = dbHelper.getBank(bank.getId());
-        if (null != existing)
+        Bank existing = dbHelper.getBankByAccountName(bank.getAccountName());
+        if (null != existing) {
+            bank.setId(existing.getId());
             dbHelper.updateBank(bank);
-        else
+        } else {
             addBank(bank);
+        }
     }
 
     public UsedAmount getUsedAmount(long timestampPeriod) {
@@ -1104,6 +1106,13 @@ public class Common {
         usedAmount.setTimestampUpdated(getTimestamp());
 
         dbHelper.updateUsedAmount(usedAmount);
+    }
+
+    public void updateTimestamp() {
+        if(Common.getInstance().timestampInitConfig == 0) {
+            Common.getInstance().timestampInitConfig = Common.getInstance().getTimestamp();
+            UserPreference.getInstance().putSharedPreference(Constant.PREF_KEY_INIT_CONFIG_TIMESTAMP, Common.getInstance().timestampInitConfig);
+        }
     }
 
 }

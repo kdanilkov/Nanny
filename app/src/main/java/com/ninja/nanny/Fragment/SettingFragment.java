@@ -251,8 +251,7 @@ public class SettingFragment extends CustomFragment implements DiscreteSeekBar.O
         Common.getInstance().updateUsedAmount(timestampCurrentPeriodEnd, nUsedSalary);
 
         if(Common.getInstance().timestampInitConfig == 0) {
-            Common.getInstance().timestampInitConfig = timestampCurrent;
-            UserPreference.getInstance().putSharedPreference(Constant.PREF_KEY_INIT_CONFIG_TIMESTAMP, timestampCurrent);
+            Common.getInstance().updateTimestamp();
             UserPreference.getInstance().putSharedPreference(Constant.PREF_KEY_INIT_USED_MONEY, nUsedSalary);
 
             mContext.launchFragment(0);

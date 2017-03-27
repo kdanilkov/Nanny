@@ -71,6 +71,7 @@ public class WizardStartPeriodFragment extends BaseWizardFragment {
         try {
             int day = Integer.parseInt(mTextPeriodStart.getText().toString());
             UserPreference.getInstance().putSharedPreference(Constant.PREF_KEY_SALARY_DATE, day);
+            Common.getInstance().updateTimestamp();
         } catch(Exception e) {
             e.printStackTrace();
         }

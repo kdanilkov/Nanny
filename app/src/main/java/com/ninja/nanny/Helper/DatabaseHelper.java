@@ -1136,6 +1136,36 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	}
 
 	/*
+	 * get bank by its name
+	 */
+	public Bank getBankByAccountName(String accountName) {
+		SQLiteDatabase db = this.getReadableDatabase();
+
+		String selectQuery = "SELECT  * FROM " + TBL_BANKS + " WHERE "
+				+ KEY_ACCOUNT_NAME + " = '" + accountName + "'";
+
+		Log.e(LOG, selectQuery);
+
+		Cursor c = db.rawQuery(selectQuery, null);
+
+		if (c == null || c.getCount() < 1)
+			return null;
+
+		c.moveToFirst();
+
+		Bank bank = new Bank();
+		bank.setId(c.getInt(c.getColumnIndex(KEY_ID)));
+		bank.setAccountName(c.getString(c.getColumnIndex(KEY_ACCOUNT_NAME)));
+		bank.setIdxKind(c.getInt(c.getColumnIndex(KEY_IDX_KIND)));
+		bank.setBalance(c.getInt(c.getColumnIndex(KEY_BALANCE)));
+		bank.setFlagActive(c.getInt(c.getColumnIndex(KEY_FLAG_ACTIVE)));
+		bank.setTimestamp(c.getLong(c.getColumnIndex(KEY_CREATED_AT)));
+
+		return bank;
+	}
+
+
+	/*
 	 * Deleting a bank
 	 */
 	public void deleteBank(int bank_id) {
@@ -1153,6 +1183,4 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		Date date = new Date();
 		return dateFormat.format(date);
 	}
-
-
 }

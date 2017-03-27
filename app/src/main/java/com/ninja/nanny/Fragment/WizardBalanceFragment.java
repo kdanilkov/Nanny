@@ -57,11 +57,16 @@ public class WizardBalanceFragment extends BaseWizardFragment {
 
     @Override
     public void setData() {
-        String text = mBalanceEdit.getText().toString();
-        int vl = Integer.valueOf(text);
-        Bank bank = mModel.getBank();
-        bank.setBalance(vl);
-        bank.setFlagActive(1);
-        Common.getInstance().updateBank(bank);
+        try {
+            String text = mBalanceEdit.getText().toString();
+            int vl = Integer.valueOf(text);
+            Bank bank = mModel.getBank();
+            bank.setBalance(vl);
+            bank.setFlagActive(1);
+            Common.getInstance().updateBank(bank);
+            Common.getInstance().updateTimestamp();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
