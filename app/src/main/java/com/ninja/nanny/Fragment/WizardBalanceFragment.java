@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import com.ninja.nanny.Custom.RegularEditText;
 import com.ninja.nanny.Model.Bank;
 import com.ninja.nanny.Model.Transaction;
-import com.ninja.nanny.Preference.UserPreference;
 import com.ninja.nanny.R;
 import com.ninja.nanny.Utils.Common;
 
@@ -58,11 +57,16 @@ public class WizardBalanceFragment extends BaseWizardFragment {
 
     @Override
     public void setData() {
-        String text = mBalanceEdit.getText().toString();
-        int vl = Integer.valueOf(text);
-        Bank bank = mModel.getBank();
-        bank.setBalance(vl);
-        bank.setFlagActive(1);
-        Common.getInstance().saveBank(bank);
+        try {
+            String text = mBalanceEdit.getText().toString();
+            int vl = Integer.valueOf(text);
+            Bank bank = mModel.getBank();
+            bank.setBalance(vl);
+            bank.setFlagActive(1);
+            Common.getInstance().updateBank(bank);
+            Common.getInstance().updateTimestamp();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

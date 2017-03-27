@@ -1,54 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <RelativeLayout
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_alignParentBottom="true">
+    <com.ninja.nanny.Custom.MediumTextView
+        android:text="@string/money_spent_this_period"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:id="@+id/rlyTop"
-        android:background="@color/colorPrimary">
-        <com.ninja.nanny.Custom.MediumTextView
-            android:text="Step 4 of 5. Money spent this period"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="false"
-            android:layout_marginStart="10dp"
-            android:id="@+id/textView3"
-            android:layout_alignBaseline="@+id/btnBack"
-            android:layout_toRightOf="@+id/btnBack"
-            android:textColor="@color/white"
-            android:textSize="@dimen/title_font_size" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-        <com.ninja.nanny.Custom.MediumTextView
-            android:text="SPENT"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/textView1"
-            android:textSize="@dimen/label_font_size"
-            android:textColor="@color/label_text_color" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-        <com.ninja.nanny.Custom.RegularEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:id="@+id/etSpendings"
-            android:background="@drawable/border_add_bank_editor"
-            android:layout_marginTop="10dp"
-            android:textColor="@color/black"
-            android:textSize="@dimen/editor_font_size"
-            android:paddingBottom="5dp"
-            android:inputType="number"
-            android:selectAllOnFocus="true"
-            android:hint="AED 0.00" />
-    </RelativeLayout>
+        android:layout_height="wrap_content"
+        android:id="@+id/textView1"
+        android:textSize="@dimen/label_font_size"
+        android:textColor="@color/label_text_color" />
+    <com.ninja.nanny.Custom.RegularEditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:id="@+id/etSpendings"
+        android:background="@drawable/border_add_bank_editor"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/black"
+        android:textSize="@dimen/editor_font_size"
+        android:paddingBottom="5dp"
+        android:inputType="number"
+        android:selectAllOnFocus="true"
+        android:hint="AED 0.00" />
 </LinearLayout>

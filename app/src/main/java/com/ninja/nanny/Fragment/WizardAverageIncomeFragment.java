@@ -109,6 +109,7 @@ public class WizardAverageIncomeFragment extends BaseWizardFragment {
         try {
             int income = Integer.parseInt(mIncomeEdit.getText().toString());
             UserPreference.getInstance().putSharedPreference(Constant.PREF_KEY_MONTHLY_INCOME, income);
+            Common.getInstance().updateTimestamp();
         } catch (Exception e) {
             Log.e(Constant.TAG_CURRENT, e.getMessage());
         }
