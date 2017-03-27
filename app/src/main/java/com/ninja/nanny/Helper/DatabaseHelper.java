@@ -1055,8 +1055,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 		Cursor c = db.rawQuery(selectQuery, null);
 
-		if (c != null)
-			c.moveToFirst();
+		if (c == null || c.getCount() < 1)
+			return null;
+
+		c.moveToFirst();
 
 		Bank bank = new Bank();
 		bank.setId(c.getInt(c.getColumnIndex(KEY_ID)));

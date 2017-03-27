@@ -1073,16 +1073,24 @@ public class Common {
         Collections.sort(listAllTransactions, new TransactionComparator());
     }
 
-    public  void saveBank(Bank bank){
-        int nID =  Common.getInstance().dbHelper.createBank(bank);
+    public  void addBank(Bank bank){
+        int nID =  dbHelper.createBank(bank);
 
         bank.setId(nID);
-        Common.getInstance().listBanks.add(bank);
+        listBanks.add(bank);
 
         if(bank.getFlagActive() == 1) {
-            Common.getInstance().bankActive = bank;
-            Common.getInstance().syncBetweenTransactionAndSms();
+            bankActive = bank;
+            syncBetweenTransactionAndSms();
         }
+    }
+
+    public void updateBank(Bank bank) {
+        Bank existing = dbHelper.getBank(bank.getId());
+        if (null != existing)
+            dbHelper.updateBank(bank);
+        else
+            addBank(bank);
     }
 
     public UsedAmount getUsedAmount(long timestampPeriod) {
@@ -1097,4 +1105,5 @@ public class Common {
 
         dbHelper.updateUsedAmount(usedAmount);
     }
+
 }
