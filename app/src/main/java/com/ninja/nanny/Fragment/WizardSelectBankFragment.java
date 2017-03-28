@@ -52,7 +52,7 @@ public class WizardSelectBankFragment extends BaseWizardFragment implements Adap
                 JSONObject jsonObject = Common.getInstance().jsonArrayBankInfo.getJSONObject(i);
                 mMyBankArrayList.add(jsonObject.getString(Constant.JSON_NAME));
             } catch (JSONException e) {
-                e.printStackTrace();
+                Log.e(Constant.TAG_CURRENT, Log.getStackTraceString(e));
             }
         }
 

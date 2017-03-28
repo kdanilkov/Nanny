@@ -1,6 +1,9 @@
 package com.ninja.nanny.Preference;
 
 import android.content.SharedPreferences;
+import android.util.Log;
+
+import com.ninja.nanny.Utils.Constant;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -82,7 +85,7 @@ public class UserPreference {
 
                 return jsonObject;
             } catch (JSONException e) {
-                e.printStackTrace();
+                Log.e(Constant.TAG_CURRENT, Log.getStackTraceString(e));
             }
         }
 

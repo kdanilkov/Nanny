@@ -1,5 +1,7 @@
 package com.ninja.nanny.Model;
 
+import android.util.Log;
+
 import com.ninja.nanny.Utils.Common;
 import com.ninja.nanny.Utils.Constant;
 
@@ -86,7 +88,7 @@ public class Bank {
 
             return strAccountName;
         } catch (JSONException e) {
-            e.printStackTrace();
+            Log.e(Constant.TAG_CURRENT, Log.getStackTraceString(e));
         }
 
         return "";
@@ -100,7 +102,7 @@ public class Bank {
 
             return strAccountType;
         } catch (JSONException e) {
-            e.printStackTrace();
+            Log.e(Constant.TAG_CURRENT, Log.getStackTraceString(e));
         }
 
         return "";

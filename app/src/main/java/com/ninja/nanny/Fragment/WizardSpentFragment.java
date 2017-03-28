@@ -2,6 +2,7 @@ package com.ninja.nanny.Fragment;
 
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,10 +74,18 @@ public class WizardSpentFragment extends BaseWizardFragment {
         int spendings = 0;
         for (int i = Common.getInstance().listAllTransactions.size() -1; i>=0; i--) {
             Transaction transaction = Common.getInstance().listAllTransactions.get(i);
-            if(transaction.getAccountName().equals(mModel.getBank().getAccountName())
-                    && periodStart <= transaction.getTimestampCreated()
-                    && periodEnd >= transaction.getTimestampCreated()) {
-                    spendings += transaction.getAmountBalance();
+            if (periodStart <= transaction.getTimestampCreated() && periodEnd >= transaction.getTimestampCreated()) {
+                    switch(transaction.getMode()) {
+                        case 1:
+                            //spendings += transaction.getAmountChange();
+                            break;
+                        case 2:
+                            spendings += transaction.getAmountChange();
+                            break;
+                        default:
+                            Log.w(Constant.TAG_CURRENT, String.format("Incompatible transaction mode: %s", transaction.getMode()));
+                }
+
             }
         }
         return spendings;
@@ -90,7 +99,7 @@ public class WizardSpentFragment extends BaseWizardFragment {
             UserPreference.getInstance().putSharedPreference(Constant.PREF_KEY_INIT_USED_MONEY, spendings);
             Common.getInstance().updateTimestamp();
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(Constant.TAG_CURRENT, Log.getStackTraceString(e));
         }
     }
 }

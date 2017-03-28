@@ -4,6 +4,7 @@ package com.ninja.nanny.Fragment;
 import android.app.AlertDialog;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -83,7 +84,7 @@ public class NewSmsFragment extends CustomFragment {
                 listBalanceTexts.add(jsonArrayBalanceText.getString(i));
             }
         } catch (JSONException e) {
-            e.printStackTrace();
+            Log.e(Constant.TAG_CURRENT, Log.getStackTraceString(e));
         }
     }
 

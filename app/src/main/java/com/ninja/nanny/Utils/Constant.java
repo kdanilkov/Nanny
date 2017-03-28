@@ -57,4 +57,16 @@ public class Constant {
     public static final String LAUNCH_FRAGMENT_PARAM = "LAUNCH_FRAGMENT";
 
     public static final int DEFAULT_SALARY_DATE = 15;
+
+    // bank transactions json field names
+    public static final String TRAN_ID = "Id";
+    public static final String TRAN_ACCOUNT = "Account";
+    public static final String TRAN_ACC_NAME = "Id";
+    public static final String TRAN_DETAILS = "Details";
+    public static final String TRAN_DETAILS_SMS = "Sms";
+    public static final String TRAN_DETAILS_VALUE = "Value";
+    public static final String TRAN_DETAILS_VALUE_AMOUNT = "Amount";
+    public static final String TRAN_DETAILS_BALANCE = "NewBalance";
+    public static final String TRAN_DETAILS_BALANCE_AMOUNT = "Amount";
+    public static final String TRAN_DETAILS_COMPLETED = "Completed";
 }

@@ -1,5 +1,15 @@
 package com.ninja.nanny.Model;
 
+import android.util.Log;
+
+import com.ninja.nanny.Helper.TimestampHelper;
+import com.ninja.nanny.Utils.Common;
+import com.ninja.nanny.Utils.Constant;
+
+import org.json.JSONObject;
+
+import hirondelle.date4j.DateTime;
+
 /**
  * Created by Administrator on 10/28/2016.
  */
@@ -14,13 +24,12 @@ public class Transaction {
     int _amountBalance; // -1: there is no balance value
     int _mode; //1-income, 2-spending
     int _paidId;
-    long _timestmapCreated;
+    long _timestampCreated;
 
     public Transaction() {
-
     }
 
-    public Transaction(String accountName, String identifier, int bankId, String text, int amountChange, int amountBalance, int mode, int paidId, int timestampCreated) {
+    public Transaction(String accountName, String identifier, int bankId, String text, int amountChange, int amountBalance, int mode, int paidId, long timestampCreated) {
         _accountName = accountName;
         _identifier = identifier;
         _bankId = bankId;
@@ -29,9 +38,35 @@ public class Transaction {
         _amountBalance = amountBalance;
         _mode = mode;
         _paidId = paidId;
-        _timestmapCreated = timestampCreated;
+        _timestampCreated = timestampCreated;
     }
 
+    public Transaction (JSONObject json) {
+        try {
+            _accountName = json.getJSONObject(Constant.TRAN_ACCOUNT)
+                    .getString(Constant.TRAN_ACC_NAME);
+            _identifier = json.getString(Constant.TRAN_ID);
+            //int bankId = json.getInt(Constant.TRAN)
+            _text = json.getJSONObject(Constant.TRAN_DETAILS)
+                    .getString(Constant.TRAN_DETAILS_SMS);
+            _amountChange = (int) Math.round(json.getJSONObject(Constant.TRAN_DETAILS)
+                    .getJSONObject(Constant.TRAN_DETAILS_VALUE)
+                    .getDouble(Constant.TRAN_DETAILS_VALUE_AMOUNT));
+            _amountBalance = (int) Math.round(json.getJSONObject(Constant.TRAN_DETAILS)
+                    .getJSONObject(Constant.TRAN_DETAILS_BALANCE)
+                    .getDouble(Constant.TRAN_DETAILS_BALANCE_AMOUNT));
+
+            // mode defines whether it is a spending or income. Value itself should always be > 0
+            _mode = _amountChange > 0 ? 1 : 2;
+            _amountChange = Math.abs(_amountChange);
+
+            String completed_time = json.getJSONObject(Constant.TRAN_DETAILS)
+                    .getString(Constant.TRAN_DETAILS_COMPLETED);
+            _timestampCreated = TimestampHelper.getTimeStampFromString(completed_time);
+        } catch (Exception e) {
+            Log.e(Constant.TAG_CURRENT, Log.getStackTraceString(e));
+        }
+    }
 
     public void setId(int id) {
         _id = id;
@@ -70,7 +105,7 @@ public class Transaction {
     }
 
     public void setTimestampCreated(long timestampCreated) {
-        _timestmapCreated = timestampCreated;
+        _timestampCreated = timestampCreated;
     }
 
     public int getId() {
@@ -110,6 +145,6 @@ public class Transaction {
     }
 
     public long getTimestampCreated() {
-        return _timestmapCreated;
+        return _timestampCreated;
     }
 }

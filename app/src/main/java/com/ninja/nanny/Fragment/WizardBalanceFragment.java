@@ -2,6 +2,7 @@ package com.ninja.nanny.Fragment;
 
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import com.ninja.nanny.Model.Bank;
 import com.ninja.nanny.Model.Transaction;
 import com.ninja.nanny.R;
 import com.ninja.nanny.Utils.Common;
+import com.ninja.nanny.Utils.Constant;
 
 /**
  * Created by petra on 12.03.2017.
@@ -26,10 +28,8 @@ public class WizardBalanceFragment extends BaseWizardFragment {
     private void initData() {
         if (!Common.getInstance().isActiveBankExist()) {
             for (Transaction transaction : Common.getInstance().listAllTransactions) {
-                if (transaction.getAccountName().equals(mModel.getBank().getAccountName())) {
-                    mBalanceEdit.setText(transaction.getAmountBalance() + "");
-                    break;
-                }
+                mBalanceEdit.setText(transaction.getAmountBalance() + "");
+                break;
             }
         } else {
             mBalanceEdit.setText(Common.getInstance().bankActive.getBalance() + "");
@@ -66,7 +66,7 @@ public class WizardBalanceFragment extends BaseWizardFragment {
             Common.getInstance().updateBank(bank);
             Common.getInstance().updateTimestamp();
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e(Constant.TAG_CURRENT, Log.getStackTraceString(e));
         }
     }
 }
