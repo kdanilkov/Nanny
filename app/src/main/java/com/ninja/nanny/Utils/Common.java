@@ -49,6 +49,7 @@ public class Common {
     public static Common getInstance() {
         if(instance == null){
             instance = new Common();
+            instance.listAllTransactions = new ArrayList<>();
         }
 
         return instance;
@@ -644,7 +645,7 @@ public class Common {
             strAccountName = jsonObjBank.getString(Constant.JSON_NAME);
             strAddress = jsonObjBank.getString(Constant.JSON_ADDRESS);
         } catch (JSONException e) {
-            e.printStackTrace();
+            Log.e(Constant.TAG_CURRENT, Log.getStackTraceString(e));
         }
 
         if (!sms.getAddress().toLowerCase().equals(strAddress.toLowerCase())) return null;
@@ -660,7 +661,7 @@ public class Common {
                 //process template
                 transaction = parseTextUsingTempalte(sms.getText(), jsonTemplate);
             } catch (Exception e) {
-                e.printStackTrace();
+                Log.e(Constant.TAG_CURRENT, Log.getStackTraceString(e));
             }
             if(transaction == null) continue;
 
@@ -738,7 +739,7 @@ public class Common {
             }
 
         } catch (JSONException e) {
-            e.printStackTrace();
+            Log.e(Constant.TAG_CURRENT, Log.getStackTraceString(e));
         }
 
         return null;
@@ -973,14 +974,14 @@ public class Common {
                 writer.write(buffer, 0, n);
             }
         } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+            Log.e(Constant.TAG_CURRENT, Log.getStackTraceString(e));
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e(Constant.TAG_CURRENT, Log.getStackTraceString(e));
         } finally {
             try {
                 is.close();
             } catch (IOException e) {
-                e.printStackTrace();
+                Log.e(Constant.TAG_CURRENT, Log.getStackTraceString(e));
             }
         }
 
@@ -989,7 +990,7 @@ public class Common {
         try {
             jsonArrayBankInfo = new JSONArray(jsonString);
         } catch (JSONException e) {
-            e.printStackTrace();
+            Log.e(Constant.TAG_CURRENT, Log.getStackTraceString(e));
         }
     }
 
@@ -1003,15 +1004,13 @@ public class Common {
             while ((n = reader.read(buffer)) != -1) {
                 writer.write(buffer, 0, n);
             }
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.e(Constant.TAG_CURRENT, Log.getStackTraceString(e));
         } finally {
             try {
                 is.close();
             } catch (IOException e) {
-                e.printStackTrace();
+                Log.e(Constant.TAG_CURRENT, Log.getStackTraceString(e));
             }
         }
 
@@ -1020,7 +1019,7 @@ public class Common {
         try {
             jsonArrayTemplates = new JSONArray(jsonString);
         } catch (JSONException e) {
-            e.printStackTrace();
+            Log.e(Constant.TAG_CURRENT, Log.getStackTraceString(e));
         }
     }
     // Fill all transactions
@@ -1054,7 +1053,7 @@ public class Common {
                         //process template
                         transaction = parseTextUsingTempalte(sms.getText(), jsonTemplate);
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        Log.e(Constant.TAG_CURRENT, Log.getStackTraceString(e));
                     }
                     if (transaction == null) continue;
 
@@ -1115,4 +1114,45 @@ public class Common {
         }
     }
 
+    public void fillTestTransactions(Context mContext) {
+        InputStream is = mContext.getResources().openRawResource(R.raw.demobank);
+        Writer writer = new StringWriter();
+        char[] buffer = new char[1024];
+        try {
+            Reader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+            int n;
+            while ((n = reader.read(buffer)) != -1) {
+                writer.write(buffer, 0, n);
+            }
+        } catch (UnsupportedEncodingException e) {
+            Log.e(Constant.TAG_CURRENT, Log.getStackTraceString(e));
+        } catch (IOException e) {
+            Log.e(Constant.TAG_CURRENT, Log.getStackTraceString(e));
+        } finally {
+            try {
+                is.close();
+            } catch (IOException e) {
+                Log.e(Constant.TAG_CURRENT, Log.getStackTraceString(e));
+            }
+        }
+
+        String jsonString = writer.toString();
+        JSONArray transactions = new JSONArray();
+
+        try {
+             transactions = new JSONArray(jsonString);
+        } catch (JSONException e) {
+            Log.e(Constant.TAG_CURRENT, Log.getStackTraceString(e));
+        }
+        for (int i = 0; i < transactions.length(); i++) {
+            try {
+                Transaction trans = new Transaction(transactions.getJSONObject(i));
+                if (null != trans) {
+                    listAllTransactions.add(trans);
+                }
+            } catch (Exception e) {
+                Log.e(Constant.TAG_CURRENT, Log.getStackTraceString(e));
+            }
+        }
+    }
 }

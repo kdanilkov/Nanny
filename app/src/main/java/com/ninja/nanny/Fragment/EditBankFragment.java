@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,7 +66,7 @@ public class EditBankFragment extends CustomFragment {
                 JSONObject jsonObject = Common.getInstance().jsonArrayBankInfo.getJSONObject(i);
                 myBankArrayList.add(jsonObject.getString(Constant.JSON_NAME));
             } catch (JSONException e) {
-                e.printStackTrace();
+                Log.e(Constant.TAG_CURRENT, Log.getStackTraceString(e));
             }
         }
 

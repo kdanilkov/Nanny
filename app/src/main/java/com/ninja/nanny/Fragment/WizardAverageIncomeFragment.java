@@ -76,9 +76,7 @@ public class WizardAverageIncomeFragment extends BaseWizardFragment {
         int previewsBalance = 0;
         for (int i = Common.getInstance().listAllTransactions.size() - 1; i >= 0; i--) {
             Transaction transaction = Common.getInstance().listAllTransactions.get(i);
-            if (transaction.getAccountName().equals(mModel.getBank().getAccountName())
-                    && startPreviewRange <= transaction.getTimestampCreated()
-                    && endPreviewRange >= transaction.getTimestampCreated()) {
+            if (startPreviewRange <= transaction.getTimestampCreated() && endPreviewRange >= transaction.getTimestampCreated()) {
                 if (previewsBalance == 0) {
                     previewsBalance = transaction.getAmountBalance();
                     continue;
@@ -111,7 +109,7 @@ public class WizardAverageIncomeFragment extends BaseWizardFragment {
             UserPreference.getInstance().putSharedPreference(Constant.PREF_KEY_MONTHLY_INCOME, income);
             Common.getInstance().updateTimestamp();
         } catch (Exception e) {
-            Log.e(Constant.TAG_CURRENT, e.getMessage());
+            Log.e(Constant.TAG_CURRENT, Log.getStackTraceString(e));
         }
     }
 }

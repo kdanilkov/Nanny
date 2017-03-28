@@ -1,6 +1,7 @@
 package com.ninja.nanny.Fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,7 +53,7 @@ public class WizardStartPeriodFragment extends BaseWizardFragment {
             }
         mTextPeriodStart.setText(String.valueOf(day), TextView.BufferType.EDITABLE);
         } catch(Exception e) {
-            e.printStackTrace();
+            Log.e(Constant.TAG_CURRENT, Log.getStackTraceString(e));
         }
     }
 
@@ -73,7 +74,7 @@ public class WizardStartPeriodFragment extends BaseWizardFragment {
             UserPreference.getInstance().putSharedPreference(Constant.PREF_KEY_SALARY_DATE, day);
             Common.getInstance().updateTimestamp();
         } catch(Exception e) {
-            e.printStackTrace();
+            Log.e(Constant.TAG_CURRENT, Log.getStackTraceString(e));
         }
     }
 }

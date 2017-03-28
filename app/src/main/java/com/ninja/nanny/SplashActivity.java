@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Window;
 
 import com.ninja.nanny.Helper.DatabaseHelper;
@@ -52,10 +53,11 @@ public class SplashActivity extends Activity {
                 Common.getInstance().listFinishedWishes = Common.getInstance().dbHelper.getFinishedWishes();
                 Common.getInstance().listAllPayments = Common.getInstance().dbHelper.getAllPayments();
                 Common.getInstance().listAllTransactions = Common.getInstance().dbHelper.getAllTransactions();
+//                Common.getInstance().fillTestTransactions(SplashActivity.this);
                 Common.getInstance().listSms = new ArrayList<>();
                 Thread.sleep(3000);
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                Log.e(Constant.TAG_CURRENT, Log.getStackTraceString(e));
             }
             //if (Common.getInstance().timestampInitConfig > 0) {
                 startActivity(new Intent(SplashActivity.this, MainActivity.class));
