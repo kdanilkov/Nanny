@@ -10,7 +10,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/textView1"
         android:textSize="@dimen/label_font_size"
-        android:textColor="@color/label_text_color" />
+        android:textColor="@color/label_text_color"
+        android:layout_marginTop="30dp"/>
     <Spinner
         android:id="@+id/spinnerBank"
         android:layout_height="60dp"
