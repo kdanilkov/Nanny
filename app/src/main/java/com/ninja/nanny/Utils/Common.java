@@ -1108,9 +1108,9 @@ public class Common {
     }
 
     public void updateTimestamp() {
-        if(Common.getInstance().timestampInitConfig == 0) {
-            Common.getInstance().timestampInitConfig = Common.getInstance().getTimestamp();
-            UserPreference.getInstance().putSharedPreference(Constant.PREF_KEY_INIT_CONFIG_TIMESTAMP, Common.getInstance().timestampInitConfig);
+        if(timestampInitConfig == 0) {
+            timestampInitConfig = getTimestamp();
+            UserPreference.getInstance().putSharedPreference(Constant.PREF_KEY_INIT_CONFIG_TIMESTAMP, timestampInitConfig);
         }
     }
 
