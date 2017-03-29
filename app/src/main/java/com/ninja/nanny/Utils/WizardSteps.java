@@ -9,5 +9,5 @@ public enum WizardSteps {
     Balance,
     Period,
     Spent,
-    AverageIncome
+    AmountPerDay, AverageIncome
 }

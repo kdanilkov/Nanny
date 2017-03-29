@@ -11,7 +11,7 @@
         android:id="@+id/rlyTop"
         android:background="@color/colorPrimary">
         <com.ninja.nanny.Custom.MediumTextView
-            android:text="@string/step_1_of_5"
+            android:text="@string/step_1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="false"

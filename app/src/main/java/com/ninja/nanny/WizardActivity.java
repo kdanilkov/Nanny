@@ -8,16 +8,15 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.ninja.nanny.Comparator.SmsComparator;
 import com.ninja.nanny.Custom.CustomActivity;
 import com.ninja.nanny.Custom.MediumTextView;
 import com.ninja.nanny.Fragment.BaseWizardFragment;
+import com.ninja.nanny.Fragment.WizardAmountPerDayFragment;
 import com.ninja.nanny.Fragment.WizardAverageIncomeFragment;
 import com.ninja.nanny.Fragment.WizardBalanceFragment;
 import com.ninja.nanny.Fragment.WizardSelectBankFragment;
@@ -132,23 +131,27 @@ public class WizardActivity extends CustomActivity {
         switch (mCurrentStep) {
             case Bank:
                 f = new WizardSelectBankFragment();
-                ((MediumTextView)findViewById(R.id.textView3)).setText(getString(R.string.step_1_of_5));
+                ((MediumTextView)findViewById(R.id.textView3)).setText(getString(R.string.step_1));
                 break;
             case Balance:
                 f = new WizardBalanceFragment();
-                ((MediumTextView)findViewById(R.id.textView3)).setText(getString(R.string.step_2_of_5));
+                ((MediumTextView)findViewById(R.id.textView3)).setText(getString(R.string.step_2));
                 break;
             case Period:
                 f = new WizardStartPeriodFragment();
-                ((MediumTextView)findViewById(R.id.textView3)).setText(getString(R.string.step_3_of_5));
+                ((MediumTextView)findViewById(R.id.textView3)).setText(getString(R.string.step_3));
                 break;
             case Spent:
                 f = new WizardSpentFragment();
-                ((MediumTextView)findViewById(R.id.textView3)).setText(getString(R.string.step_4_of_5));
+                ((MediumTextView)findViewById(R.id.textView3)).setText(getString(R.string.step_4));
                 break;
             case AverageIncome:
                 f = new WizardAverageIncomeFragment();
-                ((MediumTextView)findViewById(R.id.textView3)).setText(getString(R.string.step_5_of_5));
+                ((MediumTextView)findViewById(R.id.textView3)).setText(getString(R.string.step_5));
+                break;
+            case AmountPerDay:
+                f = new WizardAmountPerDayFragment();
+                ((MediumTextView)findViewById(R.id.textView3)).setText(getString(R.string.step_6));
                 break;
             default:
                 startActivity(new Intent(WizardActivity.this, MainActivity.class));
@@ -181,6 +184,9 @@ public class WizardActivity extends CustomActivity {
                 mCurrentStep = WizardSteps.AverageIncome;
                 break;
             case AverageIncome:
+                mCurrentStep = WizardSteps.AmountPerDay;
+                break;
+            case AmountPerDay:
                 startActivity(new Intent(WizardActivity.this, MainActivity.class));
                 finish();
                 return;
