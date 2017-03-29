@@ -73,20 +73,20 @@ public class WizardAverageIncomeFragment extends BaseWizardFragment {
         long endPreviewRange = calendar.getTimeInMillis();
         // get income in preview period
         int income = 0;
-        int previewsBalance = 0;
+        int previousBalance = 0;
         for (int i = Common.getInstance().listAllTransactions.size() - 1; i >= 0; i--) {
             Transaction transaction = Common.getInstance().listAllTransactions.get(i);
             if (startPreviewRange <= transaction.getTimestampCreated() && endPreviewRange >= transaction.getTimestampCreated()) {
-                if (previewsBalance == 0) {
-                    previewsBalance = transaction.getAmountBalance();
+                if (previousBalance == 0) {
+                    previousBalance = transaction.getAmountBalance();
                     continue;
                 } else {
-                    int diff = transaction.getAmountBalance() - previewsBalance;
+                    int diff = transaction.getAmountBalance() - previousBalance;
                     if (diff > 0) {
                         income += diff;
                     }
                 }
-                previewsBalance = transaction.getAmountBalance();
+                previousBalance = transaction.getAmountBalance();
             }
         }
         return income;
