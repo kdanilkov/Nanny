@@ -75,15 +75,15 @@ public class WizardSpentFragment extends BaseWizardFragment {
         for (int i = Common.getInstance().listAllTransactions.size() -1; i>=0; i--) {
             Transaction transaction = Common.getInstance().listAllTransactions.get(i);
             if (periodStart <= transaction.getTimestampCreated() && periodEnd >= transaction.getTimestampCreated()) {
-                    switch(transaction.getMode()) {
-                        case 1:
-                            //spendings += transaction.getAmountChange();
-                            break;
-                        case 2:
-                            spendings += transaction.getAmountChange();
-                            break;
-                        default:
-                            Log.w(Constant.TAG_CURRENT, String.format("Incompatible transaction mode: %s", transaction.getMode()));
+                switch(transaction.getMode()) {
+                    case 1:
+                        //spendings += transaction.getAmountChange();
+                        break;
+                    case 2:
+                        spendings += transaction.getAmountChange();
+                        break;
+                    default:
+                        Log.w(Constant.TAG_CURRENT, String.format("Incompatible transaction mode: %s", transaction.getMode()));
                 }
 
             }
