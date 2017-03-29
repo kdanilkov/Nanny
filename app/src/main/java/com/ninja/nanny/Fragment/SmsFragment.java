@@ -51,6 +51,7 @@ public class SmsFragment extends CustomFragment {
         mView.findViewById(R.id.btnBack).setOnClickListener(this);
         mView.findViewById(R.id.btnAdd).setOnClickListener(this);
 
+
         mLyContainer = (LinearLayout)mView.findViewById(R.id.lyContainer);
     }
 

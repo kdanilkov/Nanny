@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/NannyFork.iml" filepath="$PROJECT_DIR$/NannyFork.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Nanny.iml" filepath="$PROJECT_DIR$/Nanny.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/fork_nanny.iml" filepath="$PROJECT_DIR$/fork_nanny.iml" />
     </modules>
   </component>
 </project>

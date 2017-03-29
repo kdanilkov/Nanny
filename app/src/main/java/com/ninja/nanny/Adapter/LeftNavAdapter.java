@@ -18,8 +18,8 @@ public class LeftNavAdapter extends BaseAdapter
 {
 
 	/** The items. */
-	private String titles[] = {"Home", "Bank / Cards", "Wishes", "Predefined Payments", "Transactions", "Application Settings", "SMS Register"};
-//	private String titles[] = {"Home", "Bank / Cards", "Wishes", "Predefined Payments", "Transactions", "Application Settings"};
+//	private String titles[] = {"Home", "Bank / Cards", "Wishes", "Predefined Payments", "Transactions", "Application Settings", "SMS Register"};
+	private String titles[] = {"Home", "Bank / Cards", "Wishes", "Predefined Payments", "Transactions", "Application Settings"};
 	/** The context. */
 	private Context context;
 
