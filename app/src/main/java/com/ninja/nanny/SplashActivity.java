@@ -46,14 +46,14 @@ public class SplashActivity extends Activity {
                 Common.getInstance().syncSettingInfo();
 
                 Common.getInstance().dbHelper = new DatabaseHelper(getApplicationContext());
-//        sampleWishData();
+       // sampleWishData();
                 Common.getInstance().listBanks = Common.getInstance().dbHelper.getAllBanks();
                 Common.getInstance().listAllWishes = Common.getInstance().dbHelper.getAllWishes();
                 Common.getInstance().listActiveWishes = Common.getInstance().dbHelper.getActiveWishes();
                 Common.getInstance().listFinishedWishes = Common.getInstance().dbHelper.getFinishedWishes();
                 Common.getInstance().listAllPayments = Common.getInstance().dbHelper.getAllPayments();
                 Common.getInstance().listAllTransactions = Common.getInstance().dbHelper.getAllTransactions();
-//                Common.getInstance().fillTestTransactions(SplashActivity.this);
+                Common.getInstance().fillTestTransactions(SplashActivity.this);
                 Common.getInstance().listSms = new ArrayList<>();
                 Thread.sleep(3000);
             } catch (InterruptedException e) {

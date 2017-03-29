@@ -57,6 +57,7 @@ public class SettingFragment extends CustomFragment implements DiscreteSeekBar.O
         Common.getInstance().syncSettingInfo();
         mView.findViewById(R.id.btnMenu).setOnClickListener(this);
         mView.findViewById(R.id.btnSave).setOnClickListener(this);
+        mView.findViewById(R.id.btnFill).setOnClickListener(this);
         mView.findViewById(R.id.btnWizard).setOnClickListener(this);
 
         etMinimalAmountPerDay = (EditText)mView.findViewById(R.id.etMinimalAmountPerDay);
@@ -175,7 +176,9 @@ public class SettingFragment extends CustomFragment implements DiscreteSeekBar.O
                 }
                 mContext.toggleMenu();
                 break;
-
+            case R.id.btnFill:
+                Common.getInstance().fillTestTransactions(mContext);
+                break;
             case R.id.btnSave:
                 saveSettingInfo();
                 break;
