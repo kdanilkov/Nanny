@@ -72,20 +72,20 @@ public class WizardSpentFragment extends BaseWizardFragment {
         long periodStart = lastSalaryDate.getTimeInMillis();
         long periodEnd = currentDate.getTimeInMillis();
         int spendings = 0;
+        int previousBalance = 0;
         for (int i = Common.getInstance().listAllTransactions.size() -1; i>=0; i--) {
             Transaction transaction = Common.getInstance().listAllTransactions.get(i);
             if (periodStart <= transaction.getTimestampCreated() && periodEnd >= transaction.getTimestampCreated()) {
-                    switch(transaction.getMode()) {
-                        case 1:
-                            //spendings += transaction.getAmountChange();
-                            break;
-                        case 2:
-                            spendings += transaction.getAmountChange();
-                            break;
-                        default:
-                            Log.w(Constant.TAG_CURRENT, String.format("Incompatible transaction mode: %s", transaction.getMode()));
+                if (previousBalance == 0) {
+                    previousBalance = transaction.getAmountBalance();
+                    continue;
+                } else {
+                    int diff = transaction.getAmountBalance() - previousBalance;
+                    if (diff < 0) {
+                        spendings -= diff;
+                    }
                 }
-
+                previousBalance = transaction.getAmountBalance();
             }
         }
         return spendings;
