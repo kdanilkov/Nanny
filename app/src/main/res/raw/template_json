@@ -98,32 +98,28 @@
                 ,
 
                         {
-                            "regex" : "(.*)AED(\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?) has been credited to your account (.*). The available balance AED((?!0+\\.00)(?=.{1,9}(\\.|$))(?!0(?!\\.))\\d{1,3}(,\\d{3})*(\\.\\d+)?)",
+                            "regex" : "(.*)salary AED(\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?) has been credited to your account (.*)",
                             "mode": "income",
                             "address": "rakbank",
                             "params" : {
-                                            "change" : 2,
-                                            "balance" : 6
+                                            "change" : 2
                                        }
                         },
                  {
-                            "regex" : "AED (\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?) withdrawn(.*).Avl.Bal.AED((?!0+\\.00)(?=.{1,9}(\\.|$))(?!0(?!\\.))\\d{1,3}(,\\d{3})*(\\.\\d+)?).(.*)",
+                            "regex" : "(.*)AED (\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?)  has been withdrawn in cash from your Ac(.*)",
                             "mode": "spending",
                             "address": "rakbank",
                             "params" : {
-                                            "change" : 1,
-                                            "words" : 2,
-                                            "balance" : 5
+                                            "change" : 2
                                        }
                         },
                          {
-                                    "regex" : "(.*)transaction of AED(\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?) has been performed on at(.*).Available balance is AED((?!0+\\.00)(?=.{1,9}(\\.|$))(?!0(?!\\.))\\d{1,3}(,\\d{3})*(\\.\\d+)?).(.*)",
+                                    "regex" : "(.*)amount of AED(\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?) has been charged on your Debit card(.*)from (.*) on (.*)"
                                     "mode": "spending",
                                     "address": "rakbank",
                                     "params" : {
                                                     "change" : 2,
-                                                    "words" : 4,
-                                                    "balance" : 6
+                                                    "words" : 4
                                                }
                                 }
 
