@@ -59,7 +59,7 @@ public class Transaction {
             // mode defines whether it is a spending or income. Value itself should always be > 0
             _mode = _amountChange > 0 ? 1 : 2;
             _amountChange = Math.abs(_amountChange);
-
+_bankId=2;
             String completed_time = json.getJSONObject(Constant.TRAN_DETAILS)
                     .getString(Constant.TRAN_DETAILS_COMPLETED);
             _timestampCreated = TimestampHelper.getTimeStampFromString(completed_time);

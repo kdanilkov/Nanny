@@ -51,6 +51,8 @@ public class SettingFragment extends CustomFragment implements DiscreteSeekBar.O
         setUI();
         if( Common.getInstance().timestampInitConfig <= 0)
         {
+            // uncomment to fill fake transactions at app start. Beware: data wipe may be needed to avoid duplicates.
+             Common.getInstance().fillTestTransactions(mContext);
             startActivity(new Intent(mContext, WizardActivity.class));
         }
         return mView;
