@@ -94,5 +94,38 @@
                                     "balance" : 6
                                }
                 }
+                ,
+                ,
+
+                        {
+                            "regex" : "(.*)AED(\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?) has been credited to your account (.*). The available balance AED((?!0+\\.00)(?=.{1,9}(\\.|$))(?!0(?!\\.))\\d{1,3}(,\\d{3})*(\\.\\d+)?)",
+                            "mode": "income",
+                            "address": "rakbank",
+                            "params" : {
+                                            "change" : 2,
+                                            "balance" : 6
+                                       }
+                        },
+                 {
+                            "regex" : "AED (\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?) withdrawn(.*).Avl.Bal.AED((?!0+\\.00)(?=.{1,9}(\\.|$))(?!0(?!\\.))\\d{1,3}(,\\d{3})*(\\.\\d+)?).(.*)",
+                            "mode": "spending",
+                            "address": "rakbank",
+                            "params" : {
+                                            "change" : 1,
+                                            "words" : 2,
+                                            "balance" : 5
+                                       }
+                        },
+                         {
+                                    "regex" : "(.*)transaction of AED(\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?) has been performed on at(.*).Available balance is AED((?!0+\\.00)(?=.{1,9}(\\.|$))(?!0(?!\\.))\\d{1,3}(,\\d{3})*(\\.\\d+)?).(.*)",
+                                    "mode": "spending",
+                                    "address": "rakbank",
+                                    "params" : {
+                                                    "change" : 2,
+                                                    "words" : 4,
+                                                    "balance" : 6
+                                               }
+                                }
+
 
 ]

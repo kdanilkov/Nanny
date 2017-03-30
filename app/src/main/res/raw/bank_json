@@ -71,8 +71,8 @@
                                       ]
         },
         {
-                     "name" : "ADCB",
-                     "address": "adcb",
+                     "name" : "RAKBANK",
+                     "address": "rakbank",
                      "sms_pattern_type" : [
                                               "Salary"
                                            ],
