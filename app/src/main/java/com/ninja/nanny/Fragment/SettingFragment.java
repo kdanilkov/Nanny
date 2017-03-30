@@ -49,7 +49,10 @@ public class SettingFragment extends CustomFragment implements DiscreteSeekBar.O
         mInflater = inflater;
 
         setUI();
-
+        if( Common.getInstance().timestampInitConfig <= 0)
+        {
+            startActivity(new Intent(mContext, WizardActivity.class));
+        }
         return mView;
     }
 
@@ -57,7 +60,7 @@ public class SettingFragment extends CustomFragment implements DiscreteSeekBar.O
         Common.getInstance().syncSettingInfo();
         mView.findViewById(R.id.btnMenu).setOnClickListener(this);
         mView.findViewById(R.id.btnSave).setOnClickListener(this);
-        mView.findViewById(R.id.btnFill).setOnClickListener(this);
+        //mView.findViewById(R.id.btnFill).setOnClickListener(this);
         mView.findViewById(R.id.btnWizard).setOnClickListener(this);
 
         etMinimalAmountPerDay = (EditText)mView.findViewById(R.id.etMinimalAmountPerDay);
@@ -176,9 +179,9 @@ public class SettingFragment extends CustomFragment implements DiscreteSeekBar.O
                 }
                 mContext.toggleMenu();
                 break;
-            case R.id.btnFill:
-                Common.getInstance().fillTestTransactions(mContext);
-                break;
+         //   case R.id.btnFill:
+         //       Common.getInstance().fillTestTransactions(mContext);
+         //       break;
             case R.id.btnSave:
                 saveSettingInfo();
                 break;
@@ -261,6 +264,7 @@ public class SettingFragment extends CustomFragment implements DiscreteSeekBar.O
         }
 
         Toast.makeText(mContext, "Setting Info has been saved successfully", Toast.LENGTH_SHORT).show();
+
     }
 
     @Override
@@ -271,6 +275,7 @@ public class SettingFragment extends CustomFragment implements DiscreteSeekBar.O
     public void onStartTrackingTouch(DiscreteSeekBar seekBar) {
 
     }
+
 
     @Override
     public void onStopTrackingTouch(DiscreteSeekBar seekBar) {
