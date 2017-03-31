@@ -139,7 +139,7 @@ public class AddBankFragment extends CustomFragment {
 
         Bank bankNew = new Bank(strAccountName, nIdxKind, nBalance, nFlagActive, Common.getInstance().getTimestamp()); // activate the new bank info
 
-        Common.getInstance().addBank(bankNew);
+        Common.getInstance().addOrUpdateBank(bankNew);
 
         Toast.makeText(mContext, "new bank info has been added successfully", Toast.LENGTH_SHORT).show();
         mContext.getSupportFragmentManager().popBackStackImmediate();

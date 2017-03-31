@@ -28,7 +28,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringWriter;
-import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -105,7 +104,7 @@ public class Common {
         return c.getTimeInMillis();
     }
 
-    public long getTimestampCurrentSalaryDate() {
+    private long getTimestampCurrentSalaryDate() {
         Calendar c = Calendar.getInstance();
 
         c.set(Calendar.DAY_OF_MONTH, nSalaryDate);
@@ -138,11 +137,11 @@ public class Common {
         return c.getTimeInMillis();
     }
 
-    public long getTimestampPastPeriodEnd() {
+    private long getTimestampPastPeriodEnd() {
         return getTimestampCurrentPeriodStart();
     }
 
-    public long getTimestampPastPeriodStart() {
+    private long getTimestampPastPeriodStart() {
         long timestampPastPeriodEnd = getTimestampPastPeriodEnd();
         Calendar c = Calendar.getInstance();
 
@@ -178,7 +177,7 @@ public class Common {
         timeWishSaving = UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_WISH_SAVING_TIME, 0);
     }
 
-    public List<Payment> getUnPaidPayments() { // get upaid payments from past period.
+    private List<Payment> getUnPaidPayments() { // get upaid payments from past period.
 
         long timestampPastPeriodStart = getTimestampPastPeriodStart();
 
@@ -208,7 +207,7 @@ public class Common {
         return listAns;
     }
 
-    public void calculateUsedAmount() {
+    private void calculateUsedAmount() {
         for(int i = 0; i < listNewTransactions.size(); i ++) {
             Transaction trans = listNewTransactions.get(i);
 
@@ -238,7 +237,7 @@ public class Common {
         dbHelper.updateUsedAmount(usedAmount);
     }
 
-    public void  bindBetweenTransactionAndPayment() {
+    private void  bindBetweenTransactionAndPayment() {
         List<Payment> listUnPaidPayments = getUnPaidPayments();
 
         if(listUnPaidPayments.size() == 0) return;
@@ -306,7 +305,7 @@ public class Common {
         listAllPayments = dbHelper.getAllPayments();
     }
 
-    public int sumOfIncomeTransactionsForMonth(long timestampSalaryDate) { // timestampSalaryDate- End of Period.
+    private int sumOfIncomeTransactionsForMonth(long timestampSalaryDate) { // timestampSalaryDate- End of Period.
         int nAns = 0;
 
         Calendar c = Calendar.getInstance();
@@ -351,7 +350,7 @@ public class Common {
         return nAns;
     }
 
-    public int sumOfBGrupTransactionForMonth(long timestampSalaryDate) { // timestampSalaryDate- End of Period.
+    private int sumOfBGrupTransactionForMonth(long timestampSalaryDate) { // timestampSalaryDate- End of Period.
         int nAns = 0;
 
         Calendar c = Calendar.getInstance();
@@ -379,7 +378,7 @@ public class Common {
         return nAns;
     }
 
-    public int sumOfSpendingTransactionForMonth(long timestampSalaryDate) { // timestampSalaryDate- End of Period.
+    private int sumOfSpendingTransactionForMonth(long timestampSalaryDate) { // timestampSalaryDate- End of Period.
         int nAns = 0;
 
         Calendar c = Calendar.getInstance();
@@ -433,7 +432,7 @@ public class Common {
         return nAns;
     }
 
-    public void checkIncomeTransaction() {
+    private void checkIncomeTransaction() {
         long timestampSalaryDate = getTimestampCurrentSalaryDate();
         Calendar c = Calendar.getInstance();
 
@@ -634,7 +633,11 @@ public class Common {
         }
     }
 
-
+    public void syncBetweenTransactionAndSmsIfNeeded() {
+        if(timestampInitConfig > 0 && isActiveBankExist()) {
+            syncBetweenTransactionAndSms();
+        }
+    }
 
     Transaction convertSmsToTransaction(Sms sms,int bankActiveId) {
         String strAccountName = "";
@@ -675,7 +678,6 @@ public class Common {
 
             return transaction;
         }
-
         return null;
     }
 
@@ -755,7 +757,7 @@ public class Common {
     }
 
 
-    public void addNewTransactions() {
+    private void addNewTransactions() {
         for(int i = 0; i < listNewTransactions.size(); i ++) {
             Transaction trans = listNewTransactions.get(i);
             int nTransId = dbHelper.createTransaction(trans);
@@ -768,7 +770,7 @@ public class Common {
         Collections.sort(listAllTransactions, new TransactionComparator());
     }
 
-    public void calculateBalance() {
+    private void calculateBalance() {
         int nVal = bankActive.getBalance();
 
         for(int i = 0; i < listNewTransactions.size() ; i ++) {
@@ -804,7 +806,7 @@ public class Common {
         return listAns;
     }
 
-    public int sumOfPaymentsForMonth() {
+    private int sumOfPaymentsForMonth() {
         int nAns = 0;
 
         List<Payment> listCurrentPayments = getCurrentPayments();
@@ -830,7 +832,7 @@ public class Common {
         return nAns;
     }
 
-    public int monthlyLimit() {
+    private int monthlyLimit() {
         int nRealIncome = nMonthlyIncome;
         if(timestampInitConfig > getTimestampCurrentPeriodStart()) {
             nRealIncome -= UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_INIT_USED_MONEY, 0);
@@ -841,7 +843,7 @@ public class Common {
         return nRealIncome - nSumOfPaymentsForMonth - nSumOfWishesForMonth;
     }
 
-    public int weeklyLimit() {
+    private int weeklyLimit() {
         Calendar c = Calendar.getInstance();
         int nTotalDaysOfMonth = c.getActualMaximum(Calendar.DAY_OF_MONTH);
 //        int nTotalDaysOfMonth = daysLeftForThisPeriod();
@@ -850,7 +852,7 @@ public class Common {
         return monthlyLimit() * 7 / nTotalDaysOfMonth;
     }
 
-    public int sumOfTransactionThisWeek() { // for Transaction.mode = 2
+    private int sumOfTransactionThisWeek() { // for Transaction.mode = 2
         int nAns = 0;
 
         Calendar c = Calendar.getInstance();
@@ -878,7 +880,7 @@ public class Common {
         return nAns;
     }
 
-    public int leftMoneyForMonth(long timestampSalaryDate) { // timestampSalaryDate - End Of Period
+    private int leftMoneyForMonth(long timestampSalaryDate) { // timestampSalaryDate - End Of Period
         return sumOfIncomeTransactionsForMonth(timestampSalaryDate) - sumOfSpendingTransactionForMonth(timestampSalaryDate);
     }
 
@@ -921,7 +923,7 @@ public class Common {
         return bankActive.getBalance();
     }
 
-    public int daysLeftForThisWeek() {
+    private int daysLeftForThisWeek() {
         Calendar c = Calendar.getInstance();
         int nDayOfWeek = c.get(Calendar.DAY_OF_WEEK);
         return 7 - nDayOfWeek;
@@ -939,7 +941,7 @@ public class Common {
         return nSalaryDate - nDay;
     }
 
-    public int totalWishes() { // for checking the advisor
+    private int totalWishes() { // for checking the advisor
         return sumOfWishesForMonth();
     }
 
@@ -973,8 +975,6 @@ public class Common {
             while ((n = reader.read(buffer)) != -1) {
                 writer.write(buffer, 0, n);
             }
-        } catch (UnsupportedEncodingException e) {
-            Log.e(Constant.TAG_CURRENT, Log.getStackTraceString(e));
         } catch (IOException e) {
             Log.e(Constant.TAG_CURRENT, Log.getStackTraceString(e));
         } finally {
@@ -995,7 +995,7 @@ public class Common {
     }
 
     public void readTemplateJsonData(Context mContext) {
-        InputStream is = mContext.getResources().openRawResource(R.raw.template_json);
+        InputStream is = mContext.getResources().openRawResource(R.raw.template);
         Writer writer = new StringWriter();
         char[] buffer = new char[1024];
         try {
@@ -1072,25 +1072,17 @@ public class Common {
         Collections.sort(listAllTransactions, new TransactionComparator());
     }
 
-    public  void addBank(Bank bank){
-        int nID =  dbHelper.createBank(bank);
+    public  void addOrUpdateBank(Bank bank){
+        Bank existing = dbHelper.getBankByAccountName(bank.getAccountName());
+        if (null == existing) {
+            int nID = dbHelper.createBank(bank);
+            bank.setId(nID);
+        }
 
-        bank.setId(nID);
         listBanks.add(bank);
-
         if(bank.getFlagActive() == 1) {
             bankActive = bank;
             syncBetweenTransactionAndSms();
-        }
-    }
-
-    public void updateBank(Bank bank) {
-        Bank existing = dbHelper.getBankByAccountName(bank.getAccountName());
-        if (null != existing) {
-            bank.setId(existing.getId());
-            dbHelper.updateBank(bank);
-        } else {
-            addBank(bank);
         }
     }
 
@@ -1111,48 +1103,6 @@ public class Common {
         if(timestampInitConfig == 0) {
             timestampInitConfig = getTimestamp();
             UserPreference.getInstance().putSharedPreference(Constant.PREF_KEY_INIT_CONFIG_TIMESTAMP, timestampInitConfig);
-        }
-    }
-
-    public void fillTestTransactions(Context mContext) {
-        InputStream is = mContext.getResources().openRawResource(R.raw.demobank);
-        Writer writer = new StringWriter();
-        char[] buffer = new char[1024];
-        try {
-            Reader reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
-            int n;
-            while ((n = reader.read(buffer)) != -1) {
-                writer.write(buffer, 0, n);
-            }
-        } catch (UnsupportedEncodingException e) {
-            Log.e(Constant.TAG_CURRENT, Log.getStackTraceString(e));
-        } catch (IOException e) {
-            Log.e(Constant.TAG_CURRENT, Log.getStackTraceString(e));
-        } finally {
-            try {
-                is.close();
-            } catch (IOException e) {
-                Log.e(Constant.TAG_CURRENT, Log.getStackTraceString(e));
-            }
-        }
-
-        String jsonString = writer.toString();
-        JSONArray transactions = new JSONArray();
-
-        try {
-             transactions = new JSONArray(jsonString);
-        } catch (JSONException e) {
-            Log.e(Constant.TAG_CURRENT, Log.getStackTraceString(e));
-        }
-        for (int i = 0; i < transactions.length(); i++) {
-            try {
-                Transaction trans = new Transaction(transactions.getJSONObject(i));
-                if (null != trans) {
-                    listAllTransactions.add(trans);
-                }
-            } catch (Exception e) {
-                Log.e(Constant.TAG_CURRENT, Log.getStackTraceString(e));
-            }
         }
     }
 }

@@ -107,4 +107,19 @@ public class Bank {
 
         return "";
     }
+
+    public String getBankAddress() {
+        JSONObject jsonObjBank = null;
+        try {
+            jsonObjBank = Common.getInstance().jsonArrayBankInfo.getJSONObject(_idxKind);
+            String address = jsonObjBank.getString(Constant.JSON_ADDRESS);
+
+            return address;
+        } catch (JSONException e) {
+            Log.e(Constant.TAG_CURRENT, Log.getStackTraceString(e));
+        }
+
+        return "";
+    }
+
 }

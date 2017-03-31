@@ -26,14 +26,7 @@ public class WizardBalanceFragment extends BaseWizardFragment {
     }
 
     private void initData() {
-        if (!Common.getInstance().isActiveBankExist()) {
-            for (Transaction transaction : Common.getInstance().listAllTransactions) {
-                mBalanceEdit.setText(transaction.getAmountBalance() + "");
-                break;
-            }
-        } else {
-            mBalanceEdit.setText(Common.getInstance().bankActive.getBalance() + "");
-        }
+        mBalanceEdit.setText(String.valueOf(Common.getInstance().bankActive.getBalance()));
     }
 
     @Override
@@ -59,12 +52,9 @@ public class WizardBalanceFragment extends BaseWizardFragment {
     public void setData() {
         try {
             String text = mBalanceEdit.getText().toString();
-            int vl = Integer.valueOf(text);
-            Bank bank = mModel.getBank();
-            bank.setBalance(vl);
-            bank.setFlagActive(1);
-            Common.getInstance().updateBank(bank);
-            Common.getInstance().updateTimestamp();
+            int balance = Integer.valueOf(text);
+            Common.getInstance().bankActive.setBalance(balance);
+//            Common.getInstance().updateTimestamp();
         } catch (Exception e) {
             Log.e(Constant.TAG_CURRENT, Log.getStackTraceString(e));
         }

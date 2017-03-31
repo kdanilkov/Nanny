@@ -21,6 +21,14 @@
             android:textColor="@color/white"
             android:textSize="@dimen/title_font_size" />
         <Button
+            android:id="@+id/btnFill"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/ic_transaction"
+            android:layout_marginRight="15dp"
+            android:layout_toLeftOf="@+id/btnSaveAndNext"
+            android:onClick="fillSms"/>
+        <Button
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_centerVertical="true"

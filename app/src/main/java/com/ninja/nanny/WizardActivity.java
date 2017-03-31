@@ -1,10 +1,7 @@
 package com.ninja.nanny;
 
-import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -12,7 +9,6 @@ import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.Toast;
 
-import com.ninja.nanny.Comparator.SmsComparator;
 import com.ninja.nanny.Custom.CustomActivity;
 import com.ninja.nanny.Custom.MediumTextView;
 import com.ninja.nanny.Fragment.BaseWizardFragment;
@@ -22,13 +18,13 @@ import com.ninja.nanny.Fragment.WizardBalanceFragment;
 import com.ninja.nanny.Fragment.WizardSelectBankFragment;
 import com.ninja.nanny.Fragment.WizardSpentFragment;
 import com.ninja.nanny.Fragment.WizardStartPeriodFragment;
+import com.ninja.nanny.Model.Bank;
 import com.ninja.nanny.Model.SettingWizardModel;
-import com.ninja.nanny.Model.Sms;
 import com.ninja.nanny.Utils.Common;
+import com.ninja.nanny.Utils.SmsTransactionFiller;
 import com.ninja.nanny.Utils.WizardSteps;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import java.io.InputStream;
 
 /**
  * Created by petra on 10.03.2017.
@@ -87,42 +83,43 @@ public class WizardActivity extends CustomActivity {
     }
 
     void syncSms() {
-        if(Common.getInstance().listSms != null) {
-            if (Common.getInstance().listAllTransactions == null || Common.getInstance().listAllTransactions.size() == 0) {
-                Common.getInstance().fillAllTransactions();
-            }
-            return;
-        }
-        Common.getInstance().listSms = new ArrayList<>();
-
-        Uri message = Uri.parse("content://sms/");
-        ContentResolver cr = getContentResolver();
-        Cursor c = cr.query(message, null, null, null, null);
-
-        int totalSMS = c.getCount();
-
-        if(c.moveToFirst()) {
-            for(int i = 0; i < totalSMS; i ++) {
-                long lTimeStamp = c.getLong(c.getColumnIndexOrThrow("date"));
-
-                Sms objSms = new Sms();
-
-                objSms.setAddress(c.getString(c.getColumnIndexOrThrow("address")));
-                objSms.setText(c.getString(c.getColumnIndexOrThrow("body")));
-                objSms.setTimestamp(lTimeStamp);
-
-                int sms_id = Common.getInstance().dbHelper.createSMS(objSms);
-                objSms.setId(sms_id);
-
-                Common.getInstance().listSms.add(objSms);
-
-                c.moveToNext();
-            }
-        }
-        c.close();
-
-        Collections.sort(Common.getInstance().listSms, new SmsComparator());
-        Common.getInstance().fillAllTransactions();
+        Common.getInstance().syncBetweenTransactionAndSms();
+//        if(Common.getInstance().listSms != null) {
+//            if (Common.getInstance().listAllTransactions == null || Common.getInstance().listAllTransactions.size() == 0) {
+//                Common.getInstance().fillAllTransactions();
+//            }
+//            return;
+//        }
+//        Common.getInstance().listSms = new ArrayList<>();
+//
+//        Uri message = Uri.parse("content://sms/");
+//        ContentResolver cr = getContentResolver();
+//        Cursor c = cr.query(message, null, null, null, null);
+//
+//        int totalSMS = c.getCount();
+//
+//        if(c.moveToFirst()) {
+//            for(int i = 0; i < totalSMS; i ++) {
+//                long lTimeStamp = c.getLong(c.getColumnIndexOrThrow("date"));
+//
+//                Sms objSms = new Sms();
+//
+//                objSms.setAddress(c.getString(c.getColumnIndexOrThrow("address")));
+//                objSms.setText(c.getString(c.getColumnIndexOrThrow("body")));
+//                objSms.setTimestamp(lTimeStamp);
+//
+//                int sms_id = Common.getInstance().dbHelper.createSMS(objSms);
+//                objSms.setId(sms_id);
+//
+//                Common.getInstance().listSms.add(objSms);
+//
+//                c.moveToNext();
+//            }
+//        }
+//        c.close();
+//
+//        Collections.sort(Common.getInstance().listSms, new SmsComparator());
+//        Common.getInstance().fillAllTransactions();
     }
 
     private void setStep() {
@@ -192,5 +189,11 @@ public class WizardActivity extends CustomActivity {
                 return;
         }
         setStep();
+    }
+
+    public void fillSms(View v) {
+        Bank bank = new Bank("Account 1", 0, 0, 1, 0);
+        InputStream is = getResources().openRawResource(R.raw.demobank_endb);
+        SmsTransactionFiller.fillSmsFromDemoJSON(bank, is);
     }
 }

@@ -21,10 +21,10 @@ import android.widget.Toast;
 import com.ninja.nanny.Adapter.CustomSpinnerAdapter;
 import com.ninja.nanny.Custom.CustomFragment;
 import com.ninja.nanny.MainActivity;
-import com.ninja.nanny.Model.Sms;
 import com.ninja.nanny.R;
 import com.ninja.nanny.Utils.Common;
 import com.ninja.nanny.Utils.Constant;
+import com.ninja.nanny.Utils.SmsTransactionFiller;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -168,21 +168,9 @@ public class NewSmsFragment extends CustomFragment {
         cal.set(Calendar.HOUR_OF_DAY, nHour);
         cal.set(Calendar.MINUTE, nMinute);
 
-        Sms sms = new Sms(strTitle, strText, cal.getTimeInMillis());
-        int nId = Common.getInstance().dbHelper.createSMS(sms);
-
-        sms.setId(nId);
-
-        Common.getInstance().listSms.add(0, sms);
-
+        SmsTransactionFiller.saveNewSms(strTitle, strText, cal.getTimeInMillis());
         Toast.makeText(mContext, "new sms has been registered successfully", Toast.LENGTH_SHORT).show();
-
-        if(Common.getInstance().timestampInitConfig > 0) {
-
-            if(Common.getInstance().isActiveBankExist()) {
-                Common.getInstance().syncBetweenTransactionAndSms();
-            }
-        }
+        Common.getInstance().syncBetweenTransactionAndSmsIfNeeded();
 
         mContext.getSupportFragmentManager().popBackStackImmediate();
     }

@@ -97,7 +97,7 @@ public class WizardSpentFragment extends BaseWizardFragment {
             int spendings = Integer.parseInt(mSpendingsEdit.getText().toString());
             Common.getInstance().updateUsedAmount(Common.getInstance().getTimestampCurrentPeriodEnd(), spendings);
             UserPreference.getInstance().putSharedPreference(Constant.PREF_KEY_INIT_USED_MONEY, spendings);
-            Common.getInstance().updateTimestamp();
+//            Common.getInstance().updateTimestamp();
         } catch (Exception e) {
             Log.e(Constant.TAG_CURRENT, Log.getStackTraceString(e));
         }
