@@ -618,7 +618,7 @@ public class Common {
             if(timestampSms <= timestampBankActive) continue;
             if(!isNewSms(sms)) continue;
 
-            Transaction transaction = convertSmsToTransaction(sms);
+            Transaction transaction = convertSmsToTransaction(sms, bankActive.getIdxKind());
             if(transaction == null) continue;
 
             listNewTransactions.add(0,transaction);
@@ -636,12 +636,12 @@ public class Common {
 
 
 
-    Transaction convertSmsToTransaction(Sms sms) {
+    Transaction convertSmsToTransaction(Sms sms,int bankActiveId) {
         String strAccountName = "";
         String strAddress = "";
 
         try {
-            JSONObject jsonObjBank = jsonArrayBankInfo.getJSONObject(bankActive.getIdxKind());
+            JSONObject jsonObjBank = jsonArrayBankInfo.getJSONObject(bankActiveId);
             strAccountName = jsonObjBank.getString(Constant.JSON_NAME);
             strAddress = jsonObjBank.getString(Constant.JSON_ADDRESS);
         } catch (JSONException e) {
@@ -669,7 +669,7 @@ public class Common {
 
             transaction.setPaidId(-1);
             transaction.setAccountName(strAccountName);
-            transaction.setBankId(Common.getInstance().bankActive.getIdxKind());
+            transaction.setBankId(bankActiveId);
             transaction.setText(sms.getText());
             transaction.setTimestampCreated(sms.getTimestamp());
 
