@@ -21,9 +21,12 @@ import com.ninja.nanny.R;
 import com.ninja.nanny.SplashActivity;
 import com.ninja.nanny.Utils.Common;
 import com.ninja.nanny.Utils.Constant;
+import com.ninja.nanny.Utils.SmsTransactionFiller;
 import com.ninja.nanny.WizardActivity;
 
 import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar;
+
+import java.io.InputStream;
 
 
 public class SettingFragment extends CustomFragment implements DiscreteSeekBar.OnProgressChangeListener {
@@ -52,7 +55,8 @@ public class SettingFragment extends CustomFragment implements DiscreteSeekBar.O
         if( Common.getInstance().timestampInitConfig <= 0)
         {
             // uncomment to fill fake transactions at app start. Beware: data wipe may be needed to avoid duplicates.
-             Common.getInstance().fillTestTransactions(mContext);
+            // InputStream is = getResources().openRawResource(R.raw.demobank);
+            // SmsTransactionFiller.fillTestTransactions(is);
             startActivity(new Intent(mContext, WizardActivity.class));
         }
         return mView;

@@ -74,7 +74,7 @@ public class WizardStartPeriodFragment extends BaseWizardFragment {
             UserPreference.getInstance().putSharedPreference(Constant.PREF_KEY_SALARY_DATE, day);
             // due to spaghetti code these should be updated manually. bleh.
             Common.getInstance().nSalaryDate = day;
-            Common.getInstance().updateTimestamp();
+//            Common.getInstance().updateTimestamp();
         } catch(Exception e) {
             Log.e(Constant.TAG_CURRENT, Log.getStackTraceString(e));
         }

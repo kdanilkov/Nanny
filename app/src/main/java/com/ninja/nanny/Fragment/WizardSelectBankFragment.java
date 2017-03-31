@@ -1,6 +1,5 @@
 package com.ninja.nanny.Fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,9 +9,7 @@ import android.widget.AdapterView;
 import android.widget.Spinner;
 
 import com.ninja.nanny.Adapter.CustomSpinnerAdapter;
-import com.ninja.nanny.MainActivity;
 import com.ninja.nanny.Model.Bank;
-import com.ninja.nanny.Preference.UserPreference;
 import com.ninja.nanny.R;
 import com.ninja.nanny.Utils.Common;
 import com.ninja.nanny.Utils.Constant;
@@ -85,6 +82,10 @@ public class WizardSelectBankFragment extends BaseWizardFragment implements Adap
             JSONObject bankObj = Common.getInstance().jsonArrayBankInfo.getJSONObject(mIndex);
             bank.setAccountName(bankObj.getString(Constant.JSON_NAME));
             bank.setIdxKind(mIndex);
+            bank.setFlagActive(1);
+            bank.setTimestamp(0);
+            Common.getInstance().addOrUpdateBank(bank);
+            Common.getInstance().bankActive = bank;
         }
         catch (Exception ex)
         {
@@ -95,14 +96,14 @@ public class WizardSelectBankFragment extends BaseWizardFragment implements Adap
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-        if (i != mIndex) {
-            Intent intent = new Intent(getActivity(), MainActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putInt(Constant.LAUNCH_FRAGMENT_PARAM, 5);
-            intent.putExtras(bundle);
-            startActivity(intent);
-            getActivity().finish();
-        }
+//        if (i != mIndex) {
+//            Intent intent = new Intent(getActivity(), MainActivity.class);
+//            Bundle bundle = new Bundle();
+//            bundle.putInt(Constant.LAUNCH_FRAGMENT_PARAM, 5);
+//            intent.putExtras(bundle);
+//            startActivity(intent);
+//            getActivity().finish();
+//        }
     }
 
     @Override
