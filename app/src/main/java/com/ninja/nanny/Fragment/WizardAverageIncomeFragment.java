@@ -37,8 +37,9 @@ public class WizardAverageIncomeFragment extends BaseWizardFragment {
     }
 
     public void initData() {
-        int salaryDate = UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_SALARY_DATE, Constant.DEFAULT_SALARY_DATE);
-        int income = calculateIncomeForLastPeriod(salaryDate);
+//        int salaryDate = UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_SALARY_DATE, Constant.DEFAULT_SALARY_DATE);
+//        int income = calculateIncomeForLastPeriod(salaryDate);
+        int income = Common.getInstance().sumOfIncomeTransactionsForMonth(Common.getInstance().getTimestampCurrentPeriodStart());
         mIncomeEdit.setText(String.valueOf(income));
     }
 

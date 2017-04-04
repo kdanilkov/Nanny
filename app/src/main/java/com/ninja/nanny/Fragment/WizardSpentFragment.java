@@ -47,11 +47,7 @@ public class WizardSpentFragment extends BaseWizardFragment {
     }
 
     private void initData() {
-        int salaryDate = UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_SALARY_DATE, Constant.DEFAULT_SALARY_DATE);
-        int spendings = calculateSpendingsForCurrentPeriod(salaryDate);
-        if (spendings == 0) {
-            spendings = Common.getInstance().getUsedAmount(Common.getInstance().getTimestampCurrentPeriodEnd()).getUsedAmount();
-        }
+        int spendings = Common.getInstance().getUsedAmount(Common.getInstance().getTimestampCurrentPeriodEnd()).getUsedAmount();
         mSpendingsEdit.setText(String.valueOf(spendings));
     }
 

@@ -12,6 +12,7 @@ import com.ninja.nanny.Helper.DatabaseHelper;
 import com.ninja.nanny.Preference.UserPreference;
 import com.ninja.nanny.Utils.Common;
 import com.ninja.nanny.Utils.Constant;
+import com.ninja.nanny.Utils.Tester;
 
 import java.util.ArrayList;
 
@@ -53,9 +54,7 @@ public class SplashActivity extends Activity {
                 Common.getInstance().listFinishedWishes = Common.getInstance().dbHelper.getFinishedWishes();
                 Common.getInstance().listAllPayments = Common.getInstance().dbHelper.getAllPayments();
                 Common.getInstance().listAllTransactions = Common.getInstance().dbHelper.getAllTransactions();
-                // uncomment to fill fake transactions at app start. Beware: data wipe may be needed to avoid duplicates.
-                // Common.getInstance().fillTestTransactions(SplashActivity.this);
-                Common.getInstance().listSms = new ArrayList<>();
+
                 Thread.sleep(3000);
             } catch (InterruptedException e) {
                 Log.e(Constant.TAG_CURRENT, Log.getStackTraceString(e));

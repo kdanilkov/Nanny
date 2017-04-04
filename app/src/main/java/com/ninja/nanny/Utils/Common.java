@@ -49,6 +49,7 @@ public class Common {
         if(instance == null){
             instance = new Common();
             instance.listAllTransactions = new ArrayList<>();
+            instance.listSms = new ArrayList<>();
         }
 
         return instance;
@@ -62,7 +63,7 @@ public class Common {
     public List<Wish> listActiveWishes;
     public List<Wish> listFinishedWishes;
     public List<Payment> listAllPayments;
-    public List<Sms> listSms;
+    public List<Sms> listSms ;
     public List<Transaction> listAllTransactions;
     List<Transaction> listNewTransactions;
     public long timestampInitConfig;
@@ -207,7 +208,7 @@ public class Common {
         return listAns;
     }
 
-    private void calculateUsedAmount() {
+    public void calculateUsedAmount() {
         for(int i = 0; i < listNewTransactions.size(); i ++) {
             Transaction trans = listNewTransactions.get(i);
 
@@ -227,9 +228,9 @@ public class Common {
         }
     }
 
-    private void increaseUsedAmount(int inrease, long timestampPeriodEnd) {
+    private void increaseUsedAmount(int increase, long timestampPeriodEnd) {
         UsedAmount usedAmount = getUsedAmount(timestampPeriodEnd);
-        int nUpdatedUsedAmount = usedAmount.getUsedAmount() + inrease;
+        int nUpdatedUsedAmount = usedAmount.getUsedAmount() + increase;
 
         usedAmount.setUsedAmount(nUpdatedUsedAmount);
         usedAmount.setTimestampUpdated(getTimestamp());
@@ -305,7 +306,7 @@ public class Common {
         listAllPayments = dbHelper.getAllPayments();
     }
 
-    private int sumOfIncomeTransactionsForMonth(long timestampSalaryDate) { // timestampSalaryDate- End of Period.
+    public int sumOfIncomeTransactionsForMonth(long timestampSalaryDate) { // timestampSalaryDate- End of Period.
         int nAns = 0;
 
         Calendar c = Calendar.getInstance();
@@ -365,6 +366,8 @@ public class Common {
         for(int i = 0; i < listAllTransactions.size(); i ++) {
             Transaction trans = listAllTransactions.get(i);
             long timestampTrans = trans.getTimestampCreated();
+            if (timestampTrans > getTimestamp())
+                continue;
 
             if(trans.getMode() < 2) continue;
             if(trans.getPaidId() == -1) {
@@ -378,7 +381,7 @@ public class Common {
         return nAns;
     }
 
-    private int sumOfSpendingTransactionForMonth(long timestampSalaryDate) { // timestampSalaryDate- End of Period.
+    public int sumOfSpendingTransactionForMonth(long timestampSalaryDate) { // timestampSalaryDate- End of Period.
         int nAns = 0;
 
         Calendar c = Calendar.getInstance();
@@ -773,7 +776,7 @@ public class Common {
     private void calculateBalance() {
         int nVal = bankActive.getBalance();
 
-        for(int i = 0; i < listNewTransactions.size() ; i ++) {
+        for(int i = 0; i < listNewTransactions.size(); i++) {
             Transaction trans = listNewTransactions.get(i);
 
             if(trans.getMode() == 1) nVal += trans.getAmountChange();
@@ -1074,9 +1077,13 @@ public class Common {
 
     public  void addOrUpdateBank(Bank bank){
         Bank existing = dbHelper.getBankByAccountName(bank.getAccountName());
-        if (null == existing) {
+        if (null != existing) {
+            bank.setId(existing.getId());
+            bank.setTimestamp(existing.getTimestamp());
+        } else {
             int nID = dbHelper.createBank(bank);
             bank.setId(nID);
+//            bank.setTimestamp(0);
         }
 
         listBanks.add(bank);
