@@ -209,10 +209,14 @@ public class Common {
     }
 
     public void calculateUsedAmount() {
+        long now = getTimestamp();
         for(int i = 0; i < listNewTransactions.size(); i ++) {
             Transaction trans = listNewTransactions.get(i);
+            if (trans.getTimestampCreated() > now)
+                continue;
 
-            if(trans.getMode() < 2) continue;
+            if(trans.getMode() < 2)
+                continue;
 
             int nPaidId = trans.getPaidId();
             long timestampPeriodEnd = 0;
@@ -363,13 +367,15 @@ public class Common {
         long timestampStart = c.getTimeInMillis();
         long timestampEnd = timestampSalaryDate;
 
+        long now = getTimestamp();
         for(int i = 0; i < listAllTransactions.size(); i ++) {
             Transaction trans = listAllTransactions.get(i);
             long timestampTrans = trans.getTimestampCreated();
-            if (timestampTrans > getTimestamp())
+            if (timestampTrans > now)
                 continue;
 
-            if(trans.getMode() < 2) continue;
+            if(trans.getMode() < 2)
+                continue;
             if(trans.getPaidId() == -1) {
                 if(timestampTrans < timestampEnd && timestampTrans >= timestampStart) {
                     nAns += trans.getAmountChange();
@@ -405,14 +411,20 @@ public class Common {
         c.add(Calendar.DAY_OF_YEAR, nToleranceDays);
 
         long timestampIntervalEnd = c.getTimeInMillis();
+        long now = getTimestamp();
 
         for(int i = 0; i < listAllTransactions.size(); i ++) {
             Transaction trans = listAllTransactions.get(i);
             long timestampTrans = trans.getTimestampCreated();
 
-            if(trans.getMode() < 2) continue;
-            if(timestampTrans >= timestampIntervalEnd) continue;
-            if(timestampTrans < timestampIntervalStart) break;
+            if (trans.getTimestampCreated() > now)
+                continue;
+            if(trans.getMode() < 2)
+                continue;
+            if(timestampTrans >= timestampIntervalEnd)
+                continue;
+            if(timestampTrans < timestampIntervalStart)
+                break;
 
             int nPaidId = trans.getPaidId();
 
@@ -426,8 +438,10 @@ public class Common {
             Paid paid = dbHelper.getPaid(nPaidId);
             long timestampPayment = paid.getTimestampPayment();
 
-            if(timestampPayment < timestampStart) continue;
-            if(timestampPayment >= timestampEnd) continue;
+            if(timestampPayment < timestampStart)
+                continue;
+            if(timestampPayment >= timestampEnd)
+                continue;
 
             nAns += trans.getAmountChange();
         }
@@ -454,10 +468,14 @@ public class Common {
         int nAmountHigh = nMonthlyIncome * (100 + nTolerancePercents) / 100;
         int nAmountLow = nMonthlyIncome * (100 - nTolerancePercents) / 100;
 
+        long now = getTimestamp();
         for(int i = 0; i < listNewTransactions.size(); i ++) {
             Transaction trans = listNewTransactions.get(i);
+            if (trans.getTimestampCreated() > now)
+                continue;
 
-            if(trans.getMode() != 1) continue;
+            if(trans.getMode() != 1)
+                continue;
 
             long timestampTrans = trans.getTimestampCreated();
             int nAmountTrans = trans.getAmountChange();
@@ -577,13 +595,15 @@ public class Common {
                 Transaction trans = listAllTransactions.get(nStart);
                 long timestampTrans = trans.getTimestampCreated();
 
-                if(timestampTrans == timestampSms) return false;
+                if(timestampTrans == timestampSms)
+                    return false;
 
                 if(nEnd < listAllTransactions.size()) {
                     trans = listAllTransactions.get(nEnd);
                     timestampTrans = trans.getTimestampCreated();
 
-                    if(timestampTrans == timestampSms) return false;
+                    if(timestampTrans == timestampSms)
+                        return false;
                 }
 
                 break;
@@ -592,7 +612,8 @@ public class Common {
             Transaction trans = listAllTransactions.get(nCurrent);
             long timestampTrans = trans.getTimestampCreated();
 
-            if(timestampTrans == timestampSms) return false;
+            if(timestampTrans == timestampSms)
+                return false;
             if(timestampTrans > timestampSms) {
                 nStart = nCurrent;
             } else {
@@ -613,15 +634,21 @@ public class Common {
         long timestampBankActive = bankActive.getTimestamp();
 
         listNewTransactions = new ArrayList<Transaction>();
+        long now = getTimestamp();
 
         for(int i = 0; i < listSms.size(); i ++) {
             Sms sms = listSms.get(i);
             long timestampSms = sms.getTimestamp();
-            if(timestampSms <= timestampBankActive) continue;
-            if(!isNewSms(sms)) continue;
+            if (timestampSms > now)
+                continue;
+            if(timestampSms <= timestampBankActive)
+                continue;
+            if(!isNewSms(sms))
+                continue;
 
             Transaction transaction = convertSmsToTransaction(sms, bankActive.getIdxKind());
-            if(transaction == null) continue;
+            if(transaction == null)
+                continue;
 
             listNewTransactions.add(0,transaction);
             Log.e(Constant.TAG_CURRENT, "added transaction to the listNewTransaction");
@@ -669,7 +696,8 @@ public class Common {
             } catch (Exception e) {
                 Log.e(Constant.TAG_CURRENT, Log.getStackTraceString(e));
             }
-            if(transaction == null) continue;
+            if(transaction == null)
+                continue;
 
             Log.e(Constant.TAG_CURRENT, "success on parsing sms in the parseSmsUsingRegex");
 
@@ -761,10 +789,13 @@ public class Common {
 
 
     private void addNewTransactions() {
+        long now = getTimestamp();
         for(int i = 0; i < listNewTransactions.size(); i ++) {
             Transaction trans = listNewTransactions.get(i);
-            int nTransId = dbHelper.createTransaction(trans);
+            if (trans.getTimestampCreated() > now)
+                continue;
 
+            int nTransId = dbHelper.createTransaction(trans);
             trans.setId(nTransId);
             listAllTransactions.add(0, trans);
             Log.e(Constant.TAG_CURRENT, "added transaction to the listAllTransactions");
@@ -776,11 +807,15 @@ public class Common {
     private void calculateBalance() {
         int nVal = bankActive.getBalance();
 
+        long now = getTimestamp();
         for(int i = 0; i < listNewTransactions.size(); i++) {
             Transaction trans = listNewTransactions.get(i);
-
-            if(trans.getMode() == 1) nVal += trans.getAmountChange();
-            if(trans.getMode() == 2) nVal -= trans.getAmountChange();
+            if (trans.getTimestampCreated() > now)
+                continue;
+            if(trans.getMode() == 1)
+                nVal += trans.getAmountChange();
+            if(trans.getMode() == 2)
+                nVal -= trans.getAmountChange();
 
             if(trans.getAmountBalance() >= 0) {
                 nVal = trans.getAmountBalance();

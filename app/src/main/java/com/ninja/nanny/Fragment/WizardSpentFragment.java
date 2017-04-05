@@ -51,42 +51,6 @@ public class WizardSpentFragment extends BaseWizardFragment {
         mSpendingsEdit.setText(String.valueOf(spendings));
     }
 
-    private int calculateSpendingsForCurrentPeriod(int salaryDate) {
-        Calendar currentDate = Calendar.getInstance();
-        int year = currentDate.get(Calendar.YEAR);
-        int month = currentDate.get(Calendar.MONTH);
-        if (currentDate.get(Calendar.DAY_OF_MONTH) < salaryDate) {
-            month -= 1;
-            if(month < 0) {
-                month = 0;
-                year -= 1;
-            }
-        }
-
-        Calendar lastSalaryDate = Calendar.getInstance();
-        lastSalaryDate.set(year, month, salaryDate);
-        long periodStart = lastSalaryDate.getTimeInMillis();
-        long periodEnd = currentDate.getTimeInMillis();
-        int spendings = 0;
-        int previousBalance = 0;
-        for (int i = Common.getInstance().listAllTransactions.size() -1; i>=0; i--) {
-            Transaction transaction = Common.getInstance().listAllTransactions.get(i);
-            if (periodStart <= transaction.getTimestampCreated() && periodEnd >= transaction.getTimestampCreated()) {
-                if (previousBalance == 0) {
-                    previousBalance = transaction.getAmountBalance();
-                    continue;
-                } else {
-                    int diff = transaction.getAmountBalance() - previousBalance;
-                    if (diff < 0) {
-                        spendings -= diff;
-                    }
-                }
-                previousBalance = transaction.getAmountBalance();
-            }
-        }
-        return spendings;
-    }
-
     @Override
     public void setData() {
         try {

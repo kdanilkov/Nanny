@@ -1,9 +1,13 @@
 package com.ninja.nanny.Utils;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.ninja.nanny.Model.Bank;
+import com.ninja.nanny.Model.Transaction;
 import com.ninja.nanny.R;
+
+import org.json.JSONArray;
 
 import java.io.InputStream;
 
@@ -36,5 +40,23 @@ public class Tester {
     public static void fillSmsRak(Context context) {
         InputStream is = context.getResources().openRawResource(R.raw.demobank_rankbank);
         SmsTransactionFiller.fillSmsFromDemoJSON(rak, is);
+    }
+
+    public static int calculateSumFromJson(Context context) {
+        InputStream is = context.getResources().openRawResource(R.raw.demobank_rankbank);
+        JSONArray transactions = SmsTransactionFiller.getTransactionsJSONArray(is);
+
+        int sum = 0;
+        for (int i = transactions.length() -1 ; i >= 0; i--) {
+            try {
+                Transaction trans = new Transaction(transactions.getJSONObject(i));
+                sum = (1 == trans.getMode())
+                        ? sum + trans.getAmountChange()
+                        : sum - trans.getAmountChange();
+            } catch (Exception e) {
+                Log.e(Constant.TAG_CURRENT, Log.getStackTraceString(e));
+            }
+        }
+        return sum;
     }
 }
