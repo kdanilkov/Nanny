@@ -63,7 +63,7 @@ public class SmsTransactionFiller {
     }
 
     @NonNull
-    private static JSONArray getTransactionsJSONArray(InputStream is) {
+    static JSONArray getTransactionsJSONArray(InputStream is) {
         Writer writer = new StringWriter();
         char[] buffer = new char[1024];
         try {

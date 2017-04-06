@@ -78,32 +78,23 @@ public class WizardSelectBankFragment extends BaseWizardFragment implements Adap
     @Override
     public void setData() {
         Bank bank = new Bank();
-        try{
+        try {
             JSONObject bankObj = Common.getInstance().jsonArrayBankInfo.getJSONObject(mIndex);
             bank.setAccountName(bankObj.getString(Constant.JSON_NAME));
             bank.setIdxKind(mIndex);
             bank.setFlagActive(1);
             bank.setTimestamp(0);
             Common.getInstance().addOrUpdateBank(bank);
-            Common.getInstance().bankActive = bank;
         }
         catch (Exception ex)
         {
             Log.e(Constant.TAG_CURRENT, ex.getMessage());
         }
-        mModel.setBank(bank);
     }
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-//        if (i != mIndex) {
-//            Intent intent = new Intent(getActivity(), MainActivity.class);
-//            Bundle bundle = new Bundle();
-//            bundle.putInt(Constant.LAUNCH_FRAGMENT_PARAM, 5);
-//            intent.putExtras(bundle);
-//            startActivity(intent);
-//            getActivity().finish();
-//        }
+        mIndex = i;
     }
 
     @Override

@@ -12,15 +12,6 @@ import com.ninja.nanny.Model.SettingWizardModel;
 
 public abstract class BaseWizardFragment extends CustomFragment {
     protected View mView;
-    protected SettingWizardModel mModel;
-
-    public void setModel(SettingWizardModel model){
-        mModel = model;
-    }
-
-    public SettingWizardModel getModel() {
-        return mModel;
-    }
 
     /**
      * Validate input data

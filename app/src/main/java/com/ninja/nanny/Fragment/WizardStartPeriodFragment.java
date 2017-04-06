@@ -14,6 +14,7 @@ import com.ninja.nanny.Preference.UserPreference;
 import com.ninja.nanny.R;
 import com.ninja.nanny.Utils.Common;
 import com.ninja.nanny.Utils.Constant;
+import com.ninja.nanny.Utils.SmsReader;
 import com.ninja.nanny.WizardActivity;
 
 /**
@@ -42,20 +43,10 @@ public class WizardStartPeriodFragment extends BaseWizardFragment {
     }
 
     private void trySetSalaryDay() {
-        int day = UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_SALARY_DATE, Constant.DEFAULT_SALARY_DATE);
-        try {
-            for (Transaction tran : Common.getInstance().listAllTransactions) {
-                int change = tran.getAmountChange();
-                if (change > getResources().getInteger(R.integer.salary_limit)) {
-                    day = TimestampHelper.getDayOfMonthFromTimestamp(tran.getTimestampCreated());
-                    break;
-                }
-            }
+        int day = SmsReader.readSalaryDay(mContext, Common.getInstance().bankActive);
         mTextPeriodStart.setText(String.valueOf(day), TextView.BufferType.EDITABLE);
-        } catch(Exception e) {
-            Log.e(Constant.TAG_CURRENT, Log.getStackTraceString(e));
-        }
     }
+
 
     private void setUI(View mView) {
         View view = mView.findViewById(R.id.etSalaryDate);
@@ -74,7 +65,7 @@ public class WizardStartPeriodFragment extends BaseWizardFragment {
             UserPreference.getInstance().putSharedPreference(Constant.PREF_KEY_SALARY_DATE, day);
             // due to spaghetti code these should be updated manually. bleh.
             Common.getInstance().nSalaryDate = day;
-//            Common.getInstance().updateTimestamp();
+            Common.getInstance().calculateUsedAmount();
         } catch(Exception e) {
             Log.e(Constant.TAG_CURRENT, Log.getStackTraceString(e));
         }

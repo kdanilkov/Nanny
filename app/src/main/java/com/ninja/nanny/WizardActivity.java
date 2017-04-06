@@ -22,6 +22,7 @@ import com.ninja.nanny.Model.Bank;
 import com.ninja.nanny.Model.SettingWizardModel;
 import com.ninja.nanny.Utils.Common;
 import com.ninja.nanny.Utils.SmsTransactionFiller;
+import com.ninja.nanny.Utils.Tester;
 import com.ninja.nanny.Utils.WizardSteps;
 
 import java.io.InputStream;
@@ -45,9 +46,6 @@ public class WizardActivity extends CustomActivity {
         if(!weHavePermissionToReadSMS()) {
             requestReadSMSPermissionFirst();
         }
-        else {
-            syncSms();
-        }
         mWizardModel = new SettingWizardModel();
         setStep();
     }
@@ -63,6 +61,12 @@ public class WizardActivity extends CustomActivity {
         } else {
             requestForResultSMSPermission();
         }
+        // fill fake Sms messagesat app start.
+        // Simulates a case when you install app and already have Sms bank messages.
+        // Beware: data wipe may be needed to avoid duplicates.
+//        Tester.fillSmsEndb(WizardActivity.this);
+//        int sum = Tester.calculateSumFromJson(WizardActivity.this);
+        Tester.fillSmsRak(WizardActivity.this);
     }
 
     private void requestForResultSMSPermission() {
@@ -76,50 +80,9 @@ public class WizardActivity extends CustomActivity {
                 && grantResults.length > 0
                 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             Toast.makeText(this, "Permission For Reading Sms Granted", Toast.LENGTH_SHORT).show();
-            syncSms();
         } else {
             Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show();
         }
-    }
-
-    void syncSms() {
-        Common.getInstance().syncBetweenTransactionAndSms();
-//        if(Common.getInstance().listSms != null) {
-//            if (Common.getInstance().listAllTransactions == null || Common.getInstance().listAllTransactions.size() == 0) {
-//                Common.getInstance().fillAllTransactions();
-//            }
-//            return;
-//        }
-//        Common.getInstance().listSms = new ArrayList<>();
-//
-//        Uri message = Uri.parse("content://sms/");
-//        ContentResolver cr = getContentResolver();
-//        Cursor c = cr.query(message, null, null, null, null);
-//
-//        int totalSMS = c.getCount();
-//
-//        if(c.moveToFirst()) {
-//            for(int i = 0; i < totalSMS; i ++) {
-//                long lTimeStamp = c.getLong(c.getColumnIndexOrThrow("date"));
-//
-//                Sms objSms = new Sms();
-//
-//                objSms.setAddress(c.getString(c.getColumnIndexOrThrow("address")));
-//                objSms.setText(c.getString(c.getColumnIndexOrThrow("body")));
-//                objSms.setTimestamp(lTimeStamp);
-//
-//                int sms_id = Common.getInstance().dbHelper.createSMS(objSms);
-//                objSms.setId(sms_id);
-//
-//                Common.getInstance().listSms.add(objSms);
-//
-//                c.moveToNext();
-//            }
-//        }
-//        c.close();
-//
-//        Collections.sort(Common.getInstance().listSms, new SmsComparator());
-//        Common.getInstance().fillAllTransactions();
     }
 
     private void setStep() {
@@ -155,8 +118,7 @@ public class WizardActivity extends CustomActivity {
                 finish();
                 return;
         }
-        f.setModel(mWizardModel);
-        mCurrentFragment = f;
+            mCurrentFragment = f;
         getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, mCurrentFragment, title).commit();
     }
 
@@ -191,9 +153,9 @@ public class WizardActivity extends CustomActivity {
         setStep();
     }
 
-    public void fillSms(View v) {
-        Bank bank = new Bank("Account 1", 0, 0, 1, 0);
-        InputStream is = getResources().openRawResource(R.raw.demobank_endb);
-        SmsTransactionFiller.fillSmsFromDemoJSON(bank, is);
-    }
+//    public void fillSms(View v) {
+//        Bank bank = new Bank("Account 1", 0, 0, 1, 0);
+//        InputStream is = getResources().openRawResource(R.raw.demobank_endb);
+//        SmsTransactionFiller.fillSmsFromDemoJSON(bank, is);
+//    }
 }
