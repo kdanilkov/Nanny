@@ -806,24 +806,26 @@ public class Common {
 
     private void calculateBalance() {
         int nVal = bankActive.getBalance();
-
         long now = getTimestamp();
+//        TransactionLogger logger = new TransactionLogger();
         for(int i = 0; i < listNewTransactions.size(); i++) {
             Transaction trans = listNewTransactions.get(i);
             if (trans.getTimestampCreated() > now)
                 continue;
-            if(trans.getMode() == 1)
+            if(trans.getMode() == 1) {
                 nVal += trans.getAmountChange();
-            if(trans.getMode() == 2)
+//                logger.addTransaction(trans.getAmountChange());
+            }
+            if(trans.getMode() == 2) {
                 nVal -= trans.getAmountChange();
+//                logger.addTransaction(-trans.getAmountChange());
+            }
 
             if(trans.getAmountBalance() >= 0) {
                 nVal = trans.getAmountBalance();
             }
         }
-
         bankActive.setBalance(nVal);
-
         dbHelper.updateBank(bankActive);
     }
 

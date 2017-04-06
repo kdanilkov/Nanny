@@ -46,17 +46,25 @@ public class Tester {
         InputStream is = context.getResources().openRawResource(R.raw.demobank_rankbank);
         JSONArray transactions = SmsTransactionFiller.getTransactionsJSONArray(is);
 
+        TransactionLogger logger = new TransactionLogger();
         int sum = 0;
-        for (int i = transactions.length() -1 ; i >= 0; i--) {
+        for (int i = transactions.length() - 1; i >= 0; i--) {
             try {
                 Transaction trans = new Transaction(transactions.getJSONObject(i));
-                sum = (1 == trans.getMode())
-                        ? sum + trans.getAmountChange()
-                        : sum - trans.getAmountChange();
+                if (trans.getMode() == 1) {
+                    sum += trans.getAmountChange();
+                    logger.addTransaction(trans.getAmountChange());
+                } else {
+                    sum -= trans.getAmountChange();
+                    logger.addTransaction(-trans.getAmountChange());
+                }
             } catch (Exception e) {
                 Log.e(Constant.TAG_CURRENT, Log.getStackTraceString(e));
             }
         }
+        int i = 5;
+        sum += 5;
+        sum -= i;
         return sum;
     }
 }

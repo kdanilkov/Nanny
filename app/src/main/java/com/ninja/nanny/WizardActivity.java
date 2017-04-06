@@ -65,7 +65,7 @@ public class WizardActivity extends CustomActivity {
         // Simulates a case when you install app and already have Sms bank messages.
         // Beware: data wipe may be needed to avoid duplicates.
 //        Tester.fillSmsEndb(WizardActivity.this);
-        int sum = Tester.calculateSumFromJson(WizardActivity.this);
+//        int sum = Tester.calculateSumFromJson(WizardActivity.this);
         Tester.fillSmsRak(WizardActivity.this);
     }
 
