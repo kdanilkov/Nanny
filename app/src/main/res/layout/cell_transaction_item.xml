@@ -10,14 +10,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
-        <com.ninja.nanny.Custom.RegularTextView
+        <com.moneynanny.nanny.Custom.RegularTextView
             android:text="12 October 2016"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/tvDate"
             android:textSize="@dimen/editor_font_size" />
 
-        <com.ninja.nanny.Custom.RegularTextView
+        <com.moneynanny.nanny.Custom.RegularTextView
             android:text="Emirates NBD, 100$ > Internet"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

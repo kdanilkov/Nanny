@@ -47,7 +47,7 @@
             android:id="@+id/lytContainer"
             android:padding="20dp" >
 
-            <com.ninja.nanny.Custom.RegularTextView
+            <com.moneynanny.nanny.Custom.RegularTextView
                 android:text="Purchase of AED 26.00 with Debit Card ending 1736 at GULF FILM LLC -471203, DUBAI.Avl Balance is AED"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

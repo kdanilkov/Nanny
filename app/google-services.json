@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:467091502706:android:7a2ea5a4c9bfeab1",
         "android_client_info": {
-          "package_name": "com.ninja.nanny"
+          "package_name": "com.moneynanny.nanny"
         }
       },
       "oauth_client": [
@@ -18,7 +18,7 @@
           "client_id": "467091502706-ovf7ofel2alll92m3sl1i9fbh5pf3gnn.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.ninja.nanny",
+            "package_name": "com.moneynanny.nanny",
             "certificate_hash": "94B1D71FC3FE670786C80EB2CCBB3157C8A28E80"
           }
         },

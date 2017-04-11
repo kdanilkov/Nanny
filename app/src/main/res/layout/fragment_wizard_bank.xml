@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_alignParentBottom="true">
-    <com.ninja.nanny.Custom.MediumTextView
+    <com.moneynanny.nanny.Custom.MediumTextView
         android:text="@string/select_bank"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -36,7 +36,7 @@
             android:layout_below="@+id/imgvTop"
             android:scaleType="fitXY" />
 
-        <com.ninja.nanny.Custom.RegularTextView
+        <com.moneynanny.nanny.Custom.RegularTextView
             android:text="Oh, man, come on, you don't have some much money!"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -55,7 +55,7 @@
         android:layout_weight="2"
         android:layout_marginLeft="5dp">
 
-        <com.ninja.nanny.Custom.RegularTextView
+        <com.moneynanny.nanny.Custom.RegularTextView
             android:text="Oct, 16"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -65,7 +65,7 @@
             android:textSize="@dimen/label_font_size"
             android:textColor="@color/gray_dark" />
 
-        <com.ninja.nanny.Custom.MediumTextView
+        <com.moneynanny.nanny.Custom.MediumTextView
             android:text="VIEW BALENCE..."
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

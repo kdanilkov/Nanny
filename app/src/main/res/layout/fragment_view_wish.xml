@@ -23,7 +23,7 @@
             android:layout_width="30dp"
             android:layout_height="30dp" />
 
-        <com.ninja.nanny.Custom.MediumTextView
+        <com.moneynanny.nanny.Custom.MediumTextView
             android:text="View wishlist item"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -107,14 +107,14 @@
                     android:layout_marginTop="30dp"
                     android:id="@+id/lyTitle">
 
-                    <com.ninja.nanny.Custom.MediumTextView
+                    <com.moneynanny.nanny.Custom.MediumTextView
                         android:text="TITLE"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColor="@color/label_text_color"
                         android:textSize="@dimen/label_font_size" />
 
-                    <com.ninja.nanny.Custom.RegularTextView
+                    <com.moneynanny.nanny.Custom.RegularTextView
                         android:text="Trip to Maldives"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -134,14 +134,14 @@
                     android:layout_below="@+id/lyTitle"
                     android:layout_alignStart="@+id/lyTitle">
 
-                    <com.ninja.nanny.Custom.MediumTextView
+                    <com.moneynanny.nanny.Custom.MediumTextView
                         android:text="AMOUNT"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColor="@color/label_text_color"
                         android:textSize="@dimen/label_font_size" />
 
-                    <com.ninja.nanny.Custom.RegularTextView
+                    <com.moneynanny.nanny.Custom.RegularTextView
                         android:text="10,000$"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -161,14 +161,14 @@
                     android:layout_below="@+id/lyAmount"
                     android:layout_alignStart="@+id/lyAmount">
 
-                    <com.ninja.nanny.Custom.MediumTextView
+                    <com.moneynanny.nanny.Custom.MediumTextView
                         android:text="MONTHLY PAYMENT"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColor="@color/label_text_color"
                         android:textSize="@dimen/label_font_size" />
 
-                    <com.ninja.nanny.Custom.RegularTextView
+                    <com.moneynanny.nanny.Custom.RegularTextView
                         android:text="250$"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -201,14 +201,14 @@
                             android:layout_marginTop="15dp"
                             android:id="@+id/lySaved">
 
-                            <com.ninja.nanny.Custom.MediumTextView
+                            <com.moneynanny.nanny.Custom.MediumTextView
                                 android:text="SAVED"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:textColor="@color/label_text_color"
                                 android:textSize="@dimen/label_font_size" />
 
-                            <com.ninja.nanny.Custom.RegularTextView
+                            <com.moneynanny.nanny.Custom.RegularTextView
                                 android:text="6,200$"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
@@ -233,14 +233,14 @@
                             android:layout_marginTop="15dp"
                             android:id="@+id/lyLeft">
 
-                            <com.ninja.nanny.Custom.MediumTextView
+                            <com.moneynanny.nanny.Custom.MediumTextView
                                 android:text="LEFT"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:textColor="@color/label_text_color"
                                 android:textSize="@dimen/label_font_size" />
 
-                            <com.ninja.nanny.Custom.RegularTextView
+                            <com.moneynanny.nanny.Custom.RegularTextView
                                 android:text="3,800$"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"

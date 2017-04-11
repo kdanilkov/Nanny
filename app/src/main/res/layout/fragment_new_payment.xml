@@ -24,7 +24,7 @@
             android:layout_width="30dp"
             android:layout_height="30dp" />
 
-        <com.ninja.nanny.Custom.MediumTextView
+        <com.moneynanny.nanny.Custom.MediumTextView
             android:text="New Payment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -76,14 +76,14 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="30dp">
 
-                <com.ninja.nanny.Custom.MediumTextView
+                <com.moneynanny.nanny.Custom.MediumTextView
                     android:text="TITLE"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/label_font_size"
                     android:textColor="@color/label_text_color" />
 
-                <com.ninja.nanny.Custom.RegularEditText
+                <com.moneynanny.nanny.Custom.RegularEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName"
@@ -109,7 +109,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1">
 
-                    <com.ninja.nanny.Custom.MediumTextView
+                    <com.moneynanny.nanny.Custom.MediumTextView
                         android:text="AMOUNT (AED)"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -117,7 +117,7 @@
                         android:textSize="@dimen/label_font_size"
                         android:id="@+id/tvAmount" />
 
-                    <com.ninja.nanny.Custom.RegularEditText
+                    <com.moneynanny.nanny.Custom.RegularEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:ems="10"
@@ -140,14 +140,14 @@
                     android:layout_weight="1"
                     android:layout_marginLeft="60dp">
 
-                    <com.ninja.nanny.Custom.MediumTextView
+                    <com.moneynanny.nanny.Custom.MediumTextView
                         android:text="DATE OF MONTH"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textSize="@dimen/label_font_size"
                         android:textColor="@color/label_text_color" />
 
-                    <com.ninja.nanny.Custom.RegularEditText
+                    <com.moneynanny.nanny.Custom.RegularEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:ems="10"
@@ -181,7 +181,7 @@
                         android:layout_width="30dp"
                         android:background="@drawable/ic_unchecked" />
 
-                    <com.ninja.nanny.Custom.MediumTextView
+                    <com.moneynanny.nanny.Custom.MediumTextView
                         android:text="RECURRENT"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -205,7 +205,7 @@
                         android:layout_width="30dp"
                         android:background="@drawable/ic_unchecked" />
 
-                    <com.ninja.nanny.Custom.MediumTextView
+                    <com.moneynanny.nanny.Custom.MediumTextView
                         android:text="SAVINGS"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -223,14 +223,14 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="30dp">
 
-                <com.ninja.nanny.Custom.MediumTextView
+                <com.moneynanny.nanny.Custom.MediumTextView
                     android:text="Key words"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/label_font_size"
                     android:textColor="@color/label_text_color" />
 
-                <com.ninja.nanny.Custom.RegularEditText
+                <com.moneynanny.nanny.Custom.RegularEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName"

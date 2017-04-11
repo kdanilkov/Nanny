@@ -21,7 +21,7 @@
             android:background="@drawable/ic_menu"
             android:layout_width="30dp"
             android:layout_height="30dp" />
-        <com.ninja.nanny.Custom.MediumTextView
+        <com.moneynanny.nanny.Custom.MediumTextView
             android:text="Payments"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -57,7 +57,7 @@
             android:layout_weight="1"
             android:id="@+id/rlyThisPeriod">
 
-            <com.ninja.nanny.Custom.MediumTextView
+            <com.moneynanny.nanny.Custom.MediumTextView
                 android:text="THIS PERIOD"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -82,7 +82,7 @@
             android:layout_weight="1"
             android:id="@+id/rlyAll">
 
-            <com.ninja.nanny.Custom.MediumTextView
+            <com.moneynanny.nanny.Custom.MediumTextView
                 android:text="ALL"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

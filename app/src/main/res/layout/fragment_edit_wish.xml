@@ -24,7 +24,7 @@
             android:layout_width="30dp"
             android:layout_height="30dp" />
 
-        <com.ninja.nanny.Custom.MediumTextView
+        <com.moneynanny.nanny.Custom.MediumTextView
             android:text="Edit Wishlist item"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -76,7 +76,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="30dp">
 
-                <com.ninja.nanny.Custom.MediumTextView
+                <com.moneynanny.nanny.Custom.MediumTextView
                     android:text="TITLE"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -84,7 +84,7 @@
                     android:textSize="@dimen/label_font_size"
                     android:textColor="@color/label_text_color" />
 
-                <com.ninja.nanny.Custom.RegularEditText
+                <com.moneynanny.nanny.Custom.RegularEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPersonName"
@@ -104,7 +104,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="30dp">
 
-                <com.ninja.nanny.Custom.MediumTextView
+                <com.moneynanny.nanny.Custom.MediumTextView
                     android:text="AMOUNT (AED)"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -112,7 +112,7 @@
                     android:textSize="@dimen/label_font_size"
                     android:textColor="@color/label_text_color" />
 
-                <com.ninja.nanny.Custom.RegularEditText
+                <com.moneynanny.nanny.Custom.RegularEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
@@ -134,7 +134,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="30dp">
 
-                <com.ninja.nanny.Custom.MediumTextView
+                <com.moneynanny.nanny.Custom.MediumTextView
                     android:text="PAYMENT PERIOD"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -168,7 +168,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1">
 
-                    <com.ninja.nanny.Custom.MediumTextView
+                    <com.moneynanny.nanny.Custom.MediumTextView
                         android:text="TOTAL MONTHS"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -176,7 +176,7 @@
                         android:textSize="@dimen/label_font_size"
                         android:textColor="@color/label_text_color" />
 
-                    <com.ninja.nanny.Custom.RegularTextView
+                    <com.moneynanny.nanny.Custom.RegularTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/tvTotalMonths"
@@ -192,7 +192,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1">
 
-                    <com.ninja.nanny.Custom.MediumTextView
+                    <com.moneynanny.nanny.Custom.MediumTextView
                         android:text="MONTHLY PAYMENT"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -200,7 +200,7 @@
                         android:textSize="@dimen/label_font_size"
                         android:textColor="@color/label_text_color" />
 
-                    <com.ninja.nanny.Custom.RegularTextView
+                    <com.moneynanny.nanny.Custom.RegularTextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:id="@+id/tvMonthlyPayment"

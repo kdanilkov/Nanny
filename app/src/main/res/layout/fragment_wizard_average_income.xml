@@ -5,14 +5,14 @@
     android:layout_height="match_parent"
     android:layout_alignParentBottom="true">
 
-    <com.ninja.nanny.Custom.MediumTextView
+    <com.moneynanny.nanny.Custom.MediumTextView
         android:text="@string/average_income"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="@dimen/label_font_size"
         android:textColor="@color/label_text_color"
         android:layout_marginTop="30dp"/>
-    <com.ninja.nanny.Custom.RegularEditText
+    <com.moneynanny.nanny.Custom.RegularEditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"

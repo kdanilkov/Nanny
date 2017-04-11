@@ -24,7 +24,7 @@
             android:layout_width="30dp"
             android:layout_height="30dp" />
 
-        <com.ninja.nanny.Custom.MediumTextView
+        <com.moneynanny.nanny.Custom.MediumTextView
             android:text="Mark as payed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -44,7 +44,7 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/rlyTop">
 
-        <com.ninja.nanny.Custom.RegularTextView
+        <com.moneynanny.nanny.Custom.RegularTextView
             android:text="Hot water BBB suplier regular"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -53,7 +53,7 @@
             android:layout_marginTop="40dp"
             android:id="@+id/tvIdentifier" />
 
-        <com.ninja.nanny.Custom.RegularTextView
+        <com.moneynanny.nanny.Custom.RegularTextView
             android:text="20 day payment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -62,7 +62,7 @@
             android:layout_marginTop="5dp"
             android:id="@+id/tvDateOfMonth" />
 
-        <com.ninja.nanny.Custom.RegularTextView
+        <com.moneynanny.nanny.Custom.RegularTextView
             android:text="30 AED"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -71,7 +71,7 @@
             android:textSize="@dimen/label_font_size"
             android:layout_marginTop="5dp" />
 
-        <com.ninja.nanny.Custom.MediumOrangeButton
+        <com.moneynanny.nanny.Custom.MediumOrangeButton
             android:text="PAYED BY WIRE"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -83,7 +83,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="30dp" />
 
-        <com.ninja.nanny.Custom.MediumButton
+        <com.moneynanny.nanny.Custom.MediumButton
             android:text="PAYED BY CASH"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

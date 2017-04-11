@@ -23,7 +23,7 @@
             android:layout_width="30dp"
             android:layout_height="30dp" />
 
-        <com.ninja.nanny.Custom.MediumTextView
+        <com.moneynanny.nanny.Custom.MediumTextView
             android:text="Advisor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -98,7 +98,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp" />
 
-        <com.ninja.nanny.Custom.RegularEditText
+        <com.moneynanny.nanny.Custom.RegularEditText
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:ems="10"

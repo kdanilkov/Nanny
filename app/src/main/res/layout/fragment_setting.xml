@@ -26,14 +26,14 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="30dp">
 
-                <com.ninja.nanny.Custom.MediumTextView
+                <com.moneynanny.nanny.Custom.MediumTextView
                     android:text="MINIMAL AMOUNT PER DAY (AED)"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/label_font_size"
                     android:textColor="@color/label_text_color" />
 
-                <com.ninja.nanny.Custom.RegularEditText
+                <com.moneynanny.nanny.Custom.RegularEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="number"
@@ -54,14 +54,14 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="30dp">
 
-                <com.ninja.nanny.Custom.MediumTextView
+                <com.moneynanny.nanny.Custom.MediumTextView
                     android:text="Income DEPOSIT / accounting period start DATE"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/label_font_size"
                     android:textColor="@color/label_text_color" />
 
-                <com.ninja.nanny.Custom.RegularEditText
+                <com.moneynanny.nanny.Custom.RegularEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="15"
@@ -82,14 +82,14 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="30dp">
 
-                <com.ninja.nanny.Custom.MediumTextView
+                <com.moneynanny.nanny.Custom.MediumTextView
                     android:text="MONTHLY INCOME (AED)"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/label_font_size"
                     android:textColor="@color/label_text_color" />
 
-                <com.ninja.nanny.Custom.RegularEditText
+                <com.moneynanny.nanny.Custom.RegularEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
@@ -110,14 +110,14 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="30dp">
 
-                <com.ninja.nanny.Custom.MediumTextView
+                <com.moneynanny.nanny.Custom.MediumTextView
                     android:text="Spent from current income (AED)"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/label_font_size"
                     android:textColor="@color/label_text_color" />
 
-                <com.ninja.nanny.Custom.RegularEditText
+                <com.moneynanny.nanny.Custom.RegularEditText
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
@@ -144,7 +144,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent">
 
-                    <com.ninja.nanny.Custom.MediumTextView
+                    <com.moneynanny.nanny.Custom.MediumTextView
                         android:id="@+id/mediumTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -153,7 +153,7 @@
                         android:textColor="@color/label_text_color"
                         android:textSize="@dimen/label_font_size" />
 
-                    <com.ninja.nanny.Custom.RegularTextView
+                    <com.moneynanny.nanny.Custom.RegularTextView
                         android:text="3 DAYS"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -190,14 +190,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent">
 
-                    <com.ninja.nanny.Custom.MediumTextView
+                    <com.moneynanny.nanny.Custom.MediumTextView
                         android:text="AMOUNT TOLERANCE (%)"
                         android:layout_width="match_parent"
                         android:textSize="@dimen/label_font_size"
                         android:layout_height="wrap_content"
                         android:textColor="@color/label_text_color" />
 
-                    <com.ninja.nanny.Custom.RegularTextView
+                    <com.moneynanny.nanny.Custom.RegularTextView
                         android:text="15 %"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -248,7 +248,7 @@
             android:layout_width="30dp"
             android:layout_height="30dp" />
 
-        <com.ninja.nanny.Custom.MediumTextView
+        <com.moneynanny.nanny.Custom.MediumTextView
             android:text="Application Settings"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
