@@ -21,7 +21,7 @@ public class Tester {
     private static final Bank adcb = new Bank("Account 1", 2, 0, 1, 0);;
     private static final Bank rak = new Bank("Account 1", 3, 0, 1, 0);;
 
-
+/*
     public static void fillSmsEndb(Context context) {
         InputStream is = context.getResources().openRawResource(R.raw.demobank_endb);
         SmsTransactionFiller.fillSmsFromDemoJSON(endb, is);
@@ -66,5 +66,5 @@ public class Tester {
         sum += 5;
         sum -= i;
         return sum;
-    }
+    }*/
 }

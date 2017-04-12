@@ -1,26 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 <string-array name="payment_pattern_name">
-    <item>Subscription for music</item>
-    <item>Film processing</item>
-    <item>Internet</item>
-    <item>Mobile</item>
-    <item>Utility</item>
-</string-array>
+    <item>DEWA</item>
+    <item>DU</item>
+    <item>Empower</item>
+    </string-array>
 
 <string-array name="payment_pattern_words">
-    <item>itunes.com</item>
-    <item>GULF FILM LLC</item>
-    <item>internet</item>
-    <item>mobile</item>
-    <item>utility</item>
-</string-array>
+    <item>DEWA</item>
+    <item>DU (EITC)(</item>
+    <item>Empower</item>
+    </string-array>
 
 <string-array name="payment_pattern_date">
-    <item>3</item>
-    <item>25</item>
-    <item>20</item>
-    <item>21</item>
-    <item>20</item>
-</string-array>
+    <item>10</item>
+    <item>15</item>
+    <item>15</item>
+    </string-array>
 </resources>
