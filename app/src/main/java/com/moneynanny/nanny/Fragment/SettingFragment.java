@@ -50,6 +50,7 @@ public class SettingFragment extends CustomFragment implements DiscreteSeekBar.O
 
         setUI();
 
+
         //Tester.testRegex();
         if( Common.getInstance().timestampInitConfig <= 0)
         {
