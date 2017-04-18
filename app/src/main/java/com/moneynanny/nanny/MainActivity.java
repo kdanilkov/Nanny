@@ -114,16 +114,7 @@ public class MainActivity extends CustomActivity {
         }
     }
 
-    void testRegex() {
-        String strSms = "Loan installment AED 6678.63 from ACCT 3392";
-        Transaction trans = ParseSms.getInstance().getSmsByTemplate6(strSms);
 
-        if(trans == null) {
-            Log.e(Constant.TAG_CURRENT, "parsing failed");
-        } else {
-            Log.e(Constant.TAG_CURRENT, "parsing success");
-        }
-    }
 
 
     private boolean weHavePermissionToReadSMS() {

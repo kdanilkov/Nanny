@@ -8,6 +8,7 @@ import com.moneynanny.nanny.Model.Transaction;
 import com.moneynanny.nanny.R;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.InputStream;
 
@@ -67,4 +68,34 @@ public class Tester {
         sum -= i;
         return sum;
     }
+
+    public static void testRegex() {
+
+        String strSms = "AED 5,999.09 has been deposited to your account 223-444-XXX through the deposit machine";
+        String strPattern = "AED (\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?) has been deposited to your account (\\w+)-(\\w+)-(\\w+) (.*)";
+        Transaction trans = ParseSms.getInstance().getSmsByTemplate(strSms,strPattern);
+
+        if(trans == null) {
+            Log.e(Constant.TAG_CURRENT, "parsing failed");
+        } else {
+            Log.e(Constant.TAG_CURRENT, "parsing success");
+        }
+    }
+    private static void setBank(int mIndex)
+    {
+        Bank bank = new Bank();
+        try {
+            JSONObject bankObj = Common.getInstance().jsonArrayBankInfo.getJSONObject(mIndex);
+            bank.setAccountName(bankObj.getString(Constant.JSON_NAME));
+            bank.setIdxKind(mIndex);
+            bank.setFlagActive(1);
+            bank.setTimestamp(0);
+            Common.getInstance().addOrUpdateBank(bank);
+        }
+        catch (Exception ex)
+        {
+            Log.e(Constant.TAG_CURRENT, ex.getMessage());
+        }
+    }
+
 }

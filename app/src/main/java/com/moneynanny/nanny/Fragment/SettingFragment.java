@@ -20,6 +20,7 @@ import com.moneynanny.nanny.Preference.UserPreference;
 import com.moneynanny.nanny.R;
 import com.moneynanny.nanny.Utils.Common;
 import com.moneynanny.nanny.Utils.Constant;
+import com.moneynanny.nanny.Utils.Tester;
 import com.moneynanny.nanny.WizardActivity;
 
 import org.adw.library.widgets.discreteseekbar.DiscreteSeekBar;
@@ -48,6 +49,8 @@ public class SettingFragment extends CustomFragment implements DiscreteSeekBar.O
         mInflater = inflater;
 
         setUI();
+
+        //Tester.testRegex();
         if( Common.getInstance().timestampInitConfig <= 0)
         {
             // uncomment to fill fake transactions at app start. Beware: data wipe may be needed to avoid duplicates.
