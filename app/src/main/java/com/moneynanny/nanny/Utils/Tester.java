@@ -71,8 +71,8 @@ public class Tester {
 
     public static void testRegex() {
 
-        String strSms = "AED 5,999.09 has been deposited to your account 223-444-XXX through the deposit machine";
-        String strPattern = "AED (\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?) has been deposited to your account (\\w+)-(\\w+)-(\\w+) (.*)";
+        String strSms = "25MAR2017 Credit Telegraphic Transfer to Amr-HSBC AED 20,000.00+ Your available balance is AED 20,667.64";
+        String strPattern = "(.*) Credit (.*) AED (\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?)\\+ Your available balance is AED ((?!0+\\.00)(?=.{1,9}(\\.|$))(?!0(?!\\.))\\d{1,3}(,\\d{3})*(\\.\\d+)?)";
         Transaction trans = ParseSms.getInstance().getSmsByTemplate(strSms,strPattern);
 
         if(trans == null) {

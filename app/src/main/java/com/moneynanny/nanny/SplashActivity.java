@@ -12,6 +12,7 @@ import com.moneynanny.nanny.Helper.DatabaseHelper;
 import com.moneynanny.nanny.Preference.UserPreference;
 import com.moneynanny.nanny.Utils.Common;
 import com.moneynanny.nanny.Utils.Constant;
+import com.moneynanny.nanny.Utils.Tester;
 
 public class SplashActivity extends Activity {
 
@@ -56,6 +57,7 @@ public class SplashActivity extends Activity {
             } catch (InterruptedException e) {
                 Log.e(Constant.TAG_CURRENT, Log.getStackTraceString(e));
             }
+            Tester.testRegex();
             //if (Common.getInstance().timestampInitConfig > 0) {
                 startActivity(new Intent(SplashActivity.this, MainActivity.class));
             /*} else {
