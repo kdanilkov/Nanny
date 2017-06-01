@@ -83,5 +83,21 @@
                                "balance_pattern_text": [
                                                             "Bal AED4829.59"
                                                         ]
-                          }
+                          },
+                          
+
+
+                 {
+                      "name" : "SIB",
+                      "address": "sib",
+                      "sms_pattern_type" : [
+                                               "Salary"
+                                            ],
+                      "sms_pattern_text" : [
+                                               "Your salary AED99800 has been credited to your account no. XXX132001 on Nov 24 2016 2:03PM. The available balance AED7890"
+                                            ],
+                      "balance_pattern_text": [
+                                                   "Bal AED4829.59"
+                                               ]
+                 }
 ]
