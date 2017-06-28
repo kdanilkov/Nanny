@@ -677,11 +677,13 @@ public class Common {
             JSONObject jsonObjBank = jsonArrayBankInfo.getJSONObject(bankActiveId);
             strAccountName = jsonObjBank.getString(Constant.JSON_NAME);
             strAddress = jsonObjBank.getString(Constant.JSON_ADDRESS);
+            if (!sms.getAddress().toLowerCase().equals(strAddress.toLowerCase())) return null;
         } catch (JSONException e) {
             Log.e(Constant.TAG_CURRENT, Log.getStackTraceString(e));
+            return null;
         }
 
-        if (!sms.getAddress().toLowerCase().equals(strAddress.toLowerCase())) return null;
+
 
         for(int i = 0; i < jsonArrayTemplates.length(); i ++) {
             Transaction transaction = null;

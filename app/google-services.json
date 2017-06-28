@@ -1,35 +1,27 @@
 {
   "project_info": {
-    "project_number": "467091502706",
-    "firebase_url": "https://nanny-85065.firebaseio.com",
-    "project_id": "nanny-85065",
-    "storage_bucket": "nanny-85065.appspot.com"
+    "project_number": "814053610130",
+    "firebase_url": "https://money-nanny.firebaseio.com",
+    "project_id": "money-nanny",
+    "storage_bucket": "money-nanny.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:467091502706:android:7a2ea5a4c9bfeab1",
+        "mobilesdk_app_id": "1:814053610130:android:ddc0c4cd626cecf5",
         "android_client_info": {
           "package_name": "com.moneynanny.nanny"
         }
       },
       "oauth_client": [
         {
-          "client_id": "467091502706-ovf7ofel2alll92m3sl1i9fbh5pf3gnn.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.moneynanny.nanny",
-            "certificate_hash": "94B1D71FC3FE670786C80EB2CCBB3157C8A28E80"
-          }
-        },
-        {
-          "client_id": "467091502706-bb7nim2mqs6v8ab4hulshhgda8ii7euu.apps.googleusercontent.com",
+          "client_id": "814053610130-pb6tm10c22q37aql0grmp9ikou9mo3c5.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyAJS1f0o7q6wLp8fcpuxg2CBU2a0hhyl7Q"
+          "current_key": "AIzaSyDsJMyOYUTy1OjDZnRAXPMq9hl_9PjDkQ0"
         }
       ],
       "services": {
@@ -37,13 +29,8 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 2,
-          "other_platform_oauth_client": [
-            {
-              "client_id": "467091502706-bb7nim2mqs6v8ab4hulshhgda8ii7euu.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "status": 1,
+          "other_platform_oauth_client": []
         },
         "ads_service": {
           "status": 2
