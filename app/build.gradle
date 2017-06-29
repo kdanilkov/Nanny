@@ -7,8 +7,8 @@ android {
         applicationId "com.moneynanny.nanny"
         minSdkVersion 18
         targetSdkVersion 24
-        versionCode 12
-        versionName "1.12"
+        versionCode 14
+        versionName "1.14"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

@@ -18,7 +18,7 @@ public class SplashActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        UserPreference.getInstance().pref = getSharedPreferences(Constant.PREF_NAME, Context.MODE_PRIVATE);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         //Do your operation
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
@@ -39,8 +39,10 @@ public class SplashActivity extends Activity {
                 // init common
                 Common.getInstance().readBankJsonData(SplashActivity.this);
                 Common.getInstance().readTemplateJsonData(SplashActivity.this);
+                if(UserPreference.getInstance().pref==null) {
+                    UserPreference.getInstance().pref = getSharedPreferences(Constant.PREF_NAME, Context.MODE_PRIVATE);
+                }
 
-                UserPreference.getInstance().pref = getSharedPreferences(Constant.PREF_NAME, Context.MODE_PRIVATE);
                 Common.getInstance().syncSettingInfo();
 
                 Common.getInstance().dbHelper = new DatabaseHelper(getApplicationContext());

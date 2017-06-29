@@ -169,6 +169,9 @@ public class Common {
     }
 
     public void syncSettingInfo() {
+
+
+
         timestampInitConfig = UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_INIT_CONFIG_TIMESTAMP, (long)0);
         nMinimalDayAmount = UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_MINIMAL_AMOUNT_PER_DAY, 0);
         nSalaryDate = UserPreference.getInstance().getSharedPreference(Constant.PREF_KEY_SALARY_DATE, 15);
