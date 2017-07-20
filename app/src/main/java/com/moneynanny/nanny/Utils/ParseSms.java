@@ -22,9 +22,9 @@ public class ParseSms {
 
         return instance;
     }
-
+/*
     public Transaction getSmsByTemplate0(String strMsg) {
-        String strPattern = "Purchase of AED (\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?) with Debit Card ending (\\d{4}) at (.*). Avl (Balance|Bal) is AED (\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?)";
+        String strPattern = "Purchase of BHD (\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?) with Debit Card ending (\\d{4}) at (.*). Avl (Balance|Bal) is BHD (\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?)";
 
         Pattern p = Pattern.compile(strPattern);
         Matcher m = p.matcher(strMsg);
@@ -51,7 +51,7 @@ public class ParseSms {
     }
 
     public Transaction getSmsByTemplate1(String strMsg) {
-        String strPattern = "Purchase of AED (\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?) with Debit Card ending (\\d{4}) at (.*)";
+        String strPattern = "Purchase of BHD (\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?) with Debit Card ending (\\d{4}) at (.*)";
 
         Pattern p = Pattern.compile(strPattern);
         Matcher m = p.matcher(strMsg);
@@ -78,7 +78,7 @@ public class ParseSms {
     }
 
     public Transaction getSmsByTemplate2(String strMsg) {
-        String strPattern = "Transaction AED(\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?) credit card (\\d{4}) (.*). Bal AED(\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?)";
+        String strPattern = "Transaction BHD(\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?) credit card (\\d{4}) (.*). Bal BHD(\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?)";
 
         Pattern p = Pattern.compile(strPattern);
         Matcher m = p.matcher(strMsg);
@@ -106,7 +106,7 @@ public class ParseSms {
     }
 
     public Transaction getSmsByTemplate3(String strMsg) {
-        String strPattern = "Cash Withdrawal of AED (\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?) with Debit Card ending (\\d{4})";
+        String strPattern = "Cash Withdrawal of BHD (\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?) with Debit Card ending (\\d{4})";
 
         Pattern p = Pattern.compile(strPattern);
         Matcher m = p.matcher(strMsg);
@@ -132,7 +132,7 @@ public class ParseSms {
     }
 
     public Transaction getSmsByTemplate4(String strMsg) {
-        String strPattern = "AED (\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?) has been received as TELEGRAHPHIC TRANSFER";
+        String strPattern = "BHD (\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?) has been received as TELEGRAHPHIC TRANSFER";
 
         Pattern p = Pattern.compile(strPattern);
         Matcher m = p.matcher(strMsg);
@@ -158,7 +158,7 @@ public class ParseSms {
     }
 
     public Transaction getSmsByTemplate5(String strMsg) {
-        String strPattern = "Your salary AED(\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?) has been credited to your account (.*). The available balance AED(\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?)";
+        String strPattern = "Your salary BHD(\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?) has been credited to your account (.*). The available balance BHD(\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?)";
 
         Pattern p = Pattern.compile(strPattern);
         Matcher m = p.matcher(strMsg);
@@ -184,7 +184,7 @@ public class ParseSms {
     }
 
     public Transaction getSmsByTemplate6(String strMsg) {
-        String strPattern = "Loan installment AED (\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?) from";
+        String strPattern = "Loan installment BHD (\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?) from";
 
         Pattern p = Pattern.compile(strPattern);
         Matcher m = p.matcher(strMsg);
@@ -216,5 +216,5 @@ public class ParseSms {
 
         return (int)d;
     }
-
+*/
 }

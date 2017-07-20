@@ -27,7 +27,7 @@
                 android:layout_marginTop="30dp">
 
                 <com.moneynanny.nanny.Custom.MediumTextView
-                    android:text="MINIMAL AMOUNT PER DAY (AED)"
+                    android:text="MINIMAL AMOUNT PER DAY (BHD)"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/label_font_size"
@@ -45,7 +45,7 @@
                     android:textColor="@color/black"
                     android:paddingBottom="5dp"
                     android:selectAllOnFocus="true"
-                    android:hint="AED 0.00" />
+                    android:hint="BHD 0.00" />
             </LinearLayout>
 
             <LinearLayout
@@ -83,7 +83,7 @@
                 android:layout_marginTop="30dp">
 
                 <com.moneynanny.nanny.Custom.MediumTextView
-                    android:text="MONTHLY INCOME (AED)"
+                    android:text="MONTHLY INCOME (BHD)"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/label_font_size"
@@ -101,7 +101,7 @@
                     android:paddingBottom="5dp"
                     android:selectAllOnFocus="true"
                     android:inputType="number"
-                    android:hint="AED 0.00" />
+                    android:hint="BHD 0.00" />
             </LinearLayout>
 
             <LinearLayout
@@ -111,7 +111,7 @@
                 android:layout_marginTop="30dp">
 
                 <com.moneynanny.nanny.Custom.MediumTextView
-                    android:text="Spent from current income (AED)"
+                    android:text="Spent from current income (BHD)"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/label_font_size"
@@ -130,7 +130,7 @@
                     android:paddingBottom="5dp"
                     android:inputType="number"
                     android:imeOptions="actionDone"
-                    android:hint="AED 0.00" />
+                    android:hint="BHD 0.00" />
             </LinearLayout>
 
             <LinearLayout

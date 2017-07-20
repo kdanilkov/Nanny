@@ -1,103 +1,15 @@
 [
         {
-            "name" : "EmiratesNBD",
-            "address": "emiratesnbd",
+            "name" : "Standard Chartered",
+            "address": "stanchart",
             "sms_pattern_type" : [
-                                    "GULF FILM LLC",
-                                    "Cash",
-                                    "Income",
-                                    "Itunes",
-                                    "Food",
-                                    "Taxi",
-                                    "Mobile phone",
-                                    "Internet",
-                                    "Utility"
+
                                  ],
             "sms_pattern_text" : [
-                                    "Purchase of AED 26.00 with Debit Card ending 0000 at GULF FILM LLC -471203, DUBAI",
-                                    "Cash Withdrawal of AED 500.00 with Debit Card ending 0000 at, DUBAI",
-                                    "AED 22,000.00 has been received as TELEGRAHPHIC TRANSFER. The available balance of your account is AED 70,000.10.",
-                                    "Purchase of AED 70.00 with Debit Card ending 0000 at itunes.com",
-                                    "Purchase of AED 10.00 with Debit Card ending 0000 at food",
-                                    "Purchase of AED 10.00 with Debit Card ending 0000 at taxi",
-                                    "Purchase of AED 30.00 with Debit Card ending 0000 at mobile",
-                                    "Purchase of AED 20.00 with Debit Card ending 0000 at internet",
-                                    "Purchase of AED 100.00 with Debit Card ending 0000 at utility"
+
                                  ],
             "balance_pattern_text": [
-                                        "Avl Balance is AED 26.00",
-                                        "Avl Balance is AED 26.00",
-                                        "The available balance of your account is AED 26.00",
-                                        "Avl Balance is AED 26.00",
-                                        "Avl Balance is AED 26.00",
-                                        "Avl Balance is AED 26.00",
-                                        "Avl Balance is AED 26.00",
-                                        "Avl Balance is AED 26.00",
-                                        "Avl Balance is AED 26.00"
+
                                     ]
-        },
-
-
-
-        {
-             "name" : "ADCB",
-             "address": "adcb",
-             "sms_pattern_type" : [
-                                      "Salary"
-                                   ],
-             "sms_pattern_text" : [
-                                      "Your salary AED99800 has been credited to your account no. XXX132001 on Nov 24 2016 2:03PM. The available balance AED7890"
-                                   ],
-             "balance_pattern_text": [
-                                          "Bal AED4829.59"
-                                      ]
-        },
-
-
-
-                 {
-                      "name" : "Mashreq",
-                      "address": "mashreqbank",
-                      "sms_pattern_type" : [
-                                               "Salary"
-                                            ],
-                      "sms_pattern_text" : [
-                                               "Your salary AED99800 has been credited to your account no. XXX132001 on Nov 24 2016 2:03PM. The available balance AED7890"
-                                            ],
-                      "balance_pattern_text": [
-                                                   "Bal AED4829.59"
-                                               ]
-                 },
-
-
-
-                          {
-                               "name" : "HSBC",
-                               "address": "hsbc-uae",
-                               "sms_pattern_type" : [
-                                                        "Salary"
-                                                     ],
-                               "sms_pattern_text" : [
-                                                        "Your salary AED99800 has been credited to your account no. XXX132001 on Nov 24 2016 2:03PM. The available balance AED7890"
-                                                     ],
-                               "balance_pattern_text": [
-                                                            "Bal AED4829.59"
-                                                        ]
-                          },
-                          
-
-
-                 {
-                      "name" : "SIB",
-                      "address": "sib",
-                      "sms_pattern_type" : [
-                                               "Salary"
-                                            ],
-                      "sms_pattern_text" : [
-                                               "Your salary AED99800 has been credited to your account no. XXX132001 on Nov 24 2016 2:03PM. The available balance AED7890"
-                                            ],
-                      "balance_pattern_text": [
-                                                   "Bal AED4829.59"
-                                               ]
-                 }
+        }
 ]

@@ -1,7 +1,18 @@
 [
 
   {
-    "regex" : "Purchase of AED (\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?) with Debit Card ending (\\d{4}) at (.*). Avl (Balance|Bal) is AED ((?!0+\\.00)(?=.{1,9}(\\.|$))(?!0(?!\\.))\\d{1,3}(,\\d{3})*(\\.\\d+)?)",
+    "regex" : "Purchase of BHD (\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?) with Debit Card ending (\\d{4}) at (.*). Avl (Balance|Bal) is BHD ((?!0+\\.00)(?=.{1,9}(\\.|$))(?!0(?!\\.))\\d{1,3}(,\\d{3})*(\\.\\d+)?)",
+    "mode": "spending",
+    "address": "stanchart",
+    "params" : {
+      "change" : 1,
+      "words" : 5,
+      "balance" : 7
+    }
+  },
+
+  {
+    "regex" : "Cash Withdrawal of BHD (\\d*\\.?\\\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?) with Debit Card ending (\\d{4}) at (.*). Avl (Balance|Bal) is BHD ((?!0+\\.00)(?=.{1,9}(\\.|$))(?!0(?!\\.))\\d{1,3}(,\\d{3})*(\\.\\d+)?)",
     "mode": "spending",
     "address": "emiratesnbd",
     "params" : {
@@ -12,18 +23,7 @@
   },
 
   {
-    "regex" : "Cash Withdrawal of AED (\\d*\\.?\\\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?) with Debit Card ending (\\d{4}) at (.*). Avl (Balance|Bal) is AED ((?!0+\\.00)(?=.{1,9}(\\.|$))(?!0(?!\\.))\\d{1,3}(,\\d{3})*(\\.\\d+)?)",
-    "mode": "spending",
-    "address": "emiratesnbd",
-    "params" : {
-      "change" : 1,
-      "words" : 5,
-      "balance" : 7
-    }
-  },
-
-  {
-    "regex" : "AED (\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?) has been received as TELEGRAHPHIC TRANSFER. The available balance of your account is AED ((?!0+\\.00)(?=.{1,9}(\\.|$))(?!0(?!\\.))\\d{1,3}(,\\d{3})*(\\.\\d+)?)",
+    "regex" : "BHD (\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?) has been received as TELEGRAHPHIC TRANSFER. The available balance of your account is BHD ((?!0+\\.00)(?=.{1,9}(\\.|$))(?!0(?!\\.))\\d{1,3}(,\\d{3})*(\\.\\d+)?)",
     "mode": "income",
     "address": "emiratesnbd",
     "params" : {
@@ -33,7 +33,7 @@
   },
 
   {
-    "regex" : "AED (\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?) has been deducted from your account (\\w+)-(\\w+)-(\\w+) for (.*)",
+    "regex" : "BHD (\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?) has been deducted from your account (\\w+)-(\\w+)-(\\w+) for (.*)",
     "mode": "spending",
     "address": "emiratesnbd",
     "params" : {
@@ -42,7 +42,7 @@
     }
   },
   {
-    "regex" : "AED (\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?) has been deducted from your account (.*)(towards payment of your Credit Card)(.*)",
+    "regex" : "BHD (\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?) has been deducted from your account (.*)(towards payment of your Credit Card)(.*)",
     "mode": "spending",
     "address": "emiratesnbd",
     "params" : {
@@ -52,7 +52,7 @@
   },
 
   {
-    "regex" : "AED (\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?) has been debited from your account no. (\\w+)-(\\w+)-(\\w+) (.*)",
+    "regex" : "BHD (\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?) has been debited from your account no. (\\w+)-(\\w+)-(\\w+) (.*)",
     "mode": "spending",
     "address": "emiratesnbd",
     "params" : {
@@ -63,7 +63,7 @@
 
 
   {
-    "regex" : "AED (\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?) has been deposited to your account (\\w+)-(\\w+)-(\\w+) (.*)",
+    "regex" : "BHD (\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?) has been deposited to your account (\\w+)-(\\w+)-(\\w+) (.*)",
     "mode": "income",
     "address": "emiratesnbd",
     "params" : {
@@ -72,7 +72,7 @@
     }
   },
   {
-    "regex" : "Transaction AED(\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?) credit card (\\d{4}) (.*). Bal AED(\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?)",
+    "regex" : "Transaction BHD(\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?) credit card (\\d{4}) (.*). Bal BHD(\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?)",
     "mode": "spending",
     "address": "cbd",
     "params" : {
@@ -84,7 +84,7 @@
 
 
   {
-    "regex" : "Loan installment AED(\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?) from",
+    "regex" : "Loan installment BHD(\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?) from",
     "mode": "spending",
     "address": "cbd",
     "params" : {
@@ -93,7 +93,7 @@
   },
 
   {
-    "regex" : "(.*)of AED(\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?) has been credited to your A/C(.*). Available balance in your A/C is AED(\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?)",
+    "regex" : "(.*)of BHD(\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?) has been credited to your A/C(.*). Available balance in your A/C is BHD(\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?)",
     "mode": "income",
     "address": "cbd",
     "params" : {
@@ -102,7 +102,7 @@
     }
   },
   {
-    "regex" : "(.*)AED(\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?) has been credited to your account (.*). The available balance AED((?!0+\\.00)(?=.{1,9}(\\.|$))(?!0(?!\\.))\\d{1,3}(,\\d{3})*(\\.\\d+)?)",
+    "regex" : "(.*)BHD(\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?) has been credited to your account (.*). The available balance BHD((?!0+\\.00)(?=.{1,9}(\\.|$))(?!0(?!\\.))\\d{1,3}(,\\d{3})*(\\.\\d+)?)",
     "mode": "income",
     "address": "adcb",
     "params" : {
@@ -112,7 +112,7 @@
   },
 
   {
-    "regex" : "AED (\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?) withdrawn(.*).Avl.Bal.AED((?!0+\\.00)(?=.{1,9}(\\.|$))(?!0(?!\\.))\\d{1,3}(,\\d{3})*(\\.\\d+)?).(.*)",
+    "regex" : "BHD (\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?) withdrawn(.*).Avl.Bal.BHD((?!0+\\.00)(?=.{1,9}(\\.|$))(?!0(?!\\.))\\d{1,3}(,\\d{3})*(\\.\\d+)?).(.*)",
     "mode": "spending",
     "address": "adcb",
     "params" : {
@@ -123,7 +123,7 @@
   },
 
   {
-    "regex" : "(.*)transaction of AED(\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?) has been performed(.*).Available balance is AED((?!0+\\.00)(?=.{1,9}(\\.|$))(?!0(?!\\.))\\d{1,3}(,\\d{3})*(\\.\\d+)?).(.*)",
+    "regex" : "(.*)transaction of BHD(\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?) has been performed(.*).Available balance is BHD((?!0+\\.00)(?=.{1,9}(\\.|$))(?!0(?!\\.))\\d{1,3}(,\\d{3})*(\\.\\d+)?).(.*)",
     "mode": "spending",
     "address": "adcb",
     "params" : {
@@ -135,7 +135,7 @@
 
 
   {
-    "regex" : "AED(\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?) (has been deposited via CDM in your account)(.*). Available Balance is AED((?!0+\\.00)(?=.{1,9}(\\.|$))(?!0(?!\\.))\\d{1,3}(,\\d{3})*(\\.\\d+)?).(.*)",
+    "regex" : "BHD(\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?) (has been deposited via CDM in your account)(.*). Available Balance is BHD((?!0+\\.00)(?=.{1,9}(\\.|$))(?!0(?!\\.))\\d{1,3}(,\\d{3})*(\\.\\d+)?).(.*)",
     "mode": "income",
     "address": "adcb",
     "params" : {
@@ -145,7 +145,7 @@
     }
   },
   {
-    "regex" : "(.*)salary AED (\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?) has been credited to your account (.*)",
+    "regex" : "(.*)salary BHD (\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?) has been credited to your account (.*)",
     "mode": "income",
     "address": "rakbank",
     "params" : {
@@ -154,7 +154,7 @@
   },
 
   {
-    "regex" : "(.*)AED (\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?) has been withdrawn in cash from your Ac(.*)",
+    "regex" : "(.*)BHD (\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?) has been withdrawn in cash from your Ac(.*)",
     "mode": "spending",
     "address": "rakbank",
     "params" : {
@@ -163,7 +163,7 @@
   },
 
   {
-    "regex" : "(.*)amount of AED (\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?) has been charged on your Debit card(.*)from (.*) on (.*)",
+    "regex" : "(.*)amount of BHD (\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?) has been charged on your Debit card(.*)from (.*) on (.*)",
     "mode": "spending",
     "address": "rakbank",
     "params" : {
@@ -172,7 +172,7 @@
     }
   },
   {
-    "regex" : "Thank You for using your Debit Card ending (\\d{4}) for AED (\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?) at (.*) Avl. Bal is AED (\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?).",
+    "regex" : "Thank You for using your Debit Card ending (\\d{4}) for BHD (\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?) at (.*) Avl. Bal is BHD (\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?).",
     "mode": "spending",
     "address": "mashreqbank",
     "params" : {
@@ -183,7 +183,7 @@
 },
 
 {
-    "regex" : "Your Debit Card ending with (\\d{4}) was used for a cash withdrawal of AED (\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?) at (.*) Available balance is AED (\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?).",
+    "regex" : "Your Debit Card ending with (\\d{4}) was used for a cash withdrawal of BHD (\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?) at (.*) Available balance is BHD (\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?).",
     "mode": "spending",
     "address": "mashreqbank",
     "params" : {
@@ -193,7 +193,7 @@
     }
 },
 {
-    "regex" : "An amount of AED (\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?) has been (.*). Please",
+    "regex" : "An amount of BHD (\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?) has been (.*). Please",
     "mode": "income",
     "address": "mashreqbank",
     "params" : {
@@ -202,7 +202,7 @@
     }
 },
 {
-    "regex" : "(.*) ATM (.*) AED (\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?)- Your available balance is AED ((?!0+\\.00)(?=.{1,9}(\\.|$))(?!0(?!\\.))\\d{1,3}(,\\d{3})*(\\.\\d+)?)",
+    "regex" : "(.*) ATM (.*) BHD (\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?)- Your available balance is BHD ((?!0+\\.00)(?=.{1,9}(\\.|$))(?!0(?!\\.))\\d{1,3}(,\\d{3})*(\\.\\d+)?)",
     "mode": "spending",
     "address": "hsbc-uae",
     "params" : {
@@ -212,7 +212,7 @@
     }
 },
 {
-    "regex" : "(.*) AED (\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?)- Your available balance is AED ((?!0+\\.00)(?=.{1,9}(\\.|$))(?!0(?!\\.))\\d{1,3}(,\\d{3})*(\\.\\d+)?)",
+    "regex" : "(.*) BHD (\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?)- Your available balance is BHD ((?!0+\\.00)(?=.{1,9}(\\.|$))(?!0(?!\\.))\\d{1,3}(,\\d{3})*(\\.\\d+)?)",
     "mode": "spending",
     "address": "hsbc-uae",
     "params" : {
@@ -222,7 +222,7 @@
     }
 },
 {
-    "regex" : "Your Credit Card ending with (.*) has been used for AED (\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?) on (.*) and your available limit is AED (\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?)",
+    "regex" : "Your Credit Card ending with (.*) has been used for BHD (\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?) on (.*) and your available limit is BHD (\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?)",
     "mode": "spending",
     "address": "hsbc-uae",
     "params" : {
@@ -232,7 +232,7 @@
     }
 },
 {
-    "regex" : "(.*) Credit (.*) AED (\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?)\\+ Your available balance is AED ((?!0+\\.00)(?=.{1,9}(\\.|$))(?!0(?!\\.))\\d{1,3}(,\\d{3})*(\\.\\d+)?)",
+    "regex" : "(.*) Credit (.*) BHD (\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?)\\+ Your available balance is BHD ((?!0+\\.00)(?=.{1,9}(\\.|$))(?!0(?!\\.))\\d{1,3}(,\\d{3})*(\\.\\d+)?)",
     "mode": "income",
     "address": "hsbc-uae",
     "params" : {
@@ -242,7 +242,7 @@
     }
 },
 {
-    "regex" : "(.*) Purchase Txn. AED \\+(\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?) at (.*).Available Balance is AED (\\+|\\-)((?!0+\\.00)(?=.{1,9}(\\.|$))(?!0(?!\\.))\\d{1,3}(,\\d{3})*(\\.\\d+)?)",
+    "regex" : "(.*) Purchase Txn. BHD \\+(\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?) at (.*).Available Balance is BHD (\\+|\\-)((?!0+\\.00)(?=.{1,9}(\\.|$))(?!0(?!\\.))\\d{1,3}(,\\d{3})*(\\.\\d+)?)",
     "mode": "spending",
     "address": "sib",
     "params" : {
@@ -253,7 +253,7 @@
 },
   
 {
-    "regex" : "(.*) cash withdrawal AED \\-(\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?) at (.*)Available balance is AED (\\+|\\-)((?!0+\\.00)(?=.{1,9}(\\.|$))(?!0(?!\\.))\\d{1,3}(,\\d{3})*(\\.\\d+)?)",
+    "regex" : "(.*) cash withdrawal BHD \\-(\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?) at (.*)Available balance is BHD (\\+|\\-)((?!0+\\.00)(?=.{1,9}(\\.|$))(?!0(?!\\.))\\d{1,3}(,\\d{3})*(\\.\\d+)?)",
     "mode": "spending",
     "address": "sib",
     "params" : {
@@ -263,7 +263,7 @@
     }
 },
 {
-    "regex" : "(.*), (Salary credited) AED (\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?)\\+ (.*). Available balance is ((?!0+\\.00)(?=.{1,9}(\\.|$))(?!0(?!\\.))\\d{1,3}(,\\d{3})*(\\.\\d+)?)",
+    "regex" : "(.*), (Salary credited) BHD (\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?)\\+ (.*). Available balance is ((?!0+\\.00)(?=.{1,9}(\\.|$))(?!0(?!\\.))\\d{1,3}(,\\d{3})*(\\.\\d+)?)",
     "mode": "income",
     "address": "sib",
     "params" : {
@@ -274,7 +274,7 @@
 }
 ,
   {
-    "regex" : "(.*)amount of AED \\+(\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?) (has been credited). Available balance is AED \\+((?!0+\\.00)(?=.{1,9}(\\.|$))(?!0(?!\\.))\\d{1,3}(,\\d{3})*(\\.\\d+)?)",
+    "regex" : "(.*)amount of BHD \\+(\\d*\\.?\\d+|\\d{1,3}(,\\d{3})*(\\.\\d+)?) (has been credited). Available balance is BHD \\+((?!0+\\.00)(?=.{1,9}(\\.|$))(?!0(?!\\.))\\d{1,3}(,\\d{3})*(\\.\\d+)?)",
     "mode": "income",
     "address": "sib",
     "params" : {

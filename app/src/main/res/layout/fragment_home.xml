@@ -70,7 +70,7 @@
                         android:textColor="@color/white" />
 
                     <com.moneynanny.nanny.Custom.RegularTextView
-                        android:text="AED"
+                        android:text="BHD"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_toRightOf="@+id/tvLeftThisWeek"
@@ -102,7 +102,7 @@
                         android:textSize="@dimen/big_font_size" />
 
                     <com.moneynanny.nanny.Custom.RegularTextView
-                        android:text="AED"
+                        android:text="BHD"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_toRightOf="@+id/tvLeftThisMonth"
@@ -142,7 +142,7 @@
                         android:textColor="@color/white" />
 
                     <com.moneynanny.nanny.Custom.RegularTextView
-                        android:text="AED"
+                        android:text="BHD"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_toRightOf="@+id/tvUpcomingPayment"
@@ -195,7 +195,7 @@
                     android:textColor="@color/white"
                     android:textSize="@dimen/big_font_size" />
                 <com.moneynanny.nanny.Custom.RegularTextView
-                    android:text="AED"
+                    android:text="BHD"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@+id/tvSpentForWish"
@@ -237,7 +237,7 @@
                     android:textColor="@color/white" />
 
                 <com.moneynanny.nanny.Custom.RegularTextView
-                    android:text="AED"
+                    android:text="BHD"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_toRightOf="@+id/tvMoneyDebit"

@@ -120,7 +120,7 @@ public class NewWishFragment extends CustomFragment {
 
                 int nTotalMonths = (nTotalAmount + nMonthlyPayment -1) / nMonthlyPayment;
 
-                tvMonthlyPayment.setText(nMonthlyPayment + " AED");
+                tvMonthlyPayment.setText(nMonthlyPayment + " BHD");
                 tvPeriod.setText(nTotalMonths + " month");
             }
         });
@@ -222,7 +222,7 @@ public class NewWishFragment extends CustomFragment {
         int nTotalMonths = (nTotalAmount + nMonthlyPayment -1) / nMonthlyPayment;
 
         seekbarPropotion.setProgress(50);
-        tvMonthlyPayment.setText(nMonthlyPayment + " AED");
+        tvMonthlyPayment.setText(nMonthlyPayment + " BHD");
         tvPeriod.setText(nTotalMonths + " month");
     }
 

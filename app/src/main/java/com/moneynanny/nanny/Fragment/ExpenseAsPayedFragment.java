@@ -49,7 +49,7 @@ public class ExpenseAsPayedFragment extends CustomFragment {
 
         ((TextView)mView.findViewById(R.id.tvIdentifier)).setText(paymentSelected.getTitle());
         ((TextView)mView.findViewById(R.id.tvDateOfMonth)).setText(paymentSelected.getDateOfMonth() + " day payment");
-        ((TextView)mView.findViewById(R.id.tvAmount)).setText(paymentSelected.getAmount() + " AED");
+        ((TextView)mView.findViewById(R.id.tvAmount)).setText(paymentSelected.getAmount() + " BHD");
     }
 
 

@@ -129,7 +129,7 @@ public class AdvisorActivity extends CustomActivity {
 
         View cellRight = mInflater.inflate(R.layout.cell_chat_right_gray, null);
 
-        ((TextView)cellRight.findViewById(R.id.tvTitle)).setText(nVal + "AED");
+        ((TextView)cellRight.findViewById(R.id.tvTitle)).setText(nVal + "BHD");
 
         lyContainer.addView(cellRight);
 

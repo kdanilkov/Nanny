@@ -63,7 +63,7 @@
             android:id="@+id/tvDateOfMonth" />
 
         <com.moneynanny.nanny.Custom.RegularTextView
-            android:text="30 AED"
+            android:text="30 BHD"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/tvAmount"

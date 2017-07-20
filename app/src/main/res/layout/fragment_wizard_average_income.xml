@@ -24,5 +24,5 @@
         android:paddingBottom="5dp"
         android:inputType="number"
         android:selectAllOnFocus="true"
-        android:hint="AED 0.00" />
+        android:hint="BHD 0.00" />
 </LinearLayout>

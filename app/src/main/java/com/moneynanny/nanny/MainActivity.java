@@ -113,9 +113,9 @@ public class MainActivity extends CustomActivity {
             }
         }
     }
-
+/*
     void testRegex() {
-        String strSms = "Loan installment AED 6678.63 from ACCT 3392";
+        String strSms = "Loan installment BHD 6678.63 from ACCT 3392";
         Transaction trans = ParseSms.getInstance().getSmsByTemplate6(strSms);
 
         if(trans == null) {
@@ -124,7 +124,7 @@ public class MainActivity extends CustomActivity {
             Log.e(Constant.TAG_CURRENT, "parsing success");
         }
     }
-
+*/
 
     private boolean weHavePermissionToReadSMS() {
         return ContextCompat.checkSelfPermission(this, Manifest.permission.READ_SMS) == PackageManager.PERMISSION_GRANTED;

@@ -99,10 +99,10 @@ public class PaymentFragment extends CustomFragment {
             int nPaymentMode = payment.getPaymentMode();
             int nPaidStatus = payment.getPaidStatus();
 
-            String strDetail = payment.getAmount() + "AED, to Savings Account";
+            String strDetail = payment.getAmount() + "BHD, to Savings Account";
 
             if(nPaymentMode > 1) {
-                strDetail = payment.getAmount() + "AED, to Provider";
+                strDetail = payment.getAmount() + "BHD, to Provider";
             }
 
             View cell = mInflater.inflate(R.layout.cell_payment_item, null);

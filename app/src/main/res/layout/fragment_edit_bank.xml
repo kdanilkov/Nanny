@@ -105,7 +105,7 @@
                 android:layout_marginTop="30dp">
 
                 <com.moneynanny.nanny.Custom.MediumTextView
-                    android:text="BALANCE (AED)"
+                    android:text="BALANCE (BHD)"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/textView4"
@@ -125,7 +125,7 @@
                     android:inputType="number"
                     android:selectAllOnFocus="true"
                     android:imeOptions="actionDone"
-                    android:hint="AED 0.00" />
+                    android:hint="BHD 0.00" />
             </LinearLayout>
 
             <LinearLayout
@@ -143,14 +143,16 @@
                     android:textColor="@color/label_text_color" />
 
                 <RelativeLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
                     <Spinner
                         android:id="@+id/spinnerBank"
                         android:layout_marginTop="10dp"
                         android:layout_height="60dp"
-                        android:layout_width="200dp" />
+                        android:layout_width="200dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentStart="true" />
 
                 </RelativeLayout>
 

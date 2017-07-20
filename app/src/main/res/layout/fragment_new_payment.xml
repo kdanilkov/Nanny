@@ -110,7 +110,7 @@
                     android:layout_weight="1">
 
                     <com.moneynanny.nanny.Custom.MediumTextView
-                        android:text="AMOUNT (AED)"
+                        android:text="AMOUNT (BHD)"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:textColor="@color/label_text_color"
@@ -130,7 +130,7 @@
                         android:textSize="@dimen/editor_font_size"
                         android:nextFocusDown="@+id/etDateOfMonth"
                         android:selectAllOnFocus="true"
-                        android:hint="AED 0.00" />
+                        android:hint="BHD 0.00" />
                 </LinearLayout>
 
                 <LinearLayout
