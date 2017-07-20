@@ -37,6 +37,7 @@ public class SplashActivity extends Activity {
         public void run() {
             try {
                 // init common
+
                 Common.getInstance().readBankJsonData(SplashActivity.this);
                 Common.getInstance().readTemplateJsonData(SplashActivity.this);
                 if(UserPreference.getInstance().pref==null) {
